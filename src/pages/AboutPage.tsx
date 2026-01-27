@@ -54,7 +54,7 @@ export function AboutPage() {
       {/* Hero */}
       <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">About The Faithful Foundation</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Two Finger Foundation</h1>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto">
             Dedicated to serving humanity with compassion, dignity, and unwavering commitment to Islamic values
           </p>
@@ -69,7 +69,7 @@ export function AboutPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-6">Who We Are</h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  The Faithful Foundation (TFF) is a global Islamic charitable organization founded in 2010 with a mission to uplift the most vulnerable members of our community—widows, orphans, and new Muslims who have embraced Islam.
+                  Two Finger Foundation (TFF) is a global Islamic charitable organization founded in 2010 with a mission to uplift the most vulnerable members of our community—widows, orphans, and new Muslims who have embraced Islam.
                 </p>
                 <p>
                   Born from a deep commitment to serving humanity and guided by Islamic principles of compassion, justice, and dignity, we work tirelessly to provide comprehensive support that addresses both immediate needs and long-term development.
@@ -150,7 +150,7 @@ export function AboutPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-4">Why The Faithful Foundation?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-4">Why Two Finger Foundation?</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               What sets us apart in serving our community
             </p>
@@ -199,7 +199,7 @@ export function AboutPage() {
                 "Assalamu Alaikum dear brothers and sisters,
               </p>
               <p className="text-lg leading-relaxed mb-6">
-                The Faithful Foundation was born from a simple yet profound realization: that the most vulnerable among 
+                Two Finger Foundation was born from a simple yet profound realization: that the most vulnerable among 
                 us—widows who have lost their providers, orphans who have lost their parents, and new Muslims seeking 
                 guidance—often struggle alone when they need support the most.
               </p>

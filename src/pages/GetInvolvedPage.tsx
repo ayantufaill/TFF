@@ -349,7 +349,7 @@ export function GetInvolvedPage() {
                   <Mail className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-[#2C5F2D] mb-2">Email Us</h3>
-                <p className="text-gray-600 mb-3">volunteer@faithfulfoundation.org</p>
+                <p className="text-gray-600 mb-3">volunteer@twofingerfoundation.org</p>
                 <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
                   Send Email
                 </Button>

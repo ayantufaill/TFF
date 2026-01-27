@@ -34,7 +34,7 @@ export function Layout() {
                 <Heart className="w-7 h-7 text-white" fill="white" />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-[#2C5F2D]">The Faithful Foundation</h1>
+                <h1 className="text-xl font-semibold text-[#2C5F2D]">Two Finger Foundation</h1>
                 <p className="text-xs text-gray-600">Empowering Lives, Nurturing Faith</p>
               </div>
             </Link>
@@ -110,7 +110,7 @@ export function Layout() {
             <div>
               <h3 className="text-lg font-semibold mb-4 text-[#C9A961]">About TFF</h3>
               <p className="text-sm text-gray-200 leading-relaxed">
-                The Faithful Foundation is dedicated to empowering widows, supporting orphans, and guiding new Muslims to a stronger future through compassion and community.
+                Two Finger Foundation is dedicated to empowering widows, supporting orphans, and guiding new Muslims to a stronger future through compassion and community.
               </p>
             </div>
 
@@ -129,7 +129,7 @@ export function Layout() {
             <div>
               <h3 className="text-lg font-semibold mb-4 text-[#C9A961]">Contact Us</h3>
               <ul className="space-y-2 text-sm text-gray-200">
-                <li>Email: info@faithfulfoundation.org</li>
+                <li>Email: info@twofingerfoundation.org</li>
                 <li>Phone: +1 (555) 123-4567</li>
                 <li>Address: 123 Charity Lane, City, ST 12345</li>
               </ul>
@@ -155,7 +155,7 @@ export function Layout() {
           {/* Bottom Bar */}
           <div className="border-t border-white/20 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-200">
-              <p>© 2026 The Faithful Foundation. All rights reserved.</p>
+              <p>© 2026 Two Finger Foundation. All rights reserved.</p>
               <div className="flex gap-6">
                 <Link to="/privacy" className="hover:text-[#C9A961] transition-colors">Privacy Policy</Link>
                 <Link to="/terms" className="hover:text-[#C9A961] transition-colors">Terms & Conditions</Link>

@@ -234,7 +234,7 @@ export function HomePage() {
                   <div>
                     <h3 className="text-xl font-semibold mb-3">Testimonial</h3>
                     <p className="text-gray-100 italic leading-relaxed mb-4">
-                      "After losing my husband, I felt lost and unable to provide for my children. The Faithful Foundation gave me hope, skills training, and the support I needed to stand on my own feet. Today, I run my own small business and can send my children to school with dignity."
+                      "After losing my husband, I felt lost and unable to provide for my children. Two Finger Foundation gave me hope, skills training, and the support I needed to stand on my own feet. Today, I run my own small business and can send my children to school with dignity."
                     </p>
                     <p className="text-[#C9A961] font-semibold">— Amina, Widow & Entrepreneur</p>
                   </div>
