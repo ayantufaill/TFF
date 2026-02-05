@@ -7,7 +7,7 @@ import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 
 // Video section (right after hero): set to your YouTube video ID (from youtube.com/watch?v=XXXXX) or null to hide section.
 // For a self-hosted video: put the file in public/ (e.g. public/intro.mp4) and replace the iframe block with: <video src="/intro.mp4" controls className="w-full h-full" />
-const HERO_VIDEO_YOUTUBE_ID = null as string | null;
+const HERO_VIDEO_YOUTUBE_ID = '3uNNZ9h3vS8' as string | null;
 
 const HERO_TAGLINES = [
   { headline: 'Empowering Widows, Supporting Orphans, Guiding New Muslims to a Stronger Future', subtitle: 'Building a compassionate community through dignity, support, and faith' },
@@ -241,13 +241,20 @@ export function HomePage() {
       </section>
 
       {/* Video Section - right after banner */}
+      {/* Width: change max-w-6xl → max-w-4xl (narrower) / max-w-7xl (wider). Height: aspect-video = 16:9; or use h-[400px] / h-[50vh] for fixed height */}
       {HERO_VIDEO_YOUTUBE_ID && (
-        <section className="py-12 sm:py-16 bg-[#FAF8F3]">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] text-center mb-6 sm:mb-8">
-              Our Story
-            </h2>
-            <div className="aspect-video w-full rounded-lg overflow-hidden shadow-lg bg-gray-200">
+        <section className="py-12 sm:py-16 lg:py-24 bg-[#E8E4DC]">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-6 sm:mb-10">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">
+                Our Path
+              </h2>
+              <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-3 sm:mb-4" aria-hidden />
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-1">
+                Discover our journey, our mission, and the impact we&apos;re making in communities worldwide
+              </p>
+            </div>
+            <div className="aspect-square w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg bg-gray-200">
               <iframe
                 title="TFF Video"
                 src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}`}

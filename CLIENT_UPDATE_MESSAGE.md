@@ -28,7 +28,7 @@ Existing policy pages (Privacy, Terms, Donation Policy, etc.) continue to use th
 ## Design & background
 
 - **Who We Serve section**  
-  The background is updated to match the reference you shared: a subtle Islamic-style geometric pattern with a soft gold tint in the top-left that fades to white toward the bottom-right. The section keeps the gold accent bar on the left and the same card layout.
+  The background is updated to match the reference you shared: a subtle Islamic-style geometric pattern with a soft gold tint in the top-left that fades to white toward the bottom-right. The section keeps the gold accent bar on the left and the same card layout. The data you asked for has also been added — Widows Support, Orphans Support, and New Revert Support with titles, descriptions, and images.
 
 ---
 
