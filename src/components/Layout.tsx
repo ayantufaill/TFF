@@ -19,22 +19,22 @@ export function Layout() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] flex flex-col">
+    <div className="min-h-screen bg-[#FAF8F3] flex flex-col overflow-x-hidden">
       <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20 min-h-[4rem]">
             {/* Logo – SVG from public/logo.svg */}
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 flex items-center justify-center shrink-0">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
                 <img
                   src={LOGO_SVG}
                   alt="Two Finger Foundation"
-                  className="h-12 w-12 object-contain"
+                  className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                 />
               </div>
-              <div>
-                <h1 className="text-xl font-semibold text-[#2C5F2D]">Two Finger Foundation</h1>
-                <p className="text-xs text-gray-600">Empowering Lives, Nurturing Faith</p>
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-xl font-semibold text-[#2C5F2D] truncate">Two Finger Foundation</h1>
+                <p className="text-xs text-gray-600 hidden sm:block">Empowering Lives, Nurturing Faith</p>
               </div>
             </div>
 
@@ -94,9 +94,9 @@ export function Layout() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#2C5F2D] text-white mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-[#2C5F2D] text-white mt-10 sm:mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* About */}
             <div>
               <h3 className="text-lg font-semibold mb-4 text-[#C9A961]">About TFF</h3>
@@ -130,13 +130,13 @@ export function Layout() {
             <div>
               <h3 className="text-lg font-semibold mb-4 text-[#C9A961]">Stay Connected</h3>
               <p className="text-sm text-gray-200 mb-3">Subscribe to our newsletter for updates</p>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="px-3 py-2 rounded text-sm flex-1 text-gray-900"
+                  className="px-3 py-2 rounded text-sm flex-1 min-w-0 text-gray-900 w-full sm:w-auto"
                 />
-                <Button className="bg-[#C9A961] hover:bg-[#B89751] text-white">
+                <Button className="bg-[#C9A961] hover:bg-[#B89751] text-white w-full sm:w-auto shrink-0">
                   Subscribe
                 </Button>
               </div>
@@ -144,10 +144,10 @@ export function Layout() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-white/20 pt-8">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-200">
+          <div className="border-t border-white/20 pt-6 sm:pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs sm:text-sm text-gray-200 text-center md:text-left">
               <p>© 2026 Two Finger Foundation. All rights reserved.</p>
-              <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6 text-gray-200">
+              <div className="flex flex-wrap justify-center md:justify-end gap-3 sm:gap-4 md:gap-6 text-gray-200">
                 <Link to="/privacy-policy" className="hover:text-[#C9A961] transition-colors">Privacy Policy</Link>
                 <Link to="/terms-and-conditions" className="hover:text-[#C9A961] transition-colors">Terms and Conditions</Link>
                 <Link to="/donation-policy" className="hover:text-[#C9A961] transition-colors">Donation Policy</Link>

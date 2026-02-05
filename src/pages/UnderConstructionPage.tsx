@@ -7,11 +7,17 @@ const POLICY_TITLES: Record<string, string> = {
   'refund-policy': 'Refund Policy',
   'accessibility-statement': 'Accessibility Statement',
   'impartiality-statement': 'Impartiality Statement',
+  'cause-of-tff': 'Cause of TFF',
+  'daily-ayat-hadith': 'Daily Ayat and Hadith',
+  'azkaar-dua': 'Azkaar / Dua',
+  'donate': 'Donate',
+  'volunteer': 'Volunteer',
+  'get-help': 'Get Help',
 };
 
 export function UnderConstructionPage() {
   const path = useLocation().pathname.replace(/^\//, '') || '';
-  const title = POLICY_TITLES[path] || 'Policy';
+  const title = POLICY_TITLES[path] || 'Page';
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 py-16 text-center">
