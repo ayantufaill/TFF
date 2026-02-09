@@ -1,30 +1,48 @@
-import { Link, Outlet } from 'react-router';
-import { Menu, X } from 'lucide-react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
+import { ArrowLeft, Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { useState } from 'react';
 
 // Relative path so logo loads when app is opened as file (e.g. dist/index.html) or from any base URL
 const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
 
-// Demo: all buttons/links shown, no navigation (homepage only deploy)
+const navLinks = [
+  { label: 'Home', to: '/' },
+  { label: 'About Us', to: '/about-us' },
+  { label: 'Discovering Islam', to: '/discovering-islam' },
+  { label: 'Programs', to: '/programs' },
+  { label: 'Playlist', to: '/playlist' },
+  { label: 'Downloads', to: '/downloads' },
+];
+
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const navLinks = [
-    { label: 'Home', isActive: true },
-    { label: 'About Us', isActive: false },
-    { label: 'Programs', isActive: false },
-    { label: 'Training', isActive: false },
-    { label: 'Get Involved', isActive: false },
-  ];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const showBack = location.pathname !== '/' && location.pathname !== '';
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] flex flex-col overflow-x-hidden">
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <header className="bg-white shadow-sm sticky top-0 z-50 relative h-16 sm:h-20 min-h-[4rem]">
+        {/* Back – top-left, header ke darmayan (vertical center) */}
+        {showBack ? (
+          <div className="absolute left-0 top-0 bottom-0 h-full flex items-center justify-center pl-10 sm:pl-14 z-10">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-1.5 sm:gap-2 text-[#2C5F2D] hover:text-[#C9A961] font-medium transition-colors"
+              aria-label="Go back"
+            >
+              <ArrowLeft className="w-5 h-5 shrink-0" />
+              <span>Back</span>
+            </button>
+          </div>
+        ) : null}
+
+        <div className={`max-w-7xl mx-auto pl-8 sm:pl-10 lg:pl-12 pr-3 sm:pr-6 lg:pr-8 ${showBack ? 'pl-24 sm:pl-32' : ''}`}>
           <div className="flex items-center justify-between h-16 sm:h-20 min-h-[4rem]">
             {/* Logo – SVG from public/logo.svg */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-start">
               <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
                 <img
                   src={LOGO_SVG}
@@ -38,21 +56,22 @@ export function Layout() {
               </div>
             </div>
 
-            {/* Desktop nav – all buttons, no navigation */}
-            <nav className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <span
-                  key={link.label}
-                  className={`transition-colors cursor-default ${
-                    link.isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
-                  }`}
-                >
-                  {link.label}
-                </span>
-              ))}
-              <Button className="bg-[#C9A961] hover:bg-[#B89751] text-white cursor-default" type="button">
-                Donate Now
-              </Button>
+            {/* Desktop nav */}
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    className={`transition-colors ${
+                      isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
 
             <button
@@ -65,24 +84,24 @@ export function Layout() {
             </button>
           </div>
 
-          {/* Mobile nav – same items, no links */}
+          {/* Mobile nav */}
           {mobileMenuOpen && (
             <nav className="lg:hidden py-4 border-t">
-              {navLinks.map((link) => (
-                <span
-                  key={link.label}
-                  className={`block py-3 px-4 transition-colors cursor-default ${
-                    link.isActive ? 'bg-[#C9A961]/10 text-[#C9A961] font-medium' : 'text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {link.label}
-                </span>
-              ))}
-              <div className="py-3 px-4">
-                <Button className="w-full bg-[#C9A961] hover:bg-[#B89751] text-white cursor-default" type="button">
-                  Donate Now
-                </Button>
-              </div>
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
+                return (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block py-3 px-4 transition-colors ${
+                      isActive ? 'bg-[#C9A961]/10 text-[#C9A961] font-medium' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </nav>
           )}
         </div>
@@ -93,9 +112,9 @@ export function Layout() {
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#2C5F2D] text-white mt-10 sm:mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      {/* Footer – About TFF ke upar zyada green; © 2026 neeche se upar */}
+      <footer className="bg-[#2C5F2D] text-white mt-32 sm:mt-40 lg:mt-48">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 'clamp(28px, 3.5vw, 48px)', paddingBottom: 'clamp(20px, 2.5vw, 36px)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* About */}
             <div>
@@ -143,8 +162,8 @@ export function Layout() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
-          <div className="border-t border-white/20 pt-6 sm:pt-8">
+          {/* Bottom Bar – neeche padding taake © 2026 full end par na lage */}
+          <div className="border-t border-white/20 pt-8 sm:pt-10" style={{ paddingBottom: 'clamp(16px, 2vw, 28px)' }}>
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs sm:text-sm text-gray-200 text-center md:text-left">
               <p>© 2026 Two Finger Foundation. All rights reserved.</p>
               <div className="flex flex-wrap justify-center md:justify-end gap-3 sm:gap-4 md:gap-6 text-gray-200">

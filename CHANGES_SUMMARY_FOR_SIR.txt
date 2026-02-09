@@ -1,0 +1,40 @@
+Summary of completed changes (for Sir)
+
+All requested items are done. Brief list below.
+
+1. Banner navigation
+   - Header nav added: Home, About Us, Discovering Islam, Programs, Playlist, Downloads (desktop + mobile menu).
+
+2. Overlapping text
+   - Adjusted so headline/subtitle and header content don’t overlap (padding and min-heights).
+
+3. Main pages
+   - Routes in place for: About Us, Discovering Islam, Programs, Playlist, Downloads, Cause of TFF, Daily Ayat and Hadith, Azkaar/Dua, Donate, Volunteer, Get Help, and policy pages.
+
+4. Links + Under Construction
+   - All hero buttons and nav links go to their routes; each shows the Under Construction message until the page is built.
+
+5. Video and text (Shahadah)
+   - Section re-arranged: text block on the left, video on the right.
+
+6. Trusted section
+   - “Trusted & Transparent” block removed from the home page.
+
+7. Books section (10 titles, 5+5 layout)
+   - New “Recommended Books” section added on the home page with 10 titles in a 5+5 grid:
+     • The Clear Quran (Tafsir)
+     • Riyad us-Saliheen
+     • Forty Hadith Qudsi
+     • Stories of the Prophets
+     • The Sealed Nectar (Ar-Raheeq Al-Makhtum)
+     • Purification of the Soul
+     • The Book of Assistance
+     • In the Footsteps of the Prophet
+     • Islam: A Short History
+     • The Ideal Muslim
+
+8. Footer
+   - More green space above “About TFF”.
+   - Copyright line (© 2026) given padding below so it is not flush with the bottom; spacing set to a balanced amount.
+
+All of the above are implemented and live on the site.

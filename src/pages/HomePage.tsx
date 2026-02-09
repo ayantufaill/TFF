@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield } from 'lucide-react';
+import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
@@ -25,6 +25,14 @@ export function HomePage() {
   const [heroEntering, setHeroEntering] = useState(true);
   const heroTaglineRef = useRef(0);
   heroTaglineRef.current = heroTaglineIndex;
+  const [carouselResetKey, setCarouselResetKey] = useState(0);
+
+  const goToSlide = (index: number) => {
+    const next = (index + HERO_TAGLINES.length) % HERO_TAGLINES.length;
+    setHeroTaglineIndex(next);
+    setHeroEntering(true);
+    setCarouselResetKey((k) => k + 1);
+  };
 
   useEffect(() => {
     const el = globalReachRef.current;
@@ -53,25 +61,26 @@ export function HomePage() {
     return () => cancelAnimationFrame(raf);
   }, [heroLeavingIndex]);
 
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    const intervalId = setInterval(() => {
-      if (timeoutId) clearTimeout(timeoutId);
-      const current = heroTaglineRef.current;
-      setHeroLeavingIndex(current);
-      timeoutId = setTimeout(() => {
-        setHeroTaglineIndex((prev) => (prev + 1) % HERO_TAGLINES.length);
-        setHeroEntering(true);
-        setHeroLeavingIndex(null);
-        setHeroLeavingVisible(false);
-        timeoutId = null;
-      }, 700);
-    }, 5000);
-    return () => {
-      clearInterval(intervalId);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, []);
+  /* Auto-advance carousel (khud move) – comment out kiya, ab sirf arrows/dots se change hoga */
+  // useEffect(() => {
+  //   let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  //   const intervalId = setInterval(() => {
+  //     if (timeoutId) clearTimeout(timeoutId);
+  //     const current = heroTaglineRef.current;
+  //     setHeroLeavingIndex(current);
+  //     timeoutId = setTimeout(() => {
+  //       setHeroTaglineIndex((prev) => (prev + 1) % HERO_TAGLINES.length);
+  //       setHeroEntering(true);
+  //       setHeroLeavingIndex(null);
+  //       setHeroLeavingVisible(false);
+  //       timeoutId = null;
+  //     }, 700);
+  //   }, 5000);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //     if (timeoutId) clearTimeout(timeoutId);
+  //   };
+  // }, [carouselResetKey]);
 
   const beneficiaries = [
     {
@@ -124,6 +133,19 @@ export function HomePage() {
     { number: '95%', label: 'Transparency Rating', icon: Award },
   ];
 
+  const bookTitles = [
+    'The Clear Quran (Tafsir)',
+    'Riyad us-Saliheen',
+    'Forty Hadith Qudsi',
+    'Stories of the Prophets',
+    'The Sealed Nectar (Ar-Raheeq Al-Makhtum)',
+    'Purification of the Soul',
+    'The Book of Assistance',
+    'In the Footsteps of the Prophet',
+    'Islam: A Short History',
+    'The Ideal Muslim',
+  ]; // 10 titles – 5+5 layout in section
+
   return (
     <div>
       {/* Hero Section */}
@@ -135,16 +157,45 @@ export function HomePage() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="relative max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36 text-center">
-          <div className="mb-10 sm:mb-12 text-[#C9A961] text-base sm:text-lg leading-relaxed" dir="rtl" style={{ minHeight: '2.5rem' }}>
+
+        {/* Left arrow – sirf tab dikhe jab first headline par na hon */}
+        {HERO_TAGLINES.length > 1 && heroTaglineIndex > 0 && (
+          <div className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-10">
+            <button
+              type="button"
+              onClick={() => goToSlide(heroTaglineIndex - 1)}
+              className="p-3 sm:p-4 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-transform"
+              aria-label="Previous statement"
+            >
+              <ChevronLeft className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
+            </button>
+          </div>
+        )}
+
+        {/* Right arrow – sirf tab dikhe jab last headline par na hon */}
+        {HERO_TAGLINES.length > 1 && heroTaglineIndex < HERO_TAGLINES.length - 1 && (
+          <div className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-10">
+            <button
+              type="button"
+              onClick={() => goToSlide(heroTaglineIndex + 1)}
+              className="p-3 sm:p-4 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-transform"
+              aria-label="Next statement"
+            >
+              <ChevronRight className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
+            </button>
+          </div>
+        )}
+
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 sm:py-32 lg:py-40 text-center">
+          <div className="mb-16 sm:mb-20 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
           {/* Headline: fixed height, centered – clear gap above so no overlap with Arabic */}
-          <div className="relative min-h-[5rem] h-24 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center mb-8 sm:mb-10 px-2 mt-0">
+          <div className="relative min-h-[5rem] h-24 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center mb-12 sm:mb-16 px-4 sm:px-6 lg:px-8 mt-0">
             {heroLeavingIndex !== null && (
               <h1
                 key={`leave-${heroLeavingIndex}`}
-                className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-2 leading-tight ${
+                className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-4 sm:px-6 leading-tight ${
                   heroLeavingVisible ? 'opacity-100' : 'opacity-0'
                 }`}
               >
@@ -153,19 +204,19 @@ export function HomePage() {
             )}
             <h1
               key={heroTaglineIndex}
-              className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-2 leading-tight ${
+              className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-4 sm:px-6 leading-tight ${
                 heroEntering ? 'opacity-0' : 'opacity-100'
               }`}
             >
               {HERO_TAGLINES[heroTaglineIndex].headline}
             </h1>
           </div>
-          {/* Subtitle: fixed height, below headline, above buttons */}
-          <div className="relative min-h-[3rem] h-12 sm:h-14 md:h-16 flex items-center justify-center mb-8 sm:mb-10 px-2">
+          {/* Subtitle: fixed height, below headline, above buttons (mb = space below subtitle, buttons neeche aate hain) */}
+          <div className="relative min-h-[3rem] h-12 sm:h-14 md:h-16 flex items-center justify-center mb-40 sm:mb-48 px-4 sm:px-6 lg:px-8">
             {heroLeavingIndex !== null && (
               <p
                 key={`sub-leave-${heroLeavingIndex}`}
-                className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto ${
+                className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto px-4 sm:px-6 ${
                   heroLeavingVisible ? 'opacity-100' : 'opacity-0'
                 }`}
               >
@@ -174,14 +225,14 @@ export function HomePage() {
             )}
             <p
               key={`sub-${heroTaglineIndex}`}
-              className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto ${
+              className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto px-4 sm:px-6 ${
                 heroEntering ? 'opacity-0' : 'opacity-100'
               }`}
             >
               {HERO_TAGLINES[heroTaglineIndex].subtitle}
             </p>
           </div>
-          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center px-1">
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center px-4 sm:px-6 mt-10 sm:mt-14">
             <Link to="/cause-of-tff">
               <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
                 Cause of TFF
@@ -203,36 +254,18 @@ export function HomePage() {
               </Button>
             </Link>
           </div>
-          {/* Sliding white dots - inline styles so they always show */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2.75rem' }}>
-            <div style={{ display: 'inline-flex', gap: 10, position: 'relative', alignItems: 'center', height: 14 }}>
-              <span
-                role="presentation"
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '50%',
-                  width: 10,
-                  height: 10,
-                  borderRadius: '50%',
-                  backgroundColor: '#fff',
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                  transform: `translate(${heroTaglineIndex * (10 + 10)}px, -50%)`,
-                  transition: 'transform 0.3s ease-out',
-                  zIndex: 10,
-                }}
-              />
+          {/* Dots only – arrows ab left/right sides par bade wale */}
+          <div className="flex items-center justify-center mt-[4.5rem]">
+            <div className="inline-flex gap-2.5 sm:gap-3 items-center h-4">
               {HERO_TAGLINES.map((_, i) => (
-                <span
+                <button
                   key={i}
-                  role="presentation"
-                  style={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(255,255,255,0.6)',
-                    flexShrink: 0,
-                  }}
+                  type="button"
+                  onClick={() => goToSlide(i)}
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full flex-shrink-0 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent"
+                  style={{ backgroundColor: heroTaglineIndex === i ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.5)' }}
+                  aria-label={`Go to statement ${i + 1}`}
+                  aria-current={heroTaglineIndex === i ? 'true' : undefined}
                 />
               ))}
             </div>
@@ -240,28 +273,59 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Video Section - right after banner */}
-      {/* Width: change max-w-6xl → max-w-4xl (narrower) / max-w-7xl (wider). Height: aspect-video = 16:9; or use h-[400px] / h-[50vh] for fixed height */}
+      {/* Shahadah Section – same design language as Who We Serve (pattern bg, gold bar, card style) */}
       {HERO_VIDEO_YOUTUBE_ID && (
-        <section className="py-12 sm:py-16 lg:py-24 bg-[#E8E4DC]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-6 sm:mb-10">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">
-                Our Path
+        <section className="py-12 sm:py-16 lg:py-24 relative overflow-hidden">
+          {/* Same textured background as Who We Serve */}
+          <div
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundColor: '#FAF8F3',
+              backgroundImage: 'linear-gradient(135deg, rgba(201,169,97,0.14) 0%, rgba(250,248,243,0.4) 35%, rgba(255,255,255,0.9) 100%), url(/pattern-geometric.svg)',
+              backgroundSize: 'auto, 120px 120px',
+              backgroundRepeat: 'repeat',
+            }}
+            aria-hidden
+          />
+          <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-10 sm:mb-16">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-5 tracking-tight">
+                Shahadah: The first step of Faith
               </h2>
-              <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-3 sm:mb-4" aria-hidden />
-              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-1">
-                Discover our journey, our mission, and the impact we&apos;re making in communities worldwide
+              <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
+                Understanding the declaration at the heart of Islam
               </p>
             </div>
-            <div className="aspect-square w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg bg-gray-200">
-              <iframe
-                title="TFF Video"
-                src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}`}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-stretch">
+              {/* Left: Text card (already provided text) */}
+              <div className="order-1 flex flex-col justify-center">
+                <div className="group overflow-hidden bg-white border border-gray-200/80 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(44,95,45,0.12)] hover:-translate-y-2 hover:border-[#C9A961]/40 transition-all duration-300 h-full flex flex-col">
+                  <div className="h-0.5 w-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] opacity-80 shrink-0" aria-hidden />
+                  <div className="relative p-6 sm:p-8 flex-1 flex flex-col justify-center bg-gradient-to-br from-white to-[#FAFAF8]">
+                    <div className="absolute left-0 top-8 bottom-8 w-1 rounded-r bg-gradient-to-b from-[#C9A961]/40 to-[#8B7355]/30" aria-hidden />
+                    <p className="text-gray-700 text-base sm:text-lg md:text-xl leading-loose pl-5 sm:pl-6">
+                      <span className="text-[#2C5F2D] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              {/* Right: Video card */}
+              <div className="group order-2 flex items-center">
+                <div className="w-full overflow-hidden bg-white border border-gray-200/80 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(44,95,45,0.12)] hover:-translate-y-2 hover:border-[#C9A961]/40 transition-all duration-300">
+                  <div className="h-0.5 w-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] opacity-80" aria-hidden />
+                  <div className="aspect-square w-full max-w-lg mx-auto lg:max-w-none bg-gray-200">
+                    <iframe
+                      title="Understanding the Shahadah"
+                      src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}`}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -314,6 +378,49 @@ export function HomePage() {
                   <p className="text-gray-600 leading-relaxed">{beneficiary.description}</p>
                 </CardContent>
               </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Books – 10 titles (5+5 layout) */}
+      <section className="py-12 sm:py-16 lg:py-24 relative overflow-hidden">
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            backgroundColor: '#FAF8F3',
+            backgroundImage: 'linear-gradient(135deg, rgba(201,169,97,0.14) 0%, rgba(250,248,243,0.4) 35%, rgba(255,255,255,0.9) 100%), url(/pattern-geometric.svg)',
+            backgroundSize: 'auto, 120px 120px',
+            backgroundRepeat: 'repeat',
+          }}
+          aria-hidden
+        />
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-5 tracking-tight">
+              Recommended Books
+            </h2>
+            <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
+              Faith, history, and character — titles we recommend for learning and reflection
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
+            {bookTitles.map((title, index) => (
+              <div
+                key={index}
+                className="group bg-white border border-gray-200/80 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_28px_rgba(44,95,45,0.1)] hover:border-[#C9A961]/40 hover:-translate-y-1 transition-all duration-300"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#C9A961]/15 flex items-center justify-center shrink-0 group-hover:bg-[#C9A961]/25 transition-colors">
+                    <BookOpen className="w-4 h-4 text-[#C9A961]" />
+                  </div>
+                  <h3 className="text-sm sm:text-base font-semibold text-[#2C5F2D] leading-snug pt-0.5">
+                    {title}
+                  </h3>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -490,32 +597,6 @@ export function HomePage() {
                 Get Help
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Indicators - Design 2: soft left frame */}
-      <section className="relative py-10 sm:py-16 bg-white border-t border-gray-200/80">
-        <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-[#C9A961]/15 z-10" aria-hidden />
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="text-center mb-6 sm:mb-10">
-            <h3 className="text-xl sm:text-2xl font-semibold text-[#2C5F2D] mb-2">Trusted & Transparent</h3>
-            <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-2" aria-hidden />
-            <p className="text-gray-500 text-sm sm:text-base px-1">Registered charity with full accountability and transparency</p>
-          </div>
-          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 lg:gap-8 text-gray-600 text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <Shield className="w-7 h-7 sm:w-8 sm:h-8 text-[#2C5F2D] shrink-0" />
-              <span className="font-semibold text-gray-600 text-sm sm:text-base">501(c)(3) Certified</span>
-            </div>
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <Award className="w-7 h-7 sm:w-8 sm:h-8 text-[#C9A961] shrink-0" />
-              <span className="font-semibold text-gray-600 text-sm sm:text-base">95% Transparency Rating</span>
-            </div>
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <Globe className="w-7 h-7 sm:w-8 sm:h-8 text-[#2C5F2D] shrink-0" />
-              <span className="font-semibold text-gray-600 text-sm sm:text-base">Global Impact Network</span>
-            </div>
           </div>
         </div>
       </section>
