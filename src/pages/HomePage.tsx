@@ -133,27 +133,37 @@ export function HomePage() {
     { number: '95%', label: 'Transparency Rating', icon: Award },
   ];
 
-  const bookTitles = [
-    'The Clear Quran (Tafsir)',
-    'Riyad us-Saliheen',
-    'Forty Hadith Qudsi',
-    'Stories of the Prophets',
-    'The Sealed Nectar (Ar-Raheeq Al-Makhtum)',
-    'Purification of the Soul',
-    'The Book of Assistance',
-    'In the Footsteps of the Prophet',
-    'Islam: A Short History',
-    'The Ideal Muslim',
-  ]; // 10 titles – 5+5 layout in section
+  const BOOK_DOWNLOADS = [
+    { title: 'Light of Faith', file: '/books/light-of-faith.pdf' },
+    { title: 'The New Muslims Guide', file: '/books/the-new-muslim-guide.pdf' },
+    { title: 'Living Islam', file: '/books/living-islam.pdf' },
+    { title: 'Bow Before Allah', file: '/books/bow-before-allah.pdf' },
+    { title: 'The Final Messenger ﷺ', file: '/books/the-final-messenger.pdf' },
+    { title: 'The Gateway to Quran', file: '/books/the-gateway-to-quran.pdf' },
+    { title: 'The Muslim Lifestyle', file: '/books/the-muslim-lifestyle.pdf' },
+    { title: 'Purification of Heart', file: '/books/purification-of-heart.pdf' },
+    {
+      title: 'Walking Together (Marriage and Community)',
+      file: '/books/walking-together-marriage-and-community.pdf',
+    },
+    { title: 'The Struggle Ends', file: '/books/the-struggle-ends.pdf' },
+    { title: 'Islamic Manners', file: '/books/islamic-manners.pdf' },
+    { title: 'Knowledge and Purpose', file: '/books/knowledge-and-purpose.pdf' },
+    { title: 'Ramadan Made Easy', file: '/books/ramadan-made-easy.pdf' },
+  ]; // 13 downloadable books – shared with Downloads page
 
   return (
     <div>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10" aria-hidden>
           <img
             src="https://images.unsplash.com/photo-1558114965-eeb97aa84c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc2xhbWljJTIwcGF0dGVybnxlbnwxfHx8fDE3Njk0NTA1MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080"
-            alt="Islamic pattern"
+            alt=""
+            width={1080}
+            height={1080}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         </div>
@@ -318,8 +328,9 @@ export function HomePage() {
                   <div className="aspect-square w-full max-w-lg mx-auto lg:max-w-none bg-gray-200">
                     <iframe
                       title="Understanding the Shahadah"
-                      src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}`}
+                      src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}?enablejsapi=1`}
                       className="w-full h-full"
+                      loading="lazy"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
@@ -365,6 +376,10 @@ export function HomePage() {
                   <ImageWithFallback
                     src={beneficiary.image}
                     alt={beneficiary.title}
+                    width={400}
+                    height={192}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -407,19 +422,24 @@ export function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
-            {bookTitles.map((title, index) => (
+            {BOOK_DOWNLOADS.map((book, index) => (
               <div
                 key={index}
                 className="group bg-white border border-gray-200/80 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_28px_rgba(44,95,45,0.1)] hover:border-[#C9A961]/40 hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="flex items-start gap-3">
+                <a
+                  href={book.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 no-underline"
+                >
                   <div className="w-8 h-8 rounded-lg bg-[#C9A961]/15 flex items-center justify-center shrink-0 group-hover:bg-[#C9A961]/25 transition-colors">
                     <BookOpen className="w-4 h-4 text-[#C9A961]" />
                   </div>
-                  <h3 className="text-sm sm:text-base font-semibold text-[#2C5F2D] leading-snug pt-0.5">
-                    {title}
+                  <h3 className="text-sm sm:text-base font-semibold text-[#2C5F2D] leading-snug group-hover:text-[#1f3f21]">
+                    {book.title}
                   </h3>
-                </div>
+                </a>
               </div>
             ))}
           </div>
@@ -450,6 +470,10 @@ export function HomePage() {
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1619392553201-3d9ab3169271?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b3JsZCUyMGdsb2JlJTIwbWFwfGVufDF8fHx8MTc2OTQwNTcyOHww&ixlib=rb-4.1.0&q=80&w=1080"
                 alt="Global reach"
+                width={1080}
+                height={720}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             </div>

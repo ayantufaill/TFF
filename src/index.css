@@ -2827,3 +2827,34 @@ html {
     height: 0;
   }
 }
+
+/* Accessibility: skip link and focus */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 9999;
+  padding: 0.75rem 1rem;
+  background: #2C5F2D;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.25rem;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  outline: 2px solid #C9A961;
+  outline-offset: 2px;
+}
+/* Visible focus for keyboard users */
+:focus-visible {
+  outline: 2px solid #2C5F2D;
+  outline-offset: 2px;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+[tabindex="0"]:focus-visible {
+  outline: 2px solid #2C5F2D;
+  outline-offset: 2px;
+}

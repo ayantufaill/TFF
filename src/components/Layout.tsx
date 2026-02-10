@@ -47,6 +47,9 @@ export function Layout() {
                 <img
                   src={LOGO_SVG}
                   alt="Two Finger Foundation"
+                  width={48}
+                  height={48}
+                  fetchPriority="high"
                   className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                 />
               </div>
@@ -108,7 +111,7 @@ export function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main id="main-content" className="flex-1" tabIndex={-1}>
         <Outlet />
       </main>
 
@@ -150,12 +153,16 @@ export function Layout() {
               <h3 className="text-lg font-semibold mb-4 text-[#C9A961]">Stay Connected</h3>
               <p className="text-sm text-gray-200 mb-3">Subscribe to our newsletter for updates</p>
               <div className="flex flex-col sm:flex-row gap-2">
+                <label htmlFor="footer-email" className="sr-only">Email for newsletter</label>
                 <input
+                  id="footer-email"
                   type="email"
                   placeholder="Your email"
+                  autoComplete="email"
+                  aria-label="Email for newsletter"
                   className="px-3 py-2 rounded text-sm flex-1 min-w-0 text-gray-900 w-full sm:w-auto"
                 />
-                <Button className="bg-[#C9A961] hover:bg-[#B89751] text-white w-full sm:w-auto shrink-0">
+                <Button type="button" className="bg-[#C9A961] hover:bg-[#B89751] text-white w-full sm:w-auto shrink-0" aria-label="Subscribe to newsletter">
                   Subscribe
                 </Button>
               </div>

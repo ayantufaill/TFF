@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
 import { UnderConstructionPage } from "./pages/UnderConstructionPage";
+import { DownloadsPage } from "./pages/DownloadsPage";
 // Deploy only homepage – other routes commented out
 // import { AboutPage } from "./pages/AboutPage";
 // import { ProgramsPage } from "./pages/ProgramsPage";
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
       { path: "discovering-islam", Component: UnderConstructionPage },
       { path: "programs", Component: UnderConstructionPage },
       { path: "playlist", Component: UnderConstructionPage },
-      { path: "downloads", Component: UnderConstructionPage },
+      { path: "downloads", Component: DownloadsPage },
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },
