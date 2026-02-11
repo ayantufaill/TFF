@@ -1,8 +1,10 @@
+import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
-import { UnderConstructionPage } from "./pages/UnderConstructionPage";
-import { DownloadsPage } from "./pages/DownloadsPage";
+// Lazy load non-home routes to reduce initial JS (better mobile Performance/TBT)
+const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage").then(m => ({ default: m.UnderConstructionPage })));
+const DownloadsPage = lazy(() => import("./pages/DownloadsPage").then(m => ({ default: m.DownloadsPage })));
 // Deploy only homepage – other routes commented out
 // import { AboutPage } from "./pages/AboutPage";
 // import { ProgramsPage } from "./pages/ProgramsPage";
@@ -11,29 +13,40 @@ import { DownloadsPage } from "./pages/DownloadsPage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
 // import { NotFoundPage } from "./pages/NotFoundPage";
 
+type LazyComponent = React.ComponentType<any>;
+
+const lazyFallback = React.createElement("div", {
+  className: "min-h-[40vh] flex items-center justify-center",
+  "aria-busy": "true",
+}, "Loading...");
+
+function LazyRoute({ Component }: { Component: LazyComponent }) {
+  return React.createElement(Suspense, { fallback: lazyFallback }, React.createElement(Component));
+}
+
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: Layout,
     children: [
       { index: true, Component: HomePage },
-      { path: "privacy-policy", Component: UnderConstructionPage },
-      { path: "terms-and-conditions", Component: UnderConstructionPage },
-      { path: "donation-policy", Component: UnderConstructionPage },
-      { path: "refund-policy", Component: UnderConstructionPage },
-      { path: "accessibility-statement", Component: UnderConstructionPage },
-      { path: "impartiality-statement", Component: UnderConstructionPage },
-      { path: "cause-of-tff", Component: UnderConstructionPage },
-      { path: "daily-ayat-hadith", Component: UnderConstructionPage },
-      { path: "azkaar-dua", Component: UnderConstructionPage },
-      { path: "donate", Component: UnderConstructionPage },
-      { path: "volunteer", Component: UnderConstructionPage },
-      { path: "get-help", Component: UnderConstructionPage },
-      { path: "about-us", Component: UnderConstructionPage },
-      { path: "discovering-islam", Component: UnderConstructionPage },
-      { path: "programs", Component: UnderConstructionPage },
-      { path: "playlist", Component: UnderConstructionPage },
-      { path: "downloads", Component: DownloadsPage },
+      { path: "privacy-policy", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "terms-and-conditions", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "donation-policy", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "refund-policy", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "accessibility-statement", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "impartiality-statement", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "cause-of-tff", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "daily-ayat-hadith", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "azkaar-dua", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "donate", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "volunteer", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "get-help", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "about-us", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "discovering-islam", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "programs", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "playlist", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "downloads", Component: () => React.createElement(LazyRoute, { Component: DownloadsPage }) },
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },

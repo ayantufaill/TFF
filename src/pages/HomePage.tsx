@@ -1,6 +1,37 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
+
+// Cover URL for public/books/covers (works with base: './')
+function getCoverUrl(relativePath: string): string {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return `${window.location.origin}${relativePath.startsWith('/') ? '' : '/'}${relativePath}`;
+  }
+  const path = relativePath.startsWith('/') ? relativePath : `/${relativePath}`;
+  return path;
+}
+
+function BookCover({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const [failed, setFailed] = useState(false);
+  const url = getCoverUrl(src);
+  if (failed) {
+    return (
+      <div className={`rounded-lg bg-[#C9A961]/15 flex items-center justify-center ${className ?? ''}`}>
+        <BookOpen className="w-8 h-8 text-[#C9A961]" />
+      </div>
+    );
+  }
+  return (
+    <img
+      src={url}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      className={`w-full h-full object-cover object-center rounded-lg ${className ?? ''}`}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
@@ -134,22 +165,19 @@ export function HomePage() {
   ];
 
   const BOOK_DOWNLOADS = [
-    { title: 'Light of Faith', file: '/books/light-of-faith.pdf' },
-    { title: 'The New Muslims Guide', file: '/books/the-new-muslim-guide.pdf' },
-    { title: 'Living Islam', file: '/books/living-islam.pdf' },
-    { title: 'Bow Before Allah', file: '/books/bow-before-allah.pdf' },
-    { title: 'The Final Messenger ﷺ', file: '/books/the-final-messenger.pdf' },
-    { title: 'The Gateway to Quran', file: '/books/the-gateway-to-quran.pdf' },
-    { title: 'The Muslim Lifestyle', file: '/books/the-muslim-lifestyle.pdf' },
-    { title: 'Purification of Heart', file: '/books/purification-of-heart.pdf' },
-    {
-      title: 'Walking Together (Marriage and Community)',
-      file: '/books/walking-together-marriage-and-community.pdf',
-    },
-    { title: 'The Struggle Ends', file: '/books/the-struggle-ends.pdf' },
-    { title: 'Islamic Manners', file: '/books/islamic-manners.pdf' },
-    { title: 'Knowledge and Purpose', file: '/books/knowledge-and-purpose.pdf' },
-    { title: 'Ramadan Made Easy', file: '/books/ramadan-made-easy.pdf' },
+    { title: 'Light of Faith', file: '/books/light-of-faith.pdf', cover: 'covers/1.png' },
+    { title: 'The New Muslims Guide', file: '/books/the-new-muslim-guide.pdf', cover: 'covers/2.png' },
+    { title: 'Living Islam', file: '/books/living-islam.pdf', cover: 'covers/3.png' },
+    { title: 'Bow Before Allah', file: '/books/bow-before-allah.pdf', cover: 'covers/4.png' },
+    { title: 'The Final Messenger ﷺ', file: '/books/the-final-messenger.pdf', cover: 'covers/5.png' },
+    { title: 'The Gateway to Quran', file: '/books/the-gateway-to-quran.pdf', cover: 'covers/6.png' },
+    { title: 'The Muslim Lifestyle', file: '/books/the-muslim-lifestyle.pdf', cover: 'covers/7.png' },
+    { title: 'Purification of Heart', file: '/books/purification-of-heart.pdf', cover: 'covers/8.png' },
+    { title: 'Walking Together (Marriage and Community)', file: '/books/walking-together-marriage-and-community.pdf', cover: 'covers/9.png' },
+    { title: 'The Struggle Ends', file: '/books/the-struggle-ends.pdf', cover: 'covers/10.png' },
+    { title: 'Islamic Manners', file: '/books/islamic-manners.pdf', cover: 'covers/11.png' },
+    { title: 'Knowledge and Purpose', file: '/books/knowledge-and-purpose.pdf', cover: 'covers/12.png' },
+    { title: 'Ramadan Made Easy', file: '/books/ramadan-made-easy.pdf', cover: 'covers/13.png' },
   ]; // 13 downloadable books – shared with Downloads page
 
   return (
@@ -158,11 +186,13 @@ export function HomePage() {
       <section className="relative bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10" aria-hidden>
           <img
-            src="https://images.unsplash.com/photo-1558114965-eeb97aa84c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpc2xhbWljJTIwcGF0dGVybnxlbnwxfHx8fDE3Njk0NTA1MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080"
+            src="https://images.unsplash.com/photo-1558114965-eeb97aa84c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=75&w=1080"
+            srcSet="https://images.unsplash.com/photo-1558114965-eeb97aa84c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=70&w=640 640w, https://images.unsplash.com/photo-1558114965-eeb97aa84c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=75&w=1080 1080w"
+            sizes="100vw"
             alt=""
             width={1080}
             height={1080}
-            loading="lazy"
+            fetchPriority="low"
             decoding="async"
             className="w-full h-full object-cover"
           />
@@ -398,48 +428,46 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Books – 10 titles (5+5 layout) */}
-      <section className="py-12 sm:py-16 lg:py-24 relative overflow-hidden">
+      {/* Recommended Books – attractive section background (beige area behind cards) */}
+      <section className="py-14 sm:py-20 relative overflow-hidden">
         <div
-          className="absolute inset-0 z-0"
+          className="absolute inset-0 opacity-[0.97]"
           style={{
-            backgroundColor: '#FAF8F3',
-            backgroundImage: 'linear-gradient(135deg, rgba(201,169,97,0.14) 0%, rgba(250,248,243,0.4) 35%, rgba(255,255,255,0.9) 100%), url(/pattern-geometric.svg)',
-            backgroundSize: 'auto, 120px 120px',
-            backgroundRepeat: 'repeat',
+            backgroundImage: 'linear-gradient(160deg, #FAF8F4 0%, #F6F3ED 20%, #F9F7F2 40%, #F4F1EA 60%, #F8F5F0 80%, #F2EFE7 100%)',
           }}
           aria-hidden
         />
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-10 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-5 tracking-tight">
-              Recommended Books
-            </h2>
-            <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_0%_50%,rgba(201,169,97,0.06),transparent_50%)] pointer-events-none z-[1]" aria-hidden />
+        <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Recommended Books</h2>
+            <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Faith, history, and character — titles we recommend for learning and reflection
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
+          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
             {BOOK_DOWNLOADS.map((book, index) => (
-              <div
-                key={index}
-                className="group bg-white border border-gray-200/80 rounded-xl sm:rounded-2xl p-4 sm:p-5 shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_12px_28px_rgba(44,95,45,0.1)] hover:border-[#C9A961]/40 hover:-translate-y-1 transition-all duration-300"
-              >
+              <div key={index} className="bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-gray-100/80 hover:shadow-[0_8px_24px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/20 transition-all duration-200 flex flex-col items-center">
                 <a
                   href={book.file}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 no-underline"
+                  className="block no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 focus:ring-offset-white rounded-xl w-full"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-[#C9A961]/15 flex items-center justify-center shrink-0 group-hover:bg-[#C9A961]/25 transition-colors">
-                    <BookOpen className="w-4 h-4 text-[#C9A961]" />
+                  <div className="mx-auto overflow-hidden rounded-lg bg-gray-100 shrink-0 flex items-center justify-center" style={{ width: 140, height: 186 }}>
+                    <BookCover
+                      src={book.cover.startsWith('/') ? book.cover : `/${book.cover}`}
+                      alt={book.title}
+                      className="w-full h-full object-cover object-center"
+                    />
                   </div>
-                  <h3 className="text-sm sm:text-base font-semibold text-[#2C5F2D] leading-snug group-hover:text-[#1f3f21]">
+                  <p className="mt-6 sm:mt-7 text-xs sm:text-[13px] md:text-sm font-semibold text-[#2C5F2D] leading-snug line-clamp-2 hover:text-[#1f3f21] text-center px-0.5">
                     {book.title}
-                  </h3>
+                  </p>
                 </a>
+                <div className="mt-4 h-4 sm:mt-5 sm:h-5 md:mt-6 md:h-6" aria-hidden />
               </div>
             ))}
           </div>

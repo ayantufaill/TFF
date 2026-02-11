@@ -11,13 +11,16 @@ function getCoverUrl(relativePath: string): string {
   return base === './' ? path : `${base.replace(/\/$/, '')}${path}`;
 }
 
+const COVER_W = 64;
+const COVER_H = 85;
+
 function BookCover({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
   const url = getCoverUrl(src);
   if (failed) {
     return (
-      <div className="w-full h-full rounded-lg bg-[#C9A961]/15 flex items-center justify-center">
-        <BookOpen className="w-6 h-6 text-[#C9A961]" />
+      <div className="rounded-lg bg-[#C9A961]/15 flex items-center justify-center flex-shrink-0" style={{ width: COVER_W, height: COVER_H }}>
+        <BookOpen className="w-5 h-5 text-[#C9A961]" />
       </div>
     );
   }
@@ -25,11 +28,12 @@ function BookCover({ src, alt }: { src: string; alt: string }) {
     <img
       src={url}
       alt={alt}
-      width={56}
-      height={80}
+      width={COVER_W}
+      height={COVER_H}
       loading="lazy"
       decoding="async"
-      className="w-full h-full object-cover"
+      className="w-full h-full object-cover rounded-lg flex-shrink-0"
+      style={{ width: COVER_W, height: COVER_H }}
       onError={() => setFailed(true)}
     />
   );
@@ -41,99 +45,99 @@ const BOOK_DOWNLOADS = [
     file: '/books/light-of-faith.pdf',
     tag: 'Start here',
     note: 'Gentle introduction to iman, hope and trust in Allah — ideal first read.',
-    cover: 'books/covers/1.png',
+    cover: 'covers/1.png',
   },
   {
     title: 'The New Muslims Guide',
     file: '/books/the-new-muslim-guide.pdf',
     tag: 'New Muslim',
     note: 'Step‑by‑step help for new reverts: the basics of belief, prayer and daily life.',
-    cover: 'books/covers/2.png',
+    cover: 'covers/2.png',
   },
   {
     title: 'Living Islam',
     file: '/books/living-islam.pdf',
     tag: 'Daily life',
     note: 'Shows how Islam beautifully shapes work, family, and personal routines.',
-    cover: 'books/covers/3.png',
+    cover: 'covers/3.png',
   },
   {
     title: 'Bow Before Allah',
     file: '/books/bow-before-allah.pdf',
     tag: 'Salah',
     note: 'Explains the meaning of salah, its movements and how to build khushu‘.',
-    cover: 'books/covers/4.png',
+    cover: 'covers/4.png',
   },
   {
     title: 'The Final Messenger ﷺ',
     file: '/books/the-final-messenger.pdf',
     tag: 'Seerah',
     note: 'Key events and lessons from the life of the Prophet ﷺ, made easy to follow.',
-    cover: 'books/covers/5.png',
+    cover: 'covers/5.png',
   },
   {
     title: 'The Gateway to Quran',
     file: '/books/the-gateway-to-quran.pdf',
     tag: 'Qur’an',
     note: 'A simple doorway into reading, understanding and reflecting on the Qur’an.',
-    cover: 'books/covers/6.png',
+    cover: 'covers/6.png',
   },
   {
     title: 'The Muslim Lifestyle',
     file: '/books/the-muslim-lifestyle.pdf',
     tag: 'Character',
     note: 'Covers manners, habits and routines for a balanced prophetic lifestyle.',
-    cover: 'books/covers/7.png',
+    cover: 'covers/7.png',
   },
   {
     title: 'Purification of Heart',
     file: '/books/purification-of-heart.pdf',
     tag: 'Tazkiyah',
     note: 'Talks about envy, arrogance, showing off and how to clean the heart from them.',
-    cover: 'books/covers/8.png',
+    cover: 'covers/8.png',
   },
   {
     title: 'Walking Together (Marriage and Community)',
     file: '/books/walking-together-marriage-and-community.pdf',
     tag: 'Family',
     note: 'Guidance for marriage, family ties and building a healthy Muslim community.',
-    cover: 'books/covers/9.png',
+    cover: 'covers/9.png',
   },
   {
     title: 'The Struggle Ends',
     file: '/books/the-struggle-ends.pdf',
     tag: 'Hope',
     note: 'Reminds the reader that every difficulty has an end, with sabr and tawakkul.',
-    cover: 'books/covers/10.png',
+    cover: 'covers/10.png',
   },
   {
     title: 'Islamic Manners',
     file: '/books/islamic-manners.pdf',
     tag: 'Manners',
     note: 'Practical etiquette with parents, guests, neighbours and the wider community.',
-    cover: 'books/covers/11.png',
+    cover: 'covers/11.png',
   },
   {
     title: 'Knowledge and Purpose',
     file: '/books/knowledge-and-purpose.pdf',
     tag: 'Purpose',
     note: 'Explains why we seek Islamic knowledge and how it gives direction to life.',
-    cover: 'books/covers/12.png',
+    cover: 'covers/12.png',
   },
   {
     title: 'Ramadan Made Easy',
     file: '/books/ramadan-made-easy.pdf',
     tag: 'Ramadan',
     note: 'Simple tips and checklists to prepare for, enjoy and benefit from Ramadan.',
-    cover: 'books/covers/13.png',
+    cover: 'covers/13.png',
   },
 ];
 
 export function DownloadsPage() {
   return (
-    <div className="min-h-[60vh] px-4 py-10 sm:py-16">
+    <div className="min-h-[60vh] px-4 pt-24 pb-24 sm:pt-32 sm:pb-36 lg:pb-40 mb-16 sm:mb-20 lg:mb-24 bg-[#F5F3EF]">
       <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-8 sm:mb-12">
+        <div className="text-center mb-8 sm:mb-12 pt-6 sm:pt-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-[#2C5F2D] mb-3 tracking-tight">
             Downloads
           </h1>
@@ -143,15 +147,14 @@ export function DownloadsPage() {
           </p>
         </div>
 
-        <div className="bg-white/80 rounded-2xl shadow-[0_6px_20px_rgba(0,0,0,0.06)] border border-gray-200/70 p-4 sm:p-6 lg:p-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
-            {BOOK_DOWNLOADS.map((book) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+          {BOOK_DOWNLOADS.map((book) => (
               <div
                 key={book.file}
-                className="group flex items-start justify-between gap-3 rounded-xl border border-gray-200/80 bg-white/90 px-3 py-3 sm:px-4 sm:py-4 hover:border-[#C9A961]/60 hover:shadow-[0_10px_24px_rgba(44,95,45,0.12)] hover:-translate-y-0.5 transition-all duration-200"
+                className="group flex items-start justify-between gap-3 rounded-xl border border-gray-200/80 bg-white px-3 py-3 sm:px-4 sm:py-4 hover:border-[#C9A961]/60 hover:shadow-[0_10px_24px_rgba(44,95,45,0.12)] hover:-translate-y-0.5 transition-all duration-200"
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-12 h-16 sm:w-14 sm:h-20 rounded-lg overflow-hidden bg-[#C9A961]/10 flex-shrink-0 flex items-center justify-center">
+                  <div className="rounded-lg overflow-hidden bg-[#C9A961]/10 flex-shrink-0 flex items-center justify-center" style={{ width: COVER_W, height: COVER_H }}>
                     {book.cover ? (
                       <BookCover src={book.cover.startsWith('/') ? book.cover : `/${book.cover}`} alt={book.title} />
                     ) : (
@@ -189,8 +192,7 @@ export function DownloadsPage() {
                   Download
                 </a>
               </div>
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </div>
