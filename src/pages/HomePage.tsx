@@ -198,40 +198,12 @@ export function HomePage() {
           />
         </div>
 
-        {/* Left arrow – sirf tab dikhe jab first headline par na hon */}
-        {HERO_TAGLINES.length > 1 && heroTaglineIndex > 0 && (
-          <div className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-10">
-            <button
-              type="button"
-              onClick={() => goToSlide(heroTaglineIndex - 1)}
-              className="p-3 sm:p-4 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-transform"
-              aria-label="Previous statement"
-            >
-              <ChevronLeft className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
-            </button>
-          </div>
-        )}
-
-        {/* Right arrow – sirf tab dikhe jab last headline par na hon */}
-        {HERO_TAGLINES.length > 1 && heroTaglineIndex < HERO_TAGLINES.length - 1 && (
-          <div className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-10">
-            <button
-              type="button"
-              onClick={() => goToSlide(heroTaglineIndex + 1)}
-              className="p-3 sm:p-4 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-transform"
-              aria-label="Next statement"
-            >
-              <ChevronRight className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
-            </button>
-          </div>
-        )}
-
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 sm:py-32 lg:py-40 text-center">
-          <div className="mb-16 sm:mb-20 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 sm:py-32 lg:py-40 text-center z-0 pointer-events-none">
+          <div className="pointer-events-auto mb-16 sm:mb-20 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
-          {/* Headline: fixed height, centered – clear gap above so no overlap with Arabic */}
-          <div className="relative min-h-[5rem] h-24 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center mb-12 sm:mb-16 px-4 sm:px-6 lg:px-8 mt-0">
+          {/* Headline: fixed height, centered – pointer-events-none so arrow tap works on mobile */}
+          <div className="relative min-h-[5rem] h-24 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center mb-12 sm:mb-16 px-4 sm:px-6 lg:px-8 mt-0 pointer-events-none">
             {heroLeavingIndex !== null && (
               <h1
                 key={`leave-${heroLeavingIndex}`}
@@ -251,8 +223,8 @@ export function HomePage() {
               {HERO_TAGLINES[heroTaglineIndex].headline}
             </h1>
           </div>
-          {/* Subtitle: fixed height, below headline, above buttons (mb = space below subtitle, buttons neeche aate hain) */}
-          <div className="relative min-h-[3rem] h-12 sm:h-14 md:h-16 flex items-center justify-center mb-40 sm:mb-48 px-4 sm:px-6 lg:px-8">
+          {/* Subtitle: fixed height; pointer-events-none so arrow tap works on mobile */}
+          <div className="relative min-h-[3rem] h-12 sm:h-14 md:h-16 flex items-center justify-center mb-40 sm:mb-48 px-4 sm:px-6 lg:px-8 pointer-events-none">
             {heroLeavingIndex !== null && (
               <p
                 key={`sub-leave-${heroLeavingIndex}`}
@@ -272,7 +244,7 @@ export function HomePage() {
               {HERO_TAGLINES[heroTaglineIndex].subtitle}
             </p>
           </div>
-          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center px-4 sm:px-6 mt-10 sm:mt-14">
+          <div className="pointer-events-auto flex flex-wrap gap-3 sm:gap-4 justify-center px-4 sm:px-6 mt-10 sm:mt-14">
             <Link to="/cause-of-tff">
               <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
                 Cause of TFF
@@ -295,7 +267,7 @@ export function HomePage() {
             </Link>
           </div>
           {/* Dots only – arrows ab left/right sides par bade wale */}
-          <div className="flex items-center justify-center mt-[4.5rem]">
+          <div className="pointer-events-auto flex items-center justify-center mt-[4.5rem]">
             <div className="inline-flex gap-2.5 sm:gap-3 items-center h-4">
               {HERO_TAGLINES.map((_, i) => (
                 <button
@@ -311,6 +283,32 @@ export function HomePage() {
             </div>
           </div>
         </div>
+
+        {/* Arrows rendered last so they stay on top on mobile; content has pointer-events-none so tap passes through */}
+        {HERO_TAGLINES.length > 1 && heroTaglineIndex > 0 && (
+          <div className="absolute left-2 sm:left-4 lg:left-6 top-1/2 -translate-y-1/2 z-30 pointer-events-auto">
+            <button
+              type="button"
+              onClick={() => goToSlide(heroTaglineIndex - 1)}
+              className="p-3 sm:p-4 min-w-[48px] min-h-[48px] rounded-full bg-white/25 hover:bg-white/35 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation active:scale-95"
+              aria-label="Previous statement"
+            >
+              <ChevronLeft className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
+            </button>
+          </div>
+        )}
+        {HERO_TAGLINES.length > 1 && (
+          <div className="absolute right-2 sm:right-4 lg:right-6 top-1/2 -translate-y-1/2 z-30 pointer-events-auto">
+            <button
+              type="button"
+              onClick={() => goToSlide(heroTaglineIndex + 1)}
+              className="p-3 sm:p-4 min-w-[48px] min-h-[48px] rounded-full bg-white/25 hover:bg-white/35 text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation active:scale-95"
+              aria-label="Next statement"
+            >
+              <ChevronRight className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14" />
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Shahadah Section – clean two-column: text left, video right */}
