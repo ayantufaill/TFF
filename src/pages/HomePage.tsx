@@ -313,10 +313,9 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Shahadah Section – same design language as Who We Serve (pattern bg, gold bar, card style) */}
+      {/* Shahadah Section – clean two-column: text left, video right */}
       {HERO_VIDEO_YOUTUBE_ID && (
         <section className="py-12 sm:py-16 lg:py-24 relative overflow-hidden">
-          {/* Same textured background as Who We Serve */}
           <div
             className="absolute inset-0 z-0"
             style={{
@@ -328,34 +327,27 @@ export function HomePage() {
             aria-hidden
           />
           <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
-          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-10 sm:mb-16">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-5 tracking-tight">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-10 sm:mb-14">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-4 tracking-tight">
                 Shahadah: The first step of Faith
               </h2>
-              <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
+              <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium">
                 Understanding the declaration at the heart of Islam
               </p>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-stretch">
-              {/* Left: Text card (already provided text) */}
-              <div className="order-1 flex flex-col justify-center">
-                <div className="group overflow-hidden bg-white border border-gray-200/80 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(44,95,45,0.12)] hover:-translate-y-2 hover:border-[#C9A961]/40 transition-all duration-300 h-full flex flex-col">
-                  <div className="h-0.5 w-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] opacity-80 shrink-0" aria-hidden />
-                  <div className="relative p-6 sm:p-8 flex-1 flex flex-col justify-center bg-gradient-to-br from-white to-[#FAFAF8]">
-                    <div className="absolute left-0 top-8 bottom-8 w-1 rounded-r bg-gradient-to-b from-[#C9A961]/40 to-[#8B7355]/30" aria-hidden />
-                    <p className="text-gray-700 text-base sm:text-lg md:text-xl leading-loose pl-5 sm:pl-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-stretch">
+              <div className="order-1 flex">
+                <div className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8 shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full">
+                  <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
                       <span className="text-[#2C5F2D] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
                     </p>
-                  </div>
                 </div>
               </div>
-              {/* Right: Video card */}
-              <div className="group order-2 flex items-center">
-                <div className="w-full overflow-hidden bg-white border border-gray-200/80 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(44,95,45,0.12)] hover:-translate-y-2 hover:border-[#C9A961]/40 transition-all duration-300">
-                  <div className="h-0.5 w-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] opacity-80" aria-hidden />
-                  <div className="aspect-square w-full max-w-lg mx-auto lg:max-w-none bg-gray-200">
+              <div className="order-2 flex">
+                <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full h-full min-h-0 flex flex-col">
+                  <div className="flex-1 min-h-0 w-full">
                     <iframe
                       title="Understanding the Shahadah"
                       src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}?enablejsapi=1`}
@@ -429,7 +421,7 @@ export function HomePage() {
       </section>
 
       {/* Recommended Books – attractive section background (beige area behind cards) */}
-      <section className="py-14 sm:py-20 relative overflow-hidden">
+      <section className="pt-14 pb-24 sm:pt-20 sm:pb-28 lg:pb-32 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.97]"
           style={{
