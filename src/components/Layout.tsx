@@ -13,6 +13,7 @@ const navLinks = [
   { label: 'Programs', to: '/programs' },
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },
+  { label: 'Articles', to: '/articles' },
 ];
 
 export function Layout() {
