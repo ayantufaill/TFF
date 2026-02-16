@@ -135,19 +135,28 @@ const BOOK_DOWNLOADS = [
 
 export function DownloadsPage() {
   return (
-    <div className="min-h-[60vh] px-4 pt-24 pb-24 sm:pt-32 sm:pb-36 lg:pb-40 mb-16 sm:mb-20 lg:mb-24 bg-[#F5F3EF]">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-8 sm:mb-12 pt-6 sm:pt-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#2C5F2D] mb-3 tracking-tight">
+    <div className="min-h-[60vh]">
+      {/* Hero – Articles jaisa green banner */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white shadow-[0_4px_0_0_rgba(0,0,0,0.06)] min-h-[17rem] sm:min-h-[20rem] lg:min-h-[24rem] flex flex-col justify-center">
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
             Downloads
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Free, ready‑to‑use PDFs for new Muslims and families. Click the title to preview, or use
-            the download button to save it.
+          <div className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
+          <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
+            Free, ready‑to‑use PDFs for new Muslims and families. Click the title to preview, or use the download button to save it.
           </p>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+      {/* Cream strip – green aur content ke beech */}
+      <div className="h-12 sm:h-16 lg:h-20 shrink-0 bg-[#FAF8F4]" aria-hidden />
+
+      {/* Content – cards */}
+      <div className="px-4 pt-12 sm:pt-16 lg:pt-20 pb-24 sm:pb-36 lg:pb-40 mb-16 sm:mb-20 lg:mb-24 bg-[#F5F3EF]">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {BOOK_DOWNLOADS.map((book) => (
               <div
                 key={book.file}
@@ -193,6 +202,7 @@ export function DownloadsPage() {
                 </a>
               </div>
           ))}
+          </div>
         </div>
       </div>
     </div>
