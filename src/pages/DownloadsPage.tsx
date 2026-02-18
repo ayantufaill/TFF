@@ -14,6 +14,30 @@ function getCoverUrl(relativePath: string): string {
 const COVER_W = 64;
 const COVER_H = 85;
 
+/** Get Google Drive direct download URL from a view/share link (one-click download). */
+function getDriveDownloadUrl(viewUrl: string): string {
+  const match = viewUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+  return viewUrl;
+}
+
+/** Start download in a hidden iframe so no new tab or extra page appears. */
+function startDownload(url: string, onStarted?: () => void) {
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
+  iframe.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(iframe);
+  iframe.src = url;
+  onStarted?.();
+  setTimeout(() => {
+    try {
+      document.body.removeChild(iframe);
+    } catch {
+      // already removed
+    }
+  }, 3000);
+}
+
 function BookCover({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
   const url = getCoverUrl(src);
@@ -134,6 +158,14 @@ const BOOK_DOWNLOADS = [
 ];
 
 export function DownloadsPage() {
+  const [preparingId, setPreparingId] = useState<string | null>(null);
+
+  const handleDownload = (book: { file: string }) => {
+    const url = getDriveDownloadUrl(book.file);
+    startDownload(url, () => setPreparingId(book.file));
+    setTimeout(() => setPreparingId(null), 2500);
+  };
+
   return (
     <div className="min-h-[60vh]">
       {/* Hero – Articles jaisa green banner */}
@@ -145,7 +177,7 @@ export function DownloadsPage() {
           </h1>
           <div className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
           <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            Click the title to preview, or use the download button to save it.
+            Click the title to preview, or use the download button to save it. Downloads may take a few seconds to start.
           </p>
         </div>
       </section>
@@ -193,13 +225,14 @@ export function DownloadsPage() {
                     </div>
                   </div>
                 </div>
-                <a
-                  href={book.file}
-                  download
-                  className="mt-1 inline-flex items-center justify-center rounded-full border border-[#C9A961]/70 bg-[#C9A961]/10 px-3 py-1 text-xs sm:text-[13px] font-medium text-[#2C5F2D] hover:bg-[#C9A961]/20 hover:border-[#C9A961] transition-colors whitespace-nowrap"
+                <button
+                  type="button"
+                  onClick={() => handleDownload(book)}
+                  disabled={preparingId === book.file}
+                  className="mt-1 inline-flex items-center justify-center rounded-full border border-[#C9A961]/70 bg-[#C9A961]/10 px-3 py-1 text-xs sm:text-[13px] font-medium text-[#2C5F2D] hover:bg-[#C9A961]/20 hover:border-[#C9A961] transition-colors whitespace-nowrap cursor-pointer disabled:opacity-70 disabled:cursor-wait"
                 >
-                  Download
-                </a>
+                  {preparingId === book.file ? 'Preparing…' : 'Download'}
+                </button>
               </div>
           ))}
           </div>

@@ -1,0 +1,159 @@
+/* Professional article layout – Two Finger Foundation */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Georgia", "Times New Roman", serif;
+  background: #fafaf9;
+  color: #1c1c1c;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.article-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.article-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  color: #2C5F2D;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.article-back:hover {
+  color: #1f4520;
+  text-decoration: underline;
+}
+
+.article-back::before {
+  content: "← ";
+}
+
+.article-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(44, 95, 45, 0.12);
+}
+
+.article-tag {
+  display: inline-block;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7b5b1f;
+  background: rgba(201, 169, 97, 0.18);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.article-title {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a3d1b;
+  margin: 0 0 0.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.article-title,
+.article-body h2,
+.article-body h3 { font-weight: 700; }
+
+.article-meta {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Body – readable measure, professional typography */
+.article-body {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #262626;
+}
+
+.article-body > p:first-of-type {
+  font-size: 1.2rem;
+  line-height: 1.75;
+  color: #374151;
+}
+
+.article-body h2 {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #2C5F2D;
+  margin: 2.25rem 0 0.85rem;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+}
+
+.article-body h2:first-child {
+  margin-top: 0;
+}
+
+.article-body h3 {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2C5F2D;
+  margin: 1.75rem 0 0.6rem;
+}
+
+.article-body p {
+  margin: 0 0 1.35rem;
+  text-align: left;
+}
+
+.article-body ul,
+.article-body ol {
+  margin: 0 0 1.35rem;
+  padding-left: 1.6rem;
+}
+
+.article-body li {
+  margin-bottom: 0.4rem;
+}
+
+.article-body strong {
+  color: #1a3d1b;
+  font-weight: 700;
+}
+
+.article-body blockquote {
+  margin: 1.5rem 0;
+  padding: 0.75rem 0 0.75rem 1.25rem;
+  border-left: 3px solid #C9A961;
+  color: #374151;
+  font-style: italic;
+}
+
+.article-body a {
+  color: #2C5F2D;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.article-body a:hover {
+  color: #1f4520;
+}
+
+@media (min-width: 640px) {
+  .article-page { padding: 2.5rem 2rem 5rem; }
+  .article-title { font-size: 2.25rem; }
+  .article-body h2 { font-size: 1.4rem; margin-top: 2.5rem; }
+  .article-body p { margin-bottom: 1.5rem; }
+}
