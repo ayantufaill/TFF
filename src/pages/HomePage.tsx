@@ -36,6 +36,28 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 
+/** Count-up animation when in view: 0 → target over ~1.5s with ease-out */
+function CountUp({ target, suffix, inView }: { target: number; suffix: string; inView: boolean }) {
+  const [display, setDisplay] = useState(0);
+  const started = useRef(false);
+  useEffect(() => {
+    if (!inView || started.current) return;
+    started.current = true;
+    const duration = 1800;
+    const start = performance.now();
+    const step = (now: number) => {
+      const elapsed = now - start;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - (1 - t) ** 4;
+      setDisplay(Math.round(eased * target));
+      if (t < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, target]);
+  const value = Math.min(display, target);
+  return <>{value.toLocaleString()}{suffix}</>;
+}
+
 // Video section (right after hero): set to your YouTube video ID (from youtube.com/watch?v=XXXXX) or null to hide section.
 // For a self-hosted video: put the file in public/ (e.g. public/intro.mp4) and replace the iframe block with: <video src="/intro.mp4" controls className="w-full h-full" />
 const HERO_VIDEO_YOUTUBE_ID = '3uNNZ9h3vS8' as string | null;
@@ -158,26 +180,26 @@ export function HomePage() {
   ];
 
   const impactStats = [
-    { number: '20+', label: 'Countries Served', icon: Globe },
-    { number: '5,000+', label: 'Families Supported', icon: Users },
-    { number: '12,000+', label: 'Children Educated', icon: BookOpen },
-    { number: '95%', label: 'Transparency Rating', icon: Award },
+    { value: 20, suffix: '+', label: 'Countries Served', icon: Globe },
+    { value: 5000, suffix: '+', label: 'Families Supported', icon: Users },
+    { value: 12000, suffix: '+', label: 'Children Educated', icon: BookOpen },
+    { value: 95, suffix: '%', label: 'Transparency Rating', icon: Award },
   ];
 
   const BOOK_DOWNLOADS = [
-    { title: 'Light of Faith', file: '/books/light-of-faith.pdf', cover: 'covers/1.png' },
-    { title: 'The New Muslims Guide', file: '/books/the-new-muslim-guide.pdf', cover: 'covers/2.png' },
-    { title: 'Living Islam', file: '/books/living-islam.pdf', cover: 'covers/3.png' },
-    { title: 'Bow Before Allah', file: '/books/bow-before-allah.pdf', cover: 'covers/4.png' },
-    { title: 'The Final Messenger ﷺ', file: '/books/the-final-messenger.pdf', cover: 'covers/5.png' },
-    { title: 'The Gateway to Quran', file: '/books/the-gateway-to-quran.pdf', cover: 'covers/6.png' },
-    { title: 'The Muslim Lifestyle', file: '/books/the-muslim-lifestyle.pdf', cover: 'covers/7.png' },
-    { title: 'Purification of Heart', file: '/books/purification-of-heart.pdf', cover: 'covers/8.png' },
-    { title: 'Walking Together (Marriage and Community)', file: '/books/walking-together-marriage-and-community.pdf', cover: 'covers/9.png' },
-    { title: 'The Struggle Ends', file: '/books/the-struggle-ends.pdf', cover: 'covers/10.png' },
-    { title: 'Islamic Manners', file: '/books/islamic-manners.pdf', cover: 'covers/11.png' },
-    { title: 'Knowledge and Purpose', file: '/books/knowledge-and-purpose.pdf', cover: 'covers/12.png' },
-    { title: 'Ramadan Made Easy', file: '/books/ramadan-made-easy.pdf', cover: 'covers/13.png' },
+    { title: 'Light of Faith', file: 'https://drive.google.com/file/d/1M9bi34Rc6_moPbppjDD2l98hcSmQjyYg/view?usp=drive_link', cover: 'covers/1.png' },
+    { title: 'The New Muslims Guide', file: 'https://drive.google.com/file/d/13gbIDTvL7DjZ_TOzkqXXo-Ps5DHSokGD/view?usp=drive_link', cover: 'covers/2.png' },
+    { title: 'Living Islam', file: 'https://drive.google.com/file/d/1YOZ5o4VWeWTBHuUKY7CStPtsC68zOoaK/view?usp=drive_link', cover: 'covers/3.png' },
+    { title: 'Bow Before Allah', file: 'https://drive.google.com/file/d/1jdHtlhrfRtAdNlgTe2LhmQsH2aesRjHl/view?usp=drive_link', cover: 'covers/4.png' },
+    { title: 'The Final Messenger ﷺ', file: 'https://drive.google.com/file/d/1JLkXjyulXNLGmdkct89-r-2V0AsZD7qW/view?usp=drive_link', cover: 'covers/5.png' },
+    { title: 'The Gateway to Quran', file: 'https://drive.google.com/file/d/1CDHlGdiUicK-pH4UJZZLOI8gRqtfPTai/view?usp=drive_link', cover: 'covers/6.png' },
+    { title: 'The Muslim Lifestyle', file: 'https://drive.google.com/file/d/1yudypcC8_yYXGetTgs1S07IgY8LagbTZ/view?usp=drive_link', cover: 'covers/7.png' },
+    { title: 'Purification of Heart', file: 'https://drive.google.com/file/d/13uHJEY1T2U0_lIVeU3DI21nvE1l99FzH/view?usp=drive_link', cover: 'covers/8.png' },
+    { title: 'Walking Together (Marriage and Community)', file: 'https://drive.google.com/file/d/1XXdirVBG_ulReYf56Bua-hL-Upw3J5zS/view?usp=drive_link', cover: 'covers/9.png' },
+    { title: 'The Struggle Ends', file: 'https://drive.google.com/file/d/1ipBZf0-1x1igyHloTV_rJDx_RoaUVM09/view?usp=drive_link', cover: 'covers/10.png' },
+    { title: 'Islamic Manners', file: 'https://drive.google.com/file/d/1RCPxd-3F94o99BMcrkYhRN3VAcBfvfoE/view?usp=drive_link', cover: 'covers/11.png' },
+    { title: 'Knowledge and Purpose', file: 'https://drive.google.com/file/d/1FUbodc2vVhyPMMOwO3isVJo44aib7TQL/view?usp=drive_link', cover: 'covers/12.png' },
+    { title: 'Ramadan Made Easy', file: 'https://drive.google.com/file/d/1FKR2L1Mt67-1lJNrzBgGMS8ScN1ba8qr/view?usp=drive_link', cover: 'covers/13.png' },
   ]; // 13 downloadable books – shared with Downloads page
 
   return (
@@ -512,7 +534,9 @@ export function HomePage() {
                     }
                   >
                     <stat.icon className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A961] mb-2 sm:mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#B89751]" />
-                    <div className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-0.5 sm:mb-1">{stat.number}</div>
+                    <div className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-0.5 sm:mb-1">
+                      <CountUp target={stat.value} suffix={stat.suffix} inView={globalReachInView} />
+                    </div>
                     <div className="text-xs sm:text-sm text-gray-500">{stat.label}</div>
                   </div>
                 ))}

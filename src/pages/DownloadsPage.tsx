@@ -42,91 +42,91 @@ function BookCover({ src, alt }: { src: string; alt: string }) {
 const BOOK_DOWNLOADS = [
   {
     title: 'Light of Faith',
-    file: '/books/light-of-faith.pdf',
+    file: 'https://drive.google.com/file/d/1M9bi34Rc6_moPbppjDD2l98hcSmQjyYg/view?usp=drive_link',
     tag: 'Start here',
     note: 'Gentle introduction to iman, hope and trust in Allah — ideal first read.',
     cover: 'covers/1.png',
   },
   {
     title: 'The New Muslims Guide',
-    file: '/books/the-new-muslim-guide.pdf',
+    file: 'https://drive.google.com/file/d/13gbIDTvL7DjZ_TOzkqXXo-Ps5DHSokGD/view?usp=drive_link',
     tag: 'New Muslim',
     note: 'Step‑by‑step help for new reverts: the basics of belief, prayer and daily life.',
     cover: 'covers/2.png',
   },
   {
     title: 'Living Islam',
-    file: '/books/living-islam.pdf',
+    file: 'https://drive.google.com/file/d/1YOZ5o4VWeWTBHuUKY7CStPtsC68zOoaK/view?usp=drive_link',
     tag: 'Daily life',
     note: 'Shows how Islam beautifully shapes work, family, and personal routines.',
     cover: 'covers/3.png',
   },
   {
     title: 'Bow Before Allah',
-    file: '/books/bow-before-allah.pdf',
+    file: 'https://drive.google.com/file/d/1jdHtlhrfRtAdNlgTe2LhmQsH2aesRjHl/view?usp=drive_link',
     tag: 'Salah',
     note: 'Explains the meaning of salah, its movements and how to build khushu‘.',
     cover: 'covers/4.png',
   },
   {
     title: 'The Final Messenger ﷺ',
-    file: '/books/the-final-messenger.pdf',
+    file: 'https://drive.google.com/file/d/1JLkXjyulXNLGmdkct89-r-2V0AsZD7qW/view?usp=drive_link',
     tag: 'Seerah',
     note: 'Key events and lessons from the life of the Prophet ﷺ, made easy to follow.',
     cover: 'covers/5.png',
   },
   {
     title: 'The Gateway to Quran',
-    file: '/books/the-gateway-to-quran.pdf',
+    file: 'https://drive.google.com/file/d/1CDHlGdiUicK-pH4UJZZLOI8gRqtfPTai/view?usp=drive_link',
     tag: 'Qur’an',
     note: 'A simple doorway into reading, understanding and reflecting on the Qur’an.',
     cover: 'covers/6.png',
   },
   {
     title: 'The Muslim Lifestyle',
-    file: '/books/the-muslim-lifestyle.pdf',
+    file: 'https://drive.google.com/file/d/1yudypcC8_yYXGetTgs1S07IgY8LagbTZ/view?usp=drive_link',
     tag: 'Character',
     note: 'Covers manners, habits and routines for a balanced prophetic lifestyle.',
     cover: 'covers/7.png',
   },
   {
     title: 'Purification of Heart',
-    file: '/books/purification-of-heart.pdf',
+    file: 'https://drive.google.com/file/d/13uHJEY1T2U0_lIVeU3DI21nvE1l99FzH/view?usp=drive_link',
     tag: 'Tazkiyah',
     note: 'Talks about envy, arrogance, showing off and how to clean the heart from them.',
     cover: 'covers/8.png',
   },
   {
     title: 'Walking Together (Marriage and Community)',
-    file: '/books/walking-together-marriage-and-community.pdf',
+    file: 'https://drive.google.com/file/d/1XXdirVBG_ulReYf56Bua-hL-Upw3J5zS/view?usp=drive_link',
     tag: 'Family',
     note: 'Guidance for marriage, family ties and building a healthy Muslim community.',
     cover: 'covers/9.png',
   },
   {
     title: 'The Struggle Ends',
-    file: '/books/the-struggle-ends.pdf',
+    file: 'https://drive.google.com/file/d/1ipBZf0-1x1igyHloTV_rJDx_RoaUVM09/view?usp=drive_link',
     tag: 'Hope',
     note: 'Reminds the reader that every difficulty has an end, with sabr and tawakkul.',
     cover: 'covers/10.png',
   },
   {
     title: 'Islamic Manners',
-    file: '/books/islamic-manners.pdf',
+    file: 'https://drive.google.com/file/d/1RCPxd-3F94o99BMcrkYhRN3VAcBfvfoE/view?usp=drive_link',
     tag: 'Manners',
     note: 'Practical etiquette with parents, guests, neighbours and the wider community.',
     cover: 'covers/11.png',
   },
   {
     title: 'Knowledge and Purpose',
-    file: '/books/knowledge-and-purpose.pdf',
+    file: 'https://drive.google.com/file/d/1FUbodc2vVhyPMMOwO3isVJo44aib7TQL/view?usp=drive_link',
     tag: 'Purpose',
     note: 'Explains why we seek Islamic knowledge and how it gives direction to life.',
     cover: 'covers/12.png',
   },
   {
     title: 'Ramadan Made Easy',
-    file: '/books/ramadan-made-easy.pdf',
+    file: 'https://drive.google.com/file/d/1FKR2L1Mt67-1lJNrzBgGMS8ScN1ba8qr/view?usp=drive_link',
     tag: 'Ramadan',
     note: 'Simple tips and checklists to prepare for, enjoy and benefit from Ramadan.',
     cover: 'covers/13.png',
@@ -145,7 +145,7 @@ export function DownloadsPage() {
           </h1>
           <div className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
           <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            Free, ready‑to‑use PDFs for new Muslims and families. Click the title to preview, or use the download button to save it.
+            Click the title to preview, or use the download button to save it.
           </p>
         </div>
       </section>

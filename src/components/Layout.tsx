@@ -25,9 +25,9 @@ export function Layout() {
   return (
     <div className="min-h-screen bg-[#FAF8F3] flex flex-col overflow-x-hidden">
       <header className="bg-white shadow-sm sticky top-0 z-50 relative h-16 sm:h-20 min-h-[4rem]">
-        {/* Back – top-left, header ke darmayan (vertical center) */}
+        {/* Back – desktop only: top-left (web unchanged) */}
         {showBack ? (
-          <div className="absolute left-0 top-0 bottom-0 h-full flex items-center justify-center pl-10 sm:pl-14 z-10">
+          <div className="absolute left-0 top-0 bottom-0 h-full hidden lg:flex items-center justify-center pl-10 sm:pl-14 z-10">
             <button
               type="button"
               onClick={() => navigate(-1)}
@@ -40,10 +40,26 @@ export function Layout() {
           </div>
         ) : null}
 
-        <div className={`max-w-7xl mx-auto pl-8 sm:pl-10 lg:pl-12 pr-3 sm:pr-6 lg:pr-8 ${showBack ? 'pl-24 sm:pl-32' : ''}`}>
-          <div className="flex items-center justify-between h-16 sm:h-20 min-h-[4rem]">
-            {/* Logo – SVG from public/logo.svg */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-start">
+        <div className={`max-w-7xl mx-auto pl-8 sm:pl-10 lg:pl-12 pr-3 sm:pr-6 lg:pr-8 h-full ${showBack ? 'lg:pl-24 lg:pl-32' : ''}`}>
+          <div className="flex items-center justify-between h-16 sm:h-20 min-h-[4rem] gap-3">
+            {/* Back – mobile only: logo se pehle */}
+            {showBack ? (
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="lg:hidden flex-shrink-0 inline-flex items-center gap-1.5 text-[#2C5F2D] hover:text-[#C9A961] font-medium transition-colors py-2 pr-1"
+                aria-label="Go back"
+              >
+                <ArrowLeft className="w-5 h-5 shrink-0" />
+                <span>Back</span>
+              </button>
+            ) : null}
+            {/* Logo + name – click pe home */}
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
+            >
               <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
                 <img
                   src={LOGO_SVG}
@@ -58,7 +74,7 @@ export function Layout() {
                 <h1 className="text-base sm:text-xl font-semibold text-[#2C5F2D] truncate">Two Finger Foundation</h1>
                 <p className="text-xs text-gray-600 hidden sm:block">Empowering Lives, Nurturing Faith</p>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
@@ -87,29 +103,34 @@ export function Layout() {
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-
-          {/* Mobile nav */}
-          {mobileMenuOpen && (
-            <nav className="lg:hidden py-4 border-t">
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
-                return (
-                  <Link
-                    key={link.label}
-                    to={link.to}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`block py-3 px-4 transition-colors ${
-                      isActive ? 'bg-[#C9A961]/10 text-[#C9A961] font-medium' : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          )}
         </div>
       </header>
+
+      {/* Mobile-only full-screen menu overlay – main content ko cover, nav clear */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-x-0 bottom-0 top-16 sm:top-20 z-40 lg:hidden bg-[#FAF8F3]"
+          aria-hidden="false"
+        >
+          <nav className="pt-6 px-6 pb-8 flex flex-col gap-1" aria-label="Main">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
+              return (
+                <Link
+                  key={link.label}
+                  to={link.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block py-4 px-4 rounded-lg text-lg font-medium transition-colors ${
+                    isActive ? 'bg-[#C9A961]/15 text-[#2C5F2D]' : 'text-[#2C5F2D] hover:bg-[#2C5F2D]/5'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      )}
 
       {/* Main Content */}
       <main id="main-content" className="flex-1" tabIndex={-1}>

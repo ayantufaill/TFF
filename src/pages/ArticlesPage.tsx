@@ -1,24 +1,28 @@
 import { useState, useCallback } from 'react';
 import { ChevronDown, ChevronUp, FileText } from 'lucide-react';
 
-const ARTICLES = [
-  { file: 'Article 1 (40 Ethics of Rasulluah SAW).pdf', title: '40 Ethics of Rasulullah ﷺ', tag: 'Faith & Character' },
-  { file: 'Article 2 (Life after Death in Islam).pdf', title: 'Life after Death in Islam', tag: 'Aqeedah' },
-  { file: 'Article 3 Ramadan Checklist and planner.pdf', title: 'Ramadan Checklist and Planner', tag: 'Ramadan' },
-  { file: 'Article 4 Life after loss.pdf', title: 'Life After Loss', tag: 'Healing' },
-  { file: 'Article 5 Restoring Dignity.pdf', title: 'Restoring Dignity', tag: 'Widows' },
-  { file: 'Article 6 From Dependency to Independence.pdf', title: 'From Dependency to Independence', tag: 'Empowerment' },
-  { file: 'Article 7 The Silent Struggle of Widows.pdf', title: 'The Silent Struggle of Widows', tag: 'Widows' },
-  { file: 'Article 8 Emotional Healing for Widows.pdf', title: 'Emotional Healing for Widows', tag: 'Healing' },
-  { file: 'Article 9 How Community Support.pdf', title: 'How Community Support Helps', tag: 'Community' },
-  { file: 'Article 10 Education as a Second Chance.pdf', title: 'Education as a Second Chance', tag: 'Education' },
-  { file: 'Article 11 Breaking Social Stigma.pdf', title: 'Breaking Social Stigma', tag: 'Community' },
-  { file: 'Article 12 Sustainable Livelihoods for Widows.pdf', title: 'Sustainable Livelihoods for Widows', tag: 'Widows' },
-  { file: 'Article 13 Stories of Strength.pdf', title: 'Stories of Strength', tag: 'Stories' },
+const ARTICLES: { file: string; title: string; tag: string; htmlSlug?: string }[] = [
+  { file: 'Article 1 (40 Ethics of Rasulluah SAW).pdf', title: '40 Ethics of Rasulullah ﷺ', tag: 'Faith & Character', htmlSlug: '40-ethics-of-rasulullah' },
+  { file: 'Article 2 (Life after Death in Islam).pdf', title: 'Life after Death in Islam', tag: 'Aqeedah', htmlSlug: 'life-after-death-in-islam' },
+  { file: 'Article 3 Ramadan Checklist and planner.pdf', title: 'Ramadan Checklist and Planner', tag: 'Ramadan', htmlSlug: 'ramadan-checklist-and-planner' },
+  { file: 'Article 4 Life after loss.pdf', title: 'Life After Loss', tag: 'Healing', htmlSlug: 'life-after-loss' },
+  { file: 'Article 5 Restoring Dignity.pdf', title: 'Restoring Dignity', tag: 'Widows', htmlSlug: 'restoring-dignity' },
+  { file: 'Article 6 From Dependency to Independence.pdf', title: 'From Dependency to Independence', tag: 'Empowerment', htmlSlug: 'from-dependency-to-independence' },
+  { file: 'Article 7 The Silent Struggle of Widows.pdf', title: 'The Silent Struggle of Widows', tag: 'Widows', htmlSlug: 'the-silent-struggle-of-widows' },
+  { file: 'Article 8 Emotional Healing for Widows.pdf', title: 'Emotional Healing for Widows', tag: 'Healing', htmlSlug: 'emotional-healing-for-widows' },
+  { file: 'Article 9 How Community Support.pdf', title: 'How Community Support Helps', tag: 'Community', htmlSlug: 'how-community-support-helps' },
+  { file: 'Article 10 Education as a Second Chance.pdf', title: 'Education as a Second Chance', tag: 'Education', htmlSlug: 'education-as-a-second-chance' },
+  { file: 'Article 11 Breaking Social Stigma.pdf', title: 'Breaking Social Stigma', tag: 'Community', htmlSlug: 'breaking-social-stigma' },
+  { file: 'Article 12 Sustainable Livelihoods for Widows.pdf', title: 'Sustainable Livelihoods for Widows', tag: 'Widows', htmlSlug: 'sustainable-livelihoods-for-widows' },
+  { file: 'Article 13 Stories of Strength.pdf', title: 'Stories of Strength', tag: 'Stories', htmlSlug: 'stories-of-strength' },
 ];
 
-function articleUrl(file: string): string {
-  return `/articles/${encodeURIComponent(file)}`;
+function getArticleDisplayUrl(article: (typeof ARTICLES)[0]): string {
+  if (article.htmlSlug) return `/articles/${article.htmlSlug}.html`;
+  return `/articles/${encodeURIComponent(article.file)}`;
+}
+function getPdfUrl(article: (typeof ARTICLES)[0]): string {
+  return `/articles/${encodeURIComponent(article.file)}`;
 }
 
 export function ArticlesPage() {
@@ -61,7 +65,9 @@ export function ArticlesPage() {
           <div className="space-y-2 sm:space-y-3">
             {ARTICLES.map((article, index) => {
               const isOpen = openIndex === index;
-              const url = articleUrl(article.file);
+              const displayUrl = getArticleDisplayUrl(article);
+              // const pdfUrl = getPdfUrl(article); // uncomment when enabling Download PDF
+              const hasHtml = Boolean(article.htmlSlug);
               return (
                 <article
                   key={article.file}
@@ -122,19 +128,32 @@ export function ArticlesPage() {
                       <div className="rounded-lg overflow-hidden border border-gray-200/80 bg-white shadow-inner min-h-[1000px]">
                         <iframe
                           title={article.title}
-                          src={url}
+                          src={displayUrl}
                           className="w-full border-0"
                           style={{ height: '1000px', minHeight: '1000px' }}
                           loading="lazy"
                         />
                       </div>
-                      <a
-                        href={url}
-                        className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#2C5F2D] hover:text-[#C9A961] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
-                      >
-                        <FileText className="w-4 h-4" />
-                        Open full article
-                      </a>
+                      <div className="mt-3 flex flex-wrap items-center gap-3">
+                        <a
+                          href={displayUrl}
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-[#2C5F2D] hover:text-[#C9A961] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
+                        >
+                          <FileText className="w-4 h-4" />
+                          {hasHtml ? 'Open full article (page)' : 'Open full article'}
+                        </a>
+                        {/* Download PDF – commented for now
+                        {hasHtml && (
+                          <a
+                            href={pdfUrl}
+                            download
+                            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#2C5F2D] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
+                          >
+                            Download PDF
+                          </a>
+                        )}
+                        */}
+                      </div>
                     </div>
                   </div>
                 </article>

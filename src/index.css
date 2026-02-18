@@ -2828,24 +2828,16 @@ html {
   }
 }
 
-/* Accessibility: skip link and focus */
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  z-index: 9999;
-  padding: 0.75rem 1rem;
-  background: #2C5F2D;
-  color: white;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 0.25rem;
+/* Smooth fade-in when navigating to Articles (reduces flicker) */
+@keyframes articles-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-.skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  outline: 2px solid #C9A961;
-  outline-offset: 2px;
+.articles-page-fade {
+  animation: articles-fade-in 0.25s ease-out;
 }
+
+/* Accessibility: skip-link-removed – fully hidden until keyboard focus (no visible “Skip to main content” in flow) */
 /* Visible focus for keyboard users */
 :focus-visible {
   outline: 2px solid #2C5F2D;

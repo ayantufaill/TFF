@@ -2,10 +2,10 @@ import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
-// Lazy load non-home routes to reduce initial JS (better mobile Performance/TBT)
+import { DownloadsPage } from "./pages/DownloadsPage";
+import { ArticlesPage } from "./pages/ArticlesPage";
+// Lazy load other routes
 const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage").then(m => ({ default: m.UnderConstructionPage })));
-const DownloadsPage = lazy(() => import("./pages/DownloadsPage").then(m => ({ default: m.DownloadsPage })));
-const ArticlesPage = lazy(() => import("./pages/ArticlesPage").then(m => ({ default: m.ArticlesPage })));
 // Deploy only homepage – other routes commented out
 // import { AboutPage } from "./pages/AboutPage";
 // import { ProgramsPage } from "./pages/ProgramsPage";
@@ -47,8 +47,8 @@ export const router = createBrowserRouter([
       { path: "discovering-islam", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "programs", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "playlist", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
-      { path: "downloads", Component: () => React.createElement(LazyRoute, { Component: DownloadsPage }) },
-      { path: "articles", Component: () => React.createElement(LazyRoute, { Component: ArticlesPage }) },
+      { path: "downloads", Component: DownloadsPage },
+      { path: "articles", Component: ArticlesPage },
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },

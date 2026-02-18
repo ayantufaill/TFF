@@ -52,11 +52,13 @@
             "@types/react": "^19.2.9",
             "@types/react-dom": "^19.2.3",
             "@vitejs/plugin-react-swc": "^3.10.2",
+            "pdf-parse": "^2.4.5",
             "typescript": "^5.9.3",
             "vite": "6.3.5"
       },
       "scripts": {
             "dev": "vite",
-            "build": "vite build"
+            "build": "vite build",
+            "extract-articles": "node scripts/extract-articles-from-pdf.cjs"
       }
 }
