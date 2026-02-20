@@ -26,6 +26,7 @@ function startDownload(url: string, onStarted?: () => void) {
   const iframe = document.createElement('iframe');
   iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
   iframe.setAttribute('aria-hidden', 'true');
+  iframe.setAttribute('sandbox', 'allow-downloads'); // stop Drive from redirecting our page
   document.body.appendChild(iframe);
   iframe.src = url;
   onStarted?.();

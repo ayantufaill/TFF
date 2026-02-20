@@ -7,7 +7,7 @@ import { ArticlesPage } from "./pages/ArticlesPage";
 // Lazy load other routes
 const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage").then(m => ({ default: m.UnderConstructionPage })));
 // Deploy only homepage – other routes commented out
-// import { AboutPage } from "./pages/AboutPage";
+import { AboutPage } from "./pages/AboutPage";
 // import { ProgramsPage } from "./pages/ProgramsPage";
 // import { TrainingPage } from "./pages/TrainingPage";
 // import { DonatePage } from "./pages/DonatePage";
@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
       { path: "donate", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "volunteer", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "get-help", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
-      { path: "about-us", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "about-us", Component: AboutPage },
       { path: "discovering-islam", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "programs", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "playlist", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
