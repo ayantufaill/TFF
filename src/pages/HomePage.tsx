@@ -200,7 +200,8 @@ export function HomePage() {
     { title: 'Islamic Manners', file: 'https://drive.google.com/file/d/1RCPxd-3F94o99BMcrkYhRN3VAcBfvfoE/view?usp=drive_link', cover: 'covers/11.png' },
     { title: 'Knowledge and Purpose', file: 'https://drive.google.com/file/d/1FUbodc2vVhyPMMOwO3isVJo44aib7TQL/view?usp=drive_link', cover: 'covers/12.png' },
     { title: 'Ramadan Made Easy', file: 'https://drive.google.com/file/d/1FKR2L1Mt67-1lJNrzBgGMS8ScN1ba8qr/view?usp=drive_link', cover: 'covers/13.png' },
-  ]; // 13 downloadable books – shared with Downloads page
+    { title: 'Ramadan Booklet', file: 'https://drive.google.com/file/d/1rwafPkQxxbj_RB4VbzU_vXpPUFNQqlbj/view?usp=drive_link', cover: 'covers/14.png?t=1' },
+  ]; // 14 downloadable books – shared with Downloads page
 
   return (
     <div>
