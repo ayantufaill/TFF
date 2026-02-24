@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
-import { Link } from 'react-router';
-import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link, useLocation } from 'react-router';
+import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield, ChevronLeft, ChevronRight, Target, CheckCircle } from 'lucide-react';
 
 // Cover URL for public/books/covers (works with base: './')
 function getCoverUrl(relativePath: string): string {
@@ -69,7 +69,31 @@ const HERO_TAGLINES = [
   { headline: 'Restoring Dignity. Rebuilding Hope. Empowering Futures.', subtitle: 'From Survival to Self-Reliance — Together We Rise.' },
 ];
 
+const DUAS_AZKAR: { arabic: string; transliteration: string; meaning: string }[] = [
+  { arabic: 'سُبْحَانَ اللَّهِ', transliteration: 'SubhanAllah', meaning: 'Glory be to Allah.' },
+  { arabic: 'الْحَمْدُ لِلَّهِ', transliteration: 'Alhamdulillah', meaning: 'All praise is for Allah.' },
+  { arabic: 'اللَّهُ أَكْبَرُ', transliteration: 'Allahu Akbar', meaning: 'Allah is the Greatest.' },
+  { arabic: 'لَا إِلٰهَ إِلَّا اللَّهُ', transliteration: 'La ilaha illa Allah', meaning: 'There is no god but Allah.' },
+  { arabic: 'أَسْتَغْفِرُ اللَّهَ', transliteration: 'Astaghfirullah', meaning: 'I seek forgiveness from Allah.' },
+  { arabic: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', transliteration: 'SubhanAllahi wa bihamdihi', meaning: 'Glory be to Allah and praise Him.' },
+  { arabic: 'سُبْحَانَ اللَّهِ الْعَظِيمِ', transliteration: 'SubhanAllahi Al-\'Azim', meaning: 'Glory be to Allah, the Most Great.' },
+  { arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', transliteration: 'La hawla wa la quwwata illa billah', meaning: 'There is no power and no strength except with Allah.' },
+  { arabic: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', transliteration: 'Hasbunallahu wa ni\'mal wakeel', meaning: 'Allah is sufficient for us and He is the best disposer of affairs.' },
+  { arabic: 'رَبِّ اغْفِرْ لِي', transliteration: 'Rabbi ighfir li', meaning: 'My Lord, forgive me.' },
+  { arabic: 'رَبِّ ارْحَمْنِي', transliteration: 'Rabbi irhamni', meaning: 'My Lord, have mercy on me.' },
+  { arabic: 'رَبِّ زِدْنِي عِلْمًا', transliteration: 'Rabbi zidni \'ilma', meaning: 'My Lord, increase me in knowledge.' },
+  { arabic: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', transliteration: 'Rabbana atina fid-dunya hasanah wa fil-akhirati hasanah wa qina \'adhab an-nar', meaning: 'Our Lord, give us good in this world and good in the Hereafter and protect us from the punishment of the Fire.' },
+  { arabic: 'اللَّهُمَّ اهْدِنِي', transliteration: 'Allahumma ihdini', meaning: 'O Allah, guide me.' },
+  { arabic: 'اللَّهُمَّ اغْفِرْ لِي وَلِوَالِدَيَّ', transliteration: 'Allahummaghfir li wa li walidayya', meaning: 'O Allah, forgive me and my parents.' },
+  { arabic: 'يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ', transliteration: 'Ya Hayyu Ya Qayyum, bi rahmatika astagheeth', meaning: 'O Ever-Living, O Sustainer, in Your mercy I seek relief.' },
+  { arabic: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ', transliteration: 'Allahumma inni as\'aluka al-\'afiyah', meaning: 'O Allah, I ask You for well-being.' },
+  { arabic: 'رَبِّ اشْرَحْ لِي صَدْرِي', transliteration: 'Rabbi ishrah li sadri', meaning: 'My Lord, expand my chest.' },
+  { arabic: 'اللَّهُمَّ ثَبِّتْ قَلْبِي عَلَى دِينِكَ', transliteration: 'Allahumma thabbit qalbi \'ala deenik', meaning: 'O Allah, keep my heart firm upon Your religion.' },
+  { arabic: 'اللَّهُمَّ إِنِّي تَوَكَّلْتُ عَلَيْكَ', transliteration: 'Allahumma inni tawakkaltu \'alayk', meaning: 'O Allah, I place my trust in You.' },
+];
+
 export function HomePage() {
+  const location = useLocation();
   const globalReachRef = useRef<HTMLElement>(null);
   const [globalReachInView, setGlobalReachInView] = useState(false);
   const [heroTaglineIndex, setHeroTaglineIndex] = useState(0);
@@ -86,6 +110,24 @@ export function HomePage() {
     setHeroEntering(true);
     setCarouselResetKey((k) => k + 1);
   };
+
+  /* Scroll to Cause of TFF section when opening /#cause-of-tff (e.g. from hero button) */
+  useEffect(() => {
+    if (location.hash !== '#cause-of-tff') return;
+    const el = document.getElementById('cause-of-tff');
+    if (!el) return;
+    const t = setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    return () => clearTimeout(t);
+  }, [location.pathname, location.hash]);
+
+  /* Scroll to Dua and Azkar section when opening /#dua-azkar */
+  useEffect(() => {
+    if (location.hash !== '#dua-azkar') return;
+    const el = document.getElementById('dua-azkar');
+    if (!el) return;
+    const t = setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    return () => clearTimeout(t);
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     const el = globalReachRef.current;
@@ -114,26 +156,26 @@ export function HomePage() {
     return () => cancelAnimationFrame(raf);
   }, [heroLeavingIndex]);
 
-  /* Auto-advance carousel (khud move) – comment out kiya, ab sirf arrows/dots se change hoga */
-  // useEffect(() => {
-  //   let timeoutId: ReturnType<typeof setTimeout> | null = null;
-  //   const intervalId = setInterval(() => {
-  //     if (timeoutId) clearTimeout(timeoutId);
-  //     const current = heroTaglineRef.current;
-  //     setHeroLeavingIndex(current);
-  //     timeoutId = setTimeout(() => {
-  //       setHeroTaglineIndex((prev) => (prev + 1) % HERO_TAGLINES.length);
-  //       setHeroEntering(true);
-  //       setHeroLeavingIndex(null);
-  //       setHeroLeavingVisible(false);
-  //       timeoutId = null;
-  //     }, 700);
-  //   }, 5000);
-  //   return () => {
-  //     clearInterval(intervalId);
-  //     if (timeoutId) clearTimeout(timeoutId);
-  //   };
-  // }, [carouselResetKey]);
+  /* Auto-advance carousel every 10 sec; arrows/dots bhi kaam karte hain */
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    const intervalId = setInterval(() => {
+      if (timeoutId) clearTimeout(timeoutId);
+      const current = heroTaglineRef.current;
+      setHeroLeavingIndex(current);
+      timeoutId = setTimeout(() => {
+        setHeroTaglineIndex((prev) => (prev + 1) % HERO_TAGLINES.length);
+        setHeroEntering(true);
+        setHeroLeavingIndex(null);
+        setHeroLeavingVisible(false);
+        timeoutId = null;
+      }, 700);
+    }, 10000);
+    return () => {
+      clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [carouselResetKey]);
 
   const beneficiaries = [
     {
@@ -221,8 +263,8 @@ export function HomePage() {
           />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 sm:py-32 lg:py-40 text-center z-0 pointer-events-none">
-          <div className="pointer-events-auto mb-16 sm:mb-20 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
+        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 sm:py-32 lg:py-40 text-center z-10">
+          <div className="mb-16 sm:mb-20 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
           {/* Headline: fixed height, centered – pointer-events-none so arrow tap works on mobile */}
@@ -267,22 +309,30 @@ export function HomePage() {
               {HERO_TAGLINES[heroTaglineIndex].subtitle}
             </p>
           </div>
-          <div className="pointer-events-auto flex flex-wrap gap-3 sm:gap-4 justify-center px-4 sm:px-6 mt-10 sm:mt-14">
-            <Link to="/cause-of-tff">
-              <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
-                Cause of TFF
-              </Button>
-            </Link>
+          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center px-4 sm:px-6 mt-10 sm:mt-14">
+            <Button
+              type="button"
+              size="lg"
+              variant="outline"
+              className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0"
+              onClick={() => document.getElementById('cause-of-tff')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            >
+              Cause of TFF
+            </Button>
             <Link to="/daily-ayat-hadith">
               <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
                 Daily Ayat and Hadith
               </Button>
             </Link>
-            <Link to="/azkaar-dua">
-              <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
-                Azkaar / Dua
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              size="lg"
+              variant="outline"
+              className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0"
+              onClick={() => document.getElementById('dua-azkar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            >
+              Azkaar / Dua
+            </Button>
             <Link to="/donate">
               <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
                 Donate Now
@@ -290,7 +340,7 @@ export function HomePage() {
             </Link>
           </div>
           {/* Dots only – arrows ab left/right sides par bade wale */}
-          <div className="pointer-events-auto flex items-center justify-center mt-[4.5rem]">
+          <div className="flex items-center justify-center mt-[4.5rem]">
             <div className="inline-flex gap-2.5 sm:gap-3 items-center h-4">
               {HERO_TAGLINES.map((_, i) => (
                 <button
@@ -350,7 +400,7 @@ export function HomePage() {
           <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-10 sm:mb-14">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-4 tracking-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4 tracking-tight">
                 Shahadah: The first step of Faith
               </h2>
               <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
@@ -402,7 +452,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 sm:mb-16">
            
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2C5F2D] mb-5 tracking-tight">Who We Serve</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4 tracking-tight">Who We Serve</h2>
             <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
               Providing comprehensive support to those in need with dignity and compassion
@@ -441,8 +491,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Recommended Books – attractive section background (beige area behind cards) */}
-      <section className="pt-14 pb-24 sm:pt-20 sm:pb-28 lg:pb-32 relative overflow-hidden">
+      {/* Recommended Books – Dua and Azkar jitna space opar */}
+      <section className="pt-8 sm:pt-10 lg:pt-12 relative overflow-hidden">
         <div
           className="absolute inset-0 opacity-[0.97]"
           style={{
@@ -452,7 +502,7 @@ export function HomePage() {
         />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_0%_50%,rgba(201,169,97,0.06),transparent_50%)] pointer-events-none z-[1]" aria-hidden />
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 pb-20 sm:pb-28 lg:pb-36">
           <div className="text-center mb-10 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Recommended Books</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
@@ -460,7 +510,7 @@ export function HomePage() {
               Faith, history, and character — titles we recommend for learning and reflection
             </p>
           </div>
-          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-4 sm:mb-6 md:mb-8 lg:mb-10">
             {BOOK_DOWNLOADS.map((book, index) => (
               <div key={index} className="bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-gray-100/80 hover:shadow-[0_8px_24px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/20 transition-all duration-200 flex flex-col items-center">
                 <a
@@ -485,10 +535,128 @@ export function HomePage() {
             ))}
           </div>
         </div>
+        {/* Books ke neeche spacing – same section same colour */}
+        <div className="min-h-[100px] sm:min-h-[140px] lg:min-h-[180px]" aria-hidden />
       </section>
 
-      {/* Global Reach - Design 2: soft left frame */}
-      <section ref={globalReachRef} className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-[#FAF8F3] to-[#F8F6F0] overflow-x-hidden relative">
+      {/* The Cause of Two Finger Foundation – same gradient, same colour feel */}
+      <section id="cause-of-tff" className="pt-8 pb-24 sm:pt-10 sm:pb-28 lg:pt-12 lg:pb-32 relative overflow-hidden scroll-mt-20">
+        <div
+          className="absolute inset-0 opacity-[0.97]"
+          style={{
+            backgroundImage: 'linear-gradient(160deg, #FAF8F4 0%, #F6F3ED 20%, #F9F7F2 40%, #F4F1EA 60%, #F8F5F0 80%, #F2EFE7 100%)',
+          }}
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_0%_50%,rgba(201,169,97,0.06),transparent_50%)] pointer-events-none z-[1]" aria-hidden />
+        <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">The Cause of Two Finger Foundation</h2>
+            <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+              Why we exist and what drives everything we do
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <Card className="border-0 shadow-sm hover:shadow-lg transition-shadow duration-200">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <Target className="w-10 h-10 text-[#C9A961]" />
+                  <h3 className="text-2xl font-bold text-[#2C5F2D]">Our Cause</h3>
+                </div>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  Two Finger Foundation exists to restore dignity, strengthen faith, and rebuild lives. Across many communities, widows struggle in silence, orphans grow without guidance, and new Muslims begin their journey without structured support. Poverty is not only financial—it is educational, emotional, and spiritual. TFF was established to respond to this deeper need.
+                </p>
+                <p className="text-lg font-semibold text-[#2C5F2D] mb-3">Our cause is simple but powerful:</p>
+                <ul className="space-y-2 list-none pl-0 text-gray-600 leading-relaxed">
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> To stand with the vulnerable, not temporarily, but sustainably.</li>
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> To replace dependency with empowerment.</li>
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> To turn confusion into clarity.</li>
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> To transform charity into long-term impact.</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-sm hover:shadow-lg transition-shadow duration-200">
+              <CardContent className="p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <CheckCircle className="w-10 h-10 text-[#C9A961]" />
+                  <h3 className="text-2xl font-bold text-[#2C5F2D]">Our Commitment</h3>
+                </div>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  We believe real change happens when compassion is combined with structure. Through educational resources, targeted support programs, and faith-centered development initiatives, TFF works to create stability, confidence, and hope where it is most needed.
+                </p>
+                <p className="text-lg font-semibold text-[#2C5F2D] mb-3">This is our cause:</p>
+                <ul className="space-y-2 list-none pl-0 text-gray-600 leading-relaxed">
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> This is not just relief work.</li>
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> This is restoration.</li>
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> This is responsibility.</li>
+                  <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> This is our cause.</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Dua and Azkar – Cause of TFF heading jitna space opar, utna yahan bhi */}
+      <section id="dua-azkar" className="pt-8 pb-12 sm:pt-10 sm:pb-16 lg:pt-12 lg:pb-20 relative overflow-hidden scroll-mt-20">
+        <div
+          className="absolute inset-0 opacity-[0.97]"
+          style={{
+            backgroundImage: 'linear-gradient(160deg, #FAF8F4 0%, #F6F3ED 20%, #F9F7F2 40%, #F4F1EA 60%, #F8F5F0 80%, #F2EFE7 100%)',
+          }}
+          aria-hidden
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_0%_50%,rgba(201,169,97,0.06),transparent_50%)] pointer-events-none z-[1]" aria-hidden />
+        <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Dua and Azkar</h2>
+            <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+              Short adhkar and duas for remembrance and supplication
+            </p>
+          </div>
+
+          {/* Choti duayen – row-wise amne saamne (left + right same row) */}
+          <div className="space-y-4 sm:space-y-5">
+            {[
+              [0, 9], [1, 10], [2, 11], [3, 13], [4, 14], [5, 15], [6, 16], [7, 17], [8, 18],
+            ].map(([leftIdx, rightIdx], rowIdx) => (
+              <div key={rowIdx} className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
+                  <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[leftIdx].arabic}</p>
+                  <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[leftIdx].transliteration}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[leftIdx].meaning}</p>
+                </div>
+                <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
+                  <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[rightIdx].arabic}</p>
+                  <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[rightIdx].transliteration}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[rightIdx].meaning}</p>
+                </div>
+              </div>
+            ))}
+            {/* Last row – choti (19) left, bari (13) right; neeche bhi wahi spacing jo opar wali rows kay neeche */}
+            <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-5">
+              <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
+                <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[19].arabic}</p>
+                <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[19].transliteration}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[19].meaning}</p>
+              </div>
+              <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
+                <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[12].arabic}</p>
+                <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[12].transliteration}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[12].meaning}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Global Reach – section end pe neeche zyada spacing */}
+      <section ref={globalReachRef} className="pt-4 pb-24 sm:pt-6 sm:pb-28 lg:pt-8 lg:pb-32 bg-gradient-to-b from-[#FAF8F3] to-[#F8F6F0] overflow-x-hidden relative border-t-2 border-[#C9A961]/30">
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-[#C9A961]/15 z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div

@@ -15,6 +15,13 @@ const ARTICLES: { file: string; title: string; tag: string; htmlSlug?: string }[
   { file: 'Article 11 Breaking Social Stigma.pdf', title: 'Breaking Social Stigma', tag: 'Community', htmlSlug: 'breaking-social-stigma' },
   { file: 'Article 12 Sustainable Livelihoods for Widows.pdf', title: 'Sustainable Livelihoods for Widows', tag: 'Widows', htmlSlug: 'sustainable-livelihoods-for-widows' },
   { file: 'Article 13 Stories of Strength.pdf', title: 'Stories of Strength', tag: 'Stories', htmlSlug: 'stories-of-strength' },
+  { file: 'Article 14 Beyond Shelter Holistic Care Orphaned Children.pdf', title: 'Beyond Shelter', tag: 'Orphans & Child Welfare', htmlSlug: 'beyond-shelter-holistic-care-orphaned-children' },
+  { file: 'Article 15 Every Child Deserves a Future.pdf', title: 'Every Child Deserves a Future', tag: 'Orphans & Child Welfare', htmlSlug: 'every-child-deserves-a-future-reality-orphaned-children' },
+  { file: 'Article 16 Importance of Education Breaking Cycle Poverty Orphans.pdf', title: 'The Importance of Education', tag: 'Orphans & Child Welfare', htmlSlug: 'importance-of-education-breaking-cycle-poverty-orphans' },
+  { file: 'Article 17 Sponsoring an Orphan.pdf', title: 'Sponsoring an Orphan', tag: 'Orphans & Child Welfare', htmlSlug: 'sponsoring-an-orphan-how-one-act-can-change-lifetime' },
+  { file: 'Article 18 Psychological Wellbeing of Orphans.pdf', title: 'Psychological Wellbeing of Orphans', tag: 'Orphans & Child Welfare', htmlSlug: 'psychological-wellbeing-orphans-emotional-care-matters' },
+  { file: 'Article 19 Nutrition Health and Growth Orphans.pdf', title: 'Nutrition, Health, and Growth', tag: 'Orphans & Child Welfare', htmlSlug: 'nutrition-health-growth-meeting-basic-needs-orphans' },
+  { file: 'Article 20 Mentorship Programs Orphan Development.pdf', title: 'Mentorship Programs', tag: 'Orphans & Child Welfare', htmlSlug: 'mentorship-programs-impact-orphan-development' },
 ];
 
 function getArticleDisplayUrl(article: (typeof ARTICLES)[0]): string {
