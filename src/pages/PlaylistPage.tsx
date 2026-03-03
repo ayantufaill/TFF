@@ -16,7 +16,6 @@ const RECITATIONS = [
     qariName: 'Islam Sobhi',
     qariImage: '/audio/surah-al-fatihah/islam-sobhi.png',
     audioSrc: '/audio/surah-al-fatihah/islam-sobhi.mp3',
-    downloadUrl: `https://drive.google.com/uc?export=download&id=${DRIVE_AL_FATIHAH_ID}`,
   },
   {
     id: 'al-baqarah-abdul-basit',
@@ -24,7 +23,6 @@ const RECITATIONS = [
     qariName: 'Abdul Basit Abdul Samad',
     qariImage: '/audio/surah-al-baqarah/abdul-basit.png',
     audioSrc: '/audio/surah-al-baqarah/abdul-basit-abdul-samad.mp3',
-    downloadUrl: `https://drive.google.com/uc?export=download&id=${DRIVE_AL_BAQARAH_ID}`,
   },
   {
     id: 'al-imran-m-siddiq-al-manshawi',
@@ -175,23 +173,6 @@ function RecitationCard({
         </div>
         <p className="text-center font-semibold text-gray-800 pt-2 pb-3 px-4">{qariName}</p>
       </button>
-
-      {audioError && (
-        <div className="px-4 py-3 text-sm text-amber-800 bg-amber-50 border-t border-amber-200 space-y-2">
-          <p className="font-medium">Apni recitation yahin play karne ke liye file project mein daalein.</p>
-          <p>
-            1. <strong>Download</strong> button se file save karo · 2. Naam do{' '}
-            <code className="bg-amber-100 px-1 rounded">{audioSrc.split('/').pop()}</code> · 3. Is folder mein rakho:{' '}
-            <code className="bg-amber-100 px-1 rounded text-xs">public{audioSrc.replace(/\/[^/]+$/, '')}</code> · 4. Page refresh karo.
-          </p>
-        </div>
-      )}
-
-      {usingFallback && !audioError && (
-        <p className="px-4 py-1.5 text-xs text-[#2C5F2D] bg-[#2C5F2D]/10 border-t border-[#2C5F2D]/20">
-          Abhi sample play ho raha hai. Apni file isi naam se <code className="px-0.5 rounded">public{audioSrc.replace(/\/[^/]+$/, '')}</code> mein daalein.
-        </p>
-      )}
 
       {/* Play bar: left = Download, then progress + time */}
       <div className="px-4 pb-4 flex items-center gap-2">
