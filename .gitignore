@@ -1,1 +1,5 @@
 node_modules
+dist
+scripts/ffmpeg-darwin
+# Large audio – keep in public/ locally; deploy from CDN or build step
+public/audio/**/*.mp3
