@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
 import { Play, Pause, Download } from 'lucide-react';
 
 /* One audio per Surah, each from a different Qari.
@@ -98,13 +98,22 @@ function formatTime(seconds: number): string {
 }
 
 function RecitationCard({
+  id,
   number,
   surahName,
   qariName,
   qariImage,
   audioSrc,
   downloadUrl,
-}: (typeof RECITATIONS)[0] & { number: number }) {
+  isPlaying,
+  onPlayRequest,
+  onPauseRequest,
+}: (typeof RECITATIONS)[0] & {
+  number: number;
+  isPlaying: boolean;
+  onPlayRequest: (id: string) => void;
+  onPauseRequest: () => void;
+}) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -114,20 +123,30 @@ function RecitationCard({
   const [usingFallback, setUsingFallback] = useState(false);
   const showImage = qariImage && !imageError;
 
+  // When another card starts playing, pause this one
+  useEffect(() => {
+    if (!isPlaying && audioRef.current && !audioRef.current.paused) {
+      audioRef.current.pause();
+      setPlaying(false);
+    }
+  }, [isPlaying]);
+
   const togglePlay = useCallback(() => {
     const el = audioRef.current;
     if (!el) return;
     if (el.paused) {
+      onPlayRequest(id);
       setPlaying(true);
       el.play().catch(() => {
         setPlaying(false);
         setAudioError(true);
       });
     } else {
+      onPauseRequest();
       el.pause();
       setPlaying(false);
     }
-  }, []);
+  }, [id, onPlayRequest, onPauseRequest]);
 
   const handleTimeUpdate = useCallback(() => {
     const el = audioRef.current;
@@ -143,9 +162,10 @@ function RecitationCard({
   }, []);
 
   const handleEnded = useCallback(() => {
+    onPauseRequest();
     setPlaying(false);
     setCurrentTime(0);
-  }, []);
+  }, [onPauseRequest]);
 
   const handleProgressClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -298,6 +318,8 @@ function RecitationCard({
 }
 
 export function PlaylistPage() {
+  const [playingId, setPlayingId] = useState<string | null>(null);
+
   return (
     <div className="min-h-[60vh] pb-40 sm:pb-48 lg:pb-56">
       <section className="relative overflow-hidden bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white min-h-[14rem] sm:min-h-[16rem] flex flex-col justify-center">
@@ -318,7 +340,14 @@ export function PlaylistPage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
           {RECITATIONS.map((rec, index) => (
-            <RecitationCard key={rec.id} number={index + 1} {...rec} />
+            <RecitationCard
+              key={rec.id}
+              number={index + 1}
+              {...rec}
+              isPlaying={playingId === rec.id}
+              onPlayRequest={(id) => setPlayingId(id)}
+              onPauseRequest={() => setPlayingId(null)}
+            />
           ))}
         </div>
         {RECITATIONS.length === 0 && (
