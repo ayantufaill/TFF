@@ -56,6 +56,34 @@ const RECITATIONS = [
     audioSrc: '/audio/surah-al-anam/mehmood-al-hasri.mp3',
     // downloadUrl optional: agar Drive link ho to yahan add karein
   },
+  {
+    id: 'al-araf-shahat-anwar',
+    surahName: "Surah Al-A'raf",
+    qariName: 'Shahat Anwar',
+    qariImage: "/audio/surah-al-a'raf/shahat-anwar.png",
+    audioSrc: "/audio/surah-al-a'raf/shahat-anwar.mp3",
+  },
+  {
+    id: 'al-anfal-saud-al-shuraim',
+    surahName: 'Surah Al-Anfal',
+    qariName: 'Saud Al Shuraim',
+    qariImage: '/audio/surah-al-anfal/saud-al-shuraim.png',
+    audioSrc: '/audio/surah-al-anfal/saud-al-shuraim.mp3',
+  },
+  {
+    id: 'at-tawbah-abdullah-kahayyat',
+    surahName: 'Surah At-Tawbah',
+    qariName: 'Abdullah Kahayyat',
+    qariImage: '/audio/surah-al-tawbah/abdullah-kahayyat.png',
+    audioSrc: '/audio/surah-al-tawbah/abdullah-kahayyat.mp3',
+  },
+  {
+    id: 'yunus-abdul-rashid-soufi',
+    surahName: 'Surah Yunus',
+    qariName: 'Abdul Rashid Soufi',
+    qariImage: '/audio/surah-yunus/abdul-rashid-soufi.png',
+    audioSrc: '/audio/surah-yunus/10 Yunus (Abdul Rashid Soufi).mp3',
+  },
 ];
 
 function formatTime(seconds: number): string {
@@ -130,17 +158,46 @@ function RecitationCard({
     [duration]
   );
 
-  const handleDownload = useCallback(() => {
+  const handleDownload = useCallback(async () => {
     const url = downloadUrl || audioSrc;
     if (!url) return;
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${qariName.replace(/\s+/g, '-')}.mp3`;
-    a.rel = 'noopener noreferrer';
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const filename = `${qariName.replace(/\s+/g, '-')}.mp3`;
+    const isSameOrigin = url.startsWith('/') || url.startsWith(window.location.origin);
+    if (isSameOrigin) {
+      try {
+        const res = await fetch(url);
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      } catch {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    } else {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
+      iframe.setAttribute('aria-hidden', 'true');
+      iframe.setAttribute('sandbox', 'allow-downloads');
+      document.body.appendChild(iframe);
+      iframe.src = url;
+      setTimeout(() => {
+        try {
+          document.body.removeChild(iframe);
+        } catch {
+          /* already removed */
+        }
+      }, 3000);
+    }
   }, [downloadUrl, audioSrc, qariName]);
 
   return (
@@ -148,7 +205,7 @@ function RecitationCard({
       {/* Title row: subtle number + Surah name */}
       <h3 className="text-lg font-bold text-[#2C5F2D] px-4 pt-4 pb-1 flex items-center justify-center gap-2">
         <span className="text-[#C9A961] font-semibold tabular-nums">{number}.</span>
-        <span>{surahName}</span>
+        <span className="line-clamp-2 text-center">{surahName}</span>
       </h3>
 
       {/* Qari image + name (click to play) */}
@@ -259,7 +316,7 @@ export function PlaylistPage() {
       <div className="h-10 sm:h-14 bg-[#FAF8F4]" aria-hidden />
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
           {RECITATIONS.map((rec, index) => (
             <RecitationCard key={rec.id} number={index + 1} {...rec} />
           ))}

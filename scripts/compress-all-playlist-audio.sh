@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Saari playlist MP3s compress karta hai (metadata/cover hata ke) — GitHub 100 MB limit ke liye.
+# Saari playlist MP3s compress karta hai (metadata/cover hata ke).
+# Target: sab 20 MB se kam (GitHub limit + fast loading).
 # Chalao: ./scripts/compress-all-playlist-audio.sh
 
 set -e
@@ -24,13 +25,18 @@ compress() {
   "$FFMPEG" -y -i "$f" -vn -b:a "$rate" -map_metadata -1 -f mp3 "${f}.tmp" && mv "${f}.tmp" "$f" && echo "Done: $f"
 }
 
-# Al-Baqarah lambi hai — 80k se under 100 MB
-compress "public/audio/surah-al-baqarah/abdul-basit-abdul-samad.mp3" "80k"
-# Baaki 128k
+# 20 MB target: bitrate = 160000/duration_sec (approx)
+# Al-Baqarah 3h22m -> 12k | Al-Imran 1h27m -> 32k | An-Nisa 1h17m -> 36k
+# Al-Maidah 1h07m -> 40k | Al-Anam 1h45m -> 26k | Al-A'raf 1h23m -> 32k
+compress "public/audio/surah-al-baqarah/abdul-basit-abdul-samad.mp3" "12k"
 compress "public/audio/surah-al-fatihah/islam-sobhi.mp3" "128k"
-compress "public/audio/surah-al-imran/m-siddiq-al-manshawi.mp3" "128k"
-compress "public/audio/surah-an-nisa/mahmood-ali-al-banna.mp3" "128k"
-compress "public/audio/surah-al-maidah/mehmood-al-tablawi.mp3" "128k"
-compress "public/audio/surah-al-anam/mehmood-al-hasri.mp3" "128k"
+compress "public/audio/surah-al-imran/m-siddiq-al-manshawi.mp3" "32k"
+compress "public/audio/surah-an-nisa/mahmood-ali-al-banna.mp3" "36k"
+compress "public/audio/surah-al-maidah/mehmood-al-tablawi.mp3" "40k"
+compress "public/audio/surah-al-anam/mehmood-al-hasri.mp3" "26k"
+compress "public/audio/surah-al-a'raf/shahat-anwar.mp3" "32k"
+compress "public/audio/surah-al-anfal/saud-al-shuraim.mp3" "128k"
+compress "public/audio/surah-al-tawbah/abdullah-kahayyat.mp3" "64k"
+compress "public/audio/surah-yunus/10 Yunus (Abdul Rashid Soufi).mp3" "32k"
 
-echo "Sab compress ho gaye. Ab: git add public/audio/**/*.mp3 && git commit -m 'Add compressed playlist audio' && git push"
+echo "Sab compress ho gaye (target: 20 MB se kam). Ab: git add public/audio/**/*.mp3 && git commit -m 'Compress playlist audio under 20MB' && git push"
