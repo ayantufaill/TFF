@@ -1,100 +1,132 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
-import { Play, Pause, Download } from 'lucide-react';
+import { useRef, useState, useCallback, useEffect } from "react";
+import { Play, Pause, Download } from "lucide-react";
 
 /* One audio per Surah, each from a different Qari.
  * Add your audio file in public/audio/surah-al-baqarah/ and set audioSrc.
  * For download before upload: use downloadUrl (e.g. Google Drive direct link). */
-const DRIVE_AL_FATIHAH_ID = '15vZd-IpDYFia-YmbnOCneDFDmPNGx8oh';
-const DRIVE_AL_BAQARAH_ID = '1LjCPDmsdyyu28G3Kp3rKB8hCP6PvP3nI';
+const DRIVE_AL_FATIHAH_ID = "15vZd-IpDYFia-YmbnOCneDFDmPNGx8oh";
+const DRIVE_AL_BAQARAH_ID = "1LjCPDmsdyyu28G3Kp3rKB8hCP6PvP3nI";
 
-const FALLBACK_SAMPLE_URL = 'https://raw.githubusercontent.com/mathiasbynens/small/master/mp3.mp3';
+const FALLBACK_SAMPLE_URL =
+  "https://raw.githubusercontent.com/mathiasbynens/small/master/mp3.mp3";
 
 const RECITATIONS = [
   {
-    id: 'al-fatihah-islam-sobhi',
-    surahName: 'Surah Al-Fatihah',
-    qariName: 'Islam Sobhi',
-    qariImage: '/audio/surah-al-fatihah/islam-sobhi.png',
-    audioSrc: '/audio/surah-al-fatihah/islam-sobhi.mp3',
+    id: "al-fatihah-islam-sobhi",
+    surahName: "Surah Al-Fatihah",
+    qariName: "Islam Sobhi",
+    qariImage: "/audio/surah-al-fatihah/islam-sobhi.png",
+    audioSrc:
+      "https://ia801604.us.archive.org/13/items/islam-sobhi_202603/Islam-Sobhi.mp3",
+    downloadUrl:
+      "https://ia801604.us.archive.org/13/items/islam-sobhi_202603/Islam-Sobhi.mp3",
   },
   {
-    id: 'al-baqarah-abdul-basit',
-    surahName: 'Surah Al-Baqarah',
-    qariName: 'Abdul Basit Abdul Samad',
-    qariImage: '/audio/surah-al-baqarah/abdul-basit.png',
-    audioSrc: '/audio/surah-al-baqarah/abdul-basit-abdul-samad.mp3',
+    id: "al-baqarah-abdul-basit",
+    surahName: "Surah Al-Baqarah",
+    qariName: "Abdul Basit Abdul Samad",
+    qariImage: "/audio/surah-al-baqarah/abdul-basit.png",
+    audioSrc:
+      "https://ia600702.us.archive.org/2/items/abdul-basit-abdul-samad_202603/Abdul-Basit-Abdul-Samad.mp3",
+    downloadUrl:
+      "https://ia600702.us.archive.org/2/items/abdul-basit-abdul-samad_202603/Abdul-Basit-Abdul-Samad.mp3",
   },
   {
-    id: 'al-imran-m-siddiq-al-manshawi',
-    surahName: 'Surah Al-Imran',
-    qariName: 'M. Siddiq Al-Manshawi',
-    qariImage: '/audio/surah-al-imran/m-siddiq-al-manshawi.png',
-    audioSrc: '/audio/surah-al-imran/m-siddiq-al-manshawi.mp3',
-    // downloadUrl optional: agar Drive link ho to yahan add karein
+    id: "al-imran-m-siddiq-al-manshawi",
+    surahName: "Surah Al-Imran",
+    qariName: "M. Siddiq Al-Manshawi",
+    qariImage: "/audio/surah-al-imran/m-siddiq-al-manshawi.png",
+    audioSrc:
+      "https://ia800502.us.archive.org/22/items/m.-siddiq-al-manshawi/M.-Siddiq-Al-Manshawi.mp3",
+    downloadUrl:
+      "https://ia800502.us.archive.org/22/items/m.-siddiq-al-manshawi/M.-Siddiq-Al-Manshawi.mp3",
   },
   {
-    id: 'an-nisa-mahmood-ali-al-banna',
-    surahName: 'Surah An-Nisa',
-    qariName: 'Mahmood Ali Al Banna',
-    qariImage: '/audio/surah-an-nisa/mahmood-ali-al-banna.png',
-    audioSrc: '/audio/surah-an-nisa/mahmood-ali-al-banna.mp3',
-    // downloadUrl optional: agar Drive link ho to yahan add karein
+    id: "an-nisa-mahmood-ali-al-banna",
+    surahName: "Surah An-Nisa",
+    qariName: "Mahmood Ali Al Banna",
+    qariImage: "/audio/surah-an-nisa/mahmood-ali-al-banna.png",
+    audioSrc:
+      "https://ia600106.us.archive.org/2/items/mahmood-ali-al-banna/Mahmood-Ali-Al-Banna.mp3",
+    downloadUrl:
+      "https://ia600106.us.archive.org/2/items/mahmood-ali-al-banna/Mahmood-Ali-Al-Banna.mp3",
   },
   {
-    id: 'al-maidah-mehmood-al-tablawi',
+    id: "al-maidah-mehmood-al-tablawi",
     surahName: "Surah Al-Ma'idah",
-    qariName: 'Mehmood Al Tablawi',
-    qariImage: '/audio/surah-al-maidah/mehmood-al-tablawi.png',
-    audioSrc: '/audio/surah-al-maidah/mehmood-al-tablawi.mp3',
-    // downloadUrl optional: agar Drive link ho to yahan add karein
+    qariName: "Mehmood Al Tablawi",
+    qariImage: "/audio/surah-al-maidah/mehmood-al-tablawi.png",
+    audioSrc:
+      "https://ia600702.us.archive.org/15/items/mehmood-al-tablawi_202603/Mehmood-Al-Tablawi.mp3",
+    downloadUrl:
+      "https://ia600702.us.archive.org/15/items/mehmood-al-tablawi_202603/Mehmood-Al-Tablawi.mp3",
   },
   {
-    id: 'al-anam-mehmood-al-hasri',
+    id: "al-anam-mehmood-al-hasri",
     surahName: "Surah Al-An'am",
-    qariName: 'Mehmood Al Hasri',
-    qariImage: '/audio/surah-al-anam/mehmood-al-hasri.png',
-    audioSrc: '/audio/surah-al-anam/mehmood-al-hasri.mp3',
+    qariName: "Mehmood Al Hasri",
+    qariImage: "/audio/surah-al-anam/mehmood-al-hasri.png",
+    audioSrc:
+      "https://ia601602.us.archive.org/10/items/mehmood-al-hasri/Mehmood-Al-Hasri.mp3",
+    downloadUrl:
+      "https://ia601602.us.archive.org/10/items/mehmood-al-hasri/Mehmood-Al-Hasri.mp3",
     // downloadUrl optional: agar Drive link ho to yahan add karein
   },
   {
-    id: 'al-araf-shahat-anwar',
+    id: "al-araf-shahat-anwar",
     surahName: "Surah Al-A'raf",
-    qariName: 'Shahat Anwar',
+    qariName: "Shahat Anwar",
     qariImage: "/audio/surah-al-a'raf/shahat-anwar.png",
-    audioSrc: "/audio/surah-al-a'raf/shahat-anwar.mp3",
+    audioSrc:
+      "https://ia600805.us.archive.org/13/items/shahat-anwar/Shahat-Anwar.mp3",
+    downloadUrl:
+      "https://ia600805.us.archive.org/13/items/shahat-anwar/Shahat-Anwar.mp3",
   },
   {
-    id: 'al-anfal-saud-al-shuraim',
-    surahName: 'Surah Al-Anfal',
-    qariName: 'Saud Al Shuraim',
-    qariImage: '/audio/surah-al-anfal/saud-al-shuraim.png',
-    audioSrc: '/audio/surah-al-anfal/saud-al-shuraim.mp3',
+    id: "al-anfal-saud-al-shuraim",
+    surahName: "Surah Al-Anfal",
+    qariName: "Saud Al Shuraim",
+    qariImage: "/audio/surah-al-anfal/saud-al-shuraim.png",
+    audioSrc:
+      "https://ia601607.us.archive.org/24/items/saud-al-shuraim_202603/Saud-Al-Shuraim.mp3",
+    downloadUrl:
+      "https://ia601607.us.archive.org/24/items/saud-al-shuraim_202603/Saud-Al-Shuraim.mp3",
   },
   {
-    id: 'at-tawbah-abdullah-kahayyat',
-    surahName: 'Surah At-Tawbah',
-    qariName: 'Abdullah Kahayyat',
-    qariImage: '/audio/surah-al-tawbah/abdullah-kahayyat.png',
-    audioSrc: '/audio/surah-al-tawbah/abdullah-kahayyat.mp3',
+    id: "at-tawbah-abdullah-kahayyat",
+    surahName: "Surah At-Tawbah",
+    qariName: "Abdullah Kahayyat",
+    qariImage: "/audio/surah-al-tawbah/abdullah-kahayyat.png",
+    audioSrc:
+      "https://ia600701.us.archive.org/16/items/abdullah-kahayyat/Abdullah-Kahayyat.mp3",
+    downloadUrl:
+      "https://ia600701.us.archive.org/16/items/abdullah-kahayyat/Abdullah-Kahayyat.mp3",
   },
   {
-    id: 'yunus-abdul-rashid-soufi',
-    surahName: 'Surah Yunus',
-    qariName: 'Abdul Rashid Soufi',
-    qariImage: '/audio/surah-yunus/abdul-rashid-soufi.png',
-    audioSrc: '/audio/surah-yunus/10 Yunus (Abdul Rashid Soufi).mp3',
+    id: "yunus-abdul-rashid-soufi",
+    surahName: "Surah Yunus",
+    qariName: "Abdul Rashid Soufi",
+    qariImage: "/audio/surah-yunus/abdul-rashid-soufi.png",
+    audioSrc:
+      "https://ia600701.us.archive.org/12/items/abdul-rashid-soufi/Abdul-Rashid-Soufi.mp3",
+    downloadUrl:
+      "https://ia600701.us.archive.org/12/items/abdul-rashid-soufi/Abdul-Rashid-Soufi.mp3",
   },
 ];
 
 function formatTime(seconds: number): string {
-  if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
   const s = Math.floor(seconds % 60);
   if (h > 0) {
-    return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    return `${h}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   }
-  return `${m}:${s.toString().padStart(2, '0')}`;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
+
+function isArchiveUrl(url?: string): boolean {
+  return Boolean(url?.includes("archive.org"));
 }
 
 function RecitationCard({
@@ -122,6 +154,7 @@ function RecitationCard({
   const [audioError, setAudioError] = useState(false);
   const [usingFallback, setUsingFallback] = useState(false);
   const showImage = qariImage && !imageError;
+  const sourceUrl = downloadUrl || audioSrc;
 
   // When another card starts playing, pause this one
   useEffect(() => {
@@ -135,9 +168,23 @@ function RecitationCard({
     const el = audioRef.current;
     if (!el) return;
     if (el.paused) {
+      if (isArchiveUrl(audioSrc)) {
+        console.log("[Playlist] Playing from Archive.org", {
+          surahName,
+          qariName,
+          audioSrc,
+        });
+      }
       onPlayRequest(id);
       setPlaying(true);
       el.play().catch(() => {
+        if (isArchiveUrl(audioSrc)) {
+          console.error("[Playlist] Archive.org playback failed", {
+            surahName,
+            qariName,
+            audioSrc,
+          });
+        }
         setPlaying(false);
         setAudioError(true);
       });
@@ -157,9 +204,18 @@ function RecitationCard({
     const el = audioRef.current;
     if (el) {
       setDuration(el.duration);
-      if (el.src.includes('small') || el.src.includes('mathiasbynens')) setAudioError(false);
+      if (isArchiveUrl(el.currentSrc || audioSrc)) {
+        console.log("[Playlist] Archive.org audio ready", {
+          surahName,
+          qariName,
+          currentSrc: el.currentSrc || audioSrc,
+          duration: el.duration,
+        });
+      }
+      if (el.src.includes("small") || el.src.includes("mathiasbynens"))
+        setAudioError(false);
     }
-  }, []);
+  }, [audioSrc, qariName, surahName]);
 
   const handleEnded = useCallback(() => {
     onPauseRequest();
@@ -175,56 +231,66 @@ function RecitationCard({
       const x = (e.clientX - rect.left) / rect.width;
       el.currentTime = x * duration;
     },
-    [duration]
+    [duration],
   );
+
+  const [downloading, setDownloading] = useState(false);
 
   const handleDownload = useCallback(async () => {
     const url = downloadUrl || audioSrc;
-    if (!url) return;
-    const filename = `${qariName.replace(/\s+/g, '-')}.mp3`;
-    const isSameOrigin = url.startsWith('/') || url.startsWith(window.location.origin);
-    if (isSameOrigin) {
-      try {
-        const res = await fetch(url);
-        const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(blobUrl);
-      } catch {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    if (!url || downloading) return;
+    const filename = `${qariName.replace(/\s+/g, "-")}.mp3`;
+
+    setDownloading(true);
+    try {
+      if (isArchiveUrl(url)) {
+        console.log("[Playlist] Downloading from Archive.org", {
+          surahName,
+          qariName,
+          downloadUrl: url,
+          filename,
+        });
       }
-    } else {
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:absolute;width:0;height:0;border:0;visibility:hidden';
-      iframe.setAttribute('aria-hidden', 'true');
-      iframe.setAttribute('sandbox', 'allow-downloads');
-      document.body.appendChild(iframe);
-      iframe.src = url;
-      setTimeout(() => {
-        try {
-          document.body.removeChild(iframe);
-        } catch {
-          /* already removed */
-        }
-      }, 3000);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Download failed");
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+      if (isArchiveUrl(url)) {
+        console.log("[Playlist] Archive.org download started", {
+          surahName,
+          qariName,
+          filename,
+        });
+      }
+    } catch {
+      if (isArchiveUrl(url)) {
+        console.error("[Playlist] Archive.org download fallback triggered", {
+          surahName,
+          qariName,
+          downloadUrl: url,
+        });
+      }
+      // Fallback: open in new tab if fetch fails
+      window.open(url, "_blank");
+    } finally {
+      setDownloading(false);
     }
-  }, [downloadUrl, audioSrc, qariName]);
+  }, [downloadUrl, audioSrc, qariName, surahName, downloading]);
 
   return (
     <div className="bg-white rounded-xl border border-gray-200/90 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       {/* Title row: subtle number + Surah name */}
       <h3 className="text-lg font-bold text-[#2C5F2D] px-4 pt-4 pb-1 flex items-center justify-center gap-2">
-        <span className="text-[#C9A961] font-semibold tabular-nums">{number}.</span>
+        <span className="text-[#C9A961] font-semibold tabular-nums">
+          {number}.
+        </span>
         <span className="line-clamp-2 text-center">{surahName}</span>
       </h3>
 
@@ -248,7 +314,9 @@ function RecitationCard({
             </div>
           )}
         </div>
-        <p className="text-center font-semibold text-gray-800 pt-2 pb-3 px-4">{qariName}</p>
+        <p className="text-center font-semibold text-gray-800 pt-2 pb-3 px-4">
+          {qariName}
+        </p>
       </button>
 
       {/* Play bar: left = Download, then progress + time */}
@@ -256,18 +324,23 @@ function RecitationCard({
         <button
           type="button"
           onClick={handleDownload}
-          className="flex-shrink-0 w-9 h-9 rounded-full bg-[#C9A961]/20 text-[#2C5F2D] flex items-center justify-center hover:bg-[#C9A961]/30 transition-colors"
-          title="Download"
-          aria-label="Download audio"
+          disabled={downloading}
+          className={`flex-shrink-0 w-9 h-9 rounded-full bg-[#C9A961]/20 text-[#2C5F2D] flex items-center justify-center hover:bg-[#C9A961]/30 transition-colors ${downloading ? "opacity-50 cursor-wait" : ""}`}
+          title={downloading ? "Downloading..." : "Download"}
+          aria-label={downloading ? "Downloading audio" : "Download audio"}
         >
-          <Download className="w-4 h-4" />
+          {downloading ? (
+            <div className="w-4 h-4 border-2 border-[#2C5F2D] border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <Download className="w-4 h-4" />
+          )}
         </button>
         <div className="flex-1 min-w-0 flex items-center gap-2">
           <button
             type="button"
             onClick={togglePlay}
             className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2C5F2D] text-white flex items-center justify-center hover:bg-[#1e4620] transition-colors"
-            aria-label={playing ? 'Pause' : 'Play'}
+            aria-label={playing ? "Pause" : "Play"}
           >
             {playing ? (
               <Pause className="w-4 h-4" />
@@ -285,7 +358,9 @@ function RecitationCard({
           >
             <div
               className="h-full bg-[#C9A961] rounded-full transition-all duration-150"
-              style={{ width: duration ? `${(currentTime / duration) * 100}%` : '0%' }}
+              style={{
+                width: duration ? `${(currentTime / duration) * 100}%` : "0%",
+              }}
             />
           </div>
           <span className="flex-shrink-0 text-xs text-gray-500 tabular-nums min-w-[7rem] text-right whitespace-nowrap">
@@ -302,6 +377,14 @@ function RecitationCard({
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
         onError={() => {
+          if (isArchiveUrl(sourceUrl)) {
+            console.error("[Playlist] Archive.org audio error", {
+              surahName,
+              qariName,
+              audioSrc,
+              usingFallback,
+            });
+          }
           if (!usingFallback) {
             setUsingFallback(true);
             setAudioError(true);
@@ -313,6 +396,12 @@ function RecitationCard({
           }
         }}
       />
+      {audioError && audioSrc.includes("archive.org") && (
+        <p className="px-4 pt-1 pb-2 text-xs text-amber-700 text-center">
+          Audio load nahi hua. Archive page pe &quot;download 1 file&quot; pe
+          right-click → Copy link → developer ko bhejein.
+        </p>
+      )}
     </div>
   );
 }
@@ -323,14 +412,22 @@ export function PlaylistPage() {
   return (
     <div className="min-h-[60vh] pb-40 sm:pb-48 lg:pb-56">
       <section className="relative overflow-hidden bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white min-h-[14rem] sm:min-h-[16rem] flex flex-col justify-center">
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
+        <div
+          className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10"
+          aria-hidden
+        />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
             Playlist
           </h1>
-          <div className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
+          <div
+            className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4"
+            aria-hidden
+          />
           <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            One Surah, one audio — each in a different Qari&apos;s voice. Click the image or Surah to play; use the bar to seek. Download from the left.
+            One Surah, one audio — each in a different Qari&apos;s voice. Click
+            the image or Surah to play; use the bar to seek. Download from the
+            left.
           </p>
         </div>
       </section>
@@ -352,7 +449,8 @@ export function PlaylistPage() {
         </div>
         {RECITATIONS.length === 0 && (
           <p className="text-center text-gray-500 py-12">
-            No recitations added yet. Add entries to the RECITATIONS array in PlaylistPage.tsx and place audio files in public/audio/.
+            No recitations added yet. Add entries to the RECITATIONS array in
+            PlaylistPage.tsx and place audio files in public/audio/.
           </p>
         )}
       </section>
