@@ -20,6 +20,9 @@ const MAP = [
   { file: 'Article 11 Breaking Social Stigma.pdf', slug: 'breaking-social-stigma', title: 'Breaking Social Stigma', tag: 'Community' },
   { file: 'Article 12 Sustainable Livelihoods for Widows.pdf', slug: 'sustainable-livelihoods-for-widows', title: 'Sustainable Livelihoods for Widows', tag: 'Widows' },
   { file: 'Article 13 Stories of Strength.pdf', slug: 'stories-of-strength', title: 'Stories of Strength', tag: 'Stories' },
+  { file: 'Article 21 Protecting Orphans from Exploitation and Neglect.pdf', slug: 'protecting-orphans-exploitation-neglect', title: 'Protecting Orphans from Exploitation and Neglect', tag: 'Orphans & Child Welfare' },
+  { file: 'Article 22 Community-Based Care Models for Orphan.pdf', slug: 'community-based-care-models-orphans', title: 'Community-Based Care Models for Orphans', tag: 'Orphans & Child Welfare' },
+  { file: 'Article 23 Success Stories Orphans.pdf', slug: 'success-stories-orphans', title: 'Success Stories: Orphans', tag: 'Orphans & Child Welfare' },
 ];
 
 function escapeHtml(s) {

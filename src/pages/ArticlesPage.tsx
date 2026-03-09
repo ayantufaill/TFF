@@ -22,6 +22,9 @@ const ARTICLES: { file: string; title: string; tag: string; htmlSlug?: string }[
   { file: 'Article 18 Psychological Wellbeing of Orphans.pdf', title: 'Psychological Wellbeing of Orphans', tag: 'Orphans & Child Welfare', htmlSlug: 'psychological-wellbeing-orphans-emotional-care-matters' },
   { file: 'Article 19 Nutrition Health and Growth Orphans.pdf', title: 'Nutrition, Health, and Growth', tag: 'Orphans & Child Welfare', htmlSlug: 'nutrition-health-growth-meeting-basic-needs-orphans' },
   { file: 'Article 20 Mentorship Programs Orphan Development.pdf', title: 'Mentorship Programs', tag: 'Orphans & Child Welfare', htmlSlug: 'mentorship-programs-impact-orphan-development' },
+  { file: 'Article 21 Protecting Orphans from Exploitation and Neglect.pdf', title: 'Protecting Orphans from Exploitation and Neglect', tag: 'Orphans & Child Welfare', htmlSlug: 'protecting-orphans-exploitation-neglect' },
+  { file: 'Article 22 Community-Based Care Models for Orphan.pdf', title: 'Community-Based Care Models for Orphans', tag: 'Orphans & Child Welfare', htmlSlug: 'community-based-care-models-orphans' },
+  { file: 'Article 23 Success Stories Orphans.pdf', title: 'Success Stories: Orphans', tag: 'Orphans & Child Welfare', htmlSlug: 'success-stories-orphans' },
 ];
 
 function getArticleDisplayUrl(article: (typeof ARTICLES)[0]): string {

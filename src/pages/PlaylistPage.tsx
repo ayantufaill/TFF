@@ -112,6 +112,53 @@ const RECITATIONS = [
     downloadUrl:
       "https://ia600701.us.archive.org/12/items/abdul-rashid-soufi/Abdul-Rashid-Soufi.mp3",
   },
+  {
+    id: "hud-taufiq-al-saigh",
+    surahName: "Surah Hud",
+    qariName: "Taufiq Al Saigh",
+    qariImage: "/audio/surah-hud/taufiq-al-saigh.png",
+    audioSrc:
+      "https://ia601903.us.archive.org/9/items/taufiq-al-saigh/Taufiq-Al-Saigh.mp3",
+    downloadUrl:
+      "https://ia601903.us.archive.org/9/items/taufiq-al-saigh/Taufiq-Al-Saigh.mp3",
+  },
+  {
+    id: "yusuf-wadi-al-yamani",
+    surahName: "Surah Yusuf",
+    qariName: "Wadi Al Yamani",
+    qariImage: "/audio/surah-yusuf/wadi-al-yamani.png",
+    audioSrc:
+      "https://ia601505.us.archive.org/19/items/wadi-al-yamani_202603/Wadi-Al-Yamani.mp3",
+    downloadUrl:
+      "https://ia601505.us.archive.org/19/items/wadi-al-yamani_202603/Wadi-Al-Yamani.mp3",
+  },
+  {
+    id: "ar-rad-mashaari-alafasi",
+    surahName: "Surah Ar-Ra'd",
+    qariName: "Mashaari Alafasi",
+    qariImage: "/audio/surah-ar-ra'd/mashaari-alafasi.png",
+    audioSrc: "/audio/surah-ar-ra'd/13 Ar-Ra'd (Mashaari Alafasi).mp3",
+  },
+  {
+    id: "ibrahim-saad-al-ghamdi",
+    surahName: "Surah Ibrahim",
+    qariName: "Saad Al Ghamdi",
+    qariImage: "/audio/surah-ibrahim/saad-al-ghamdi.png",
+    audioSrc:
+      "https://ia601608.us.archive.org/29/items/saad-al-ghamdi_202603/Saad-Al-Ghamdi.mp3",
+    downloadUrl:
+      "https://ia601608.us.archive.org/29/items/saad-al-ghamdi_202603/Saad-Al-Ghamdi.mp3",
+  },
+  {
+    id: "al-hijr-ali-saleh-jabir",
+    surahName: "Surah Al-Hijr",
+    qariName: "Ali Saleh Jabir",
+    qariImage: "/audio/surah-al-hijr/ali-saleh-jabir.png",
+    audioSrc:
+      "https://ia601806.us.archive.org/16/items/ali-saleh-jabir/Ali-Saleh-Jabir.mp3",
+    downloadUrl:
+      "https://ia601806.us.archive.org/16/items/ali-saleh-jabir/Ali-Saleh-Jabir.mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
