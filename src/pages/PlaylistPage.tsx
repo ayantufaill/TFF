@@ -229,6 +229,41 @@ const RECITATIONS = [
     qariImage: "/audio/surah-al-furqan/muhammad-jibreel.jpg",
     audioSrc: "/audio/surah-al-furqan/25 Al-Furqan (Muhmmad Jibreel).mp3",
   },
+  {
+    id: "ash-shuara-khalifa-al-tunaiji",
+    surahName: "Surah Ash-Shu'ara",
+    qariName: "Khalifa Al Tunaiji",
+    qariImage: "/audio/surah-al-shu'ara/khalifa-al-tunaiji.jpg",
+    audioSrc: "/audio/surah-al-shu'ara/26 Ash-Shu'ara (Khalifa Al Tunaiji).mp3",
+  },
+  {
+    id: "an-naml-nabil-al-rafai",
+    surahName: "Surah An-Naml",
+    qariName: "Nabil Al Rafai",
+    qariImage: "/audio/surah-an-naml/nabil-al-rafai.jpg",
+    audioSrc: "/audio/surah-an-naml/27 An-Naml (Nabil Al Rafai).mp3",
+  },
+  {
+    id: "al-qasas-omer-al-qazabari",
+    surahName: "Surah Al-Qasas",
+    qariName: "Omer Al Qazabari",
+    qariImage: "/audio/surah-al-qasas/omer-al-qazabari.jpg",
+    audioSrc: "/audio/surah-al-qasas/28 Al-Qasas (Omer Al Qazabari).mp3",
+  },
+  {
+    id: "al-ankabut-salah-al-budair",
+    surahName: "Surah Al-Ankabut",
+    qariName: "Salah Al Budair",
+    qariImage: "/audio/surah-al-ankabut/salah-al-budair.jpg",
+    audioSrc: "/audio/surah-al-ankabut/29 Al-Ankabut (Salah Al Budair).mp3",
+  },
+  {
+    id: "ar-rum-salaj-bukatir",
+    surahName: "Surah Ar-Rum",
+    qariName: "Salaj Bukatir",
+    qariImage: "/audio/surah-ar-rum/salaj-bukatir.jpg",
+    audioSrc: "/audio/surah-ar-rum/30 Ar-Rum (Salaj Bukatir).mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
