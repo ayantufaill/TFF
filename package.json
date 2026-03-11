@@ -60,6 +60,7 @@
             "dev": "vite",
             "build": "vite build",
             "extract-articles": "node scripts/extract-articles-from-pdf.cjs",
-            "download-playlist-audio": "node scripts/download-playlist-audio.js"
+            "download-playlist-audio": "node scripts/download-playlist-audio.js",
+            "compress-playlist-audio": "bash scripts/compress-playlist-audio-16-25.sh"
       }
 }

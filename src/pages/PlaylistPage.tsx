@@ -159,6 +159,76 @@ const RECITATIONS = [
     downloadUrl:
       "https://ia601806.us.archive.org/16/items/ali-saleh-jabir/Ali-Saleh-Jabir.mp3",
   },
+  {
+    id: "an-nahl-khalid-jalil",
+    surahName: "Surah An-Nahl",
+    qariName: "Khalid Jalil",
+    qariImage: "/audio/surah-an-nahl/khalid-jalil.jpg",
+    audioSrc: "/audio/surah-an-nahl/16 An-Nahl (Khalid Jalil).mp3",
+  },
+  {
+    id: "al-isra-abdul-rehman-al-sudais",
+    surahName: "Surah Al-Isra",
+    qariName: "Abdul Rehman Al Sudais",
+    qariImage: "/audio/surah-al-isra/abdul-rehman-al-sudais.jpg",
+    audioSrc: "/audio/surah-al-isra/17 Al-Isra (Abdul Rehman Al sudais).mp3",
+  },
+  {
+    id: "al-kahf-abu-bakar-al-shatiri",
+    surahName: "Surah Al-Kahf",
+    qariName: "Abu Bakar Al Shatiri",
+    qariImage: "/audio/surah-al-kahf/abu-bakar-al-shatiri.jpg",
+    audioSrc: "/audio/surah-al-kahf/18 Al-Kahf (Abu Bakar Al Shatiri).mp3",
+  },
+  {
+    id: "maryam-ahmad-al-tarablisi",
+    surahName: "Surah Maryam",
+    qariName: "Ahmad Al Tarablisi",
+    qariImage: "/audio/surah-maryam/ahmad-al-tarablisi.jpg",
+    audioSrc: "/audio/surah-maryam/19 Maryam (Ahmad Al Tarablisi).mp3",
+  },
+  {
+    id: "ta-ha-raad-al-kurdi",
+    surahName: "Surah Ta-Ha",
+    qariName: "Ra'ad Al Kurdi",
+    qariImage: "/audio/surah ta-ha/raad-al-kurdi.jpg",
+    audioSrc: "/audio/surah ta-ha/20 Ta-Ha (Ra'ad Al Kurdi).mp3",
+  },
+  {
+    id: "al-anbiya-faris-abbad",
+    surahName: "Surah Al-Anbiya",
+    qariName: "Faris Abbad",
+    qariImage: "/audio/surah-al-anbiya/faris-abbad.jpg",
+    audioSrc: "/audio/surah-al-anbiya/21 Al-Anbiya (Faris Abbad).mp3",
+  },
+  {
+    id: "al-hajj-hani-al-rafai",
+    surahName: "Surah Al-Hajj",
+    qariName: "Hani Al Rafai",
+    qariImage: "/audio/surah-al-hajj/hani-al-rafai.jpg",
+    audioSrc: "/audio/surah-al-hajj/22 Al-Hajj (Hani Al Rafai).mp3",
+  },
+  {
+    id: "al-muminun-mahir-al-muaiqli",
+    surahName: "Surah Al-Mu'minun",
+    qariName: "Mahir Al Muaiqli",
+    qariImage: "/audio/surah-al-mu'minun/mahir-al-muaiqli.jpg",
+    audioSrc: "/audio/surah-al-mu'minun/23 Al-Mu'minun (Mahir Al Muaiqli).mp3",
+  },
+  {
+    id: "an-nur-muhammad-ayub",
+    surahName: "Surah An-Nur",
+    qariName: "Muhammad Ayub",
+    qariImage: "/audio/surah-an-nur/muhammad-ayub.jpg",
+    audioSrc: "/audio/surah-an-nur/24 An-Nur (Muhmmad Ayub).mp3",
+  },
+  {
+    id: "al-furqan-muhammad-jibreel",
+    surahName: "Surah Al-Furqan",
+    qariName: "Muhammad Jibreel",
+    qariImage: "/audio/surah-al-furqan/muhammad-jibreel.jpg",
+    audioSrc: "/audio/surah-al-furqan/25 Al-Furqan (Muhmmad Jibreel).mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
