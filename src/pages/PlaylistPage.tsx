@@ -218,6 +218,7 @@ const RECITATIONS = [
     qariName: "Faris Abbad",
     qariImage: "/audio/surah-al-anbiya/faris-abbad.jpg",
     audioSrc: "/audio/surah-al-anbiya/21 Al-Anbiya (Faris Abbad).mp3",
+    downloadUrl: "/audio/surah-al-anbiya/21 Al-Anbiya (Faris Abbad).mp3",
   },
   {
     id: "al-hajj-hani-al-rafai",
@@ -225,13 +226,17 @@ const RECITATIONS = [
     qariName: "Hani Al Rafai",
     qariImage: "/audio/surah-al-hajj/hani-al-rafai.jpg",
     audioSrc: "/audio/surah-al-hajj/22 Al-Hajj (Hani Al Rafai).mp3",
+    downloadUrl: "/audio/surah-al-hajj/22 Al-Hajj (Hani Al Rafai).mp3",
   },
   {
     id: "al-muminun-mahir-al-muaiqli",
     surahName: "Surah Al-Mu'minun",
     qariName: "Mahir Al Muaiqli",
     qariImage: "/audio/surah-al-mu'minun/mahir-al-muaiqli.jpg",
-    audioSrc: "/audio/surah-al-mu'minun/23 Al-Mu'minun (Mahir Al Muaiqli).mp3",
+    audioSrc:
+      "/audio/surah-al-mu'minun/23 Al-Mu'minun (Mahir Al Muaiqli).mp3",
+    downloadUrl:
+      "/audio/surah-al-mu'minun/23 Al-Mu'minun (Mahir Al Muaiqli).mp3",
   },
   {
     id: "an-nur-muhammad-ayub",
@@ -239,6 +244,7 @@ const RECITATIONS = [
     qariName: "Muhammad Ayub",
     qariImage: "/audio/surah-an-nur/muhammad-ayub.jpg",
     audioSrc: "/audio/surah-an-nur/24 An-Nur (Muhmmad Ayub).mp3",
+    downloadUrl: "/audio/surah-an-nur/24 An-Nur (Muhmmad Ayub).mp3",
   },
   {
     id: "al-furqan-muhammad-jibreel",
@@ -246,13 +252,17 @@ const RECITATIONS = [
     qariName: "Muhammad Jibreel",
     qariImage: "/audio/surah-al-furqan/muhammad-jibreel.jpg",
     audioSrc: "/audio/surah-al-furqan/25 Al-Furqan (Muhmmad Jibreel).mp3",
+    downloadUrl: "/audio/surah-al-furqan/25 Al-Furqan (Muhmmad Jibreel).mp3",
   },
   {
     id: "ash-shuara-khalifa-al-tunaiji",
     surahName: "Surah Ash-Shu'ara",
     qariName: "Khalifa Al Tunaiji",
     qariImage: "/audio/surah-al-shu'ara/khalifa-al-tunaiji.jpg",
-    audioSrc: "/audio/surah-al-shu'ara/26 Ash-Shu'ara (Khalifa Al Tunaiji).mp3",
+    audioSrc:
+      "/audio/surah-al-shu'ara/26 Ash-Shu'ara (Khalifa Al Tunaiji).mp3",
+    downloadUrl:
+      "/audio/surah-al-shu'ara/26 Ash-Shu'ara (Khalifa Al Tunaiji).mp3",
   },
   {
     id: "an-naml-nabil-al-rafai",
@@ -260,6 +270,7 @@ const RECITATIONS = [
     qariName: "Nabil Al Rafai",
     qariImage: "/audio/surah-an-naml/nabil-al-rafai.jpg",
     audioSrc: "/audio/surah-an-naml/27 An-Naml (Nabil Al Rafai).mp3",
+    downloadUrl: "/audio/surah-an-naml/27 An-Naml (Nabil Al Rafai).mp3",
   },
   {
     id: "al-qasas-omer-al-qazabari",
@@ -267,6 +278,7 @@ const RECITATIONS = [
     qariName: "Omer Al Qazabari",
     qariImage: "/audio/surah-al-qasas/omer-al-qazabari.jpg",
     audioSrc: "/audio/surah-al-qasas/28 Al-Qasas (Omer Al Qazabari).mp3",
+    downloadUrl: "/audio/surah-al-qasas/28 Al-Qasas (Omer Al Qazabari).mp3",
   },
   {
     id: "al-ankabut-salah-al-budair",
@@ -274,6 +286,8 @@ const RECITATIONS = [
     qariName: "Salah Al Budair",
     qariImage: "/audio/surah-al-ankabut/salah-al-budair.jpg",
     audioSrc: "/audio/surah-al-ankabut/29 Al-Ankabut (Salah Al Budair).mp3",
+    downloadUrl:
+      "/audio/surah-al-ankabut/29 Al-Ankabut (Salah Al Budair).mp3",
   },
   {
     id: "ar-rum-salaj-bukatir",
@@ -281,6 +295,64 @@ const RECITATIONS = [
     qariName: "Salaj Bukatir",
     qariImage: "/audio/surah-ar-rum/salaj-bukatir.jpg",
     audioSrc: "/audio/surah-ar-rum/30 Ar-Rum (Salaj Bukatir).mp3",
+    downloadUrl: "/audio/surah-ar-rum/30 Ar-Rum (Salaj Bukatir).mp3",
+  },
+  {
+    id: "luqman-ahmad-al-ajmi",
+    surahName: "Surah Luqman",
+    qariName: "Ahmad Al Ajmi",
+    qariImage: "/audio/surah-luqman/ahmad-al-ajmi.png",
+    audioSrc: "/audio/surah-luqman/31 Luqman (Ahmad Al Ajmi).mp3",
+    downloadUrl: "/audio/surah-luqman/31 Luqman (Ahmad Al Ajmi).mp3",
+  },
+  {
+    id: "as-sajdah-omer-hisham-al-arabi",
+    surahName: "Surah As-Sajdah",
+    qariName: "Omer Hisham Al Arabi",
+    qariImage: "/audio/surah-as-sajdah/omer-hisham-al-arabi.png",
+    audioSrc: "/audio/surah-as-sajdah/32 As-Sajdah (Omer Hisham Al Arabi).mp3",
+    downloadUrl:
+      "/audio/surah-as-sajdah/32 As-Sajdah (Omer Hisham Al Arabi).mp3",
+  },
+  {
+    id: "al-ahzab-abdullah-basfar",
+    surahName: "Surah Al-Ahzab",
+    qariName: "Abdullah Basfar",
+    qariImage: "/audio/surah-al-ahzab/abdullah-basfar.png",
+    audioSrc: "/audio/surah-al-ahzab/33 Al-Ahzab (Abdullah Basfar).mp3",
+    downloadUrl: "/audio/surah-al-ahzab/33 Al-Ahzab (Abdullah Basfar).mp3",
+  },
+  {
+    id: "saba-yasir-al-dosri",
+    surahName: "Surah Saba",
+    qariName: "Yasir Al Dosri",
+    qariImage: "/audio/surah-saba/yasir-al-dosri.png",
+    audioSrc: "/audio/surah-saba/34 Saba (Yasir Al Dosri).mp3",
+    downloadUrl: "/audio/surah-saba/34 Saba (Yasir Al Dosri).mp3",
+  },
+  {
+    id: "fatir-zain-muhammad",
+    surahName: "Surah Fatir",
+    qariName: "Zain Muhammad",
+    qariImage: "/audio/surah-fatir/zain-muhammad.png",
+    audioSrc: "/audio/surah-fatir/35 Fatir (Zain Muhammad).mp3",
+    downloadUrl: "/audio/surah-fatir/35 Fatir (Zain Muhammad).mp3",
+  },
+  {
+    id: "ya-sin-zain-muhammad",
+    surahName: "Surah Ya-Sin",
+    qariName: "Zain Muhammad",
+    qariImage: "/audio/surah-fatir/zain-muhammad.png",
+    audioSrc: "/audio/surah-yasin/36 Ya-Sin (Zain Muhammad).mp3",
+    downloadUrl: "/audio/surah-yasin/36 Ya-Sin (Zain Muhammad).mp3",
+  },
+  {
+    id: "as-saaffat-mansour-al-salmi",
+    surahName: "Surah As-Saaffat",
+    qariName: "Mansour Al Salmi",
+    qariImage: "/audio/surah-as-saaffat/mansour-al-salmi.png",
+    audioSrc: "/audio/surah-as-saaffat/37 As-Saaffat (Mansour Al Salmi).mp3",
+    downloadUrl: "/audio/surah-as-saaffat/37 As-Saaffat (Mansour Al Salmi).mp3",
   },
 ];
 
@@ -347,18 +419,16 @@ function RecitationCard({
       });
       onPlayRequest(id);
       setPlaying(true);
-      el
-        .play()
-        .catch(() => {
-          console.error("[Playlist] Playback failed", {
-            surahName,
-            qariName,
-            sourceType: fromArchive ? "archive.org" : "project-file",
-            audioSrc,
-          });
-          setPlaying(false);
-          setAudioError(true);
+      el.play().catch(() => {
+        console.error("[Playlist] Playback failed", {
+          surahName,
+          qariName,
+          sourceType: fromArchive ? "archive.org" : "project-file",
+          audioSrc,
         });
+        setPlaying(false);
+        setAudioError(true);
+      });
     } else {
       onPauseRequest();
       el.pause();
