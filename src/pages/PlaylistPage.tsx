@@ -137,7 +137,10 @@ const RECITATIONS = [
     surahName: "Surah Ar-Ra'd",
     qariName: "Mashaari Alafasi",
     qariImage: "/audio/surah-ar-ra'd/mashaari-alafasi.png",
-    audioSrc: "/audio/surah-ar-ra'd/13 Ar-Ra'd (Mashaari Alafasi).mp3",
+    audioSrc:
+      "https://dn711105.ca.archive.org/0/items/mashaari-alafasi_202603/Mashaari-Alafasi.mp3",
+    downloadUrl:
+      "https://dn711105.ca.archive.org/0/items/mashaari-alafasi_202603/Mashaari-Alafasi.mp3",
   },
   {
     id: "ibrahim-saad-al-ghamdi",
@@ -164,35 +167,50 @@ const RECITATIONS = [
     surahName: "Surah An-Nahl",
     qariName: "Khalid Jalil",
     qariImage: "/audio/surah-an-nahl/khalid-jalil.jpg",
-    audioSrc: "/audio/surah-an-nahl/16 An-Nahl (Khalid Jalil).mp3",
+    audioSrc:
+      "https://ia903202.us.archive.org/31/items/khalid-jalil/Khalid-Jalil.mp3",
+    downloadUrl:
+      "https://ia903202.us.archive.org/31/items/khalid-jalil/Khalid-Jalil.mp3",
   },
   {
     id: "al-isra-abdul-rehman-al-sudais",
     surahName: "Surah Al-Isra",
     qariName: "Abdul Rehman Al Sudais",
     qariImage: "/audio/surah-al-isra/abdul-rehman-al-sudais.jpg",
-    audioSrc: "/audio/surah-al-isra/17 Al-Isra (Abdul Rehman Al sudais).mp3",
+    audioSrc:
+      "https://ia600603.us.archive.org/4/items/abdul-rehman-al-sudais_202603/Abdul-Rehman-Al-Sudais.mp3",
+    downloadUrl:
+      "https://ia600603.us.archive.org/4/items/abdul-rehman-al-sudais_202603/Abdul-Rehman-Al-Sudais.mp3",
   },
   {
     id: "al-kahf-abu-bakar-al-shatiri",
     surahName: "Surah Al-Kahf",
     qariName: "Abu Bakar Al Shatiri",
     qariImage: "/audio/surah-al-kahf/abu-bakar-al-shatiri.jpg",
-    audioSrc: "/audio/surah-al-kahf/18 Al-Kahf (Abu Bakar Al Shatiri).mp3",
+    audioSrc:
+      "https://ia903202.us.archive.org/7/items/abu-bakar-al-shatiri/Abu-Bakar-Al-Shatiri.mp3",
+    downloadUrl:
+      "https://ia903202.us.archive.org/7/items/abu-bakar-al-shatiri/Abu-Bakar-Al-Shatiri.mp3",
   },
   {
     id: "maryam-ahmad-al-tarablisi",
     surahName: "Surah Maryam",
     qariName: "Ahmad Al Tarablisi",
     qariImage: "/audio/surah-maryam/ahmad-al-tarablisi.jpg",
-    audioSrc: "/audio/surah-maryam/19 Maryam (Ahmad Al Tarablisi).mp3",
+    audioSrc:
+      "https://ia600101.us.archive.org/21/items/ahmad-al-tarablisi/Ahmad-Al-Tarablisi.mp3",
+    downloadUrl:
+      "https://ia600101.us.archive.org/21/items/ahmad-al-tarablisi/Ahmad-Al-Tarablisi.mp3",
   },
   {
     id: "ta-ha-raad-al-kurdi",
     surahName: "Surah Ta-Ha",
     qariName: "Ra'ad Al Kurdi",
     qariImage: "/audio/surah ta-ha/raad-al-kurdi.jpg",
-    audioSrc: "/audio/surah ta-ha/20 Ta-Ha (Ra'ad Al Kurdi).mp3",
+    audioSrc:
+      "https://ia600908.us.archive.org/6/items/raad-al-kurdi_202603/Ra%27ad-Al-Kurdi.mp3",
+    downloadUrl:
+      "https://ia600908.us.archive.org/6/items/raad-al-kurdi_202603/Ra%27ad-Al-Kurdi.mp3",
   },
   {
     id: "al-anbiya-faris-abbad",
@@ -320,32 +338,33 @@ function RecitationCard({
     const el = audioRef.current;
     if (!el) return;
     if (el.paused) {
-      if (isArchiveUrl(audioSrc)) {
-        console.log("[Playlist] Playing from Archive.org", {
-          surahName,
-          qariName,
-          audioSrc,
-        });
-      }
+      const fromArchive = isArchiveUrl(audioSrc);
+      console.log("[Playlist] Playing audio", {
+        surahName,
+        qariName,
+        sourceType: fromArchive ? "archive.org" : "project-file",
+        audioSrc,
+      });
       onPlayRequest(id);
       setPlaying(true);
-      el.play().catch(() => {
-        if (isArchiveUrl(audioSrc)) {
-          console.error("[Playlist] Archive.org playback failed", {
+      el
+        .play()
+        .catch(() => {
+          console.error("[Playlist] Playback failed", {
             surahName,
             qariName,
+            sourceType: fromArchive ? "archive.org" : "project-file",
             audioSrc,
           });
-        }
-        setPlaying(false);
-        setAudioError(true);
-      });
+          setPlaying(false);
+          setAudioError(true);
+        });
     } else {
       onPauseRequest();
       el.pause();
       setPlaying(false);
     }
-  }, [id, onPlayRequest, onPauseRequest]);
+  }, [id, onPlayRequest, onPauseRequest, audioSrc, qariName, surahName]);
 
   const handleTimeUpdate = useCallback(() => {
     const el = audioRef.current;
@@ -392,17 +411,18 @@ function RecitationCard({
     const url = downloadUrl || audioSrc;
     if (!url || downloading) return;
     const filename = `${qariName.replace(/\s+/g, "-")}.mp3`;
+    const fromArchive = isArchiveUrl(url);
+
+    console.log("[Playlist] Download requested", {
+      surahName,
+      qariName,
+      sourceType: fromArchive ? "archive.org" : "project-file",
+      downloadUrl: url,
+      filename,
+    });
 
     setDownloading(true);
     try {
-      if (isArchiveUrl(url)) {
-        console.log("[Playlist] Downloading from Archive.org", {
-          surahName,
-          qariName,
-          downloadUrl: url,
-          filename,
-        });
-      }
       const res = await fetch(url);
       if (!res.ok) throw new Error("Download failed");
       const blob = await res.blob();
@@ -414,21 +434,19 @@ function RecitationCard({
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(blobUrl);
-      if (isArchiveUrl(url)) {
-        console.log("[Playlist] Archive.org download started", {
-          surahName,
-          qariName,
-          filename,
-        });
-      }
+      console.log("[Playlist] Download started", {
+        surahName,
+        qariName,
+        sourceType: fromArchive ? "archive.org" : "project-file",
+        filename,
+      });
     } catch {
-      if (isArchiveUrl(url)) {
-        console.error("[Playlist] Archive.org download fallback triggered", {
-          surahName,
-          qariName,
-          downloadUrl: url,
-        });
-      }
+      console.error("[Playlist] Download failed, opening URL directly", {
+        surahName,
+        qariName,
+        sourceType: fromArchive ? "archive.org" : "project-file",
+        downloadUrl: url,
+      });
       // Fallback: open in new tab if fetch fails
       window.open(url, "_blank");
     } finally {
@@ -548,12 +566,6 @@ function RecitationCard({
           }
         }}
       />
-      {audioError && audioSrc.includes("archive.org") && (
-        <p className="px-4 pt-1 pb-2 text-xs text-amber-700 text-center">
-          Audio load nahi hua. Archive page pe &quot;download 1 file&quot; pe
-          right-click → Copy link → developer ko bhejein.
-        </p>
-      )}
     </div>
   );
 }
