@@ -217,16 +217,20 @@ const RECITATIONS = [
     surahName: "Surah Al-Anbiya",
     qariName: "Faris Abbad",
     qariImage: "/audio/surah-al-anbiya/faris-abbad.jpg",
-    audioSrc: "/audio/surah-al-anbiya/21 Al-Anbiya (Faris Abbad).mp3",
-    downloadUrl: "/audio/surah-al-anbiya/21 Al-Anbiya (Faris Abbad).mp3",
+    audioSrc:
+      "https://ia601402.us.archive.org/30/items/faris-abbad_202603/Faris-Abbad.mp3",
+    downloadUrl:
+      "https://ia601402.us.archive.org/30/items/faris-abbad_202603/Faris-Abbad.mp3",
   },
   {
     id: "al-hajj-hani-al-rafai",
     surahName: "Surah Al-Hajj",
     qariName: "Hani Al Rafai",
     qariImage: "/audio/surah-al-hajj/hani-al-rafai.jpg",
-    audioSrc: "/audio/surah-al-hajj/22 Al-Hajj (Hani Al Rafai).mp3",
-    downloadUrl: "/audio/surah-al-hajj/22 Al-Hajj (Hani Al Rafai).mp3",
+    audioSrc:
+      "https://ia600402.us.archive.org/30/items/hani-al-rafai/Hani-Al-Rafai.mp3",
+    downloadUrl:
+      "https://ia600402.us.archive.org/30/items/hani-al-rafai/Hani-Al-Rafai.mp3",
   },
   {
     id: "al-muminun-mahir-al-muaiqli",
@@ -234,25 +238,29 @@ const RECITATIONS = [
     qariName: "Mahir Al Muaiqli",
     qariImage: "/audio/surah-al-mu'minun/mahir-al-muaiqli.jpg",
     audioSrc:
-      "/audio/surah-al-mu'minun/23 Al-Mu'minun (Mahir Al Muaiqli).mp3",
+      "https://ia600908.us.archive.org/31/items/mahir-al-muaiqli/Mahir-Al-Muaiqli.mp3",
     downloadUrl:
-      "/audio/surah-al-mu'minun/23 Al-Mu'minun (Mahir Al Muaiqli).mp3",
+      "https://ia600908.us.archive.org/31/items/mahir-al-muaiqli/Mahir-Al-Muaiqli.mp3",
   },
   {
     id: "an-nur-muhammad-ayub",
     surahName: "Surah An-Nur",
     qariName: "Muhammad Ayub",
     qariImage: "/audio/surah-an-nur/muhammad-ayub.jpg",
-    audioSrc: "/audio/surah-an-nur/24 An-Nur (Muhmmad Ayub).mp3",
-    downloadUrl: "/audio/surah-an-nur/24 An-Nur (Muhmmad Ayub).mp3",
+    audioSrc:
+      "https://ia600706.us.archive.org/28/items/muhammad-ayub_202603/Muhammad-Ayub.mp3",
+    downloadUrl:
+      "https://ia600706.us.archive.org/28/items/muhammad-ayub_202603/Muhammad-Ayub.mp3",
   },
   {
     id: "al-furqan-muhammad-jibreel",
     surahName: "Surah Al-Furqan",
     qariName: "Muhammad Jibreel",
     qariImage: "/audio/surah-al-furqan/muhammad-jibreel.jpg",
-    audioSrc: "/audio/surah-al-furqan/25 Al-Furqan (Muhmmad Jibreel).mp3",
-    downloadUrl: "/audio/surah-al-furqan/25 Al-Furqan (Muhmmad Jibreel).mp3",
+    audioSrc:
+      "https://ia600504.us.archive.org/8/items/muhammad-jibreel/Muhammad-Jibreel.mp3",
+    downloadUrl:
+      "https://ia600504.us.archive.org/8/items/muhammad-jibreel/Muhammad-Jibreel.mp3",
   },
   {
     id: "ash-shuara-khalifa-al-tunaiji",
@@ -260,99 +268,169 @@ const RECITATIONS = [
     qariName: "Khalifa Al Tunaiji",
     qariImage: "/audio/surah-al-shu'ara/khalifa-al-tunaiji.jpg",
     audioSrc:
-      "/audio/surah-al-shu'ara/26 Ash-Shu'ara (Khalifa Al Tunaiji).mp3",
+      "https://ia600600.us.archive.org/7/items/khalifa-al-tunaiji_202603/Khalifa-Al-Tunaiji.mp3",
     downloadUrl:
-      "/audio/surah-al-shu'ara/26 Ash-Shu'ara (Khalifa Al Tunaiji).mp3",
+      "https://ia600600.us.archive.org/7/items/khalifa-al-tunaiji_202603/Khalifa-Al-Tunaiji.mp3",
   },
   {
     id: "an-naml-nabil-al-rafai",
     surahName: "Surah An-Naml",
     qariName: "Nabil Al Rafai",
     qariImage: "/audio/surah-an-naml/nabil-al-rafai.jpg",
-    audioSrc: "/audio/surah-an-naml/27 An-Naml (Nabil Al Rafai).mp3",
-    downloadUrl: "/audio/surah-an-naml/27 An-Naml (Nabil Al Rafai).mp3",
+    audioSrc:
+      "https://ia601903.us.archive.org/6/items/nabil-al-rafai/Nabil-Al-Rafai.mp3",
+    downloadUrl:
+      "https://ia601903.us.archive.org/6/items/nabil-al-rafai/Nabil-Al-Rafai.mp3",
   },
   {
     id: "al-qasas-omer-al-qazabari",
     surahName: "Surah Al-Qasas",
     qariName: "Omer Al Qazabari",
     qariImage: "/audio/surah-al-qasas/omer-al-qazabari.jpg",
-    audioSrc: "/audio/surah-al-qasas/28 Al-Qasas (Omer Al Qazabari).mp3",
-    downloadUrl: "/audio/surah-al-qasas/28 Al-Qasas (Omer Al Qazabari).mp3",
+    audioSrc:
+      "https://ia600509.us.archive.org/21/items/omer-al-qazabari/Omer-Al-Qazabari.mp3",
+    downloadUrl:
+      "https://ia600509.us.archive.org/21/items/omer-al-qazabari/Omer-Al-Qazabari.mp3",
   },
   {
     id: "al-ankabut-salah-al-budair",
     surahName: "Surah Al-Ankabut",
     qariName: "Salah Al Budair",
     qariImage: "/audio/surah-al-ankabut/salah-al-budair.jpg",
-    audioSrc: "/audio/surah-al-ankabut/29 Al-Ankabut (Salah Al Budair).mp3",
+    audioSrc:
+      "https://ia601404.us.archive.org/17/items/salah-al-budair_202603/Salah-Al-Budair.mp3",
     downloadUrl:
-      "/audio/surah-al-ankabut/29 Al-Ankabut (Salah Al Budair).mp3",
+      "https://ia601404.us.archive.org/17/items/salah-al-budair_202603/Salah-Al-Budair.mp3",
   },
   {
     id: "ar-rum-salaj-bukatir",
     surahName: "Surah Ar-Rum",
     qariName: "Salaj Bukatir",
     qariImage: "/audio/surah-ar-rum/salaj-bukatir.jpg",
-    audioSrc: "/audio/surah-ar-rum/30 Ar-Rum (Salaj Bukatir).mp3",
-    downloadUrl: "/audio/surah-ar-rum/30 Ar-Rum (Salaj Bukatir).mp3",
+    audioSrc:
+      "https://ia601903.us.archive.org/27/items/salaj-bukatir/Salaj-Bukatir.mp3",
+    downloadUrl:
+      "https://ia601903.us.archive.org/27/items/salaj-bukatir/Salaj-Bukatir.mp3",
   },
   {
     id: "luqman-ahmad-al-ajmi",
     surahName: "Surah Luqman",
     qariName: "Ahmad Al Ajmi",
     qariImage: "/audio/surah-luqman/ahmad-al-ajmi.png",
-    audioSrc: "/audio/surah-luqman/31 Luqman (Ahmad Al Ajmi).mp3",
-    downloadUrl: "/audio/surah-luqman/31 Luqman (Ahmad Al Ajmi).mp3",
+    audioSrc:
+      "https://ia601904.us.archive.org/5/items/ahmad-al-ajmi_202603/Ahmad-Al-Ajmi.mp3",
+    downloadUrl:
+      "https://ia601904.us.archive.org/5/items/ahmad-al-ajmi_202603/Ahmad-Al-Ajmi.mp3",
   },
   {
     id: "as-sajdah-omer-hisham-al-arabi",
     surahName: "Surah As-Sajdah",
     qariName: "Omer Hisham Al Arabi",
     qariImage: "/audio/surah-as-sajdah/omer-hisham-al-arabi.png",
-    audioSrc: "/audio/surah-as-sajdah/32 As-Sajdah (Omer Hisham Al Arabi).mp3",
+    audioSrc:
+      "https://ia601402.us.archive.org/13/items/omer-hisham-al-arabi_202603/Omer-Hisham-Al-Arabi.mp3",
     downloadUrl:
-      "/audio/surah-as-sajdah/32 As-Sajdah (Omer Hisham Al Arabi).mp3",
+      "https://ia601402.us.archive.org/13/items/omer-hisham-al-arabi_202603/Omer-Hisham-Al-Arabi.mp3",
   },
   {
     id: "al-ahzab-abdullah-basfar",
     surahName: "Surah Al-Ahzab",
     qariName: "Abdullah Basfar",
     qariImage: "/audio/surah-al-ahzab/abdullah-basfar.png",
-    audioSrc: "/audio/surah-al-ahzab/33 Al-Ahzab (Abdullah Basfar).mp3",
-    downloadUrl: "/audio/surah-al-ahzab/33 Al-Ahzab (Abdullah Basfar).mp3",
+    audioSrc:
+      "https://ia600103.us.archive.org/26/items/abdullah-basfar_20260313/Abdullah-Basfar.mp3",
+    downloadUrl:
+      "https://ia600103.us.archive.org/26/items/abdullah-basfar_20260313/Abdullah-Basfar.mp3",
   },
   {
     id: "saba-yasir-al-dosri",
     surahName: "Surah Saba",
     qariName: "Yasir Al Dosri",
     qariImage: "/audio/surah-saba/yasir-al-dosri.png",
-    audioSrc: "/audio/surah-saba/34 Saba (Yasir Al Dosri).mp3",
-    downloadUrl: "/audio/surah-saba/34 Saba (Yasir Al Dosri).mp3",
+    audioSrc:
+      "https://ia903203.us.archive.org/6/items/yasir-al-dosri_202603/Yasir-Al-Dosri.mp3",
+    downloadUrl:
+      "https://ia903203.us.archive.org/6/items/yasir-al-dosri_202603/Yasir-Al-Dosri.mp3",
   },
   {
     id: "fatir-zain-muhammad",
     surahName: "Surah Fatir",
     qariName: "Zain Muhammad",
     qariImage: "/audio/surah-fatir/zain-muhammad.png",
-    audioSrc: "/audio/surah-fatir/35 Fatir (Zain Muhammad).mp3",
-    downloadUrl: "/audio/surah-fatir/35 Fatir (Zain Muhammad).mp3",
+    audioSrc:
+      "https://ia600407.us.archive.org/8/items/zain-muhammad_202603/Zain-Muhammad.mp3",
+    downloadUrl:
+      "https://ia600407.us.archive.org/8/items/zain-muhammad_202603/Zain-Muhammad.mp3",
   },
   {
     id: "ya-sin-zain-muhammad",
     surahName: "Surah Ya-Sin",
     qariName: "Zain Muhammad",
     qariImage: "/audio/surah-fatir/zain-muhammad.png",
-    audioSrc: "/audio/surah-yasin/36 Ya-Sin (Zain Muhammad).mp3",
-    downloadUrl: "/audio/surah-yasin/36 Ya-Sin (Zain Muhammad).mp3",
+    audioSrc:
+      "https://ia601503.us.archive.org/25/items/zain-muhammad_20260313/Zain-Muhammad.mp3",
+    downloadUrl:
+      "https://ia601503.us.archive.org/25/items/zain-muhammad_20260313/Zain-Muhammad.mp3",
   },
   {
     id: "as-saaffat-mansour-al-salmi",
     surahName: "Surah As-Saaffat",
     qariName: "Mansour Al Salmi",
     qariImage: "/audio/surah-as-saaffat/mansour-al-salmi.png",
-    audioSrc: "/audio/surah-as-saaffat/37 As-Saaffat (Mansour Al Salmi).mp3",
-    downloadUrl: "/audio/surah-as-saaffat/37 As-Saaffat (Mansour Al Salmi).mp3",
+    audioSrc:
+      "https://ia903207.us.archive.org/6/items/mansour-al-salmi_202603/Mansour-Al-Salmi.mp3",
+    downloadUrl:
+      "https://ia903207.us.archive.org/6/items/mansour-al-salmi_202603/Mansour-Al-Salmi.mp3",
+  },
+  {
+    id: "saad-hazaa-al-baloushi",
+    surahName: "Surah Saad",
+    qariName: "Hazaa Al Baloushi",
+    qariImage: "/audio/surah-saad/hazaa-al-baloushi.png",
+    audioSrc:
+      "https://ia601904.us.archive.org/24/items/hazaa-al-baloushi/Hazaa-Al-Baloushi.mp3",
+    downloadUrl:
+      "https://ia601904.us.archive.org/24/items/hazaa-al-baloushi/Hazaa-Al-Baloushi.mp3",
+  },
+  {
+    id: "az-zumar-hazaa-al-baloushi",
+    surahName: "Surah Az-Zumar",
+    qariName: "Hazaa Al Baloushi",
+    qariImage: "/audio/surah-az-zumar/hazaa-al-baloushi.png",
+    audioSrc:
+      "https://ia903204.us.archive.org/27/items/hazaa-al-baloushi-1/Hazaa-Al-Baloushi%20%281%29.mp3",
+    downloadUrl:
+      "https://ia903204.us.archive.org/27/items/hazaa-al-baloushi-1/Hazaa-Al-Baloushi%20%281%29.mp3",
+  },
+  {
+    id: "ghafir-noreen-siddiq",
+    surahName: "Surah Ghafir",
+    qariName: "Noreen Siddiq",
+    qariImage: "/audio/surah-ghafir/noreen-siddiq.png",
+    audioSrc:
+      "https://ia601503.us.archive.org/22/items/noreen-siddiq/Noreen-Siddiq.mp3",
+    downloadUrl:
+      "https://ia601503.us.archive.org/22/items/noreen-siddiq/Noreen-Siddiq.mp3",
+  },
+  {
+    id: "fussilat-muayyid-al-mazin",
+    surahName: "Surah Fussilat",
+    qariName: "Muayyid Al Mazin",
+    qariImage: "/audio/surah-fussilat/muayyid-al-mazin.png",
+    audioSrc:
+      "https://ia601404.us.archive.org/25/items/muayyid-al-mazin/Muayyid-Al-Mazin.mp3",
+    downloadUrl:
+      "https://ia601404.us.archive.org/25/items/muayyid-al-mazin/Muayyid-Al-Mazin.mp3",
+  },
+  {
+    id: "ash-shura-hasan-saleh",
+    surahName: "Surah Ash-Shura",
+    qariName: "Hasan Saleh",
+    qariImage: "/audio/surah-ash-shura/hasan-saleh.png",
+    audioSrc:
+      "https://ia903207.us.archive.org/26/items/hasan-saleh/Hasan-Saleh.mp3",
+    downloadUrl:
+      "https://ia903207.us.archive.org/26/items/hasan-saleh/Hasan-Saleh.mp3",
   },
 ];
 
