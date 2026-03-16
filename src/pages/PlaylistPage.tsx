@@ -432,6 +432,16 @@ const RECITATIONS = [
     downloadUrl:
       "https://ia903207.us.archive.org/26/items/hasan-saleh/Hasan-Saleh.mp3",
   },
+  {
+    id: "az-zukhruf-muhammad-al-shareef",
+    surahName: "Surah Az-Zukhruf",
+    qariName: "Muhammad Al Shareef",
+    qariImage: "/audio/surah-az-zukhruf/muhammad-al-shareef.jpg",
+    audioSrc:
+      "/audio/surah-az-zukhruf/43 Az-Zukhruf (Muhmmad Al Shareef).mp3",
+    downloadUrl:
+      "/audio/surah-az-zukhruf/43 Az-Zukhruf (Muhmmad Al Shareef).mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
