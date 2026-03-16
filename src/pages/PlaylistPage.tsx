@@ -442,6 +442,16 @@ const RECITATIONS = [
     downloadUrl:
       "/audio/surah-az-zukhruf/43 Az-Zukhruf (Muhmmad Al Shareef).mp3",
   },
+  {
+    id: "ad-dukhan-abdul-rehman-bin-mousa",
+    surahName: "Surah Ad-Dukhan",
+    qariName: "Abdul Rehman Bin Mousa",
+    qariImage: "/audio/surah-ad-dukhan/abdul-rehman-bin-mousa.jpg",
+    audioSrc:
+      "/audio/surah-ad-dukhan/44 Ad-Dukhan (Abdul Rehman Bin Mousa).mp3",
+    downloadUrl:
+      "/audio/surah-ad-dukhan/44 Ad-Dukhan (Abdul Rehman Bin Mousa).mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
