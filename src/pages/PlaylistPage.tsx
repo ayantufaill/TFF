@@ -452,6 +452,66 @@ const RECITATIONS = [
     downloadUrl:
       "/audio/surah-ad-dukhan/44 Ad-Dukhan (Abdul Rehman Bin Mousa).mp3",
   },
+  {
+    id: "al-jathiyah-nasir-al-qatami",
+    surahName: "Surah Al-Jathiyah",
+    qariName: "Nasir Al Qatami",
+    qariImage: "/audio/surah-al-jathiyah/nasir-al-qatami.jpg",
+    audioSrc:
+      "/audio/surah-al-jathiyah/45 Al-Jathiyah ( The Kneeling ) سورة الجاثية (Nasir Al Qatami).mp3",
+    downloadUrl:
+      "/audio/surah-al-jathiyah/45 Al-Jathiyah ( The Kneeling ) سورة الجاثية (Nasir Al Qatami).mp3",
+  },
+  {
+    id: "al-ahqaf-younus-solis",
+    surahName: "Surah Al-Ahqaf",
+    qariName: "Younus Solis",
+    qariImage: "/audio/surah-al-ahqaf/younus-solis.jpg",
+    audioSrc:
+      "/audio/surah-al-ahqaf/46 Al-Ahqaf 1-32 الأحقاف (Younus Solis).mp3",
+    downloadUrl:
+      "/audio/surah-al-ahqaf/46 Al-Ahqaf 1-32 الأحقاف (Younus Solis).mp3",
+  },
+  {
+    id: "muhammad-abdul-kareem-al-hazmi",
+    surahName: "Surah Muhammad",
+    qariName: "Abdul Kareem Al Hazmi",
+    qariImage: "/audio/surah-muhammad/abdul-kareem-al-hazmi.jpg",
+    audioSrc:
+      "/audio/surah-muhammad/47 Muhammad (Abdul Kareem Al Hazmi).mp3",
+    downloadUrl:
+      "/audio/surah-muhammad/47 Muhammad (Abdul Kareem Al Hazmi).mp3",
+  },
+  {
+    id: "al-fath-islam-sobhi-48",
+    surahName: "Surah Al-Fath",
+    qariName: "Islam Sobhi",
+    qariImage: "/audio/surah-al-fath/islam-sobhi.jpg",
+    audioSrc:
+      "/audio/surah-al-fath/48 Al-Fath الفتح (Islam Sobhi).mp3",
+    downloadUrl:
+      "/audio/surah-al-fath/48 Al-Fath الفتح (Islam Sobhi).mp3",
+  },
+  {
+    id: "al-hujurat-abdul-rehman-mosad",
+    surahName: "Surah Al-Hujurat",
+    qariName: "Abdul Rehman Mosad",
+    qariImage: "/audio/surah-al-hujurat/abdul-rehman-mosad.jpg",
+    audioSrc:
+      "/audio/surah-al-hujurat/49 Al-Hujurat الحجرات (Abdul Rehman Mosad).mp3",
+    downloadUrl:
+      "/audio/surah-al-hujurat/49 Al-Hujurat الحجرات (Abdul Rehman Mosad).mp3",
+  },
+  {
+    id: "qaf-abdul-basit-abdul-samad-50",
+    surahName: "Surah Qaf",
+    qariName: "Abdul Basit Abdul Samad",
+    qariImage: "/audio/surah-qaf/abdul-basit-abdul-samad.jpg",
+    audioSrc:
+      "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
+    downloadUrl:
+      "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
