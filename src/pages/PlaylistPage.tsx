@@ -512,6 +512,33 @@ const RECITATIONS = [
     downloadUrl:
       "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
   },
+  {
+    id: "adh-dhariyat-m-siddiq-al-manshawi-51",
+    surahName: "Surah Adh-Dhariyat",
+    qariName: "Muhmmad Siddiq al Manshawi",
+    qariImage: "/audio/surah-adh-dhariyat/m-siddiq-al-manshawi-adh-dhariyat.jpg",
+    audioSrc:
+      "/audio/surah-adh-dhariyat/51 Adh-Dhariyat (Muhmmad Siddiq al Manshawi).mp3",
+    downloadUrl:
+      "/audio/surah-adh-dhariyat/51 Adh-Dhariyat (Muhmmad Siddiq al Manshawi).mp3",
+  },
+  {
+    id: "an-najm-sharif-mustafa-53",
+    surahName: "Surah An-Najm",
+    qariName: "Sharif Mustafa",
+    qariImage: "/audio/surah-an-najm/sharif-mustafa.jpg",
+    audioSrc: "/audio/surah-an-najm/53 An-Najm (Sharif Mustafa).mp3",
+    downloadUrl: "/audio/surah-an-najm/53 An-Najm (Sharif Mustafa).mp3",
+  },
+  {
+    id: "al-qamar-muhammad-al-tablawi-54",
+    surahName: "Surah Al-Qamar",
+    qariName: "Muhammad Al Tablawi",
+    qariImage: "/audio/surah-al-qamar/muhammad-al-tablawi.jpg",
+    audioSrc: "/audio/surah-al-qamar/54 Al-Qamar (Muhammad Al Tablawi).mp3",
+    downloadUrl:
+      "/audio/surah-al-qamar/54 Al-Qamar (Muhammad Al Tablawi).mp3",
+  },
 ];
 
 function formatTime(seconds: number): string {
