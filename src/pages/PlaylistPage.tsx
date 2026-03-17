@@ -552,9 +552,9 @@ const RECITATIONS = [
     surahName: "Surah Ar-Rahman",
     qariName: "Mehmood Al Husairy",
     qariImage: "/audio/surah-ar-rahman/mehmood-al-husairy.jpg",
-    audioSrc: "/audio/surah-ar-rahman/55 Ar-Rahman (Mehmood Al Husairy).mp3",
+    audioSrc: "/audio/surah-ar-rahman/55 Ar-Rahman (Mahmood Al Husairy).mp3",
     downloadUrl:
-      "/audio/surah-ar-rahman/55 Ar-Rahman (Mehmood Al Husairy).mp3",
+      "/audio/surah-ar-rahman/55 Ar-Rahman (Mahmood Al Husairy).mp3",
   },
 ];
 
