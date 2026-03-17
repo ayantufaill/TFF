@@ -523,6 +523,14 @@ const RECITATIONS = [
       "/audio/surah-adh-dhariyat/51 Adh-Dhariyat (Muhmmad Siddiq al Manshawi).mp3",
   },
   {
+    id: "at-tur-mahmood-ali-al-banna-52",
+    surahName: "Surah At-Tur",
+    qariName: "Mahmood Ali Al Banna",
+    qariImage: "/audio/surah-at-tur/mahmood-ali-al-banna.png",
+    audioSrc: "/audio/surah-at-tur/52 At-Tur (Mahmood Ali Al Banna).mp3",
+    downloadUrl: "/audio/surah-at-tur/52 At-Tur (Mahmood Ali Al Banna).mp3",
+  },
+  {
     id: "an-najm-sharif-mustafa-53",
     surahName: "Surah An-Najm",
     qariName: "Sharif Mustafa",
@@ -539,7 +547,24 @@ const RECITATIONS = [
     downloadUrl:
       "/audio/surah-al-qamar/54 Al-Qamar (Muhammad Al Tablawi).mp3",
   },
+  {
+    id: "ar-rahman-mehmood-al-husairy-55",
+    surahName: "Surah Ar-Rahman",
+    qariName: "Mehmood Al Husairy",
+    qariImage: "/audio/surah-ar-rahman/mehmood-al-husairy.jpg",
+    audioSrc: "/audio/surah-ar-rahman/55 Ar-Rahman (Mehmood Al Husairy).mp3",
+    downloadUrl:
+      "/audio/surah-ar-rahman/55 Ar-Rahman (Mehmood Al Husairy).mp3",
+  },
 ];
+
+function getSurahNumberFromUrl(url?: string): number | null {
+  if (!url) return null;
+  const match = url.match(/\/(\d{1,3})\s/);
+  if (!match) return null;
+  const n = Number(match[1]);
+  return Number.isFinite(n) ? n : null;
+}
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
@@ -856,14 +881,21 @@ export function PlaylistPage() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
           {RECITATIONS.map((rec, index) => (
+            (() => {
+              const surahNumber =
+                getSurahNumberFromUrl(rec.audioSrc) ??
+                getSurahNumberFromUrl(rec.downloadUrl);
+              return (
             <RecitationCard
               key={rec.id}
-              number={index + 1}
+              number={surahNumber ?? index + 1}
               {...rec}
               isPlaying={playingId === rec.id}
               onPlayRequest={(id) => setPlayingId(id)}
               onPauseRequest={() => setPlayingId(null)}
             />
+              );
+            })()
           ))}
         </div>
         {RECITATIONS.length === 0 && (
