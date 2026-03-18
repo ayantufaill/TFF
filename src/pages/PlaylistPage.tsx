@@ -438,9 +438,9 @@ const RECITATIONS = [
     qariName: "Muhammad Al Shareef",
     qariImage: "/audio/surah-az-zukhruf/muhammad-al-shareef.jpg",
     audioSrc:
-      "/audio/surah-az-zukhruf/43 Az-Zukhruf (Muhmmad Al Shareef).mp3",
+      "https://ia600409.us.archive.org/5/items/muhammad-al-shareef/Muhammad-Al-Shareef.mp3",
     downloadUrl:
-      "/audio/surah-az-zukhruf/43 Az-Zukhruf (Muhmmad Al Shareef).mp3",
+      "https://ia600409.us.archive.org/5/items/muhammad-al-shareef/Muhammad-Al-Shareef.mp3",
   },
   {
     id: "ad-dukhan-abdul-rehman-bin-mousa",
@@ -448,9 +448,9 @@ const RECITATIONS = [
     qariName: "Abdul Rehman Bin Mousa",
     qariImage: "/audio/surah-ad-dukhan/abdul-rehman-bin-mousa.jpg",
     audioSrc:
-      "/audio/surah-ad-dukhan/44 Ad-Dukhan (Abdul Rehman Bin Mousa).mp3",
+      "https://ia601402.us.archive.org/33/items/abdul-rehman-bin-mousa/Abdul-Rehman-Bin-Mousa.mp3",
     downloadUrl:
-      "/audio/surah-ad-dukhan/44 Ad-Dukhan (Abdul Rehman Bin Mousa).mp3",
+      "https://ia601402.us.archive.org/33/items/abdul-rehman-bin-mousa/Abdul-Rehman-Bin-Mousa.mp3",
   },
   {
     id: "al-jathiyah-nasir-al-qatami",
@@ -458,9 +458,9 @@ const RECITATIONS = [
     qariName: "Nasir Al Qatami",
     qariImage: "/audio/surah-al-jathiyah/nasir-al-qatami.jpg",
     audioSrc:
-      "/audio/surah-al-jathiyah/45 Al-Jathiyah ( The Kneeling ) سورة الجاثية (Nasir Al Qatami).mp3",
+      "https://ia902900.us.archive.org/32/items/nasir-al-qatami/Nasir-Al-Qatami.mp3",
     downloadUrl:
-      "/audio/surah-al-jathiyah/45 Al-Jathiyah ( The Kneeling ) سورة الجاثية (Nasir Al Qatami).mp3",
+      "https://ia902900.us.archive.org/32/items/nasir-al-qatami/Nasir-Al-Qatami.mp3",
   },
   {
     id: "al-ahqaf-younus-solis",
@@ -468,17 +468,16 @@ const RECITATIONS = [
     qariName: "Younus Solis",
     qariImage: "/audio/surah-al-ahqaf/younus-solis.jpg",
     audioSrc:
-      "/audio/surah-al-ahqaf/46 Al-Ahqaf 1-32 الأحقاف (Younus Solis).mp3",
+      "https://ia903102.us.archive.org/27/items/younus-solis/Younus-Solis.mp3",
     downloadUrl:
-      "/audio/surah-al-ahqaf/46 Al-Ahqaf 1-32 الأحقاف (Younus Solis).mp3",
+      "https://ia903102.us.archive.org/27/items/younus-solis/Younus-Solis.mp3",
   },
   {
     id: "muhammad-abdul-kareem-al-hazmi",
     surahName: "Surah Muhammad",
     qariName: "Abdul Kareem Al Hazmi",
     qariImage: "/audio/surah-muhammad/abdul-kareem-al-hazmi.jpg",
-    audioSrc:
-      "/audio/surah-muhammad/47 Muhammad (Abdul Kareem Al Hazmi).mp3",
+    audioSrc: "/audio/surah-muhammad/47 Muhammad (Abdul Kareem Al Hazmi).mp3",
     downloadUrl:
       "/audio/surah-muhammad/47 Muhammad (Abdul Kareem Al Hazmi).mp3",
   },
@@ -487,10 +486,8 @@ const RECITATIONS = [
     surahName: "Surah Al-Fath",
     qariName: "Islam Sobhi",
     qariImage: "/audio/surah-al-fath/islam-sobhi.jpg",
-    audioSrc:
-      "/audio/surah-al-fath/48 Al-Fath الفتح (Islam Sobhi).mp3",
-    downloadUrl:
-      "/audio/surah-al-fath/48 Al-Fath الفتح (Islam Sobhi).mp3",
+    audioSrc: "/audio/surah-al-fath/48 Al-Fath الفتح (Islam Sobhi).mp3",
+    downloadUrl: "/audio/surah-al-fath/48 Al-Fath الفتح (Islam Sobhi).mp3",
   },
   {
     id: "al-hujurat-abdul-rehman-mosad",
@@ -507,16 +504,15 @@ const RECITATIONS = [
     surahName: "Surah Qaf",
     qariName: "Abdul Basit Abdul Samad",
     qariImage: "/audio/surah-qaf/abdul-basit-abdul-samad.jpg",
-    audioSrc:
-      "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
-    downloadUrl:
-      "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
+    audioSrc: "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
+    downloadUrl: "/audio/surah-qaf/50 Qaf (Abdul Basit Abdul Samad).mp3",
   },
   {
     id: "adh-dhariyat-m-siddiq-al-manshawi-51",
     surahName: "Surah Adh-Dhariyat",
     qariName: "Muhmmad Siddiq al Manshawi",
-    qariImage: "/audio/surah-adh-dhariyat/m-siddiq-al-manshawi-adh-dhariyat.jpg",
+    qariImage:
+      "/audio/surah-adh-dhariyat/m-siddiq-al-manshawi-adh-dhariyat.jpg",
     audioSrc:
       "/audio/surah-adh-dhariyat/51 Adh-Dhariyat (Muhmmad Siddiq al Manshawi).mp3",
     downloadUrl:
@@ -544,8 +540,7 @@ const RECITATIONS = [
     qariName: "Muhammad Al Tablawi",
     qariImage: "/audio/surah-al-qamar/muhammad-al-tablawi.jpg",
     audioSrc: "/audio/surah-al-qamar/54 Al-Qamar (Muhammad Al Tablawi).mp3",
-    downloadUrl:
-      "/audio/surah-al-qamar/54 Al-Qamar (Muhammad Al Tablawi).mp3",
+    downloadUrl: "/audio/surah-al-qamar/54 Al-Qamar (Muhammad Al Tablawi).mp3",
   },
   {
     id: "ar-rahman-mehmood-al-husairy-55",
@@ -553,8 +548,7 @@ const RECITATIONS = [
     qariName: "Mehmood Al Husairy",
     qariImage: "/audio/surah-ar-rahman/mehmood-al-husairy.jpg",
     audioSrc: "/audio/surah-ar-rahman/55 Ar-Rahman (Mahmood Al Husairy).mp3",
-    downloadUrl:
-      "/audio/surah-ar-rahman/55 Ar-Rahman (Mahmood Al Husairy).mp3",
+    downloadUrl: "/audio/surah-ar-rahman/55 Ar-Rahman (Mahmood Al Husairy).mp3",
   },
 ];
 
@@ -880,23 +874,23 @@ export function PlaylistPage() {
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
-          {RECITATIONS.map((rec, index) => (
+          {RECITATIONS.map((rec, index) =>
             (() => {
               const surahNumber =
                 getSurahNumberFromUrl(rec.audioSrc) ??
                 getSurahNumberFromUrl(rec.downloadUrl);
               return (
-            <RecitationCard
-              key={rec.id}
-              number={surahNumber ?? index + 1}
-              {...rec}
-              isPlaying={playingId === rec.id}
-              onPlayRequest={(id) => setPlayingId(id)}
-              onPauseRequest={() => setPlayingId(null)}
-            />
+                <RecitationCard
+                  key={rec.id}
+                  number={surahNumber ?? index + 1}
+                  {...rec}
+                  isPlaying={playingId === rec.id}
+                  onPlayRequest={(id) => setPlayingId(id)}
+                  onPauseRequest={() => setPlayingId(null)}
+                />
               );
-            })()
-          ))}
+            })(),
+          )}
         </div>
         {RECITATIONS.length === 0 && (
           <p className="text-center text-gray-500 py-12">
