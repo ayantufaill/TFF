@@ -27,17 +27,29 @@ export function ProgramsPage() {
                 <span className="hidden sm:inline">Widow Empowerment</span>
                 <span className="sm:hidden">Widows</span>
               </TabsTrigger>
-              <TabsTrigger value="orphans" className="py-4">
+              <TabsTrigger
+                value="orphans"
+                disabled
+                className="py-4 opacity-60 cursor-not-allowed"
+              >
                 <Users className="w-5 h-5 mr-2" />
                 <span className="hidden sm:inline">Orphan Care</span>
                 <span className="sm:hidden">Orphans</span>
               </TabsTrigger>
-              <TabsTrigger value="reverts" className="py-4">
+              <TabsTrigger
+                value="reverts"
+                disabled
+                className="py-4 opacity-60 cursor-not-allowed"
+              >
                 <BookOpen className="w-5 h-5 mr-2" />
                 <span className="hidden sm:inline">Revert Support</span>
                 <span className="sm:hidden">Reverts</span>
               </TabsTrigger>
-              <TabsTrigger value="emergency" className="py-4">
+              <TabsTrigger
+                value="emergency"
+                disabled
+                className="py-4 opacity-60 cursor-not-allowed"
+              >
                 <HandHeart className="w-5 h-5 mr-2" />
                 <span className="hidden sm:inline">Emergency Relief</span>
                 <span className="sm:hidden">Relief</span>
@@ -105,11 +117,15 @@ export function ProgramsPage() {
                 </Card>
 
                 <div className="text-center">
-                  <Link to="/donate">
-                    <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white">
-                      Sponsor a Widow
-                    </Button>
-                  </Link>
+                  <Button
+                    size="lg"
+                    type="button"
+                    disabled
+                    className="bg-[#C9A961] text-white opacity-70 cursor-not-allowed"
+                    aria-disabled="true"
+                  >
+                    Sponsor a Widow
+                  </Button>
                 </div>
               </div>
             </TabsContent>

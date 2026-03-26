@@ -10,9 +10,9 @@ const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage")
 import { AboutPage } from "./pages/AboutPage";
 import { DiscoveringIslamPage } from "./pages/DiscoveringIslamPage";
 import { PlaylistPage } from "./pages/PlaylistPage";
-// import { ProgramsPage } from "./pages/ProgramsPage";
-// import { TrainingPage } from "./pages/TrainingPage";
-// import { DonatePage } from "./pages/DonatePage";
+import { ProgramsPage } from "./pages/ProgramsPage";
+import { TrainingPage } from "./pages/TrainingPage";
+import { DonatePage } from "./pages/DonatePage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
 // import { NotFoundPage } from "./pages/NotFoundPage";
 
@@ -42,12 +42,13 @@ export const router = createBrowserRouter([
       { path: "cause-of-tff", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "daily-ayat-hadith", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "azkaar-dua", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
-      { path: "donate", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "donate", Component: DonatePage },
       { path: "volunteer", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "get-help", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "about-us", Component: AboutPage },
       { path: "discovering-islam", Component: DiscoveringIslamPage },
-      { path: "programs", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "programs", Component: ProgramsPage },
+      { path: "training", Component: TrainingPage },
       { path: "playlist", Component: PlaylistPage },
       { path: "downloads", Component: DownloadsPage },
       { path: "articles", Component: ArticlesPage },
