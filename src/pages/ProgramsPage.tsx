@@ -29,8 +29,7 @@ export function ProgramsPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="orphans"
-                disabled
-                className="py-4 opacity-60 cursor-not-allowed"
+                className="py-4"
               >
                 <Users className="w-5 h-5 mr-2" />
                 <span className="hidden sm:inline">Orphan Care</span>
@@ -38,8 +37,7 @@ export function ProgramsPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="reverts"
-                disabled
-                className="py-4 opacity-60 cursor-not-allowed"
+                className="py-4"
               >
                 <BookOpen className="w-5 h-5 mr-2" />
                 <span className="hidden sm:inline">Revert Support</span>
@@ -47,8 +45,7 @@ export function ProgramsPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="emergency"
-                disabled
-                className="py-4 opacity-60 cursor-not-allowed"
+                className="py-4"
               >
                 <HandHeart className="w-5 h-5 mr-2" />
                 <span className="hidden sm:inline">Emergency Relief</span>
@@ -191,157 +188,41 @@ export function ProgramsPage() {
                 </Card>
 
                 <div className="text-center">
-                  <Link to="/donate">
-                    <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white">
-                      Sponsor an Orphan
-                    </Button>
-                  </Link>
+                  <Button
+                    size="lg"
+                    type="button"
+                    disabled
+                    className="bg-[#C9A961] text-white opacity-70 cursor-not-allowed"
+                    aria-disabled="true"
+                  >
+                    Sponsor an Orphan
+                  </Button>
                 </div>
               </div>
             </TabsContent>
 
-            {/* Revert Support */}
             <TabsContent value="reverts">
-              <div className="space-y-12">
-                <div className="text-center max-w-3xl mx-auto">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-6">
-                    <BookOpen className="w-10 h-10 text-white" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Revert Support & Integration</h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    Comprehensive support for new Muslims, providing education, community integration, and spiritual guidance 
-                    to help them thrive in their faith journey.
-                  </p>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-6">
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
-                    <CardContent className="p-6">
-                      <BookOpen className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Islamic Education</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        Structured 15-module training program covering foundations of faith, daily practice, lifestyle 
-                        guidance, and long-term spiritual development.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
-                    <CardContent className="p-6">
-                      <UserCheck className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Personal Mentorship</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        One-on-one mentorship with experienced Muslims who provide guidance, answer questions, and offer 
-                        emotional support during the transition.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
-                    <CardContent className="p-6">
-                      <Home className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Community Integration</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        Connections to local mosques, Islamic centers, and supportive communities ensuring new Muslims 
-                        feel welcomed and included.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <Card className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] border-2 border-[#C9A961]/30">
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Transformation Story</h3>
-                    <p className="text-gray-700 italic leading-relaxed mb-4">
-                      "When I accepted Islam, I felt lost and overwhelmed. TFF's training program was a lifeline—it taught 
-                      me everything from how to pray to understanding Islamic values. My mentor Sarah became like a sister 
-                      to me, always there when I had questions or felt lonely. Now, one year later, I'm confident in my faith 
-                      and have a beautiful Muslim community around me. I'm even mentoring new reverts myself!"
-                    </p>
-                    <p className="text-[#C9A961] font-semibold">— Jennifer (Aminah), New Muslim, USA</p>
-                  </CardContent>
-                </Card>
-
-                <div className="text-center">
-                  <Link to="/training">
-                    <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white">
-                      Explore Training Modules
-                    </Button>
-                  </Link>
-                </div>
+              <div className="rounded-xl border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-8 text-center">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-3">
+                  Revert Support
+                </h2>
+                <p className="text-gray-600 text-base sm:text-lg">
+                  This section will be added next.
+                </p>
               </div>
             </TabsContent>
 
-            {/* Emergency Relief */}
             <TabsContent value="emergency">
-              <div className="space-y-12">
-                <div className="text-center max-w-3xl mx-auto">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-6">
-                    <HandHeart className="w-10 h-10 text-white" />
-                  </div>
-                  <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Emergency & Relief Programs</h2>
-                  <p className="text-lg text-gray-600 leading-relaxed">
-                    Rapid response to crises and emergencies, providing immediate assistance to communities affected by 
-                    natural disasters, conflicts, and humanitarian emergencies.
-                  </p>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-6">
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
-                    <CardContent className="p-6">
-                      <Package className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Food Distribution</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        Emergency food packages, hot meals, and nutritional support for families affected by crises, 
-                        ensuring no one goes hungry.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
-                    <CardContent className="p-6">
-                      <Activity className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Medical Aid</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        Mobile medical clinics, emergency healthcare services, medicines, and medical supplies for 
-                        communities in crisis situations.
-                      </p>
-                    </CardContent>
-                  </Card>
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
-                    <CardContent className="p-6">
-                      <HandHeart className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Crisis Response</h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        24/7 emergency hotline, rapid deployment teams, and coordinated relief efforts in response to 
-                        natural disasters and humanitarian crises.
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <Card className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] border-2 border-[#C9A961]/30">
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Recent Response</h3>
-                    <p className="text-gray-700 leading-relaxed mb-4">
-                      <strong>Syria Earthquake Relief (2023):</strong> Within 48 hours of the devastating earthquake, 
-                      TFF deployed emergency teams providing food, medical care, and temporary shelter to over 10,000 
-                      affected families. Our continued presence ensures long-term recovery and rebuilding support.
-                    </p>
-                    <p className="text-gray-700 leading-relaxed">
-                      <strong>Bangladesh Flood Response (2024):</strong> Distributed emergency food packages to 5,000 
-                      families, established medical camps treating 3,000+ patients, and provided clean water solutions 
-                      to prevent waterborne diseases.
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <div className="text-center">
-                  <Link to="/donate">
-                    <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white">
-                      Support Emergency Relief
-                    </Button>
-                  </Link>
-                </div>
+              <div className="rounded-xl border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-8 text-center">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-3">
+                  Emergency Relief
+                </h2>
+                <p className="text-gray-600 text-base sm:text-lg">
+                  This section will be added next.
+                </p>
               </div>
             </TabsContent>
+
           </Tabs>
         </div>
       </section>
