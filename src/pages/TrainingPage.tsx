@@ -1,4 +1,4 @@
-import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Lock, Play } from 'lucide-react';
+import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
@@ -14,7 +14,9 @@ export function TrainingPage() {
       level: 1,
       title: 'Foundations of Faith',
       subtitle: 'Beginner',
-      color: 'from-emerald-500 to-teal-600',
+      darkFrom: '#2C5F2D', // TFF green
+      darkTo: '#4A8B4D',   // TFF green (lighter)
+      glow: '#C9A961',     // TFF gold
       modules: [
         {
           number: 1,
@@ -58,7 +60,9 @@ export function TrainingPage() {
       level: 2,
       title: 'Daily Practice',
       subtitle: 'Essential Worship',
-      color: 'from-blue-500 to-indigo-600',
+      darkFrom: '#2C5F2D',
+      darkTo: '#4A8B4D',
+      glow: '#FAF8F3',     // warm ivory
       modules: [
         {
           number: 4,
@@ -102,7 +106,9 @@ export function TrainingPage() {
       level: 3,
       title: 'Lifestyle & Identity',
       subtitle: 'Building Your Muslim Life',
-      color: 'from-amber-500 to-orange-600',
+      darkFrom: '#2C5F2D',
+      darkTo: '#4A8B4D',
+      glow: '#E8D9B0',     // soft gold
       modules: [
         {
           number: 7,
@@ -146,7 +152,9 @@ export function TrainingPage() {
       level: 4,
       title: 'Growth & Confidence',
       subtitle: 'Deepening Your Faith',
-      color: 'from-purple-500 to-pink-600',
+      darkFrom: '#2C5F2D',
+      darkTo: '#4A8B4D',
+      glow: '#F5F1E8',     // warm cream
       modules: [
         {
           number: 10,
@@ -190,7 +198,9 @@ export function TrainingPage() {
       level: 5,
       title: 'Long-Term Practice & Stability',
       subtitle: 'Lifelong Journey',
-      color: 'from-rose-500 to-red-600',
+      darkFrom: '#2C5F2D',
+      darkTo: '#4A8B4D',
+      glow: '#D7C08A',     // deep soft-gold
       modules: [
         {
           number: 13,
@@ -304,12 +314,26 @@ export function TrainingPage() {
           {levels.map((level) => (
             <div key={level.level}>
               {/* Level Header */}
-              <div className={`bg-gradient-to-r ${level.color} text-white rounded-2xl p-8 mb-6`}>
+              <div
+                className="relative overflow-hidden rounded-2xl p-8 mb-6 text-white border border-black/10 shadow-sm"
+                style={{
+                  backgroundImage: `linear-gradient(90deg, ${level.darkFrom}, ${level.darkTo}), radial-gradient(circle at 18% 35%, ${level.glow}55 0%, transparent 62%)`,
+                  backgroundBlendMode: 'normal',
+                }}
+              >
+                <div
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 22%, rgba(255,255,255,0) 55%)',
+                  }}
+                  aria-hidden
+                />
                 <div className="flex items-center gap-4 mb-2">
-                  <Badge className="bg-white/20 text-white text-lg px-4 py-1">
+                  <Badge className="bg-white/15 text-white text-lg px-4 py-1">
                     Level {level.level}
                   </Badge>
-                  <Badge className="bg-white/20 text-white">
+                  <Badge className="bg-white/15 text-white">
                     {level.subtitle}
                   </Badge>
                 </div>
@@ -436,7 +460,22 @@ export function TrainingPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/*
+      Divider (separate cards from CTA)
+      <div className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-10">
+            <div className="mx-auto h-px w-full max-w-3xl bg-gradient-to-r from-transparent via-[#C9A961]/70 to-transparent" />
+            <p className="mt-3 text-center text-xs font-medium tracking-wide text-[#8B7355]">
+              Continue your journey
+            </p>
+          </div>
+        </div>
+      </div>
+      */}
+
+      {/*
+      CTA
       <section className="py-20 bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
@@ -455,6 +494,7 @@ export function TrainingPage() {
           </div>
         </div>
       </section>
+      */}
     </div>
   );
 }

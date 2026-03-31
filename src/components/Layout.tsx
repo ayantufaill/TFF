@@ -11,6 +11,7 @@ const navLinks = [
   { label: 'About Us', to: '/about-us' },
   { label: 'Discovering Islam', to: '/discovering-islam' },
   { label: 'Programs', to: '/programs' },
+  { label: 'Training', to: '/training' },
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },
   { label: 'Articles', to: '/articles' },
