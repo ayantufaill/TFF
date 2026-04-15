@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.PROD ? 'https://tff-production-3e66.up.railway.app/api' : 'http://localhost:5000/api');
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
