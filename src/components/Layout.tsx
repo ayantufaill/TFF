@@ -1,7 +1,8 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
-import { ArrowLeft, Menu, X } from 'lucide-react';
+import { ArrowLeft, Menu, X, LogOut } from 'lucide-react';
 import { Button } from './ui/button';
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 // Relative path so logo loads when app is opened as file (e.g. dist/index.html) or from any base URL
 const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
@@ -19,9 +20,16 @@ const navLinks = [
 
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const showBack = location.pathname !== '/' && location.pathname !== '';
+
+  const handleLogout = () => {
+    logout();
+    setMobileMenuOpen(false);
+    navigate('/training');
+  };
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] flex flex-col overflow-x-hidden">
@@ -67,7 +75,7 @@ export function Layout() {
                   alt="Two Finger Foundation"
                   width={48}
                   height={48}
-                  fetchPriority="high"
+                  fetchpriority="high"
                   className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                 />
               </div>
@@ -93,6 +101,16 @@ export function Layout() {
                   </Link>
                 );
               })}
+              {user && (
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-gray-700 hover:text-red-600 transition-colors py-2 px-3 rounded-md hover:bg-red-50 ml-2"
+                  title="Logout"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span className="font-medium">Logout</span>
+                </button>
+              )}
             </nav>
 
             <button
@@ -129,6 +147,15 @@ export function Layout() {
                 </Link>
               );
             })}
+            {user && (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-red-600 hover:bg-red-50 transition-colors mt-4 border-t border-gray-100"
+              >
+                <LogOut className="w-6 h-6" />
+                <span>Logout ({user.name})</span>
+              </button>
+            )}
           </nav>
         </div>
       )}

@@ -257,7 +257,7 @@ export function HomePage() {
             alt=""
             width={1080}
             height={1080}
-            fetchPriority="low"
+            fetchpriority="low"
             decoding="async"
             className="w-full h-full object-cover"
           />
