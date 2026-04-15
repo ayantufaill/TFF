@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix server\"",
     "build": "npm run build --prefix frontend",
-    "install:all": "npm install && npm install --prefix frontend && npm install --prefix server"
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix server",
+    "extract-articles": "node scripts/extract-articles-from-pdf.cjs",
+    "download-playlist-audio": "node scripts/download-playlist-audio.js",
+    "compress-playlist-audio": "bash scripts/compress-playlist-audio-16-25.sh"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
