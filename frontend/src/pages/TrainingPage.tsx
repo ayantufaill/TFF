@@ -20,7 +20,8 @@ export function TrainingPage() {
   const [name, setName] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [forgotStep, setForgotStep] = useState<1 | 2>(1);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -320,6 +321,14 @@ export function TrainingPage() {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setAuthError('Passwords do not match.');
+      toast.error('Validation Error', {
+        description: 'Passwords do not match.',
+      });
+      return;
+    }
+    
     setAuthError('');
     setIsSubmitting(true);
     
@@ -332,6 +341,7 @@ export function TrainingPage() {
       setForgotStep(1);
       setPassword('');
       setNewPassword('');
+      setConfirmPassword('');
       setOtp('');
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Invalid code or error resetting password.';
@@ -404,12 +414,13 @@ export function TrainingPage() {
             </CardHeader>
 
             {authMode === 'forgot' ? (
-              <form onSubmit={forgotStep === 1 ? handleForgotPassword : handleResetPassword}>
+              <form onSubmit={forgotStep === 1 ? handleForgotPassword : forgotStep === 2 ? (e) => { e.preventDefault(); setForgotStep(3); } : handleResetPassword}>
                 <CardContent className="space-y-6 px-8 pb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex justify-center mb-2">
                     <div className="flex items-center gap-2">
                       <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 1 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
                       <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 2 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
+                      <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 3 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
                     </div>
                   </div>
 
@@ -437,7 +448,7 @@ export function TrainingPage() {
                         </div>
                       </div>
                     </div>
-                  ) : (
+                  ) : forgotStep === 2 ? (
                     <div className="space-y-4 animate-in fade-in duration-500">
                       <div className="text-center space-y-2">
                         <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
@@ -459,6 +470,16 @@ export function TrainingPage() {
                           required 
                         />
                       </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4 animate-in fade-in duration-500">
+                      <div className="text-center space-y-2">
+                        <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                          <Lock className="w-8 h-8 text-[#C9A961]" />
+                        </div>
+                        <h3 className="text-xl font-bold text-[#2C5F2D]">New Password</h3>
+                        <p className="text-sm text-gray-500">Set a strong password for your account</p>
+                      </div>
                       <div className="space-y-2">
                         <Label htmlFor="new-password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">New Password</Label>
                         <div className="relative group">
@@ -467,6 +488,20 @@ export function TrainingPage() {
                             type="password" 
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="••••••••" 
+                            className="px-4 h-14 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
+                            required 
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="confirm-password" internal-role="confirm-pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">Confirm Password</Label>
+                        <div className="relative group">
+                          <Input 
+                            id="confirm-password" 
+                            type="password" 
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="••••••••" 
                             className="px-4 h-14 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
                             required 
@@ -492,10 +527,10 @@ export function TrainingPage() {
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                         Processing...
                       </div>
-                    ) : forgotStep === 1 ? 'Send Code' : 'Reset Password'}
+                    ) : forgotStep === 1 ? 'Send Code' : forgotStep === 2 ? 'Next' : 'Reset Password'}
                   </Button>
                 </CardContent>
-                <CardFooter className="pb-12 pt-4 flex justify-center">
+                <CardFooter className="pb-32 pt-4 flex justify-center">
                   <button 
                     type="button" 
                     onClick={() => { setAuthMode('login'); setForgotStep(1); setAuthError(''); }}
