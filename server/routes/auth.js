@@ -108,7 +108,6 @@ router.post('/forgot-password', async (req, res) => {
     user.resetOTPExpires = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    /*
     try {
       await sendEmail({
         email: user.email,
@@ -134,10 +133,6 @@ router.post('/forgot-password', async (req, res) => {
       console.error('Email error:', err);
       return res.status(500).json({ message: 'Error sending email. Please try again later.' });
     }
-    */
-
-    // TEMPORARY: Return success for UI testing without working email
-    res.json({ message: 'Code generated (Email skipped for now)', otp });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

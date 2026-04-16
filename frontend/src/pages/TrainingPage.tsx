@@ -11,7 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner'; 
 
 export function TrainingPage() {
-  const { user, login, register, logout, updateProgress, loading } = useAuth();
+  const { user, login, register, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   
   // Form State
@@ -301,14 +301,21 @@ export function TrainingPage() {
     setAuthError('');
     setIsSubmitting(true);
     
-    // Simulating API delay for a premium feel
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await forgotPassword(email);
       setForgotStep(2);
-      toast.success('Code sent! (Mocked)', {
+      toast.success('Code sent!', {
         description: 'Verification code has been sent to your email.',
       });
-    }, 1200);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Error sending reset code. Please try again.';
+      setAuthError(errorMessage);
+      toast.error('Reset Error', {
+        description: errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -316,10 +323,9 @@ export function TrainingPage() {
     setAuthError('');
     setIsSubmitting(true);
     
-    // Simulating API delay
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success('Password reset! (Mocked)', {
+    try {
+      await resetPassword(email, otp, newPassword);
+      toast.success('Password reset!', {
         description: 'Your password has been changed successfully.',
       });
       setAuthMode('login');
@@ -327,7 +333,15 @@ export function TrainingPage() {
       setPassword('');
       setNewPassword('');
       setOtp('');
-    }, 1500);
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Invalid code or error resetting password.';
+      setAuthError(errorMessage);
+      toast.error('Reset Error', {
+        description: errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const GoogleIcon = () => (
