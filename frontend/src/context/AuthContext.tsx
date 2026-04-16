@@ -16,6 +16,8 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
   updateProgress: (moduleId: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (email: string, otp: string, newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -73,9 +75,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Error updating progress:', err);
     }
   };
+  const forgotPassword = async (email: string) => {
+    await api.post('/auth/forgot-password', { email });
+  };
+
+  const resetPassword = async (email: string, otp: string, newPassword: string) => {
+    await api.post('/auth/reset-password', { email, otp, newPassword });
+  };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateProgress }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateProgress, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );
