@@ -49,7 +49,7 @@ export function DiscoveringIslamPage() {
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* What is Islam – card same style as project */}
-          <div className="rounded-xl border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-6 sm:p-8 mb-10 sm:mb-12">
+          <div className="rounded-[24px] border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-6 sm:p-8 mb-10 sm:mb-12">
             <div className="flex items-center gap-3 mb-4">
               <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-[#C9A961]/10 text-[#C9A961]">
                 <Sparkles className="w-5 h-5" />
@@ -146,7 +146,7 @@ export function DiscoveringIslamPage() {
           </div>
 
           {/* Quote – solid project green */}
-          <div className="mt-12 sm:mt-16 mb-16 sm:mb-24 relative rounded-2xl overflow-hidden bg-[#2C5F2D] text-white shadow-[0_8px_32px_rgba(44,95,45,0.25)] border border-[#2C5F2D]/90">
+          <div className="mt-12 sm:mt-16 mb-16 sm:mb-24 relative rounded-[24px] overflow-hidden bg-[#2C5F2D] text-white shadow-[0_8px_32px_rgba(44,95,45,0.25)] border border-[#2C5F2D]/90">
             <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#D4AF37] to-[#B8962E]" aria-hidden />
             <div className="absolute inset-0 opacity-[0.06] bg-[length:48px_48px] bg-[url('data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'1.5\' fill=\'%23fff\'/%3E%3C/svg%3E')]" aria-hidden />
             <div className="relative z-10 px-6 sm:px-10 py-11 sm:py-14 text-center">

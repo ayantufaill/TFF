@@ -81,11 +81,10 @@ export function ArticlesPage() {
               return (
                 <article
                   key={article.file}
-                  className={`rounded-xl border transition-all duration-200 overflow-hidden ${
-                    isOpen
+                  className={`rounded-xl border transition-all duration-200 overflow-hidden ${isOpen
                       ? 'border-[#C9A961]/60 bg-white shadow-[0_8px_24px_rgba(44,95,45,0.12)] ring-1 ring-[#C9A961]/20'
                       : 'border-gray-200/80 bg-white/90 hover:border-[#C9A961]/30 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)]'
-                  }`}
+                    }`}
                 >
                   {/* Clickable title row – pushes content down when open */}
                   <button
@@ -97,9 +96,8 @@ export function ArticlesPage() {
                     id={`article-trigger-${index}`}
                   >
                     <span
-                      className={`flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg transition-colors ${
-                        isOpen ? 'bg-[#C9A961]/20 text-[#C9A961]' : 'bg-[#C9A961]/10 text-[#C9A961]'
-                      }`}
+                      className={`flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg transition-colors ${isOpen ? 'bg-[#C9A961]/20 text-[#C9A961]' : 'bg-[#C9A961]/10 text-[#C9A961]'
+                        }`}
                       aria-hidden
                     >
                       <FileText className="w-5 h-5" />
@@ -113,9 +111,8 @@ export function ArticlesPage() {
                       </h2>
                     </div>
                     <span
-                      className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-                        isOpen ? 'bg-[#C9A961]/15 text-[#C9A961]' : 'bg-gray-100 text-gray-500'
-                      }`}
+                      className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full transition-colors ${isOpen ? 'bg-[#C9A961]/15 text-[#C9A961]' : 'bg-gray-100 text-gray-500'
+                        }`}
                       aria-hidden
                     >
                       {isOpen ? (

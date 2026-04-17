@@ -729,7 +729,7 @@ function RecitationCard({
   }, [downloadUrl, audioSrc, qariName, surahName, downloading]);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200/90 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-[24px] border border-gray-200/90 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       {/* Title row: subtle number + Surah name */}
       <h3 className="text-lg font-bold text-[#2C5F2D] px-4 pt-4 pb-1 flex items-center justify-center gap-2">
         <span className="text-[#C9A961] font-semibold tabular-nums">

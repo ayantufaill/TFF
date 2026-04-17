@@ -24,6 +24,18 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  currentStreak: {
+    type: Number,
+    default: 0
+  },
+  longestStreak: {
+    type: Number,
+    default: 0
+  },
+  lastActivityDate: {
+    type: Date,
+    default: null
+  },
   resetOTP: {
     type: String
   },

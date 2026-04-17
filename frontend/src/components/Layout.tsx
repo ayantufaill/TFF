@@ -9,11 +9,12 @@ const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
 
 const navLinks = [
   { label: 'Home', to: '/' },
-  { label: 'Dashboard', to: '/dashboard', authOnly: true },
-  { label: 'Courses', to: '/courses' },
+//   { label: 'Dashboard', to: '/dashboard', authOnly: true },
+//   { label: 'Courses', to: '/courses' },
   { label: 'About Us', to: '/about-us' },
   { label: 'Discovering Islam', to: '/discovering-islam' },
   { label: 'Programs', to: '/programs' },
+  { label: 'Training', to: '/Training/dashboard', authOnly: true },
   { label: 'Training', to: '/training', guestOnly: true },
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },

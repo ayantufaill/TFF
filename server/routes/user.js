@@ -15,12 +15,44 @@ router.post('/progress', auth, async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    // Update progress
     if (!user.completedModules.includes(moduleId)) {
       user.completedModules.push(moduleId);
-      await user.save();
     }
 
-    res.json(user.completedModules);
+    // Streak Logic
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    let lastActivity = null;
+    if (user.lastActivityDate) {
+      lastActivity = new Date(user.lastActivityDate.getFullYear(), user.lastActivityDate.getMonth(), user.lastActivityDate.getDate());
+    }
+
+    if (!lastActivity) {
+      // First activity ever
+      user.currentStreak = 1;
+    } else {
+      const diffTime = today.getTime() - lastActivity.getTime();
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 1) {
+        // Consecutive day
+        user.currentStreak += 1;
+      } else if (diffDays > 1) {
+        // Streak broken
+        user.currentStreak = 1;
+      }
+      // If diffDays === 0, it's the same day, no change to streak
+    }
+
+    user.lastActivityDate = now;
+    if (user.currentStreak > user.longestStreak) {
+      user.longestStreak = user.currentStreak;
+    }
+
+    await user.save();
+    res.json(user); // Return the full user object to update frontend context
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

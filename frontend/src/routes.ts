@@ -13,7 +13,7 @@ import { PlaylistPage } from "./pages/PlaylistPage";
 import { ProgramsPage } from "./pages/ProgramsPage";
 import { TrainingPage } from "./pages/TrainingPage";
 import { DashboardPage } from "./pages/DashboardPage";
-import { CoursesPage } from "./pages/CoursesPage";
+// import { CoursesPage } from "./pages/CoursesPage";
 import { DonatePage } from "./pages/DonatePage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
 // import { NotFoundPage } from "./pages/NotFoundPage";
@@ -51,8 +51,8 @@ export const router = createBrowserRouter([
       { path: "discovering-islam", Component: DiscoveringIslamPage },
       { path: "programs", Component: ProgramsPage },
       { path: "training", Component: TrainingPage },
-      { path: "dashboard", Component: DashboardPage },
-      { path: "courses", Component: CoursesPage },
+      { path: "Training/dashboard", Component: DashboardPage },
+      // { path: "courses", Component: CoursesPage },
       { path: "playlist", Component: PlaylistPage },
       { path: "downloads", Component: DownloadsPage },
       { path: "articles", Component: ArticlesPage },
