@@ -1,4 +1,4 @@
-import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, User as UserIcon, LogIn, ArrowLeft, Shield } from 'lucide-react';
+import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, User as UserIcon, LogIn, ArrowLeft, Shield, Star, Users, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
@@ -6,12 +6,96 @@ import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner'; 
 
+const LoadingOverlay = ({ message }: { message: string }) => (
+  <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-2xl animate-in fade-in duration-300">
+    <div className="relative w-20 h-20 mb-4">
+      {/* Dynamic rolling slider effect */}
+      <div className="absolute inset-0 rounded-full border-[6px] border-[#2C5F2D]/5 border-t-[#C9A961] animate-[spin_1s_cubic_bezier(0.55,0.055,0.675,0.19)_infinite]" />
+      <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#2C5F2D] animate-[spin_1.5s_cubic_bezier(0.215,0.61,0.355,1)_infinite_reverse]" />
+      
+      {/* Center glowing element */}
+      <div className="absolute inset-[30%] rounded-full bg-gradient-to-br from-[#2C5F2D] to-[#C9A961] opacity-20 animate-pulse" />
+    </div>
+    <div className="text-center px-6">
+      <h3 className="text-lg font-bold text-[#2C5F2D] tracking-tight">{message}</h3>
+      <p className="mt-1 text-[#8B7355] font-semibold text-xs animate-pulse">Please wait while we process...</p>
+    </div>
+    
+    <style>{`
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `}</style>
+  </div>
+);
+
+const courseCatalog = [
+  { id: 1, title: 'Foundations of Aqeedah', provider: 'The Faith Foundation', type: 'Course', category: 'Aqeedah', image: 'https://picsum.photos/seed/aqeedah/600/400', badges: ['New'] },
+  { id: 2, title: 'Learn to Pray – Salah Guide', provider: 'The Faith Foundation', type: 'Guided Module', category: 'Fiqh', image: 'https://picsum.photos/seed/salah/600/400', badges: ['Free'] },
+  { id: 3, title: 'Seerah – Life of the Prophet ﷺ', provider: 'The Faith Foundation', type: 'Specialization', category: 'Seerah', image: 'https://picsum.photos/seed/seerah/600/400', badges: [] },
+  { id: 4, title: 'Quranic Arabic – Read & Understand', provider: 'The Faith Foundation', type: 'Course', category: 'Language', image: 'https://picsum.photos/seed/arabic/600/400', badges: ['New', 'Free'] },
+  { id: 5, title: 'Daily Adhkar & Dua', provider: 'The Faith Foundation', type: 'Guided Module', category: 'Spirituality', image: 'https://picsum.photos/seed/adhkar/600/400', badges: ['Free'] },
+  { id: 6, title: 'Islamic History & Civilization', provider: 'The Faith Foundation', type: 'Specialization', category: 'History', image: 'https://picsum.photos/seed/history/600/400', badges: [] },
+];
+
+const CourseCard = ({ course, onClick }: { course: any; onClick: () => void }) => (
+  <div
+    onClick={onClick}
+    className="group cursor-pointer"
+  >
+    {/* Card container with border */}
+    <div className="rounded-lg border border-gray-200 bg-white overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
+      {/* Image — fixed height */}
+      <div className="relative h-[160px] bg-gray-100 overflow-hidden">
+        <img
+          src={course.image}
+          alt={course.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        {/* Badges — top right */}
+        {course.badges?.length > 0 && (
+          <div className="absolute top-2.5 right-2.5 flex gap-1.5">
+            {course.badges.map((badge: string) => (
+              <span
+                key={badge}
+                className="bg-white text-[11px] font-medium text-gray-700 px-2 py-0.5 rounded border border-gray-200"
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Card body */}
+      <div className="p-4 flex-1 flex flex-col">
+        {/* Provider row — icon + name */}
+        <div className="flex items-center gap-2 mb-2">
+          <BookOpen className="w-4 h-4 text-[#2C5F2D] flex-shrink-0" />
+          <span className="text-[12px] text-gray-500">{course.provider}</span>
+        </div>
+
+        {/* Title */}
+        <h4 className="text-[14px] font-bold text-gray-900 leading-snug mb-auto line-clamp-2 group-hover:text-[#2C5F2D] transition-colors">
+          {course.title}
+        </h4>
+
+        {/* Type */}
+        <p className="text-[12px] text-gray-500 mt-3">{course.type}</p>
+      </div>
+    </div>
+  </div>
+);
+
 export function TrainingPage() {
   const { user, login, register, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
+  const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   
   // Form State
@@ -24,6 +108,32 @@ export function TrainingPage() {
   const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // If already logged in, redirect to dashboard
+  useEffect(() => {
+    if (user && !loading) {
+      navigate('/dashboard');
+    }
+  }, [user, loading, navigate]);
+  
+  // Catalog State
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.offsetWidth * 0.8;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const categories = ['All', 'Aqeedah', 'Fiqh', 'Seerah', 'Language', 'Spirituality'];
+  const filteredCourses = selectedCategory === 'All' 
+    ? courseCatalog 
+    : courseCatalog.filter(c => c.category === selectedCategory);
 
   const userProgress = user?.completedModules?.length 
     ? Math.round((user.completedModules.length / 15) * 100) 
@@ -279,11 +389,13 @@ export function TrainingPage() {
         toast.success('Welcome back!', {
           description: 'Successfully logged in to your training portal.',
         });
+        navigate('/dashboard');
       } else {
         await register(name, email, password);
         toast.success('Account created!', {
           description: 'Welcome to the TFF training community.',
         });
+        navigate('/dashboard');
       }
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Authentication failed. Please check your credentials.';
@@ -399,7 +511,10 @@ export function TrainingPage() {
             </p>
           </div>
 
-          <Card className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
+          <div className="relative">
+            {isSubmitting && <LoadingOverlay message={authMode === 'forgot' ? (forgotStep === 1 ? "Sending Code..." : "Resetting Password...") : "Processing..."} />}
+
+            <Card className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
             <CardHeader className="pb-4 pt-8 text-center">
               <CardTitle className="text-2xl font-bold text-[#2C5F2D]">
                 {authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Reset Password' : 'Join the Community'}
@@ -512,8 +627,9 @@ export function TrainingPage() {
                   )}
 
                   {authError && (
-                    <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-100 rounded-lg font-medium text-center animate-shake">
-                      {authError}
+                    <div className="p-4 text-sm bg-red-50 text-red-600 border-l-4 border-red-500 rounded-lg font-bold flex items-start gap-3 animate-in fade-in zoom-in-95 duration-300">
+                      <div className="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5">!</div>
+                      <span>{authError}</span>
                     </div>
                   )}
 
@@ -654,6 +770,7 @@ export function TrainingPage() {
               </form>
             )}
           </Card>
+        </div>
 
           {/* Mini Trust Row */}
           <div className="mt-4 flex justify-center items-center gap-6 opacity-60">
@@ -725,6 +842,54 @@ export function TrainingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Course Catalog */}
+      <section className="py-14 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Title */}
+          <h2 className="text-xl font-bold text-gray-900 mb-5">Get started with Deen Islam</h2>
+
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium border transition-all duration-200 ${
+                  selectedCategory === cat
+                    ? 'bg-[#2C5F2D] text-white border-[#2C5F2D]'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Cards Grid — 4 columns with proper spacing */}
+          <div
+            ref={scrollRef}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {filteredCourses.slice(0, 4).map((course) => (
+              <CourseCard
+                key={course.id}
+                course={course}
+                onClick={() => toast.info(course.title, {
+                  description: `Opening ${course.type}: ${course.title}`,
+                })}
+              />
+            ))}
+          </div>
+
+          {/* Show more button */}
+          {filteredCourses.length > 4 && (
+            <button className="mt-8 px-5 py-2 text-[13px] font-semibold text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+              Show {filteredCourses.length - 4} more
+            </button>
+          )}
         </div>
       </section>
 

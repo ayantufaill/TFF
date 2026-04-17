@@ -9,10 +9,12 @@ const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
 
 const navLinks = [
   { label: 'Home', to: '/' },
+  { label: 'Dashboard', to: '/dashboard', authOnly: true },
+  { label: 'Courses', to: '/courses' },
   { label: 'About Us', to: '/about-us' },
   { label: 'Discovering Islam', to: '/discovering-islam' },
   { label: 'Programs', to: '/programs' },
-  { label: 'Training', to: '/training' },
+  { label: 'Training', to: '/training', guestOnly: true },
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },
   { label: 'Articles', to: '/articles' },
@@ -87,7 +89,11 @@ export function Layout() {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-              {navLinks.map((link) => {
+              {navLinks.filter(link => {
+                if ((link as any).authOnly && !user) return false;
+                if ((link as any).guestOnly && user) return false;
+                return true;
+              }).map((link) => {
                 const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
                 return (
                   <Link
@@ -132,7 +138,11 @@ export function Layout() {
           aria-hidden="false"
         >
           <nav className="pt-6 px-6 pb-8 flex flex-col gap-1" aria-label="Main">
-            {navLinks.map((link) => {
+            {navLinks.filter(link => {
+              if ((link as any).authOnly && !user) return false;
+              if ((link as any).guestOnly && user) return false;
+              return true;
+            }).map((link) => {
               const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
               return (
                 <Link
