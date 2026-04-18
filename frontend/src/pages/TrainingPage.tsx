@@ -884,21 +884,21 @@ export function TrainingPage() {
                 </div>
                 <h2 className="text-3xl font-bold">{level.title}</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
+              <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
                 {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
-                <div style={{ width: '220px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100 bg-[#FAF8F3]">
-                  <div className="p-6 border-b border-[#C9A961]/10 bg-white/60 sticky top-0 z-20 backdrop-blur-md">
-                    <h3 className="text-[9px] font-black text-[#8B7355] uppercase tracking-[0.3em] mb-2 opacity-60">Curriculum Path</h3>
+                <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-[#FAF8F3]">
+                  <div className="px-7 py-7 border-b border-[#C9A961]/15 bg-white/60 sticky top-0 z-20 backdrop-blur-md">
+                    <h3 className="text-[10px] font-black text-[#8B7355] uppercase tracking-[0.3em] mb-4 opacity-60">Curriculum Path</h3>
                     <div className="flex flex-col gap-3">
                         <div className="flex items-baseline justify-between">
-                            <p className="text-xs font-black text-[#2C5F2D]">Level {level.level}</p>
-                            <span className="text-[9px] font-bold text-[#8B7355]">{userProgress}%</span>
+                            <p className="text-sm font-black text-[#2C5F2D]">Level {level.level}</p>
+                            <span className="text-[10px] font-bold text-[#8B7355] bg-[#C9A961]/10 px-2 py-0.5 rounded-full">{userProgress}%</span>
                         </div>
-                        <Progress value={userProgress} className="h-1 bg-[#C9A961]/20 [&>div]:bg-gradient-to-r [&>div]:from-[#C9A961] [&>div]:to-[#2C5F2D]" />
+                        <Progress value={userProgress} className="h-1.5 bg-[#C9A961]/15 rounded-full [&>div]:bg-gradient-to-r [&>div]:from-[#C9A961] [&>div]:to-[#2C5F2D] [&>div]:rounded-full" />
                     </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }} className="pt-2">
-                    {level.modules.map((module) => {
+                  <div style={{ display: 'flex', flexDirection: 'column' }} className="pt-4 pb-6 px-4">
+                    {level.modules.map((module, moduleIdx) => {
                       const isActive = activeModuleId === module.id || activeModuleId === String(module.number);
                       const isCompleted = user?.completedModules?.includes(module.id);
                       
@@ -910,10 +910,12 @@ export function TrainingPage() {
                             params.set('module', String(module.number));
                             navigate(`?${params.toString()}`, { replace: true });
                           }}
-                          className={`relative flex flex-col gap-2 px-6 py-5 text-left transition-all duration-500 group mx-3 rounded-2xl mb-3 ${
+                          className={`relative flex flex-col gap-2.5 px-7 py-6 text-left transition-all duration-500 group rounded-2xl ${
+                            moduleIdx < level.modules.length - 1 ? 'mb-4' : ''
+                          } ${
                             isActive 
                               ? 'bg-white shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10' 
-                              : 'hover:bg-white/50 opacity-80 hover:opacity-100 hover:translate-x-1'
+                              : 'hover:bg-white/60 opacity-75 hover:opacity-100 hover:translate-x-1'
                           }`}
                         >
                           {/* Active Backdrop Tint */}
@@ -921,34 +923,34 @@ export function TrainingPage() {
                             <div className="absolute inset-0 bg-[#2C5F2D]/[0.02] rounded-2xl pointer-events-none" />
                           )}
                           {isActive && (
-                            <div className="absolute left-0 top-4 bottom-4 w-1.5 bg-gradient-to-b from-[#C9A961] to-[#8B7355] rounded-full shadow-[0_0_10px_rgba(201,169,97,0.4)]" />
+                            <div className="absolute left-1 top-4 bottom-4 w-1.5 bg-gradient-to-b from-[#C9A961] to-[#8B7355] rounded-full shadow-[0_0_10px_rgba(201,169,97,0.4)]" />
                           )}
                           
-                          <div className="flex flex-col gap-1.5 min-w-0">
+                          <div className="flex flex-col gap-2 min-w-0 pl-2">
                             <div className="flex items-center justify-between">
-                                <span className={`text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-tighter ${
+                                <span className={`text-[10px] font-black px-4 py-1.5 rounded-lg uppercase tracking-tight ${
                                     isActive ? 'bg-[#2C5F2D] text-white shadow-sm' : 'bg-gray-100 text-gray-500'
                                 }`}>
-                                    Mod {module.number}
+                                    Module {module.number}
                                 </span>
                                 {isCompleted ? (
-                                    <div className="w-5 h-5 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                                        <CheckCircle className="w-3 h-3 text-green-600" />
+                                    <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
                                     </div>
                                 ) : (
-                                    <Play className={`w-3.5 h-3.5 transition-transform duration-500 ${isActive ? 'text-[#C9A961] scale-125' : 'text-gray-300'}`} />
+                                    <Play className={`w-4 h-4 transition-transform duration-500 ${isActive ? 'text-[#C9A961] scale-125' : 'text-gray-300'}`} />
                                 )}
                             </div>
-                            <h4 className={`font-black text-sm leading-snug transition-colors line-clamp-2 ${
+                            <h4 className={`font-black text-[13px] leading-snug transition-colors line-clamp-2 mt-0.5 ${
                                 isActive ? 'text-[#2C5F2D]' : 'text-gray-600'
                             }`}>
                                 {module.title}
                             </h4>
                           </div>
                           
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className={`text-[9px] font-black flex items-center gap-1.5 uppercase tracking-widest ${isActive ? 'text-[#8B7355]' : 'text-gray-400'}`}>
-                                <Video className="w-3 h-3 opacity-70" />
+                          <div className="flex items-center gap-2 mt-0.5 pl-2">
+                            <span className={`text-[10px] font-bold flex items-center gap-2 uppercase tracking-wider ${isActive ? 'text-[#8B7355]' : 'text-gray-400'}`}>
+                                <Video className="w-3.5 h-3.5 opacity-70" />
                                 12 MINS
                             </span>
                           </div>
@@ -969,7 +971,7 @@ export function TrainingPage() {
 
                         return (
                         <div key={module.id} className="h-full w-full animate-in fade-in slide-in-from-right-4 duration-700 p-8 lg:p-10">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 380px', gap: '3rem', alignItems: 'start', width: '100%' }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 720px', gap: '1.5rem', alignItems: 'stretch', width: '100%' }}>
                             
                             {/* Left Column: Lesson Details (Main Content) */}
                             <div className="min-w-0 space-y-12">
@@ -1054,15 +1056,17 @@ export function TrainingPage() {
                             </div>
 
                             {/* Right Column: Cinematic Video Player (Sticky Focus) */}
-                            <div style={{ width: '380px' }} className="animate-in fade-in slide-in-from-right duration-1000 delay-300">
-                                <div className="sticky top-10 w-full">
-                                  <div className="bg-[#0A0A0A] rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.3)] border-[8px] border-white ring-1 ring-gray-200 relative group aspect-video transition-transform duration-500 hover:scale-[1.02]">
+                            <div style={{ width: '720px' }} className="animate-in fade-in slide-in-from-right duration-1000 delay-300">
+                                <div className="sticky top-10 w-full h-full flex flex-col">
+                                  <div className="bg-[#0A0A0A] rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.3)] border-[8px] border-white ring-1 ring-gray-200 relative group transition-transform duration-500 hover:scale-[1.02] flex-1" style={{ minHeight: '450px' }}>
                                     <iframe
                                       className="absolute inset-0 w-full h-full"
-                                      src={`https://www.youtube.com/embed/${module.videoId}?rel=0&modestbranding=1&autoplay=0&hd=1`}
+                                      src={`https://www.youtube.com/embed/${module.videoId}?rel=0&modestbranding=1&autoplay=0&hd=1&origin=${window.location.origin}`}
                                       title={module.title}
-                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                       allowFullScreen
+                                      referrerPolicy="strict-origin-when-cross-origin"
+                                      loading="lazy"
                                     ></iframe>
                                 </div>
                                 <div className="mt-6 flex flex-wrap items-center justify-between gap-4 px-2">
