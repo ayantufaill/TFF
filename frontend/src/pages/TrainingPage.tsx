@@ -886,9 +886,9 @@ export function TrainingPage() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
                 {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
-                <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-[#FAF8F3]">
-                  <div className="px-7 py-7 border-b border-[#C9A961]/15 bg-white/60 sticky top-0 z-20 backdrop-blur-md">
-                    <h3 className="text-[10px] font-black text-[#8B7355] uppercase tracking-[0.3em] mb-4 opacity-60">Curriculum Path</h3>
+                <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-white">
+                  <div className="pl-10 pr-8 pt-8 pb-7 border-b border-gray-100 bg-white sticky top-0 z-20">
+                    <h3 className="text-[11px] font-black text-[#2C5F2D] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
                     <div className="flex flex-col gap-3">
                         <div className="flex items-baseline justify-between">
                             <p className="text-sm font-black text-[#2C5F2D]">Level {level.level}</p>
@@ -914,8 +914,8 @@ export function TrainingPage() {
                             moduleIdx < level.modules.length - 1 ? 'mb-4' : ''
                           } ${
                             isActive 
-                              ? 'bg-white shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10' 
-                              : 'hover:bg-white/60 opacity-75 hover:opacity-100 hover:translate-x-1'
+                              ? 'bg-gray-50 shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10' 
+                              : 'hover:bg-gray-50/80 opacity-75 hover:opacity-100 hover:translate-x-1'
                           }`}
                         >
                           {/* Active Backdrop Tint */}
@@ -1014,7 +1014,6 @@ export function TrainingPage() {
                                                 const params = new URLSearchParams(searchParams);
                                                 params.set('module', String(nextModule.number));
                                                 navigate(`?${params.toString()}`);
-                                                window.scrollTo({ top: 0, behavior: 'smooth' });
                                             }}
                                             className="w-full max-w-xl bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] hover:from-[#234F24] hover:to-[#3e7540] text-white font-black h-16 rounded-2xl shadow-xl shadow-green-900/20 transition-all hover:scale-[1.03] active:scale-95 text-lg tracking-tight"
                                         >
