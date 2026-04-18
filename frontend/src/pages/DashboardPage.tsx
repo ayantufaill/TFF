@@ -7,11 +7,41 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Link } from 'react-router';
 
-// Reusing shared data (ideally this should be moved to a shared file later)
+// Course-based data: Each card is a full course with 5 levels (15 modules total)
 const courses = [
-  { id: 1, title: 'Foundations of Aqeedah', provider: 'The Faith Foundation', type: 'Course', category: 'Aqeedah', image: 'https://picsum.photos/seed/aqeedah/600/400', progress: 65 },
-  { id: 2, title: 'Learn to Pray – Salah Guide', provider: 'The Faith Foundation', type: 'Guided Module', category: 'Fiqh', image: 'https://picsum.photos/seed/salah/600/400', progress: 30 },
-  { id: 3, title: 'Seerah – Life of the Prophet ﷺ', provider: 'The Faith Foundation', type: 'Specialization', category: 'Seerah', image: 'https://picsum.photos/seed/seerah/600/400', progress: 0 },
+  { 
+    id: 1, 
+    title: 'Foundations of Aqeedah', 
+    category: 'Aqeedah', 
+    image: 'https://picsum.photos/seed/aqeedah/600/400',
+    type: 'Course',
+    subtitle: '5 Levels • 15 Modules',
+    // Course 1 uses module-1 through module-15
+    moduleIds: Array.from({ length: 15 }, (_, i) => `module-${i + 1}`),
+    firstModule: 1
+  },
+  { 
+    id: 2, 
+    title: 'Learn to Pray – Salah Guide', 
+    category: 'Fiqh', 
+    image: 'https://picsum.photos/seed/salah/600/400',
+    type: 'Guided Module',
+    subtitle: '5 Levels • 15 Modules',
+    // Course 2 uses module-16 through module-30
+    moduleIds: Array.from({ length: 15 }, (_, i) => `module-${i + 16}`),
+    firstModule: 16
+  },
+  { 
+    id: 3, 
+    title: 'Seerah – Life of the Prophet ﷺ', 
+    category: 'Seerah', 
+    image: 'https://picsum.photos/seed/seerah/600/400',
+    type: 'Specialization',
+    subtitle: '5 Levels • 15 Modules',
+    // Course 3 uses module-31 through module-45
+    moduleIds: Array.from({ length: 15 }, (_, i) => `module-${i + 31}`),
+    firstModule: 31
+  },
 ];
 
 export function DashboardPage() {
@@ -29,6 +59,9 @@ export function DashboardPage() {
       </div>
     );
   }
+
+  // Total completed modules across all potential courses
+  const totalCompletedCount = user.completedModules?.length || 0;
 
   return (
     <div className="min-h-screen bg-[#FAF8F3]" style={{ paddingBottom: '320px' }}>
@@ -49,8 +82,8 @@ export function DashboardPage() {
                 <div className="text-xs text-white/70 uppercase tracking-wider font-semibold">Days Streak</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center min-w-[120px]">
-                <div className="text-2xl font-bold">{user.completedModules?.length || 0}</div>
-                <div className="text-xs text-white/70 uppercase tracking-wider font-semibold">Completed</div>
+                <div className="text-2xl font-bold">{totalCompletedCount}</div>
+                <div className="text-xs text-white/70 uppercase tracking-wider font-semibold">Total Modules</div>
               </div>
             </div>
           </div>
@@ -66,29 +99,18 @@ export function DashboardPage() {
               <div className="flex items-center justify-between mb-8">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Current Learning</h2>
-                  <p className="text-sm text-gray-500 font-medium">Pick up where you left off</p>
+                  <p className="text-sm text-gray-500 font-medium">Each course contains 5 Levels • 15 Modules total</p>
                 </div>
-                {/* <Link to="/Training/dashboard" className="text-[#2C5F2D] font-bold text-sm hover:underline flex items-center gap-1 group">
-                  View full catalog <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </Link> */}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {courses.map((course) => {
-                  // Dynamic progress calculation based on course category
-                  const categoryModulesCount = 3; // Simplified assumption for demo
-                  const completedInCategory = user.completedModules?.filter(m => {
-                    if (course.category === 'Aqeedah') return ['module-1', 'module-2', 'module-3'].includes(m);
-                    if (course.category === 'Fiqh') return ['module-4', 'module-5', 'module-6'].includes(m);
-                    if (course.category === 'Seerah') return ['module-7', 'module-8', 'module-9'].includes(m);
-                    return false;
-                  }).length || 0;
-                  
-                  const calculatedProgress = Math.round((completedInCategory / categoryModulesCount) * 100);
-                  const firstModuleId = course.category === 'Aqeedah' ? 1 : course.category === 'Fiqh' ? 4 : 7;
+                  // Progress: Completed modules belonging to this course / 15
+                  const completedInCourse = user.completedModules?.filter(m => course.moduleIds.includes(m)).length || 0;
+                  const calculatedProgress = Math.round((completedInCourse / 15) * 100);
 
                   return (
-                    <Link to={`/training?module=${firstModuleId}`} key={course.id} className="block group">
+                    <Link to={`/training?module=${course.firstModule}`} key={course.id} className="block group">
                       <Card 
                         className="relative border border-[#C9A961]/30 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(44,95,45,0.15)] transition-all duration-500 h-full"
                         style={{ borderRadius: '24px', overflow: 'hidden' }}
@@ -135,7 +157,7 @@ export function DashboardPage() {
                             <div className="w-1 h-1 rounded-full bg-gray-200" />
                             <div className="flex items-center gap-1.5">
                               <Clock className="w-3.5 h-3.5 text-[#C9A961]" />
-                              Module
+                              {completedInCourse}/15 Modules
                             </div>
                           </div>
 
