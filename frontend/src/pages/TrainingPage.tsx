@@ -1007,7 +1007,7 @@ export function TrainingPage() {
                                     </ul>
                                 </div>
 
-                                <div className="pt-10 space-y-8">
+                                <div className="pt-10 space-y-6">
                                     {nextModule ? (
                                         <Button 
                                             onClick={() => {
