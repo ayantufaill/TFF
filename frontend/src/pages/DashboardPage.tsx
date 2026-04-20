@@ -9,10 +9,10 @@ import { Link } from 'react-router';
 
 // Course-based data: Each card is a full course with 5 levels (15 modules total)
 const courses = [
-  { 
-    id: 1, 
-    title: 'Foundations of Aqeedah', 
-    category: 'Aqeedah', 
+  {
+    id: 1,
+    title: 'Foundations of Aqeedah',
+    category: 'Aqeedah',
     image: 'https://picsum.photos/seed/aqeedah/600/400',
     type: 'Course',
     subtitle: '5 Levels • 15 Modules',
@@ -20,10 +20,10 @@ const courses = [
     moduleIds: Array.from({ length: 15 }, (_, i) => `module-${i + 1}`),
     firstModule: 1
   },
-  { 
-    id: 2, 
-    title: 'Learn to Pray – Salah Guide', 
-    category: 'Fiqh', 
+  {
+    id: 2,
+    title: 'Learn to Pray – Salah Guide',
+    category: 'Fiqh',
     image: 'https://picsum.photos/seed/salah/600/400',
     type: 'Guided Module',
     subtitle: '5 Levels • 15 Modules',
@@ -31,10 +31,10 @@ const courses = [
     moduleIds: Array.from({ length: 15 }, (_, i) => `module-${i + 16}`),
     firstModule: 16
   },
-  { 
-    id: 3, 
-    title: 'Seerah – Life of the Prophet ﷺ', 
-    category: 'Seerah', 
+  {
+    id: 3,
+    title: 'Seerah – Life of the Prophet ﷺ',
+    category: 'Seerah',
     image: 'https://picsum.photos/seed/seerah/600/400',
     type: 'Specialization',
     subtitle: '5 Levels • 15 Modules',
@@ -110,8 +110,8 @@ export function DashboardPage() {
                   const calculatedProgress = Math.round((completedInCourse / 15) * 100);
 
                   return (
-                    <Link to={`/training?module=${course.firstModule}`} key={course.id} className="block group">
-                      <Card 
+                    <Link to={`/training/curriculum?module=${course.firstModule}`} key={course.id} className="block group">
+                      <Card
                         className="relative border border-[#C9A961]/30 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(44,95,45,0.15)] transition-all duration-500 h-full"
                         style={{ borderRadius: '24px', overflow: 'hidden' }}
                       >
@@ -246,15 +246,15 @@ export function DashboardPage() {
                   </div>
                   <span className="font-bold text-gray-900">24.5h</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <Link to="/training/curriculum" className="flex items-center justify-between hover:bg-gray-50 p-2 -m-2 rounded-lg transition-colors group">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600 group-hover:bg-green-100 transition-colors">
                       <CheckCircle className="w-4 h-4" />
                     </div>
-                    <span className="text-sm font-medium text-gray-600">Modules Done</span>
+                    <span className="text-sm font-medium text-gray-600 group-hover:text-[#2C5F2D] transition-colors">Modules Done</span>
                   </div>
-                  <span className="font-bold text-gray-900">8 / 15</span>
-                </div>
+                  <span className="font-bold text-gray-900">{totalCompletedCount} / 15</span>
+                </Link>
                 <Button variant="outline" className="w-full border-[#2C5F2D] text-[#2C5F2D] hover:bg-[#2C5F2D]/5 font-bold py-6">
                   Weekly Report
                 </Button>
@@ -262,7 +262,7 @@ export function DashboardPage() {
             </Card>
 
             {/* Spiritual Tip of the Day */}
-            <div 
+            <div
               className="bg-[#2C5F2D] text-white p-6 shadow-lg relative overflow-hidden"
               style={{ borderRadius: '24px' }}
             >

@@ -1,4 +1,4 @@
-import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, ArrowLeft, Star } from 'lucide-react';
+import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, ArrowLeft, Star, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams, Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner'; 
 
@@ -771,18 +771,20 @@ export function TrainingPage() {
           </div>
           
           {/* Progress Tracker */}
-          <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">Your Progress</h3>
-                <span className="text-sm">{userProgress}% Complete</span>
-              </div>
-              <Progress value={userProgress} className="h-3 mb-2" />
-              <p className="text-sm text-gray-100">
-                Sign in to track your progress through all 15 modules
-              </p>
-            </CardContent>
-          </Card>
+          <Link to="/training/curriculum" className="block group">
+            <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">Your Academy Progress</h3>
+                  <span className="text-sm">{userProgress}% Complete</span>
+                </div>
+                <Progress value={userProgress} className="h-3 mb-2" indicatorClassName="bg-[#C9A961]" />
+                <p className="text-sm text-gray-100 opacity-80 group-hover:opacity-100 transition-opacity">
+                  Click here to view your curriculum and continue learning →
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </section>
 
