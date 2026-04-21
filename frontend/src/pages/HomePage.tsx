@@ -272,18 +272,16 @@ export function HomePage() {
             {heroLeavingIndex !== null && (
               <h1
                 key={`leave-${heroLeavingIndex}`}
-                className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-4 sm:px-6 leading-tight ${
-                  heroLeavingVisible ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-4 sm:px-6 leading-tight ${heroLeavingVisible ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 {HERO_TAGLINES[heroLeavingIndex].headline}
               </h1>
             )}
             <h1
               key={heroTaglineIndex}
-              className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-4 sm:px-6 leading-tight ${
-                heroEntering ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`absolute inset-0 flex items-center justify-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center transition-opacity duration-700 ease-in-out px-4 sm:px-6 leading-tight ${heroEntering ? 'opacity-0' : 'opacity-100'
+                }`}
             >
               {HERO_TAGLINES[heroTaglineIndex].headline}
             </h1>
@@ -293,18 +291,16 @@ export function HomePage() {
             {heroLeavingIndex !== null && (
               <p
                 key={`sub-leave-${heroLeavingIndex}`}
-                className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto px-4 sm:px-6 ${
-                  heroLeavingVisible ? 'opacity-100' : 'opacity-0'
-                }`}
+                className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto px-4 sm:px-6 ${heroLeavingVisible ? 'opacity-100' : 'opacity-0'
+                  }`}
               >
                 {HERO_TAGLINES[heroLeavingIndex].subtitle}
               </p>
             )}
             <p
               key={`sub-${heroTaglineIndex}`}
-              className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto px-4 sm:px-6 ${
-                heroEntering ? 'opacity-0' : 'opacity-100'
-              }`}
+              className={`absolute inset-0 flex items-center justify-center text-base sm:text-xl md:text-2xl font-normal text-gray-100 text-center transition-opacity duration-700 ease-in-out max-w-3xl mx-auto px-4 sm:px-6 ${heroEntering ? 'opacity-0' : 'opacity-100'
+                }`}
             >
               {HERO_TAGLINES[heroTaglineIndex].subtitle}
             </p>
@@ -412,12 +408,12 @@ export function HomePage() {
               <div className="order-1 flex">
                 <div className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8 shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full">
                   <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-                      <span className="text-[#2C5F2D] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
-                    </p>
+                    <span className="text-[#2C5F2D] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
+                  </p>
                 </div>
               </div>
               <div className="order-2 flex">
-                <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full h-full min-h-0 flex flex-col">
+                <div className="bg-white rounded-[24px] border border-gray-200/80 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full h-full min-h-0 flex flex-col">
                   <div className="flex-1 min-h-0 w-full">
                     <iframe
                       title="Understanding the Shahadah"
@@ -451,7 +447,7 @@ export function HomePage() {
         <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 sm:mb-16">
-           
+
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4 tracking-tight">Who We Serve</h2>
             <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
@@ -462,7 +458,8 @@ export function HomePage() {
             {beneficiaries.map((beneficiary, index) => (
               <Card
                 key={index}
-                className="group overflow-hidden bg-white border border-gray-200/80 rounded-2xl shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(44,95,45,0.12)] hover:-translate-y-2 hover:border-[#C9A961]/40 transition-all duration-300"
+                className="group overflow-hidden bg-white border border-gray-200/80 shadow-[0_4px_14px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_40px_rgba(44,95,45,0.12)] hover:-translate-y-2 hover:border-[#C9A961]/40 transition-all duration-300"
+                style={{ borderRadius: '24px' }}
               >
                 <div className="h-0.5 w-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] opacity-80" aria-hidden />
                 <div className="h-48 overflow-hidden">
@@ -512,7 +509,7 @@ export function HomePage() {
           </div>
           <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 mb-4 sm:mb-6 md:mb-8 lg:mb-10">
             {BOOK_DOWNLOADS.map((book, index) => (
-              <div key={index} className="bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-gray-100/80 hover:shadow-[0_8px_24px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/20 transition-all duration-200 flex flex-col items-center">
+              <div key={index} className="bg-white p-4 sm:p-5 md:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-gray-100/80 hover:shadow-[0_8px_24px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/20 transition-all duration-200 flex flex-col items-center" style={{ borderRadius: '24px' }}>
                 <a
                   href={book.file}
                   target="_blank"
@@ -660,9 +657,8 @@ export function HomePage() {
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-[#C9A961]/15 z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div
-            className={`text-center mb-10 sm:mb-16 transition-all duration-700 ease-out ${
-              globalReachInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            }`}
+            className={`text-center mb-10 sm:mb-16 transition-all duration-700 ease-out ${globalReachInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+              }`}
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Our Global Reach</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
@@ -672,9 +668,8 @@ export function HomePage() {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div
-              className={`rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-700 ease-out delay-150 ${
-                globalReachInView ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-8 scale-[0.98]'
-              }`}
+              className={`rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-700 ease-out delay-150 ${globalReachInView ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-8 scale-[0.98]'
+                }`}
             >
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1619392553201-3d9ab3169271?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b3JsZCUyMGdsb2JlJTIwbWFwfGVufDF8fHx8MTc2OTQwNTcyOHww&ixlib=rb-4.1.0&q=80&w=1080"
@@ -691,11 +686,10 @@ export function HomePage() {
                 {impactStats.map((stat, index) => (
                   <div
                     key={index}
-                    className={`group bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-200/70 transition-all duration-500 ease-out hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)] hover:scale-[1.02] hover:border-[#C9A961]/20 ${
-                      globalReachInView
+                    className={`group bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-gray-200/70 transition-all duration-500 ease-out hover:shadow-[0_6px_20px_rgba(0,0,0,0.06)] hover:scale-[1.02] hover:border-[#C9A961]/20 ${globalReachInView
                         ? 'opacity-100 translate-y-0'
                         : 'opacity-0 translate-y-6'
-                    }`}
+                      }`}
                     style={
                       globalReachInView
                         ? { transitionDelay: `${200 + index * 100}ms` }
@@ -711,9 +705,8 @@ export function HomePage() {
                 ))}
               </div>
               <p
-                className={`text-gray-500 leading-relaxed transition-all duration-700 ease-out delay-500 ${
-                  globalReachInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                }`}
+                className={`text-gray-500 leading-relaxed transition-all duration-700 ease-out delay-500 ${globalReachInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                  }`}
               >
                 Our presence spans across Asia, Africa, and the Middle East, bringing hope and support to communities in need. Every contribution helps us expand our reach and deepen our impact.
               </p>
@@ -810,7 +803,7 @@ export function HomePage() {
           </h2>
           <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-4 sm:mb-6" aria-hidden />
           <p className="text-base sm:text-lg text-gray-500 mb-8 sm:mb-10 leading-relaxed px-1">
-            Your support can transform lives. Whether through donation, volunteering, or seeking help, 
+            Your support can transform lives. Whether through donation, volunteering, or seeking help,
             every action creates ripples of positive change in our community.
           </p>
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">

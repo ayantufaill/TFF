@@ -1,4 +1,4 @@
-import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, User as UserIcon, LogIn, ArrowLeft, Shield } from 'lucide-react';
+import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, ArrowLeft, Star, Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
@@ -6,12 +6,40 @@ import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner'; 
 
+const LoadingOverlay = ({ message }: { message: string }) => (
+  <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-2xl animate-in fade-in duration-300">
+    <div className="relative w-20 h-20 mb-4">
+      {/* Dynamic rolling slider effect */}
+      <div className="absolute inset-0 rounded-full border-[6px] border-[#2C5F2D]/5 border-t-[#C9A961] animate-[spin_1s_cubic_bezier(0.55,0.055,0.675,0.19)_infinite]" />
+      <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#2C5F2D] animate-[spin_1.5s_cubic_bezier(0.215,0.61,0.355,1)_infinite_reverse]" />
+      
+      {/* Center glowing element */}
+      <div className="absolute inset-[30%] rounded-full bg-gradient-to-br from-[#2C5F2D] to-[#C9A961] opacity-20 animate-pulse" />
+    </div>
+    <div className="text-center px-6">
+      <h3 className="text-lg font-bold text-[#2C5F2D] tracking-tight">{message}</h3>
+      <p className="mt-1 text-[#8B7355] font-semibold text-xs animate-pulse">Please wait while we process...</p>
+    </div>
+    
+    <style>{`
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `}</style>
+  </div>
+);
+
+
+
 export function TrainingPage() {
   const { user, login, register, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
+  const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   
   // Form State
@@ -24,6 +52,31 @@ export function TrainingPage() {
   const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Search Params - Default to Lesson 1 if none is specified
+  const [searchParams] = useSearchParams();
+  const rawModuleId = searchParams.get('module');
+  const activeModuleId = rawModuleId || '1';
+  const activeModuleValue = `module-${activeModuleId}`;
+  
+  // Track which level is currently being viewed
+  const [selectedLevelId, setSelectedLevelId] = useState(1);
+
+  // Sync selectedLevelId with the level of the activeModuleId
+  useEffect(() => {
+    const parentLevel = levels.find(l => l.modules.some(m => String(m.number) === activeModuleId || m.id === activeModuleId));
+    if (parentLevel) {
+      setSelectedLevelId(parentLevel.level);
+    }
+  }, [activeModuleId]);
+
+  // If already logged in, redirect to dashboard ONLY if they haven't started a specific module
+  useEffect(() => {
+    if (user && !loading && !rawModuleId) {
+      navigate('/Training/dashboard');
+    }
+  }, [user, loading, navigate, rawModuleId]);
+  
 
   const userProgress = user?.completedModules?.length 
     ? Math.round((user.completedModules.length / 15) * 100) 
@@ -39,10 +92,12 @@ export function TrainingPage() {
       glow: '#C9A961',     // TFF gold
       modules: [
         {
+          id: 'module-1',
           number: 1,
           title: 'Welcome to Islam',
           description: 'Reassurance and clarity about accepting Islam. Myths, mercy, and common questions.',
           formats: ['Reading guide', 'Short video', 'Audio reassurance'],
+          videoId: 'f9A0Tvxu2_I',
           topics: [
             'Understanding your decision to embrace Islam',
             'Common myths and misconceptions',
@@ -51,10 +106,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-2',
           number: 2,
           title: 'Core Beliefs (Aqeedah – Simplified)',
           description: 'Explains Allah, Tawheed, Prophethood, and Afterlife in simple terms.',
           formats: ['Illustrated reading notes', 'Audio', 'Whiteboard-style videos'],
+          videoId: 'O9Yv8_D70u8',
           topics: [
             'Who is Allah? Understanding Tawheed (Oneness of God)',
             'Belief in the Prophets and Messengers',
@@ -63,10 +120,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-3',
           number: 3,
           title: 'The Shahadah Explained',
           description: 'Deepens understanding of the Shahadah in daily life and its significance.',
           formats: ['Reading', 'Short reflection audio'],
+          videoId: 'f24X_3j0qEY',
           topics: [
             'The meaning of "La ilaha illa Allah"',
             'The meaning of "Muhammad Rasulullah"',
@@ -85,10 +144,12 @@ export function TrainingPage() {
       glow: '#FAF8F3',     // warm ivory
       modules: [
         {
+          id: 'module-4',
           number: 4,
           title: 'Cleanliness & Preparation (Taharah)',
           description: 'Step-by-step guidance on Wudu (ablution) and Ghusl (full bath).',
           formats: ['Reading guide', 'Videos', 'Audio reminders'],
+          videoId: 'f9A0Tvxu2_I',
           topics: [
             'Importance of cleanliness in Islam',
             'How to perform Wudu step-by-step',
@@ -97,10 +158,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-5',
           number: 5,
           title: 'Salah (Prayer) – Step by Step',
           description: 'Explanation of prayer times, how to perform Salah without Arabic, and common mistakes.',
           formats: ['Printable guides', 'Video walkthroughs', 'Slow-paced recitations'],
+          videoId: 'O9Yv8_D70u8',
           topics: [
             'Understanding the five daily prayers',
             'How to pray step-by-step (beginner-friendly)',
@@ -109,10 +172,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-6',
           number: 6,
           title: 'Duas & Connection with Allah',
           description: 'Teaching how to make Dua, daily remembrance, and emotional connection with Allah.',
           formats: ['Dua cards', 'Audio recitations', 'Motivational videos'],
+          videoId: 'f24X_3j0qEY',
           topics: [
             'What is Dua and why it matters',
             'Essential daily Duas',
@@ -131,10 +196,12 @@ export function TrainingPage() {
       glow: '#E8D9B0',     // soft gold
       modules: [
         {
+          id: 'module-7',
           number: 7,
           title: 'Halal & Haram Basics',
           description: 'Core principles of Halal and Haram, including food and lifestyle choices.',
           formats: ['Reading guides', 'Explainer videos'],
+          videoId: 'f9A0Tvxu2_I',
           topics: [
             'Understanding Halal and Haram',
             'Halal food and dietary guidelines',
@@ -143,10 +210,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-8',
           number: 8,
           title: 'Family & Social Life',
           description: 'Guidance on managing family relationships and responding to criticisms.',
           formats: ['Reading', 'Audio counseling talks'],
+          videoId: 'O9Yv8_D70u8',
           topics: [
             'Dealing with family who don\'t understand',
             'Maintaining good relationships',
@@ -155,10 +224,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-9',
           number: 9,
           title: 'Emotional Wellbeing & Mental Health',
           description: 'Support for loneliness and handling emotional ups and downs after reversion.',
           formats: ['Audio reflections', 'Support videos'],
+          videoId: 'f24X_3j0qEY',
           topics: [
             'It\'s normal to feel overwhelmed',
             'Dealing with loneliness and isolation',
@@ -177,10 +248,12 @@ export function TrainingPage() {
       glow: '#F5F1E8',     // warm cream
       modules: [
         {
+          id: 'module-10',
           number: 10,
           title: 'Character & Manners (Akhlaq)',
           description: 'Focus on developing good character: honesty, patience, kindness, and dealing with frustration.',
           formats: ['Reading', 'Story-based videos'],
+          videoId: 'f9A0Tvxu2_I',
           topics: [
             'The importance of good character in Islam',
             'Patience (Sabr) and gratitude (Shukr)',
@@ -189,10 +262,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-11',
           number: 11,
           title: 'Knowledge Development Path',
           description: 'Guidance on what knowledge to seek first and how to avoid confusion.',
           formats: ['Reading roadmap', 'Guidance video'],
+          videoId: 'O9Yv8_D70u8',
           topics: [
             'Prioritizing Islamic knowledge',
             'Reliable sources and teachers',
@@ -201,10 +276,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-12',
           number: 12,
           title: 'Community & Belonging',
           description: 'How to integrate into a Muslim community, mosque etiquette, and how to serve humanity.',
           formats: ['Reading', 'Short videos'],
+          videoId: 'f24X_3j0qEY',
           topics: [
             'Finding your local Muslim community',
             'Mosque etiquette and participation',
@@ -223,10 +300,12 @@ export function TrainingPage() {
       glow: '#D7C08A',     // deep soft-gold
       modules: [
         {
+          id: 'module-13',
           number: 13,
           title: 'Ramadan & Fasting',
           description: 'Preparation for Ramadan and understanding fasting for new Muslims.',
           formats: ['Reading', 'Explainer videos'],
+          videoId: 'f9A0Tvxu2_I',
           topics: [
             'What is Ramadan and why it matters',
             'How to fast step-by-step',
@@ -235,10 +314,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-14',
           number: 14,
           title: 'Islamic Ethics & Purpose',
           description: 'Balancing work, family, and worship while understanding the purpose of life in Islam.',
           formats: ['Reflection reading', 'Motivational audio'],
+          videoId: 'O9Yv8_D70u8',
           topics: [
             'The purpose of life in Islam',
             'Balancing dunya (worldly life) and akhirah (hereafter)',
@@ -247,10 +328,12 @@ export function TrainingPage() {
           ],
         },
         {
+          id: 'module-15',
           number: 15,
           title: 'Long-Term Support',
           description: 'Staying consistent in faith and building a lifelong relationship with Allah.',
           formats: ['Audio reminders', 'Closing video series'],
+          videoId: 'f24X_3j0qEY',
           topics: [
             'Dealing with spiritual ups and downs',
             'Staying consistent in practice',
@@ -279,11 +362,13 @@ export function TrainingPage() {
         toast.success('Welcome back!', {
           description: 'Successfully logged in to your training portal.',
         });
+        navigate('/Training/dashboard');
       } else {
         await register(name, email, password);
         toast.success('Account created!', {
           description: 'Welcome to the TFF training community.',
         });
+        navigate('/Training/dashboard');
       }
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Authentication failed. Please check your credentials.';
@@ -399,7 +484,10 @@ export function TrainingPage() {
             </p>
           </div>
 
-          <Card className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
+          <div className="relative">
+            {isSubmitting && <LoadingOverlay message={authMode === 'forgot' ? (forgotStep === 1 ? "Sending Code..." : "Resetting Password...") : "Processing..."} />}
+
+            <Card className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
             <CardHeader className="pb-4 pt-8 text-center">
               <CardTitle className="text-2xl font-bold text-[#2C5F2D]">
                 {authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Reset Password' : 'Join the Community'}
@@ -512,8 +600,9 @@ export function TrainingPage() {
                   )}
 
                   {authError && (
-                    <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-100 rounded-lg font-medium text-center animate-shake">
-                      {authError}
+                    <div className="p-4 text-sm bg-red-50 text-red-600 border-l-4 border-red-500 rounded-lg font-bold flex items-start gap-3 animate-in fade-in zoom-in-95 duration-300">
+                      <div className="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5">!</div>
+                      <span>{authError}</span>
                     </div>
                   )}
 
@@ -654,6 +743,7 @@ export function TrainingPage() {
               </form>
             )}
           </Card>
+        </div>
 
           {/* Mini Trust Row */}
           <div className="mt-4 flex justify-center items-center gap-6 opacity-60">
@@ -681,18 +771,20 @@ export function TrainingPage() {
           </div>
           
           {/* Progress Tracker */}
-          <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold">Your Progress</h3>
-                <span className="text-sm">{userProgress}% Complete</span>
-              </div>
-              <Progress value={userProgress} className="h-3 mb-2" />
-              <p className="text-sm text-gray-100">
-                Sign in to track your progress through all 15 modules
-              </p>
-            </CardContent>
-          </Card>
+          <Link to="/training/curriculum" className="block group">
+            <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">Your Academy Progress</h3>
+                  <span className="text-sm">{userProgress}% Complete</span>
+                </div>
+                <Progress value={userProgress} className="h-3 mb-2" indicatorClassName="bg-[#C9A961]" />
+                <p className="text-sm text-gray-100 opacity-80 group-hover:opacity-100 transition-opacity">
+                  Click here to view your curriculum and continue learning →
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       </section>
 
@@ -728,14 +820,49 @@ export function TrainingPage() {
         </div>
       </section>
 
-      {/* Training Levels */}
-      <section className="py-12 bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {levels.map((level) => (
-            <div key={level.level}>
-              {/* Level Header */}
+
+      {/* Training Levels Section */}
+      <section className="py-12 bg-[#FAF8F3]">
+        <div className="w-full mx-auto px-4 lg:px-6">
+          
+          {/* Level Switcher Hero Tab Bar */}
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
+            {levels.map((l) => (
+              <button
+                key={l.level}
+                onClick={() => setSelectedLevelId(l.level)}
+                className={`group relative flex flex-col items-center p-1 transition-all duration-300 ${
+                  selectedLevelId === l.level ? 'scale-110' : 'opacity-60 hover:opacity-100 hover:scale-105'
+                }`}
+              >
+                <div className={`
+                  flex flex-col items-center justify-center w-24 h-24 rounded-2xl border-2 transition-all shadow-sm
+                  ${selectedLevelId === l.level 
+                    ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] border-[#C9A961] shadow-xl shadow-green-900/20' 
+                    : 'bg-white border-gray-100'
+                  }
+                `}>
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${selectedLevelId === l.level ? 'text-[#C9A961]' : 'text-gray-400'}`}>
+                    Level
+                  </p>
+                  <p className={`text-3xl font-black ${selectedLevelId === l.level ? 'text-white' : 'text-[#2C5F2D]'}`}>
+                    {l.level}
+                  </p>
+                </div>
+                {selectedLevelId === l.level && (
+                   <div className="absolute -bottom-2 w-2 h-2 rounded-full bg-[#C9A961] animate-pulse" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {levels
+            .filter((level) => level.level === selectedLevelId)
+            .map((level) => (
+            <Card key={level.level} className="overflow-hidden border-none rounded-[3rem] shadow-[0_40px_120px_rgba(0,0,0,0.06)] bg-white min-h-[750px] border border-gray-100">
+              {/* Unified Level Header */}
               <div
-                className="relative overflow-hidden rounded-2xl p-8 mb-6 text-white border border-black/10 shadow-sm"
+                className="relative overflow-hidden p-8 text-white border-b border-[#C9A961]/10"
                 style={{
                   backgroundImage: `linear-gradient(90deg, ${level.darkFrom}, ${level.darkTo}), radial-gradient(circle at 18% 35%, ${level.glow}55 0%, transparent 62%)`,
                   backgroundBlendMode: 'normal',
@@ -759,99 +886,215 @@ export function TrainingPage() {
                 </div>
                 <h2 className="text-3xl font-bold">{level.title}</h2>
               </div>
-
-              {/* Modules Accordion */}
-              <Accordion type="single" collapsible className="space-y-4">
-                {level.modules.map((module) => (
-                  <AccordionItem
-                    key={module.number}
-                    value={`module-${module.number}`}
-                    className="bg-white border-2 border-[#C9A961]/20 rounded-xl overflow-hidden"
-                  >
-                    <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-[#FAF8F3]">
-                      <div className="flex items-center gap-4 w-full text-left">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-white font-bold">{module.number}</span>
+              <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
+                {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
+                <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-white">
+                  <div className="pl-10 pr-8 pt-8 pb-7 border-b border-gray-100 bg-white sticky top-0 z-20">
+                    <h3 className="text-[11px] font-black text-[#2C5F2D] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-baseline justify-between">
+                            <p className="text-sm font-black text-[#2C5F2D]">Level {level.level}</p>
+                            <span className="text-[10px] font-bold text-[#8B7355] bg-[#C9A961]/10 px-2 py-0.5 rounded-full">{userProgress}%</span>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-[#2C5F2D] mb-1">{module.title}</h3>
-                          <p className="text-sm text-gray-600">{module.description}</p>
-                        </div>
-                        <CheckCircle className="w-6 h-6 text-gray-300" />
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-6">
-                      <div className="space-y-4 pt-4 border-t">
-                        {/* Topics */}
-                        <div>
-                          <h4 className="font-semibold text-[#2C5F2D] mb-3">What You'll Learn:</h4>
-                          <ul className="space-y-2">
-                            {module.topics.map((topic, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-gray-600">
-                                <CheckCircle className="w-5 h-5 text-[#C9A961] flex-shrink-0 mt-0.5" />
-                                <span>{topic}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {/* Formats */}
-                        <div>
-                          <h4 className="font-semibold text-[#2C5F2D] mb-3">Available Formats:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {module.formats.map((format, idx) => (
-                              <Badge key={idx} variant="outline" className="border-[#C9A961] text-[#2C5F2D]">
-                                {formatIcon(format)}
-                                <span className="ml-2">{format}</span>
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex flex-wrap items-center gap-3 pt-4">
-                          <Button className="bg-[#C9A961] hover:bg-[#B89751] text-white">
-                            <Play className="w-4 h-4 mr-2" />
-                            Start Module
-                          </Button>
-                          
-                          {user?.completedModules?.includes(`module-${module.number}`) ? (
-                            <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg font-bold text-sm border border-green-100">
-                              <CheckCircle className="w-4 h-4" />
-                              Module Completed
-                            </div>
-                          ) : (
-                            <Button 
-                              variant="outline" 
-                              onClick={async () => {
-                                await updateProgress(`module-${module.number}`);
-                                toast.success('Progress updated!', {
-                                  description: `Module ${module.number} marked as complete.`,
-                                });
-                              }}
-                              className="border-[#C9A961] text-[#C9A961] hover:bg-[#C9A961] hover:text-white font-bold"
-                            >
-                              Mark as Complete
-                            </Button>
+                        <Progress value={userProgress} className="h-1.5 bg-[#C9A961]/15 rounded-full [&>div]:bg-gradient-to-r [&>div]:from-[#C9A961] [&>div]:to-[#2C5F2D] [&>div]:rounded-full" />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column' }} className="pt-4 pb-6 px-4">
+                    {level.modules.map((module, moduleIdx) => {
+                      const isActive = activeModuleId === module.id || activeModuleId === String(module.number);
+                      const isCompleted = user?.completedModules?.includes(module.id);
+                      
+                      return (
+                        <button
+                          key={module.id}
+                          onClick={() => {
+                            const params = new URLSearchParams(searchParams);
+                            params.set('module', String(module.number));
+                            navigate(`?${params.toString()}`, { replace: true });
+                          }}
+                          className={`relative flex flex-col gap-2.5 px-7 py-6 text-left transition-all duration-500 group rounded-2xl ${
+                            moduleIdx < level.modules.length - 1 ? 'mb-4' : ''
+                          } ${
+                            isActive 
+                              ? 'bg-gray-50 shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10' 
+                              : 'hover:bg-gray-50/80 opacity-75 hover:opacity-100 hover:translate-x-1'
+                          }`}
+                        >
+                          {/* Active Backdrop Tint */}
+                          {isActive && (
+                            <div className="absolute inset-0 bg-[#2C5F2D]/[0.02] rounded-2xl pointer-events-none" />
                           )}
+                          {isActive && (
+                            <div className="absolute left-1 top-4 bottom-4 w-1.5 bg-gradient-to-b from-[#C9A961] to-[#8B7355] rounded-full shadow-[0_0_10px_rgba(201,169,97,0.4)]" />
+                          )}
+                          
+                          <div className="flex flex-col gap-2 min-w-0 pl-2">
+                            <div className="flex items-center justify-between">
+                                <span className={`text-[10px] font-black px-4 py-1.5 rounded-lg uppercase tracking-tight ${
+                                    isActive ? 'bg-[#2C5F2D] text-white shadow-sm' : 'bg-gray-100 text-gray-500'
+                                }`}>
+                                    Module {module.number}
+                                </span>
+                                {isCompleted ? (
+                                    <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                                    </div>
+                                ) : (
+                                    <Play className={`w-4 h-4 transition-transform duration-500 ${isActive ? 'text-[#C9A961] scale-125' : 'text-gray-300'}`} />
+                                )}
+                            </div>
+                            <h4 className={`font-black text-[13px] leading-snug transition-colors line-clamp-2 mt-0.5 ${
+                                isActive ? 'text-[#2C5F2D]' : 'text-gray-600'
+                            }`}>
+                                {module.title}
+                            </h4>
+                          </div>
+                          
+                          <div className="flex items-center gap-2 mt-0.5 pl-2">
+                            <span className={`text-[10px] font-bold flex items-center gap-2 uppercase tracking-wider ${isActive ? 'text-[#8B7355]' : 'text-gray-400'}`}>
+                                <Video className="w-3.5 h-3.5 opacity-70" />
+                                12 MINS
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                          <div className="flex gap-2 ml-auto">
-                            <Button variant="ghost" size="sm" className="text-[#2C5F2D]">
-                              <Download className="w-4 h-4 mr-2" />
-                              PDF
-                            </Button>
-                            <Button variant="ghost" size="sm" className="text-[#2C5F2D]">
-                              <Headphones className="w-4 h-4 mr-2" />
-                              Audio
-                            </Button>
+                {/* Right Content Area: Multi-Column Focus */}
+                <div className="flex-1 min-w-0 bg-white relative flex flex-col">
+                    {level.modules
+                      .filter(module => activeModuleId === module.id || activeModuleId === String(module.number))
+                      .map((module) => {
+                        // Logic to find next module
+                        const currentModuleIndex = levels.flatMap(l => l.modules).findIndex(m => m.id === module.id);
+                        const nextModule = levels.flatMap(l => l.modules)[currentModuleIndex + 1];
+
+                        return (
+                        <div key={module.id} className="h-full w-full animate-in fade-in slide-in-from-right-4 duration-700 p-8 lg:p-10">
+                          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 720px', gap: '1.5rem', alignItems: 'stretch', width: '100%' }}>
+                            
+                            {/* Left Column: Lesson Details (Main Content) */}
+                            <div className="min-w-0 space-y-12">
+                                <div className="max-w-3xl">
+                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A961]/10 text-[#2C5F2D] text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-[#C9A961]/20 shadow-sm shadow-[#C9A961]/5">
+                                        <Star className="w-3.5 h-3.5 text-[#C9A961] fill-[#C9A961]/20" />
+                                        Module {module.number} • Level {level.level}
+                                    </div>
+                                    <h1 className="text-4xl lg:text-5xl font-black text-[#2C5F2D] mb-8 tracking-tight leading-[1.05] animate-in slide-in-from-left duration-700">
+                                        {module.title}
+                                    </h1>
+                                    <p className="text-lg text-gray-500 leading-relaxed font-medium mb-10 border-l-4 border-gray-100 pl-6 py-2 italic">
+                                        {module.description}
+                                    </p>
+                                </div>
+
+                                <div className="space-y-6 bg-white p-8 rounded-[2rem] border border-[#C9A961]/10 shadow-[0_20px_40px_rgba(201,169,97,0.03)] group/goals">
+                                    <h4 className="text-xs font-black text-[#2C5F2D] flex items-center gap-3 uppercase tracking-[0.25em]">
+                                        <div className="w-8 h-8 rounded-full bg-[#C9A961]/10 flex items-center justify-center">
+                                            <BookOpen className="w-4 h-4 text-[#C9A961]" />
+                                        </div>
+                                        Mastery Goals
+                                    </h4>
+                                    <ul className="space-y-5">
+                                        {module.topics.map((topic, idx) => (
+                                            <li key={idx} className="flex items-start gap-4 text-sm text-[#4E4E4E] font-bold transition-all hover:translate-x-1 duration-300">
+                                                <div className="mt-0.5 w-5 h-5 rounded-full bg-green-50 flex items-center justify-center shrink-0 border border-green-100">
+                                                    <CheckCircle className="w-3 h-3 text-green-600" />
+                                                </div>
+                                                {topic}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div className="pt-10 space-y-6">
+                                    {nextModule ? (
+                                        <Button 
+                                            onClick={() => {
+                                                const params = new URLSearchParams(searchParams);
+                                                params.set('module', String(nextModule.number));
+                                                navigate(`?${params.toString()}`);
+                                            }}
+                                            className="w-full max-w-xl bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] hover:from-[#234F24] hover:to-[#3e7540] text-white font-black h-16 rounded-2xl shadow-xl shadow-green-900/20 transition-all hover:scale-[1.03] active:scale-95 text-lg tracking-tight"
+                                        >
+                                            Next Lesson
+                                            <ArrowLeft className="w-5 h-5 ml-3 rotate-180" />
+                                        </Button>
+                                    ) : (
+                                        <div className="flex items-center gap-4 p-5 bg-gold-50 text-[#8B7355] rounded-2xl font-bold border-2 border-[#C9A961]/20">
+                                            <Star className="w-8 h-8 text-[#C9A961]" />
+                                            <div>
+                                                <p className="text-xs opacity-60 uppercase tracking-widest">Congratulations</p>
+                                                <p className="text-lg">You've finished the course!</p>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <div className="flex flex-col gap-6">
+                                        <Button 
+                                            variant="outline" 
+                                            onClick={async () => {
+                                                await updateProgress(module.id);
+                                                toast.success('MashaAllah!', { description: `You've completed: ${module.title}` });
+                                            }}
+                                            className={`h-12 border-gray-100 font-bold rounded-xl text-xs transition-all ${
+                                                user?.completedModules?.includes(module.id) 
+                                                ? 'bg-green-50 text-green-700 border-green-200' 
+                                                : 'text-[#2C5F2D] hover:bg-[#FAF8F3]'
+                                            }`}
+                                        >
+                                            <CheckCircle className="w-4 h-4 mr-2" />
+                                            {user?.completedModules?.includes(module.id) ? 'Completed' : 'Mark Done'}
+                                        </Button>
+                                        <Button variant="outline" className="h-12 border-gray-100 text-[#2C5F2D] hover:bg-[#FAF8F3] font-bold rounded-xl text-xs">
+                                            <Download className="w-4 h-4 mr-2" />
+                                            Resources
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right Column: Cinematic Video Player (Sticky Focus) */}
+                            <div style={{ width: '720px' }} className="animate-in fade-in slide-in-from-right duration-1000 delay-300">
+                                <div className="sticky top-10 w-full h-full flex flex-col">
+                                  <div className="bg-[#0A0A0A] rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.3)] border-[8px] border-white ring-1 ring-gray-200 relative group transition-transform duration-500 hover:scale-[1.02] flex-1" style={{ minHeight: '450px' }}>
+                                    <iframe
+                                      className="absolute inset-0 w-full h-full"
+                                      src={`https://www.youtube.com/embed/${module.videoId}?rel=0&modestbranding=1&autoplay=0&hd=1&origin=${window.location.origin}`}
+                                      title={module.title}
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                      allowFullScreen
+                                      referrerPolicy="strict-origin-when-cross-origin"
+                                      loading="lazy"
+                                    ></iframe>
+                                </div>
+                                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 px-2">
+                                    <div className="flex items-center gap-3">
+                                        <Badge variant="outline" className="border-[#C9A961]/20 text-[#8B7355] px-3 py-1.5 rounded-lg text-xs font-bold bg-white">
+                                            <Video className="w-3.5 h-3.5 mr-2 text-[#C9A961]" />
+                                            Master Class
+                                        </Badge>
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">~15 min</p>
+                                    </div>
+                                    <div className="flex gap-1.5">
+                                        {module.formats.map((f, i) => (
+                                            <div key={i} className="w-7 h-7 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400">
+                                                {formatIcon(f)}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
+                      )
+                    })}
+                </div>
+              </div>
+            </Card>
           ))}
         </div>
       </section>

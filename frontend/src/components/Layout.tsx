@@ -9,10 +9,13 @@ const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
 
 const navLinks = [
   { label: 'Home', to: '/' },
+//   { label: 'Dashboard', to: '/dashboard', authOnly: true },
+//   { label: 'Courses', to: '/courses' },
   { label: 'About Us', to: '/about-us' },
   { label: 'Discovering Islam', to: '/discovering-islam' },
   { label: 'Programs', to: '/programs' },
-  { label: 'Training', to: '/training' },
+  { label: 'Training', to: '/Training/dashboard', authOnly: true },
+  { label: 'Training', to: '/training', guestOnly: true },
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },
   { label: 'Articles', to: '/articles' },
@@ -67,7 +70,7 @@ export function Layout() {
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
+              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
                 <img
@@ -87,13 +90,17 @@ export function Layout() {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
-              {navLinks.map((link) => {
+              {navLinks.filter(link => {
+                if ((link as any).authOnly && !user) return false;
+                if ((link as any).guestOnly && user) return false;
+                return true;
+              }).map((link) => {
                 const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
                 return (
                   <Link
                     key={link.label}
                     to={link.to}
-                    className={`transition-colors ${
+                    className={`transition-colors whitespace-nowrap ${
                       isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
                     }`}
                   >
@@ -132,7 +139,11 @@ export function Layout() {
           aria-hidden="false"
         >
           <nav className="pt-6 px-6 pb-8 flex flex-col gap-1" aria-label="Main">
-            {navLinks.map((link) => {
+            {navLinks.filter(link => {
+              if ((link as any).authOnly && !user) return false;
+              if ((link as any).guestOnly && user) return false;
+              return true;
+            }).map((link) => {
               const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
               return (
                 <Link

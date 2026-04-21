@@ -6,6 +6,9 @@ interface User {
   name: string;
   email: string;
   completedModules?: string[];
+  currentStreak?: number;
+  longestStreak?: number;
+  lastActivityDate?: string;
 }
 
 interface AuthContextType {
@@ -70,7 +73,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) return;
     try {
       const res = await api.post('/user/progress', { moduleId });
-      setUser({ ...user, completedModules: res.data });
+      setUser(res.data); // The response is now the full user object
     } catch (err) {
       console.error('Error updating progress:', err);
     }

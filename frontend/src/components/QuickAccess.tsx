@@ -44,7 +44,7 @@ export function QuickAccess() {
             Quick Access
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Everything you need for your Islamic journey in one place. Access the Quran, 
+            Everything you need for your Islamic journey in one place. Access the Quran,
             prayer times, recitations, and knowledge with ease.
           </p>
         </div>
@@ -53,12 +53,12 @@ export function QuickAccess() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border border-gray-100"
+              className="group bg-white rounded-[24px] p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border border-gray-100"
             >
               <div className={`w-12 h-12 ${feature.color} ${feature.hoverColor} rounded-xl flex items-center justify-center mb-4 transition-colors group-hover:scale-110 transform duration-300`}>
                 <feature.icon className="w-6 h-6 text-white" />
               </div>
-              
+
               <div className="mb-2">
                 <h3 className="text-lg font-semibold text-gray-800 mb-1">
                   {feature.title}
@@ -67,7 +67,7 @@ export function QuickAccess() {
                   {feature.titleArabic}
                 </div>
               </div>
-              
+
               <p className="text-gray-600 text-sm leading-relaxed">
                 {feature.description}
               </p>

@@ -19,7 +19,7 @@ export function DailyContent() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Hadith of the Day */}
-          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-8 border border-emerald-200 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-[24px] p-8 border border-emerald-200 relative overflow-hidden">
             {/* Decorative Islamic Pattern */}
             <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
               <ImageWithFallback
@@ -47,10 +47,10 @@ export function DailyContent() {
                 <div className="text-lg leading-relaxed text-gray-800 mb-4" style={{ direction: 'rtl' }}>
                   قَالَ رَسُولُ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ: «الْمُؤْمِنُ لِلْمُؤْمِنِ كَالْبُنْيَانِ يَشُدُّ بَعْضُهُ بَعْضًا»
                 </div>
-                
+
                 <div className="border-t border-gray-200 pt-4">
                   <p className="text-gray-700 italic mb-2">
-                    "The believer to another believer is like a building whose different parts 
+                    "The believer to another believer is like a building whose different parts
                     enforce each other."
                   </p>
                   <div className="text-sm text-gray-600">
@@ -73,14 +73,14 @@ export function DailyContent() {
           </div>
 
           {/* Featured Article */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+          <div className="bg-white rounded-[24px] border border-gray-100 overflow-hidden shadow-lg group hover:shadow-xl transition-all duration-300">
             <div className="relative">
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1665627394359-742021bc5110?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxxdXJhbiUyMGhvbHklMjBib29rfGVufDF8fHx8MTc1NjA3NzQzM3ww&ixlib=rb-4.1.0&q=80&w=1080"
                 alt="Featured Article"
                 className="w-full h-48 object-cover"
               />
-              
+
               <div className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium">
                 Featured Article
               </div>
@@ -97,14 +97,14 @@ export function DailyContent() {
               <h3 className="text-xl font-semibold text-gray-800 mb-3 leading-tight">
                 The Importance of Seeking Knowledge in Islam
               </h3>
-              
+
               <div className="text-sm text-gray-600 mb-4" style={{ direction: 'rtl' }}>
                 أهمية طلب العلم في الإسلام
               </div>
 
               <p className="text-gray-600 leading-relaxed mb-6">
-                Explore the profound emphasis Islam places on seeking knowledge and education. 
-                From the first revelation to the Prophet Muhammad (PBUH) to the countless 
+                Explore the profound emphasis Islam places on seeking knowledge and education.
+                From the first revelation to the Prophet Muhammad (PBUH) to the countless
                 verses and hadiths encouraging learning...
               </p>
 

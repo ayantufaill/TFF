@@ -62,38 +62,38 @@ export function ProgramsPage() {
                   </div>
                   <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Widow Empowerment Programs</h2>
                   <p className="text-lg text-gray-600 leading-relaxed">
-                    Supporting widows to rebuild their lives with dignity through financial assistance, skills development, 
+                    Supporting widows to rebuild their lives with dignity through financial assistance, skills development,
                     and comprehensive support systems that foster independence and resilience.
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-6">
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
+            <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors rounded-[24px]">
                     <CardContent className="p-6">
                       <Package className="w-10 h-10 text-[#C9A961] mb-4" />
                       <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Monthly Financial Support</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        Regular financial assistance to cover basic needs including food, shelter, healthcare, and children's education. 
+                        Regular financial assistance to cover basic needs including food, shelter, healthcare, and children's education.
                         Support is provided with dignity and respect.
                       </p>
                     </CardContent>
                   </Card>
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
+            <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors rounded-[24px]">
                     <CardContent className="p-6">
                       <Briefcase className="w-10 h-10 text-[#C9A961] mb-4" />
                       <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Skills Development</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        Vocational training programs in tailoring, cooking, handicrafts, computer skills, and small business 
+                        Vocational training programs in tailoring, cooking, handicrafts, computer skills, and small business
                         management to enable financial independence.
                       </p>
                     </CardContent>
                   </Card>
-                  <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
+            <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors rounded-[24px]">
                     <CardContent className="p-6">
                       <Scale className="w-10 h-10 text-[#C9A961] mb-4" />
                       <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Legal Aid</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        Legal assistance for inheritance rights, property disputes, and custody matters—ensuring widows 
+                        Legal assistance for inheritance rights, property disputes, and custody matters—ensuring widows
                         receive their rightful entitlements under Islamic law.
                       </p>
                     </CardContent>
@@ -104,9 +104,9 @@ export function ProgramsPage() {
                   <CardContent className="p-8">
                     <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Success Story</h3>
                     <p className="text-gray-700 italic leading-relaxed mb-4">
-                      "When my husband passed away, I had three young children and no income. TFF not only provided monthly 
-                      support but also enrolled me in their tailoring program. Today, I run my own small tailoring business 
-                      from home, earning enough to support my family. The program gave me more than money—it gave me confidence 
+                      "When my husband passed away, I had three young children and no income. TFF not only provided monthly
+                      support but also enrolled me in their tailoring program. Today, I run my own small tailoring business
+                      from home, earning enough to support my family. The program gave me more than money—it gave me confidence
                       and hope for the future."
                     </p>
                     <p className="text-[#C9A961] font-semibold">— Fatima, Widow & Small Business Owner, Pakistan</p>
@@ -136,7 +136,7 @@ export function ProgramsPage() {
                   </div>
                   <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Orphan Care & Education</h2>
                   <p className="text-lg text-gray-600 leading-relaxed">
-                    Providing comprehensive care, education, and mentorship to orphaned children, ensuring they have the 
+                    Providing comprehensive care, education, and mentorship to orphaned children, ensuring they have the
                     foundation for a bright and successful future.
                   </p>
                 </div>
@@ -147,7 +147,7 @@ export function ProgramsPage() {
                       <GraduationCap className="w-10 h-10 text-[#C9A961] mb-4" />
                       <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Education Sponsorship</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        Full sponsorship covering tuition fees, school supplies, uniforms, and educational materials from 
+                        Full sponsorship covering tuition fees, school supplies, uniforms, and educational materials from
                         primary through higher education.
                       </p>
                     </CardContent>
@@ -157,7 +157,7 @@ export function ProgramsPage() {
                       <School className="w-10 h-10 text-[#C9A961] mb-4" />
                       <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">School Kits & Uniforms</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        Annual provision of complete school kits with books, stationery, bags, and uniforms ensuring children 
+                        Annual provision of complete school kits with books, stationery, bags, and uniforms ensuring children
                         can attend school with dignity.
                       </p>
                     </CardContent>
@@ -167,7 +167,7 @@ export function ProgramsPage() {
                       <UserCheck className="w-10 h-10 text-[#C9A961] mb-4" />
                       <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Mentorship Programs</h3>
                       <p className="text-gray-600 leading-relaxed">
-                        Pairing orphans with caring mentors who provide guidance, emotional support, and positive role 
+                        Pairing orphans with caring mentors who provide guidance, emotional support, and positive role
                         models throughout their development.
                       </p>
                     </CardContent>
@@ -178,9 +178,9 @@ export function ProgramsPage() {
                   <CardContent className="p-8">
                     <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Impact Story</h3>
                     <p className="text-gray-700 italic leading-relaxed mb-4">
-                      "I lost both my parents in a car accident when I was 8 years old. TFF sponsored my education from 
-                      grade 3 through university. I just graduated with a degree in engineering and have secured a job at 
-                      a leading firm. The education they provided changed the trajectory of my entire life. Now I want to 
+                      "I lost both my parents in a car accident when I was 8 years old. TFF sponsored my education from
+                      grade 3 through university. I just graduated with a degree in engineering and have secured a job at
+                      a leading firm. The education they provided changed the trajectory of my entire life. Now I want to
                       give back and help other orphans like me."
                     </p>
                     <p className="text-[#C9A961] font-semibold">— Omar, Engineering Graduate & Former Sponsored Orphan, Egypt</p>

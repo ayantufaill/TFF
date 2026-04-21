@@ -190,10 +190,10 @@ export function DownloadsPage() {
       <div className="px-4 pt-12 sm:pt-16 lg:pt-20 pb-24 sm:pb-36 lg:pb-40 mb-16 sm:mb-20 lg:mb-24 bg-[#F5F3EF]">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-          {BOOK_DOWNLOADS.map((book) => (
+            {BOOK_DOWNLOADS.map((book) => (
               <div
                 key={book.file}
-                className="group flex items-start justify-between gap-3 rounded-xl border border-gray-200/80 bg-white px-3 py-3 sm:px-4 sm:py-4 hover:border-[#C9A961]/60 hover:shadow-[0_10px_24px_rgba(44,95,45,0.12)] hover:-translate-y-0.5 transition-all duration-200"
+                className="group flex items-start justify-between gap-3 rounded-[24px] border border-gray-200/80 bg-white px-3 py-3 sm:px-4 sm:py-4 hover:border-[#C9A961]/60 hover:shadow-[0_10px_24px_rgba(44,95,45,0.12)] hover:-translate-y-0.5 transition-all duration-200"
               >
                 <div className="flex items-start gap-3">
                   <div className="rounded-lg overflow-hidden bg-[#C9A961]/10 flex-shrink-0 flex items-center justify-center" style={{ width: COVER_W, height: COVER_H }}>
@@ -235,7 +235,7 @@ export function DownloadsPage() {
                   {preparingId === book.file ? 'Preparing…' : 'Download'}
                 </button>
               </div>
-          ))}
+            ))}
           </div>
         </div>
       </div>
