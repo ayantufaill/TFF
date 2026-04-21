@@ -10,74 +10,34 @@ import {
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
 import SecurePlayer from '../components/SecurePlayer';
+import { Card, CardContent } from '../components/ui/card';
+import { Progress } from '../components/ui/progress';
 
-// Replicating the data exactly for the photocopy
-const levelsData = [
-  {
-    level: 1,
-    title: 'Health And Happiness',
-    modules: [
-      {
-        number: 1,
-        title: 'True Good Health & Happiness; Submission to God',
-        description: 'Understanding the core connection between spiritual submission and physical wellbeing.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Health and happiness basics', 'The role of submission', 'Connecting with the Creator'],
-      },
-      {
-        number: 2,
-        title: 'The Quran – Understand Your Purpose in Life',
-        description: 'Exploring how the Quran defines our existence and ultimate goals.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Quranic wisdom', 'Defining purpose', 'Life mapping'],
-      },
-      {
-        number: 3,
-        title: 'The Prayer – Your Gateway to Optimism and Happiness',
-        description: 'How regular prayer transforms your mental and spiritual state.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Power of Salah', 'Building optimism', 'Daily connection'],
-      },
-      {
-        number: 4,
-        title: 'Shukr – The Power of being Thankful & Grateful',
-        description: 'The science and spirituality of gratitude in Islam.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['The practice of Shukr', 'Emotional benefits', 'Grateful living'],
-      },
-      {
-        number: 5,
-        title: 'Relationships & Good Character – Making a Better World',
-        description: 'Developing Akhlaq to improve social bonds.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Good character', 'Healthy relationships', 'Social impact'],
-      },
-      {
-        number: 6,
-        title: 'Strong in Spirit & Body – Being Active & Healthy',
-        description: 'The importance of physical health in the life of a believer.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Physical fitness', 'Spiritual strength', 'Holistic health'],
-      }
-    ],
-  }
-];
+import { trainingLevels } from '../data/trainingData';
 
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateProgress } = useAuth();
 
-  const currentLevel = levelsData[0];
+  const currentLevel = trainingLevels.find(l => String(l.level) === levelId) || trainingLevels[0];
   const currentModule = currentLevel.modules.find(m => String(m.number) === moduleId) || currentLevel.modules[0];
 
   const isCompleted = user?.completedModules?.includes(`module-${currentModule.number}`);
 
   const handleNext = () => {
+    if (!isCompleted) return;
     const currentIndex = currentLevel.modules.findIndex(m => String(m.number) === moduleId);
     if (currentIndex < currentLevel.modules.length - 1) {
       const nextModule = currentLevel.modules[currentIndex + 1];
       navigate(`/training/module/${levelId}/${nextModule.number}`);
+    } else {
+      const currentLevelIndex = trainingLevels.findIndex(l => String(l.level) === levelId);
+      if (currentLevelIndex < trainingLevels.length - 1) {
+        const nextLevel = trainingLevels[currentLevelIndex + 1];
+        const nextModule = nextLevel.modules[0];
+        navigate(`/training/module/${nextLevel.level}/${nextModule.number}`);
+      }
     }
   };
 
@@ -86,12 +46,19 @@ export function ModulePlayerPage() {
     if (currentIndex > 0) {
       const prevModule = currentLevel.modules[currentIndex - 1];
       navigate(`/training/module/${levelId}/${prevModule.number}`);
+    } else {
+      const currentLevelIndex = trainingLevels.findIndex(l => String(l.level) === levelId);
+      if (currentLevelIndex > 0) {
+        const prevLevel = trainingLevels[currentLevelIndex - 1];
+        const prevModule = prevLevel.modules[prevLevel.modules.length - 1];
+        navigate(`/training/module/${prevLevel.level}/${prevModule.number}`);
+      }
     }
   };
 
   const totalModules = 15;
   const completedCount = user?.completedModules?.length || 0;
-  const progressValue = completedCount > 0 ? (completedCount / totalModules) * 100 : 20.0;
+  const progressValue = (completedCount / totalModules) * 100;
 
   return (
     <>
@@ -192,38 +159,18 @@ export function ModulePlayerPage() {
             </p>
 
             {/* Large Progress Card */}
-            <div style={{
-              background: 'rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(10px)',
-              padding: '1rem 2rem',
-              borderRadius: '1rem',
-              border: '1px solid rgba(255,255,255,0.15)',
-              textAlign: 'left',
-              maxWidth: '500px',
-              margin: '0 auto',
-              boxShadow: '0 15px 35px rgba(0,0,0,0.2)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
-                  Your Overall Progress
-                </span>
-                <span style={{ fontSize: '1rem', fontWeight: 800, color: '#C9A961' }}>
-                  {progressValue.toFixed(1)}% Complete
-                </span>
-              </div>
-
-              <div style={{ height: '14px', background: 'rgba(0,0,0,0.3)', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.75rem' }}>
-                <div style={{
-                  height: '100%', width: `${progressValue}%`,
-                  background: 'linear-gradient(90deg, #C9A961, #F3E5AB, #C9A961)',
-                  borderRadius: '999px',
-                  transition: 'width 1s ease',
-                }} />
-              </div>
-              <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
-                You have completed {completedCount} out of {totalModules} modules. Keep going!
-              </p>
-            </div>
+            <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 mt-8 text-left text-white shadow-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-white">Your Progress</h3>
+                  <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressValue)}% Complete</span>
+                </div>
+                <Progress value={Math.round(progressValue)} className="h-3 mb-2" />
+                <p className="text-sm text-gray-200">
+                  You have completed {completedCount} out of {totalModules} modules. Keep going!
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -249,30 +196,10 @@ export function ModulePlayerPage() {
                   fontSize: '0.8rem', fontWeight: 900, color: '#2C5F2D',
                   textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0,
                 }}>
-                  Course Modules
+                  Level {currentLevel.level} - {currentLevel.title}
                 </h3>
               </div>
-              {/* Progress indicator */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                padding: '6px 12px', borderRadius: '8px',
-                background: 'rgba(44,95,45,0.05)',
-              }}>
-                <div style={{
-                  flex: 1, height: '4px', borderRadius: '999px',
-                  background: 'rgba(44,95,45,0.1)', overflow: 'hidden',
-                }}>
-                  <div style={{
-                    height: '100%', borderRadius: '999px',
-                    width: `${(completedCount / currentLevel.modules.length) * 100}%`,
-                    background: 'linear-gradient(90deg, #2C5F2D, #C9A961)',
-                    transition: 'width 0.8s ease',
-                  }} />
-                </div>
-                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#2C5F2D', whiteSpace: 'nowrap' }}>
-                  {completedCount}/{currentLevel.modules.length}
-                </span>
-              </div>
+              {/* Progress indicator removed per user request */}
             </div>
 
             {/* Module List */}
@@ -281,11 +208,17 @@ export function ModulePlayerPage() {
                 {currentLevel.modules.map((m, index) => {
                   const isActive = String(m.number) === moduleId;
                   const completed = user?.completedModules?.includes(`module-${m.number}`);
+                  const isPrevCompleted = index === 0 ? true : user?.completedModules?.includes(`module-${currentLevel.modules[index - 1].number}`);
+                  const isUnlocked = completed || isPrevCompleted || isActive;
 
                   return (
                     <button
                       key={m.number}
-                      onClick={() => navigate(`/training/module/${levelId}/${m.number}`)}
+                      onClick={() => {
+                        if (isUnlocked) {
+                          navigate(`/training/module/${levelId}/${m.number}`);
+                        }
+                      }}
                       style={{
                         width: '100%', textAlign: 'left',
                         padding: '0.85rem 1rem', borderRadius: '14px',
@@ -294,19 +227,21 @@ export function ModulePlayerPage() {
                           : 'transparent',
                         border: isActive ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
                         boxShadow: isActive ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
-                        cursor: 'pointer', transition: 'all 0.25s ease',
+                        cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.25s ease',
                         display: 'flex', alignItems: 'center', gap: '0.85rem',
                         position: 'relative',
+                        opacity: isUnlocked ? 1 : 0.6,
                       }}
                       onMouseEnter={(e) => {
-                        if (!isActive) {
+                        if (!isActive && isUnlocked) {
                           e.currentTarget.style.background = 'rgba(44,95,45,0.03)';
                           e.currentTarget.style.border = '1.5px solid rgba(44,95,45,0.08)';
                           e.currentTarget.style.transform = 'translateX(2px)';
                         }
                       }}
                       onMouseLeave={(e) => {
-                        if (!isActive) {
+                        if (!isActive && isUnlocked) {
                           e.currentTarget.style.background = 'transparent';
                           e.currentTarget.style.border = '1.5px solid transparent';
                           e.currentTarget.style.transform = 'translateX(0)';
@@ -356,7 +291,7 @@ export function ModulePlayerPage() {
                         <p style={{
                           fontSize: '0.82rem', fontWeight: isActive ? 800 : 600,
                           lineHeight: 1.4, margin: 0,
-                          color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : '#555',
+                          color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : isUnlocked ? '#555' : '#9ca3af',
                           transition: 'color 0.25s ease',
                         }}>
                           {m.title}
@@ -405,24 +340,7 @@ export function ModulePlayerPage() {
           <main className="module-content custom-scrollbar" style={{ padding: '1rem' }}>
             <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
 
-              {/* Video Player Box - Now fits available height */}
-              <div style={{
-                borderRadius: '1.25rem', overflow: 'hidden',
-                background: 'black', position: 'relative',
-                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
-                marginBottom: '1rem',
-                flex: 1,
-                minHeight: '200px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
-                  <SecurePlayer videoId={currentModule.videoId} />
-                </div>
-              </div>
-
-              {/* Module Info Card - Premium Design */}
+              {/* Module Info Card - Premium Design (Moved ABOVE Video Player) */}
               <div style={{
                 background: 'white',
                 borderRadius: '1.25rem',
@@ -430,6 +348,7 @@ export function ModulePlayerPage() {
                 border: '1px solid rgba(44,95,45,0.06)',
                 flexShrink: 0,
                 overflow: 'hidden',
+                marginBottom: '1rem',
               }}>
 
                 {/* Top accent bar */}
@@ -516,20 +435,23 @@ export function ModulePlayerPage() {
                       </button>
                       <button
                         onClick={handleNext}
+                        disabled={!isCompleted}
                         style={{
                           display: 'flex', alignItems: 'center', gap: '5px',
                           padding: '0.6rem 1.4rem', borderRadius: '12px',
                           border: 'none',
-                          background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
-                          color: 'white', fontWeight: 700, fontSize: '0.82rem',
-                          cursor: 'pointer', transition: 'all 0.25s ease',
-                          boxShadow: '0 4px 15px rgba(44,95,45,0.25)',
+                          background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
+                          color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
+                          cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
+                          boxShadow: isCompleted ? '0 4px 15px rgba(44,95,45,0.25)' : 'none',
                         }}
                         onMouseEnter={(e) => {
+                          if (!isCompleted) return;
                           e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
                           e.currentTarget.style.transform = 'translateY(-1px)';
                         }}
                         onMouseLeave={(e) => {
+                          if (!isCompleted) return;
                           e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
                           e.currentTarget.style.transform = 'translateY(0)';
                         }}
@@ -538,6 +460,26 @@ export function ModulePlayerPage() {
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Video Player Box - Fits available height */}
+              <div style={{
+                borderRadius: '1.25rem', overflow: 'hidden',
+                background: 'black', position: 'relative',
+                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
+                flex: 1,
+                minHeight: '200px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
+                  <SecurePlayer 
+                    key={currentModule.number}
+                    videoId={currentModule.videoId} 
+                    onEnded={() => updateProgress(`module-${currentModule.number}`)} 
+                  />
                 </div>
               </div>
 

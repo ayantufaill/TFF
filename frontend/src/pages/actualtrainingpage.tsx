@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
-
+import { trainingLevels } from '../data/trainingData';
 const LoadingOverlay = ({ message }: { message: string }) => (
   <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-2xl animate-in fade-in duration-300">
     <div className="relative w-20 h-20 mb-4">
@@ -152,228 +152,7 @@ export function ActualTrainingPage() {
     }
   }, [searchParams]);
 
-  const levels = [
-    {
-      level: 1,
-      title: 'Foundations of Faith',
-      subtitle: 'Beginner',
-      color: 'from-[#2C5F2D] to-[#4A8B4D]',
-      modules: [
-        {
-          number: 1,
-          title: 'Welcome to Islam',
-          description: 'Reassurance and clarity about accepting Islam. Myths, mercy, and common questions.',
-          formats: ['Reading guide', 'Short video', 'Audio reassurance'],
-          topics: [
-            'Understanding your decision to embrace Islam',
-            'Common myths and misconceptions',
-            'The mercy and forgiveness of Allah',
-            'Your rights as a new Muslim',
-          ],
-        },
-        {
-          number: 2,
-          title: 'Core Beliefs (Aqeedah – Simplified)',
-          description: 'Explains Allah, Tawheed, Prophethood, and Afterlife in simple terms.',
-          formats: ['Illustrated reading notes', 'Audio', 'Whiteboard-style videos'],
-          topics: [
-            'Who is Allah? Understanding Tawheed (Oneness of God)',
-            'Belief in the Prophets and Messengers',
-            'Understanding the Quran',
-            'Life after death and the Day of Judgment',
-          ],
-        },
-        {
-          number: 3,
-          title: 'The Shahadah Explained',
-          description: 'Deepens understanding of the Shahadah in daily life and its significance.',
-          formats: ['Reading', 'Short reflection audio'],
-          topics: [
-            'The meaning of "La ilaha illa Allah"',
-            'The meaning of "Muhammad Rasulullah"',
-            'Living by the Shahadah daily',
-            'The commitment you\'ve made',
-          ],
-        },
-      ],
-    },
-    {
-      level: 2,
-      title: 'Daily Practice',
-      subtitle: 'Essential Worship',
-      color: 'from-[#2C5F2D] to-[#4A8B4D]',
-      modules: [
-        {
-          number: 4,
-          title: 'Cleanliness & Preparation (Taharah)',
-          description: 'Step-by-step guidance on Wudu (ablution) and Ghusl (full bath).',
-          formats: ['Reading guide', 'Videos', 'Audio reminders'],
-          topics: [
-            'Importance of cleanliness in Islam',
-            'How to perform Wudu step-by-step',
-            'When Wudu is required',
-            'How to perform Ghusl (full bath)',
-          ],
-        },
-        {
-          number: 5,
-          title: 'Salah (Prayer) – Step by Step',
-          description: 'Explanation of prayer times, how to perform Salah without Arabic, and common mistakes.',
-          formats: ['Printable guides', 'Video walkthroughs', 'Slow-paced recitations'],
-          topics: [
-            'Understanding the five daily prayers',
-            'How to pray step-by-step (beginner-friendly)',
-            'What to say in prayer (transliteration provided)',
-            'Common mistakes and how to avoid them',
-          ],
-        },
-        {
-          number: 6,
-          title: 'Duas & Connection with Allah',
-          description: 'Teaching how to make Dua, daily remembrance, and emotional connection with Allah.',
-          formats: ['Dua cards', 'Audio recitations', 'Motivational videos'],
-          topics: [
-            'What is Dua and why it matters',
-            'Essential daily Duas',
-            'How to make personal Dua in your language',
-            'Dhikr (remembrance) throughout the day',
-          ],
-        },
-      ],
-    },
-    {
-      level: 3,
-      title: 'Lifestyle & Identity',
-      subtitle: 'Building Your Muslim Life',
-      color: 'from-[#2C5F2D] to-[#4A8B4D]',
-      modules: [
-        {
-          number: 7,
-          title: 'Halal & Haram Basics',
-          description: 'Core principles of Halal and Haram, including food and lifestyle choices.',
-          formats: ['Reading guides', 'Explainer videos'],
-          topics: [
-            'Understanding Halal and Haram',
-            'Halal food and dietary guidelines',
-            'Lifestyle choices in Islam',
-            'Practical tips for everyday life',
-          ],
-        },
-        {
-          number: 8,
-          title: 'Family & Social Life',
-          description: 'Guidance on managing family relationships and responding to criticisms.',
-          formats: ['Reading', 'Audio counseling talks'],
-          topics: [
-            'Dealing with family who don\'t understand',
-            'Maintaining good relationships',
-            'How to respond to questions and criticism',
-            'Finding balance and patience',
-          ],
-        },
-        {
-          number: 9,
-          title: 'Emotional Wellbeing & Mental Health',
-          description: 'Support for loneliness and handling emotional ups and downs after reversion.',
-          formats: ['Audio reflections', 'Support videos'],
-          topics: [
-            'It\'s normal to feel overwhelmed',
-            'Dealing with loneliness and isolation',
-            'Finding peace through faith',
-            'When and how to seek support',
-          ],
-        },
-      ],
-    },
-    {
-      level: 4,
-      title: 'Growth & Confidence',
-      subtitle: 'Deepening Your Faith',
-      color: 'from-[#2C5F2D] to-[#4A8B4D]',
-      modules: [
-        {
-          number: 10,
-          title: 'Character & Manners (Akhlaq)',
-          description: 'Focus on developing good character: honesty, patience, kindness, and dealing with frustration.',
-          formats: ['Reading', 'Story-based videos'],
-          topics: [
-            'The importance of good character in Islam',
-            'Patience (Sabr) and gratitude (Shukr)',
-            'Honesty, kindness, and generosity',
-            'Controlling anger and dealing with difficulty',
-          ],
-        },
-        {
-          number: 11,
-          title: 'Knowledge Development Path',
-          description: 'Guidance on what knowledge to seek first and how to avoid confusion.',
-          formats: ['Reading roadmap', 'Guidance video'],
-          topics: [
-            'Prioritizing Islamic knowledge',
-            'Reliable sources and teachers',
-            'Avoiding confusion and extremes',
-            'Building a learning routine',
-          ],
-        },
-        {
-          number: 12,
-          title: 'Community & Belonging',
-          description: 'How to integrate into a Muslim community, mosque etiquette, and how to serve humanity.',
-          formats: ['Reading', 'Short videos'],
-          topics: [
-            'Finding your local Muslim community',
-            'Mosque etiquette and participation',
-            'Building meaningful friendships',
-            'Serving others and giving back',
-          ],
-        },
-      ],
-    },
-    {
-      level: 5,
-      title: 'Long-Term Practice & Stability',
-      subtitle: 'Lifelong Journey',
-      color: 'from-[#2C5F2D] to-[#4A8B4D]',
-      modules: [
-        {
-          number: 13,
-          title: 'Ramadan & Fasting',
-          description: 'Preparation for Ramadan and understanding fasting for new Muslims.',
-          formats: ['Reading', 'Explainer videos'],
-          topics: [
-            'What is Ramadan and why it matters',
-            'How to fast step-by-step',
-            'Spiritual benefits of fasting',
-            'Preparing for your first Ramadan',
-          ],
-        },
-        {
-          number: 14,
-          title: 'Islamic Ethics & Purpose',
-          description: 'Balancing work, family, and worship while understanding the purpose of life in Islam.',
-          formats: ['Reflection reading', 'Motivational audio'],
-          topics: [
-            'The purpose of life in Islam',
-            'Balancing dunya (worldly life) and akhirah (hereafter)',
-            'Work ethic and professional conduct',
-            'Family responsibilities and worship',
-          ],
-        },
-        {
-          number: 15,
-          title: 'Long-Term Support',
-          description: 'Staying consistent in faith and building a lifelong relationship with Allah.',
-          formats: ['Audio reminders', 'Closing video series'],
-          topics: [
-            'Dealing with spiritual ups and downs',
-            'Staying consistent in practice',
-            'Continuing to grow and learn',
-            'Your ongoing journey with Allah',
-          ],
-        },
-      ],
-    },
-  ];
+  const levels = trainingLevels;
 
   const formatIcon = (format: string) => {
     if (format.toLowerCase().includes('video')) return <Video className="w-4 h-4" />;
@@ -403,9 +182,9 @@ export function ActualTrainingPage() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold">Your Progress</h3>
-                  <span className="text-sm">{(user.completedModules?.length || 0) * 6.6}% Complete</span>
+                  <span className="text-sm">{Math.round(((user.completedModules?.length || 0) / 15) * 100)}% Complete</span>
                 </div>
-                <Progress value={(user.completedModules?.length || 0) * 6.6} className="h-3 mb-2" />
+                <Progress value={Math.round(((user.completedModules?.length || 0) / 15) * 100)} className="h-3 mb-2" />
                 <p className="text-sm text-gray-100">
                   You have completed {user.completedModules?.length || 0} out of 15 modules. Keep going!
                 </p>
@@ -473,22 +252,34 @@ export function ActualTrainingPage() {
                 onValueChange={setActiveModule}
                 className="space-y-4"
               >
-                {level.modules.map((module) => (
+                {level.modules.map((module) => {
+                  const isCompleted = user?.completedModules?.includes(`module-${module.number}`);
+                  return (
                   <AccordionItem
                     key={module.number}
                     value={`module-${module.number}`}
-                    className="bg-white border-2 border-[#C9A961]/20 rounded-xl overflow-hidden"
+                    className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#2C5F2D]/40 shadow-sm' : 'border-[#C9A961]/20'}`}
                   >
-                    <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-[#FAF8F3]">
+                    <AccordionTrigger className={`px-6 py-4 hover:no-underline transition-colors ${isCompleted ? 'hover:bg-[#f0fdf4]' : 'hover:bg-[#FAF8F3]'}`}>
                       <div className="flex items-center gap-4 w-full text-left">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-white font-bold">{module.number}</span>
+                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                          isCompleted 
+                            ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] shadow-md shadow-[#2C5F2D]/20' 
+                            : 'bg-gradient-to-br from-[#C9A961] to-[#8B7355]'
+                        }`}>
+                          <span className="text-white font-bold">
+                            {isCompleted ? <CheckCircle className="w-6 h-6 text-white" /> : module.number}
+                          </span>
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-semibold text-[#2C5F2D] mb-1">{module.title}</h3>
+                          <h3 className={`font-semibold mb-1 ${isCompleted ? 'text-[#2C5F2D]' : 'text-[#2C5F2D]'}`}>
+                            {module.title}
+                          </h3>
                           <p className="text-sm text-gray-600">{module.description}</p>
                         </div>
-                        <CheckCircle className="w-6 h-6 text-gray-300" />
+                        <CheckCircle className={`w-6 h-6 transition-colors ${
+                          isCompleted ? 'text-[#2C5F2D]' : 'text-gray-300'
+                        }`} />
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="px-6 pb-6">
@@ -540,7 +331,7 @@ export function ActualTrainingPage() {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
-                ))}
+                )})}
               </Accordion>
             </div>
           ))}
