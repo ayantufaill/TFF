@@ -184,7 +184,12 @@ export function ActualTrainingPage() {
                   <h3 className="font-semibold">Your Progress</h3>
                   <span className="text-sm">{Math.round(((user.completedModules?.length || 0) / 15) * 100)}% Complete</span>
                 </div>
-                <Progress value={Math.round(((user.completedModules?.length || 0) / 15) * 100)} className="h-3 mb-2" />
+                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
+                  <div 
+                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]" 
+                    style={{ width: `${(user.completedModules?.length || 0) / 15 * 100}%` }}
+                  />
+                </div>
                 <p className="text-sm text-gray-100">
                   You have completed {user.completedModules?.length || 0} out of 15 modules. Keep going!
                 </p>
@@ -245,9 +250,9 @@ export function ActualTrainingPage() {
               </div>
 
               {/* Modules Accordion */}
-              <Accordion 
-                type="single" 
-                collapsible 
+              <Accordion
+                type="single"
+                collapsible
                 value={activeModule}
                 onValueChange={setActiveModule}
                 className="space-y-4"
@@ -255,83 +260,82 @@ export function ActualTrainingPage() {
                 {level.modules.map((module) => {
                   const isCompleted = user?.completedModules?.includes(`module-${module.number}`);
                   return (
-                  <AccordionItem
-                    key={module.number}
-                    value={`module-${module.number}`}
-                    className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#2C5F2D]/40 shadow-sm' : 'border-[#C9A961]/20'}`}
-                  >
-                    <AccordionTrigger className={`px-6 py-4 hover:no-underline transition-colors ${isCompleted ? 'hover:bg-[#f0fdf4]' : 'hover:bg-[#FAF8F3]'}`}>
-                      <div className="flex items-center gap-4 w-full text-left">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                          isCompleted 
-                            ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] shadow-md shadow-[#2C5F2D]/20' 
+                    <AccordionItem
+                      key={module.number}
+                      value={`module-${module.number}`}
+                      className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#2C5F2D]/40 shadow-sm' : 'border-[#C9A961]/20'}`}
+                    >
+                      <AccordionTrigger className={`px-6 py-4 hover:no-underline transition-colors ${isCompleted ? 'hover:bg-[#f0fdf4]' : 'hover:bg-[#FAF8F3]'}`}>
+                        <div className="flex items-center gap-4 w-full text-left">
+                          <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isCompleted
+                            ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] shadow-md shadow-[#2C5F2D]/20'
                             : 'bg-gradient-to-br from-[#C9A961] to-[#8B7355]'
-                        }`}>
-                          <span className="text-white font-bold">
-                            {isCompleted ? <CheckCircle className="w-6 h-6 text-white" /> : module.number}
-                          </span>
+                            }`}>
+                            <span className="text-white font-bold">
+                              {isCompleted ? <CheckCircle className="w-6 h-6 text-white" /> : module.number}
+                            </span>
+                          </div>
+                          <div className="flex-1">
+                            <h3 className={`font-semibold mb-1 ${isCompleted ? 'text-[#2C5F2D]' : 'text-[#2C5F2D]'}`}>
+                              {module.title}
+                            </h3>
+                            <p className="text-sm text-gray-600">{module.description}</p>
+                          </div>
+                          <CheckCircle className={`w-6 h-6 transition-colors ${isCompleted ? 'text-[#2C5F2D]' : 'text-gray-300'
+                            }`} />
                         </div>
-                        <div className="flex-1">
-                          <h3 className={`font-semibold mb-1 ${isCompleted ? 'text-[#2C5F2D]' : 'text-[#2C5F2D]'}`}>
-                            {module.title}
-                          </h3>
-                          <p className="text-sm text-gray-600">{module.description}</p>
-                        </div>
-                        <CheckCircle className={`w-6 h-6 transition-colors ${
-                          isCompleted ? 'text-[#2C5F2D]' : 'text-gray-300'
-                        }`} />
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-6">
-                      <div className="space-y-4 pt-4 border-t">
-                        {/* Topics */}
-                        <div>
-                          <h4 className="font-semibold text-[#2C5F2D] mb-3">What You'll Learn:</h4>
-                          <ul className="space-y-2">
-                            {module.topics.map((topic, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-gray-600">
-                                <CheckCircle className="w-5 h-5 text-[#C9A961] flex-shrink-0 mt-0.5" />
-                                <span>{topic}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="px-6 pb-6">
+                        <div className="space-y-4 pt-4 border-t">
+                          {/* Topics */}
+                          <div>
+                            <h4 className="font-semibold text-[#2C5F2D] mb-3">What You'll Learn:</h4>
+                            <ul className="space-y-2">
+                              {module.topics.map((topic, idx) => (
+                                <li key={idx} className="flex items-start gap-2 text-gray-600">
+                                  <CheckCircle className="w-5 h-5 text-[#C9A961] flex-shrink-0 mt-0.5" />
+                                  <span>{topic}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
 
-                        {/* Formats */}
-                        <div>
-                          <h4 className="font-semibold text-[#2C5F2D] mb-3">Available Formats:</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {module.formats.map((format, idx) => (
-                              <Badge key={idx} variant="outline" className="border-[#C9A961] text-[#2C5F2D]">
-                                {formatIcon(format)}
-                                <span className="ml-2">{format}</span>
-                              </Badge>
-                            ))}
+                          {/* Formats */}
+                          <div>
+                            <h4 className="font-semibold text-[#2C5F2D] mb-3">Available Formats:</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {module.formats.map((format, idx) => (
+                                <Badge key={idx} variant="outline" className="border-[#C9A961] text-[#2C5F2D]">
+                                  {formatIcon(format)}
+                                  <span className="ml-2">{format}</span>
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex flex-wrap gap-3 pt-4">
+                            <Button
+                              onClick={() => navigate(`/training/module/${level.level}/${module.number}`)}
+                              className="bg-[#C9A961] hover:bg-[#B89751] text-white"
+                            >
+                              <Play className="w-4 h-4 mr-2" />
+                              Start Module
+                            </Button>
+                            <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                              <Download className="w-4 h-4 mr-2" />
+                              Download PDF
+                            </Button>
+                            <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                              <Headphones className="w-4 h-4 mr-2" />
+                              Audio Version
+                            </Button>
                           </div>
                         </div>
-
-                        {/* Actions */}
-                        <div className="flex flex-wrap gap-3 pt-4">
-                          <Button
-                            onClick={() => navigate(`/training/module/${level.level}/${module.number}`)}
-                            className="bg-[#C9A961] hover:bg-[#B89751] text-white"
-                          >
-                            <Play className="w-4 h-4 mr-2" />
-                            Start Module
-                          </Button>
-                          <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
-                            <Download className="w-4 h-4 mr-2" />
-                            Download PDF
-                          </Button>
-                          <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
-                            <Headphones className="w-4 h-4 mr-2" />
-                            Audio Version
-                          </Button>
-                        </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                )})}
+                      </AccordionContent>
+                    </AccordionItem>
+                  )
+                })}
               </Accordion>
             </div>
           ))}
@@ -385,25 +389,7 @@ export function ActualTrainingPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Begin Your Journey?
-          </h2>
-          <p className="text-xl text-gray-100 mb-8">
-            Create a free account to access all training modules, track your progress, and connect with a mentor
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white px-10 py-6 text-lg">
-              Create Free Account
-            </Button>
-            <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-10 py-6 text-lg">
-              Contact a Mentor
-            </Button>
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }

@@ -71,10 +71,10 @@ export function ModulePlayerPage() {
         .module-page-container {
           display: flex;
           flex-direction: column;
-          height: calc(100vh - 64px);
+          min-height: calc(100vh - 64px);
           background-color: #FAF8F3;
           font-family: ui-sans-serif, system-ui, sans-serif;
-          overflow: hidden;
+          overflow: auto;
         }
 
         .module-layout {
@@ -82,7 +82,7 @@ export function ModulePlayerPage() {
           flex-direction: column;
           flex: 1;
           min-height: 0;
-          overflow: hidden;
+          overflow: visible;
         }
         
         .module-sidebar {
@@ -102,7 +102,7 @@ export function ModulePlayerPage() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          overflow: hidden;
+          overflow: visible;
           position: relative;
           align-self: stretch;
           min-height: 0;
@@ -110,7 +110,8 @@ export function ModulePlayerPage() {
 
         @media (min-width: 768px) {
           .module-page-container {
-            height: calc(100vh - 80px);
+            min-height: calc(100vh - 80px);
+            height: auto;
           }
           .module-layout {
             flex-direction: row;
@@ -165,7 +166,12 @@ export function ModulePlayerPage() {
                   <h3 className="font-semibold text-white">Your Progress</h3>
                   <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressValue)}% Complete</span>
                 </div>
-                <Progress value={Math.round(progressValue)} className="h-3 mb-2" />
+                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
+                  <div 
+                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]" 
+                    style={{ width: `${progressValue}%` }}
+                  />
+                </div>
                 <p className="text-sm text-gray-200">
                   You have completed {completedCount} out of {totalModules} modules. Keep going!
                 </p>
@@ -193,7 +199,7 @@ export function ModulePlayerPage() {
                   background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
                 }} />
                 <h3 style={{
-                  fontSize: '0.8rem', fontWeight: 900, color: '#2C5F2D',
+                  fontSize: '0.9rem', fontWeight: 900, color: '#2C5F2D',
                   textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0,
                 }}>
                   Level {currentLevel.level} - {currentLevel.title}
@@ -289,7 +295,7 @@ export function ModulePlayerPage() {
                       {/* Title */}
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{
-                          fontSize: '0.82rem', fontWeight: isActive ? 800 : 600,
+                          fontSize: '0.95rem', fontWeight: isActive ? 800 : 600,
                           lineHeight: 1.4, margin: 0,
                           color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : isUnlocked ? '#555' : '#9ca3af',
                           transition: 'color 0.25s ease',
@@ -297,7 +303,7 @@ export function ModulePlayerPage() {
                           {m.title}
                         </p>
                         {completed && !isActive && (
-                          <span style={{ fontSize: '0.65rem', color: '#16a34a', fontWeight: 600 }}>
+                          <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>
                             ✓ Completed
                           </span>
                         )}
@@ -326,7 +332,7 @@ export function ModulePlayerPage() {
               background: 'linear-gradient(180deg, transparent, rgba(44,95,45,0.03))',
             }}>
               <p style={{
-                fontSize: '0.7rem', color: '#6b7280', fontWeight: 600,
+                fontSize: '0.85rem', color: '#6b7280', fontWeight: 600,
                 textAlign: 'center', margin: 0, lineHeight: 1.5,
               }}>
                 🕌 Keep learning — every step brings you closer to understanding
@@ -465,20 +471,21 @@ export function ModulePlayerPage() {
 
               {/* Video Player Box - Fits available height */}
               <div style={{
-                borderRadius: '1.25rem', overflow: 'hidden',
+                borderRadius: '1.25rem', overflow: 'visible',
                 background: 'black', position: 'relative',
                 boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
                 flex: 1,
                 minHeight: '200px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                paddingBottom: '2rem'
               }}>
                 <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
-                  <SecurePlayer 
+                  <SecurePlayer
                     key={currentModule.number}
-                    videoId={currentModule.videoId} 
-                    onEnded={() => updateProgress(`module-${currentModule.number}`)} 
+                    videoId={currentModule.videoId}
+                    onEnded={() => updateProgress(`module-${currentModule.number}`)}
                   />
                 </div>
               </div>

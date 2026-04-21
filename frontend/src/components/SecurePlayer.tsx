@@ -45,13 +45,13 @@ const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId, onEnded }) => {
         player.on('ended', handleEnded);
         player.on('timeupdate', handleTimeUpdate);
         bound = true;
-        
+
         if (intervalId) clearInterval(intervalId);
       }
     };
 
     tryBind();
-    
+
     if (!bound) {
       intervalId = setInterval(tryBind, 200);
     }
@@ -96,11 +96,11 @@ const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId, onEnded }) => {
   };
 
   return (
-    <div className="secure-player-wrapper w-full rounded-[2rem] overflow-hidden bg-black shadow-2xl relative">
+    <div className="secure-player-wrapper w-full rounded-[2rem] overflow-visible bg-black shadow-2xl relative">
       <Plyr ref={ref} source={plyrSource} options={plyrOptions} />
 
       {/* Additional Click-Shield for the YouTube Logo area inside the player */}
-      <div className="absolute bottom-0 right-0 w-24 h-12 z-50 bg-transparent cursor-default"></div>
+      <div className="absolute bottom-4 right-12 w-16 h-8 z-10 bg-transparent cursor-default"></div>
     </div>
   );
 };
