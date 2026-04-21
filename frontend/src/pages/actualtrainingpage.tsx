@@ -425,22 +425,22 @@ export function ActualTrainingPage() {
               Each module includes multiple formats (reading, video, audio) to suit your learning style.
               Take your time, learn at your own pace, and build a strong foundation in your faith.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-4 rounded-lg">
-                <div className="text-3xl font-bold text-[#C9A961] mb-1">15</div>
-                <div className="text-sm text-gray-600">Modules</div>
+            <div className="grid grid-cols-4 gap-4 mt-8">
+              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-6 rounded-2xl border border-[#C9A961]/10 shadow-sm hover:shadow-md transition-all group">
+                <div className="text-3xl font-black text-[#C9A961] mb-1 group-hover:scale-110 transition-transform inline-block">15</div>
+                <div className="text-xs font-bold text-[#2C5F2D] uppercase tracking-widest opacity-70">Modules</div>
               </div>
-              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-4 rounded-lg">
-                <div className="text-3xl font-bold text-[#C9A961] mb-1">5</div>
-                <div className="text-sm text-gray-600">Levels</div>
+              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-6 rounded-2xl border border-[#C9A961]/10 shadow-sm hover:shadow-md transition-all group">
+                <div className="text-3xl font-black text-[#C9A961] mb-1 group-hover:scale-110 transition-transform inline-block">5</div>
+                <div className="text-xs font-bold text-[#2C5F2D] uppercase tracking-widest opacity-70">Levels</div>
               </div>
-              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-4 rounded-lg">
-                <div className="text-3xl font-bold text-[#C9A961] mb-1">100%</div>
-                <div className="text-sm text-gray-600">Free</div>
+              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-6 rounded-2xl border border-[#C9A961]/10 shadow-sm hover:shadow-md transition-all group">
+                <div className="text-3xl font-black text-[#C9A961] mb-1 group-hover:scale-110 transition-transform inline-block">100%</div>
+                <div className="text-xs font-bold text-[#2C5F2D] uppercase tracking-widest opacity-70">Free</div>
               </div>
-              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-4 rounded-lg">
-                <div className="text-3xl font-bold text-[#C9A961] mb-1">24/7</div>
-                <div className="text-sm text-gray-600">Access</div>
+              <div className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] p-6 rounded-2xl border border-[#C9A961]/10 shadow-sm hover:shadow-md transition-all group">
+                <div className="text-3xl font-black text-[#C9A961] mb-1 group-hover:scale-110 transition-transform inline-block">24/7</div>
+                <div className="text-xs font-bold text-[#2C5F2D] uppercase tracking-widest opacity-70">Access</div>
               </div>
             </div>
           </div>

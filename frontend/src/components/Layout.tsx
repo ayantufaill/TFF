@@ -70,7 +70,7 @@ export function Layout() {
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
+              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
                 <img
@@ -100,7 +100,7 @@ export function Layout() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className={`transition-colors ${
+                    className={`transition-colors whitespace-nowrap ${
                       isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
                     }`}
                   >

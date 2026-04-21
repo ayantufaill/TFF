@@ -5,30 +5,10 @@ import {
   Play,
   CheckCircle,
   ChevronRight,
-  BookOpen,
-  Video,
-  Headphones,
-  FileText,
-  Star,
-  ArrowRight,
-  ArrowLeft,
-  Circle,
-  ChevronDown,
-  Layout,
-  HelpCircle,
-  Menu,
-  Heart,
-  Clock,
-  Award,
-  ExternalLink,
   Sparkles
 } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Progress } from '../components/ui/progress';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
-import { toast } from 'sonner';
 import SecurePlayer from '../components/SecurePlayer';
 
 // Replicating the data exactly for the photocopy
@@ -86,10 +66,9 @@ const levelsData = [
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
   const navigate = useNavigate();
-  const { user, updateProgress } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { user } = useAuth();
 
-  const currentLevel = levelsData[0]; // Photocopying 'Health And Happiness'
+  const currentLevel = levelsData[0];
   const currentModule = currentLevel.modules.find(m => String(m.number) === moduleId) || currentLevel.modules[0];
 
   const isCompleted = user?.completedModules?.includes(`module-${currentModule.number}`);
@@ -110,255 +89,462 @@ export function ModulePlayerPage() {
     }
   };
 
-  console.log('User completed modules:', user?.completedModules);
   const totalModules = 15;
   const completedCount = user?.completedModules?.length || 0;
-  // Progress calculation - Forced test value of 20% if 0 for visibility
   const progressValue = completedCount > 0 ? (completedCount / totalModules) * 100 : 20.0;
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-[#FAF8F3] font-sans select-none overflow-hidden">
-      
-      {/* SIDEBAR - LEFT SIDE */}
-      <aside className={`bg-white transition-all duration-700 shadow-[0_20px_50px_rgba(44,95,45,0.06)] z-30 flex flex-col shrink-0 border-r border-gray-100 ${sidebarOpen ? 'w-full md:w-[350px] lg:w-[380px]' : 'w-0 opacity-0 md:hidden'}`}>
-        {/* Sidebar Header */}
-        <div className="h-[100px] md:h-[130px] bg-[#2C5F2D] flex flex-col justify-center px-7 text-white shrink-0 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque-thin.png')] opacity-10"></div>
-          <div className="flex items-center justify-between relative z-10 mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-md">
-                <Sparkles className="w-5 h-5 text-[#C9A961]" />
-              </div>
-              <div>
-                <span className="block font-black text-[9px] uppercase tracking-[0.3em] text-[#C9A961] mb-0.5">Academy</span>
-                <span className="block font-bold text-sm md:text-[16px] text-white leading-tight truncate w-40 md:w-48">{currentLevel.title}</span>
-              </div>
-            </div>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all border border-white/10"
-            >
-              <ChevronLeft className="w-5 h-5 text-white" />
-            </button>
-          </div>
+    <>
+      <style>{`
+        /* Remove the large footer margin on the module player page */
+        footer {
+          margin-top: 0 !important;
+        }
 
-          {/* Progress Mini Bar */}
-          <div className="relative z-10 px-0.5">
-            <div className="flex justify-between text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-white/50 mb-2">
-              <span>Curriculum Progress</span>
-              <span className="text-[#C9A961]">{Math.round((completedCount / currentLevel.modules.length) * 100)}%</span>
-            </div>
-            <div className="h-1.5 w-full bg-black/20 rounded-full overflow-hidden border border-white/5">
-              <div
-                className="h-full bg-gradient-to-r from-[#C9A961] via-[#E5C987] to-[#C9A961] rounded-full transition-all duration-1000"
-                style={{ width: `${(completedCount / currentLevel.modules.length) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-        </div>
+        .module-page-container {
+          display: flex;
+          flex-direction: column;
+          height: calc(100vh - 64px);
+          background-color: #FAF8F3;
+          font-family: ui-sans-serif, system-ui, sans-serif;
+          overflow: hidden;
+        }
 
-        {/* Sidebar List */}
-        <div className="flex-1 overflow-y-auto bg-gradient-to-b from-[#FAF8F3] to-white custom-scrollbar pb-12 pt-8 px-5">
-          <div className="mb-6 px-3 flex items-center justify-between">
-            <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-gray-400 mb-1">Course Modules</h3>
-              <div className="h-1 w-8 bg-[#C9A961] rounded-full"></div>
-            </div>
-            <Badge variant="outline" className="text-[8px] border-[#C9A961]/20 text-[#2C5F2D] font-black uppercase tracking-tighter">
-              {currentLevel.modules.length} Lessons
-            </Badge>
-          </div>
-
-          <div className="space-y-3">
-            {currentLevel.modules.map((m) => {
-              const isActive = String(m.number) === moduleId;
-              const completed = user?.completedModules?.includes(`module-${m.number}`);
-
-              return (
-                <div key={m.number}>
-                  <button
-                    onClick={() => navigate(`/training/module/1/${m.number}`)}
-                    className={`w-full text-left p-4 rounded-2xl transition-all duration-500 flex items-center gap-4 group relative ${isActive
-                      ? 'bg-white shadow-[0_15px_40px_rgba(44,95,45,0.08)] ring-1 ring-[#C9A961]/30 translate-x-1'
-                      : 'hover:bg-white/60 hover:translate-x-1'
-                      }`}
-                  >
-                    {isActive && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-[#C9A961] rounded-r-full shadow-[0_0_10px_#C9A961]"></div>
-                    )}
-
-                    <div className="shrink-0 relative">
-                      {completed ? (
-                        <div className="w-8 h-8 rounded-full bg-[#2C5F2D] flex items-center justify-center shadow-lg shadow-green-900/20 group-hover:scale-110 transition-transform">
-                          <CheckCircle className="w-4.5 h-4.5 text-white" />
-                        </div>
-                      ) : (
-                        <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-500 group-hover:border-[#C9A961]/50 ${isActive ? 'border-[#C9A961] bg-[#C9A961]/5 shadow-[0_0_15px_rgba(201,169,97,0.2)]' : 'border-gray-100 bg-white'
-                          }`}>
-                          <span className={`text-[11px] font-black ${isActive ? 'text-[#C9A961]' : 'text-gray-300 group-hover:text-gray-500'}`}>
-                            {String(m.number).padStart(2, '0')}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <p className={`text-[13px] font-bold leading-tight transition-colors duration-300 ${isActive ? 'text-[#2C5F2D]' : 'text-gray-500 group-hover:text-[#2C5F2D]'
-                        }`}>
-                        {m.title}
-                      </p>
-                    </div>
-
-                    {isActive && (
-                      <div className="shrink-0">
-                        <div className="w-7 h-7 rounded-xl bg-[#FAF8F3] flex items-center justify-center border border-[#C9A961]/10">
-                          <Play className="w-3 h-3 text-[#C9A961] fill-[#C9A961]" />
-                        </div>
-                      </div>
-                    )}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </aside>
-
-      {/* RIGHT SIDE CONTENT AREA */}
-      <div className="flex-1 flex flex-col overflow-y-auto bg-[#FAF8F3] relative scroll-smooth custom-scrollbar">
+        .module-layout {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          min-height: 0;
+          overflow: hidden;
+        }
         
-        {/* HERO / PROGRESS SECTION */}
-        <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white py-12 md:py-20 shrink-0 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque-thin.png')] opacity-10"></div>
-          <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10">
-            <div className="mb-10">
-              <h1 className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">Training & Support</h1>
-              <p className="text-lg md:text-xl text-gray-100 max-w-2xl mx-auto opacity-90 leading-relaxed font-medium">
-                Step-by-step journey to help you understand and practice Islam with confidence
+        .module-sidebar {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          flex-shrink: 0;
+          background-color: white;
+          border-right: 1px solid #f3f4f6;
+          overflow-y: auto;
+          box-shadow: 0 20px 50px rgba(44,95,45,0.06);
+          z-index: 10;
+          align-self: stretch;
+        }
+
+        .module-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          position: relative;
+          align-self: stretch;
+          min-height: 0;
+        }
+
+        @media (min-width: 768px) {
+          .module-page-container {
+            height: calc(100vh - 80px);
+          }
+          .module-layout {
+            flex-direction: row;
+            align-items: stretch;
+          }
+          .module-sidebar {
+            width: 350px;
+            height: auto;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .module-sidebar {
+            width: 400px;
+          }
+        }
+      `}</style>
+
+      <div className="module-page-container">
+
+        {/* ============================================================
+            HERO / PROGRESS SECTION - NOW FULL WIDTH
+            ============================================================ */}
+        <section style={{
+          background: '#2C5F2D',
+          color: 'white',
+          padding: '2rem 2rem',
+          position: 'relative',
+          overflow: 'hidden',
+          flexShrink: 0,
+          textAlign: 'center',
+          borderBottom: '1px solid rgba(255,255,255,0.1)'
+        }}>
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: "url('https://www.transparenttextures.com/patterns/arabesque-thin.png')",
+            opacity: 0.05,
+          }} />
+
+          <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+              Training & Support for New Muslims
+            </h1>
+            <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.9)', marginBottom: '1rem', fontWeight: 500, lineHeight: 1.4 }}>
+              A comprehensive, step-by-step journey to help you understand and practice Islam with confidence
+            </p>
+
+            {/* Large Progress Card */}
+            <div style={{
+              background: 'rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(10px)',
+              padding: '1rem 2rem',
+              borderRadius: '1rem',
+              border: '1px solid rgba(255,255,255,0.15)',
+              textAlign: 'left',
+              maxWidth: '500px',
+              margin: '0 auto',
+              boxShadow: '0 15px 35px rgba(0,0,0,0.2)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
+                  Your Overall Progress
+                </span>
+                <span style={{ fontSize: '1rem', fontWeight: 800, color: '#C9A961' }}>
+                  {progressValue.toFixed(1)}% Complete
+                </span>
+              </div>
+
+              <div style={{ height: '14px', background: 'rgba(0,0,0,0.3)', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.75rem' }}>
+                <div style={{
+                  height: '100%', width: `${progressValue}%`,
+                  background: 'linear-gradient(90deg, #C9A961, #F3E5AB, #C9A961)',
+                  borderRadius: '999px',
+                  transition: 'width 1s ease',
+                }} />
+              </div>
+              <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
+                You have completed {completedCount} out of {totalModules} modules. Keep going!
               </p>
             </div>
-
-            <Link to="/training/curriculum" className="block group max-w-2xl mx-auto">
-              <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-2xl rounded-3xl hover:bg-white/20 transition-all duration-500 cursor-pointer overflow-hidden">
-                <CardContent className="p-7">
-                  <div className="flex items-center justify-between mb-5">
-                    <h3 className="font-bold text-xs uppercase tracking-widest text-white/90">Academy Progress</h3>
-                    <span className="text-xs font-black text-[#C9A961] bg-black/40 px-5 py-2 rounded-full border border-white/10">
-                      {progressValue.toFixed(1)}% COMPLETE
-                    </span>
-                  </div>
-                  
-                  <div className="h-4 w-full bg-black/30 rounded-full p-1 border border-white/10 relative shadow-inner mb-5">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[#C9A961] via-[#F3E5AB] to-[#C9A961] rounded-full transition-all duration-1000 shadow-[0_0_25px_rgba(201,169,97,0.5)]"
-                      style={{ width: `${progressValue}%` }}
-                    ></div>
-                  </div>
-
-                  <p className="text-[10px] text-white/70 font-black tracking-[0.2em] uppercase group-hover:text-white transition-colors">
-                    {completedCount} OF {totalModules} MODULES MASTERED • VIEW ALL MODULES →
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
           </div>
         </section>
 
-        {/* MAIN VIDEO & CONTENT AREA */}
-        <main className="flex-1 px-4 md:px-12 py-12">
-          <div className="max-w-[1000px] mx-auto">
-            
-            {/* TOGGLE SIDEBAR BUTTON (Floating when closed) */}
-            {!sidebarOpen && (
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="fixed left-6 top-1/2 -translate-y-1/2 z-50 w-12 h-12 bg-[#2C5F2D] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all border-4 border-white/20 md:flex hidden"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            )}
+        <div className="module-layout" style={{ margin: '1rem 0' }}>
 
-            <div className="bg-white rounded-[2.5rem] shadow-[0_25px_60px_rgba(44,95,45,0.08)] border border-gray-100 overflow-hidden mb-12">
-              <div className="aspect-video w-full bg-black relative group">
-                <SecurePlayer videoId={currentModule.videoId} />
-                {/* Click Shield Overlay */}
-                <div 
-                  className="absolute inset-0 bg-transparent z-[50]" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                />
+          {/* ============================================================
+              LEFT COLUMN (SIDEBAR): COURSE MODULES
+              ============================================================ */}
+          <aside className="module-sidebar custom-scrollbar">
+
+            {/* Sidebar Header */}
+            <div style={{
+              padding: '1.25rem 1.25rem 1rem',
+              borderBottom: '1px solid rgba(44,95,45,0.08)',
+              background: 'linear-gradient(180deg, rgba(44,95,45,0.03), transparent)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem' }}>
+                <div style={{
+                  width: '5px', height: '24px', borderRadius: '4px',
+                  background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
+                }} />
+                <h3 style={{
+                  fontSize: '0.8rem', fontWeight: 900, color: '#2C5F2D',
+                  textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0,
+                }}>
+                  Course Modules
+                </h3>
               </div>
-
-              <div className="p-8 md:p-12">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 border-b border-gray-50 pb-10">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Badge className="bg-[#2C5F2D]/5 text-[#2C5F2D] border-[#2C5F2D]/10 px-4 py-1.5 text-xs font-bold rounded-full">
-                        Module {currentModule.number}
-                      </Badge>
-                      {isCompleted && (
-                        <Badge className="bg-green-50 text-green-600 border-green-100 px-4 py-1.5 text-xs font-bold rounded-full flex items-center gap-1.5">
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          Completed
-                        </Badge>
-                      )}
-                    </div>
-                    <h2 className="text-2xl md:text-4xl font-bold text-[#2C5F2D] tracking-tight">{currentModule.title}</h2>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={handlePrevious}
-                      className="rounded-2xl h-14 px-6 border-gray-100 hover:bg-gray-50 text-gray-500 font-bold"
-                    >
-                      <ChevronLeft className="w-5 h-5 mr-2" />
-                      Back
-                    </Button>
-                    <Button
-                      onClick={handleNext}
-                      className="bg-[#2C5F2D] hover:bg-[#234F24] text-white rounded-2xl h-14 px-8 font-bold shadow-lg shadow-green-900/20"
-                    >
-                      Next Lesson
-                      <ChevronRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  </div>
+              {/* Progress indicator */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '6px 12px', borderRadius: '8px',
+                background: 'rgba(44,95,45,0.05)',
+              }}>
+                <div style={{
+                  flex: 1, height: '4px', borderRadius: '999px',
+                  background: 'rgba(44,95,45,0.1)', overflow: 'hidden',
+                }}>
+                  <div style={{
+                    height: '100%', borderRadius: '999px',
+                    width: `${(completedCount / currentLevel.modules.length) * 100}%`,
+                    background: 'linear-gradient(90deg, #2C5F2D, #C9A961)',
+                    transition: 'width 0.8s ease',
+                  }} />
                 </div>
-
-                <div className="space-y-12">
-                  <section>
-                    <h3 className="text-lg font-black text-[#2C5F2D] uppercase tracking-[0.2em] mb-6 flex items-center gap-3">
-                      <div className="w-2 h-8 bg-[#C9A961] rounded-full"></div>
-                      Overview
-                    </h3>
-                    <p className="text-gray-600 text-lg leading-relaxed font-medium">
-                      {currentModule.description}
-                    </p>
-                  </section>
-
-                  <section>
-                    <h3 className="text-lg font-black text-[#2C5F2D] uppercase tracking-[0.2em] mb-8 flex items-center gap-3">
-                      <div className="w-2 h-8 bg-[#C9A961] rounded-full"></div>
-                      Learning Objectives
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      {currentModule.topics.map((topic, i) => (
-                        <div key={i} className="flex items-start gap-4 p-6 rounded-3xl bg-[#FAF8F3] border border-gray-100 hover:border-[#C9A961]/30 transition-all group">
-                          <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-[#C9A961] font-bold text-sm shadow-sm border border-gray-50 group-hover:bg-[#C9A961] group-hover:text-white transition-all">
-                            {i + 1}
-                          </div>
-                          <span className="text-gray-700 font-bold leading-snug">{topic}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                </div>
+                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#2C5F2D', whiteSpace: 'nowrap' }}>
+                  {completedCount}/{currentLevel.modules.length}
+                </span>
               </div>
             </div>
-          </div>
-        </main>
+
+            {/* Module List */}
+            <div style={{ padding: '0.75rem', flex: 1 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {currentLevel.modules.map((m, index) => {
+                  const isActive = String(m.number) === moduleId;
+                  const completed = user?.completedModules?.includes(`module-${m.number}`);
+
+                  return (
+                    <button
+                      key={m.number}
+                      onClick={() => navigate(`/training/module/${levelId}/${m.number}`)}
+                      style={{
+                        width: '100%', textAlign: 'left',
+                        padding: '0.85rem 1rem', borderRadius: '14px',
+                        background: isActive
+                          ? 'linear-gradient(135deg, rgba(44,95,45,0.06), rgba(201,169,97,0.08))'
+                          : 'transparent',
+                        border: isActive ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
+                        boxShadow: isActive ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
+                        cursor: 'pointer', transition: 'all 0.25s ease',
+                        display: 'flex', alignItems: 'center', gap: '0.85rem',
+                        position: 'relative',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.background = 'rgba(44,95,45,0.03)';
+                          e.currentTarget.style.border = '1.5px solid rgba(44,95,45,0.08)';
+                          e.currentTarget.style.transform = 'translateX(2px)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isActive) {
+                          e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.border = '1.5px solid transparent';
+                          e.currentTarget.style.transform = 'translateX(0)';
+                        }
+                      }}
+                    >
+                      {/* Active left accent */}
+                      {isActive && (
+                        <div style={{
+                          position: 'absolute', left: 0, top: '20%', bottom: '20%',
+                          width: '3px', borderRadius: '0 4px 4px 0',
+                          background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
+                        }} />
+                      )}
+
+                      {/* Circle indicator */}
+                      <div style={{ flexShrink: 0 }}>
+                        {completed ? (
+                          <div style={{
+                            width: '36px', height: '36px', borderRadius: '50%',
+                            background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 3px 10px rgba(44,95,45,0.25)',
+                          }}>
+                            <CheckCircle style={{ width: 17, height: 17, color: 'white' }} />
+                          </div>
+                        ) : (
+                          <div style={{
+                            width: '36px', height: '36px', borderRadius: '50%',
+                            border: isActive ? '2.5px solid #C9A961' : '2px solid #e0e0e0',
+                            background: isActive ? 'rgba(201,169,97,0.08)' : '#fafafa',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            transition: 'all 0.25s ease',
+                          }}>
+                            <span style={{
+                              fontSize: '0.75rem', fontWeight: 800,
+                              color: isActive ? '#C9A961' : '#9ca3af',
+                            }}>
+                              {m.number}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p style={{
+                          fontSize: '0.82rem', fontWeight: isActive ? 800 : 600,
+                          lineHeight: 1.4, margin: 0,
+                          color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : '#555',
+                          transition: 'color 0.25s ease',
+                        }}>
+                          {m.title}
+                        </p>
+                        {completed && !isActive && (
+                          <span style={{ fontSize: '0.65rem', color: '#16a34a', fontWeight: 600 }}>
+                            ✓ Completed
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Active play icon */}
+                      {isActive && (
+                        <div style={{
+                          flexShrink: 0, width: '28px', height: '28px', borderRadius: '50%',
+                          background: 'linear-gradient(135deg, #C9A961, #d4b872)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          boxShadow: '0 2px 8px rgba(201,169,97,0.3)',
+                        }}>
+                          <Play style={{ width: 12, height: 12, color: 'white', fill: 'white' }} />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Sidebar Footer */}
+            <div style={{
+              padding: '1rem 1.25rem', borderTop: '1px solid rgba(44,95,45,0.08)',
+              background: 'linear-gradient(180deg, transparent, rgba(44,95,45,0.03))',
+            }}>
+              <p style={{
+                fontSize: '0.7rem', color: '#6b7280', fontWeight: 600,
+                textAlign: 'center', margin: 0, lineHeight: 1.5,
+              }}>
+                🕌 Keep learning — every step brings you closer to understanding
+              </p>
+            </div>
+          </aside>
+
+          {/* ============================================================
+            RIGHT COLUMN (MAIN CONTENT): VIDEO PLAYER & INFO
+            ============================================================ */}
+          <main className="module-content custom-scrollbar" style={{ padding: '1rem' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+
+              {/* Video Player Box - Now fits available height */}
+              <div style={{
+                borderRadius: '1.25rem', overflow: 'hidden',
+                background: 'black', position: 'relative',
+                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
+                marginBottom: '1rem',
+                flex: 1,
+                minHeight: '200px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
+                  <SecurePlayer videoId={currentModule.videoId} />
+                </div>
+              </div>
+
+              {/* Module Info Card - Premium Design */}
+              <div style={{
+                background: 'white',
+                borderRadius: '1.25rem',
+                boxShadow: '0 10px 40px rgba(44,95,45,0.08), 0 1px 3px rgba(0,0,0,0.04)',
+                border: '1px solid rgba(44,95,45,0.06)',
+                flexShrink: 0,
+                overflow: 'hidden',
+              }}>
+
+                {/* Top accent bar */}
+                <div style={{
+                  height: '4px',
+                  background: 'linear-gradient(90deg, #2C5F2D, #C9A961, #2C5F2D)',
+                }} />
+
+                <div style={{ padding: '1.25rem 1.5rem' }}>
+                  {/* Header Row: Info + Navigation */}
+                  <div style={{
+                    display: 'flex', flexWrap: 'wrap', gap: '1rem',
+                    justifyContent: 'space-between', alignItems: 'flex-start'
+                  }}>
+
+                    {/* Left: Module Info */}
+                    <div style={{ flex: 1, minWidth: '220px' }}>
+                      {/* Badges */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
+                        <span style={{
+                          background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
+                          color: 'white',
+                          padding: '4px 14px', borderRadius: '999px', fontSize: '0.7rem',
+                          fontWeight: 800, letterSpacing: '0.04em',
+                          boxShadow: '0 2px 8px rgba(44,95,45,0.2)',
+                        }}>
+                          MODULE {currentModule.number}
+                        </span>
+                        {isCompleted && (
+                          <span style={{
+                            background: 'linear-gradient(135deg, #dcfce7, #bbf7d0)',
+                            color: '#15803d',
+                            padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem',
+                            fontWeight: 800,
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            border: '1px solid rgba(22,163,106,0.15)',
+                          }}>
+                            <CheckCircle style={{ width: 13, height: 13 }} /> Completed
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Title */}
+                      <h2 style={{
+                        fontSize: '1.35rem', fontWeight: 800, color: '#1a1a2e',
+                        lineHeight: 1.3, letterSpacing: '-0.01em', marginBottom: '0.35rem',
+                      }}>
+                        {currentModule.title}
+                      </h2>
+
+                      {/* Description */}
+                      <p style={{
+                        color: '#6b7280', fontSize: '0.88rem', lineHeight: 1.6,
+                        fontWeight: 500, margin: 0,
+                      }}>
+                        {currentModule.description}
+                      </p>
+                    </div>
+
+                    {/* Right: Navigation Buttons */}
+                    <div style={{ display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'center', paddingTop: '0.25rem' }}>
+                      <button
+                        onClick={handlePrevious}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '5px',
+                          padding: '0.6rem 1.2rem', borderRadius: '12px',
+                          border: '1.5px solid #e5e7eb', background: 'white',
+                          color: '#374151', fontWeight: 700, fontSize: '0.82rem',
+                          cursor: 'pointer', transition: 'all 0.25s ease',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.borderColor = '#C9A961';
+                          e.currentTarget.style.color = '#2C5F2D';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(201,169,97,0.15)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.borderColor = '#e5e7eb';
+                          e.currentTarget.style.color = '#374151';
+                          e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
+                        }}
+                      >
+                        <ChevronLeft style={{ width: 15, height: 15 }} /> Back
+                      </button>
+                      <button
+                        onClick={handleNext}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '5px',
+                          padding: '0.6rem 1.4rem', borderRadius: '12px',
+                          border: 'none',
+                          background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
+                          color: 'white', fontWeight: 700, fontSize: '0.82rem',
+                          cursor: 'pointer', transition: 'all 0.25s ease',
+                          boxShadow: '0 4px 15px rgba(44,95,45,0.25)',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
+                          e.currentTarget.style.transform = 'translateY(-1px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                        }}
+                      >
+                        Next <ChevronRight style={{ width: 15, height: 15 }} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
