@@ -3,11 +3,13 @@ import { Quiz as QuizType } from '../data/quizData';
 import { ChevronRight, ChevronLeft, CheckCircle, XCircle, RefreshCw, ArrowLeft, Check } from 'lucide-react';
 
 interface QuizProps {
-  quiz: QuizType;
+  quiz: any;
   onComplete: (passed: boolean) => void;
+  isFinalLevel?: boolean;
+  onViewCertificate?: () => void;
 }
 
-export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete }) => {
+export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onViewCertificate }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(false);
@@ -205,10 +207,10 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete }) => {
             <p className="text-lg text-gray-600 mb-6">You scored {score}% on the assessment.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
-                onClick={handleContinue}
+                onClick={isFinalLevel && onViewCertificate ? onViewCertificate : handleContinue}
                 className="px-8 py-3 bg-[#2C5F2D] text-white rounded-xl font-bold text-lg hover:bg-[#1a3a1b] transition-colors shadow-lg"
               >
-                Continue to Next Level
+                {isFinalLevel ? 'View Certificate' : 'Continue to Next Level'}
               </button>
               <button
                 onClick={() => setReviewMode(true)}

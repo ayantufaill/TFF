@@ -185,8 +185,8 @@ export function ActualTrainingPage() {
                   <span className="text-sm">{Math.round(((user.completedModules?.length || 0) / 15) * 100)}% Complete</span>
                 </div>
                 <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
-                  <div 
-                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]" 
+                  <div
+                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                     style={{ width: `${(user.completedModules?.length || 0) / 15 * 100}%` }}
                   />
                 </div>
@@ -237,122 +237,122 @@ export function ActualTrainingPage() {
           {levels.map((level, levelIndex) => {
             const isFirstLevel = levelIndex === 0;
             const prevLevelPassed = isFirstLevel ? true : user?.completedModules?.includes(`quiz-${levels[levelIndex - 1].level}`);
-            
+
             return (
-            <div key={level.level} className={!prevLevelPassed ? 'opacity-70 pointer-events-none grayscale-[30%]' : ''}>
-              {/* Level Header */}
-              <div className={`bg-gradient-to-r ${level.color} text-white rounded-2xl p-8 mb-6 relative overflow-hidden`}>
-                {!prevLevelPassed && (
-                  <div className="absolute top-4 right-6 bg-black/20 px-3 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm">
-                    <Lock className="w-4 h-4" />
-                    <span className="text-sm font-bold tracking-wider uppercase">Locked</span>
+              <div key={level.level} className={!prevLevelPassed ? 'opacity-70 pointer-events-none grayscale-[30%]' : ''}>
+                {/* Level Header */}
+                <div className={`bg-gradient-to-r ${level.color} text-white rounded-2xl p-8 mb-6 relative overflow-hidden`}>
+                  {!prevLevelPassed && (
+                    <div className="absolute top-4 right-6 bg-black/20 px-3 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                      <Lock className="w-4 h-4" />
+                      <span className="text-sm font-bold tracking-wider uppercase">Locked</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-4 mb-2">
+                    <Badge className="bg-white/20 text-white text-lg px-4 py-1">
+                      Level {level.level}
+                    </Badge>
+                    <Badge className="bg-white/20 text-white">
+                      {level.subtitle}
+                    </Badge>
                   </div>
-                )}
-                <div className="flex items-center gap-4 mb-2">
-                  <Badge className="bg-white/20 text-white text-lg px-4 py-1">
-                    Level {level.level}
-                  </Badge>
-                  <Badge className="bg-white/20 text-white">
-                    {level.subtitle}
-                  </Badge>
+                  <h2 className="text-3xl font-bold">{level.title}</h2>
+                  {!prevLevelPassed && (
+                    <p className="mt-4 text-white/80 font-medium">
+                      Pass Level {levels[levelIndex - 1].level} Assessment to unlock this level
+                    </p>
+                  )}
                 </div>
-                <h2 className="text-3xl font-bold">{level.title}</h2>
-                {!prevLevelPassed && (
-                  <p className="mt-4 text-white/80 font-medium">
-                    Pass Level {levels[levelIndex - 1].level} Assessment to unlock this level
-                  </p>
-                )}
-              </div>
 
-              {/* Modules Accordion */}
-              <Accordion
-                type="single"
-                collapsible
-                value={activeModule}
-                onValueChange={setActiveModule}
-                className="space-y-4"
-              >
-                {level.modules.map((module) => {
-                  const isCompleted = user?.completedModules?.includes(`module-${module.number}`);
-                  return (
-                    <AccordionItem
-                      key={module.number}
-                      value={`module-${module.number}`}
-                      className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#2C5F2D]/40 shadow-sm' : 'border-[#C9A961]/20'}`}
-                    >
-                      <AccordionTrigger className={`px-6 py-4 hover:no-underline transition-colors ${isCompleted ? 'hover:bg-[#f0fdf4]' : 'hover:bg-[#FAF8F3]'}`}>
-                        <div className="flex items-center gap-4 w-full text-left">
-                          <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isCompleted
-                            ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] shadow-md shadow-[#2C5F2D]/20'
-                            : 'bg-gradient-to-br from-[#C9A961] to-[#8B7355]'
-                            }`}>
-                            <span className="text-white font-bold">
-                              {isCompleted ? <CheckCircle className="w-6 h-6 text-white" /> : module.number}
-                            </span>
+                {/* Modules Accordion */}
+                <Accordion
+                  type="single"
+                  collapsible
+                  value={activeModule}
+                  onValueChange={setActiveModule}
+                  className="space-y-4"
+                >
+                  {level.modules.map((module) => {
+                    const isCompleted = user?.completedModules?.includes(`module-${module.number}`);
+                    return (
+                      <AccordionItem
+                        key={module.number}
+                        value={`module-${module.number}`}
+                        className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#2C5F2D]/40 shadow-sm' : 'border-[#C9A961]/20'}`}
+                      >
+                        <AccordionTrigger className={`px-6 py-4 hover:no-underline transition-colors ${isCompleted ? 'hover:bg-[#f0fdf4]' : 'hover:bg-[#FAF8F3]'}`}>
+                          <div className="flex items-center gap-4 w-full text-left">
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isCompleted
+                              ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] shadow-md shadow-[#2C5F2D]/20'
+                              : 'bg-gradient-to-br from-[#C9A961] to-[#8B7355]'
+                              }`}>
+                              <span className="text-white font-bold">
+                                {isCompleted ? <CheckCircle className="w-6 h-6 text-white" /> : module.number}
+                              </span>
+                            </div>
+                            <div className="flex-1">
+                              <h3 className={`font-semibold mb-1 ${isCompleted ? 'text-[#2C5F2D]' : 'text-[#2C5F2D]'}`}>
+                                {module.title}
+                              </h3>
+                              <p className="text-sm text-gray-600">{module.description}</p>
+                            </div>
+                            <CheckCircle className={`w-6 h-6 transition-colors ${isCompleted ? 'text-[#2C5F2D]' : 'text-gray-300'
+                              }`} />
                           </div>
-                          <div className="flex-1">
-                            <h3 className={`font-semibold mb-1 ${isCompleted ? 'text-[#2C5F2D]' : 'text-[#2C5F2D]'}`}>
-                              {module.title}
-                            </h3>
-                            <p className="text-sm text-gray-600">{module.description}</p>
-                          </div>
-                          <CheckCircle className={`w-6 h-6 transition-colors ${isCompleted ? 'text-[#2C5F2D]' : 'text-gray-300'
-                            }`} />
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="px-6 pb-6">
-                        <div className="space-y-4 pt-4 border-t">
-                          {/* Topics */}
-                          <div>
-                            <h4 className="font-semibold text-[#2C5F2D] mb-3">What You'll Learn:</h4>
-                            <ul className="space-y-2">
-                              {module.topics.map((topic, idx) => (
-                                <li key={idx} className="flex items-start gap-2 text-gray-600">
-                                  <CheckCircle className="w-5 h-5 text-[#C9A961] flex-shrink-0 mt-0.5" />
-                                  <span>{topic}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-6 pb-6">
+                          <div className="space-y-4 pt-4 border-t">
+                            {/* Topics */}
+                            <div>
+                              <h4 className="font-semibold text-[#2C5F2D] mb-3">What You'll Learn:</h4>
+                              <ul className="space-y-2">
+                                {module.topics.map((topic, idx) => (
+                                  <li key={idx} className="flex items-start gap-2 text-gray-600">
+                                    <CheckCircle className="w-5 h-5 text-[#C9A961] flex-shrink-0 mt-0.5" />
+                                    <span>{topic}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
 
-                          {/* Formats */}
-                          <div>
-                            <h4 className="font-semibold text-[#2C5F2D] mb-3">Available Formats:</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {module.formats.map((format, idx) => (
-                                <Badge key={idx} variant="outline" className="border-[#C9A961] text-[#2C5F2D]">
-                                  {formatIcon(format)}
-                                  <span className="ml-2">{format}</span>
-                                </Badge>
-                              ))}
+                            {/* Formats */}
+                            <div>
+                              <h4 className="font-semibold text-[#2C5F2D] mb-3">Available Formats:</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {module.formats.map((format, idx) => (
+                                  <Badge key={idx} variant="outline" className="border-[#C9A961] text-[#2C5F2D]">
+                                    {formatIcon(format)}
+                                    <span className="ml-2">{format}</span>
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex flex-wrap gap-3 pt-4">
+                              <Button
+                                onClick={() => navigate(`/training/module/${level.level}/${module.number}`)}
+                                className="bg-[#C9A961] hover:bg-[#B89751] text-white"
+                              >
+                                <Play className="w-4 h-4 mr-2" />
+                                Start Module
+                              </Button>
+                              <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                                <Download className="w-4 h-4 mr-2" />
+                                Download PDF
+                              </Button>
+                              <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                                <Headphones className="w-4 h-4 mr-2" />
+                                Audio Version
+                              </Button>
                             </div>
                           </div>
-
-                          {/* Actions */}
-                          <div className="flex flex-wrap gap-3 pt-4">
-                            <Button
-                              onClick={() => navigate(`/training/module/${level.level}/${module.number}`)}
-                              className="bg-[#C9A961] hover:bg-[#B89751] text-white"
-                            >
-                              <Play className="w-4 h-4 mr-2" />
-                              Start Module
-                            </Button>
-                            <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
-                              <Download className="w-4 h-4 mr-2" />
-                              Download PDF
-                            </Button>
-                            <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
-                              <Headphones className="w-4 h-4 mr-2" />
-                              Audio Version
-                            </Button>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  )
-                })}
-              </Accordion>
-            </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    )
+                  })}
+                </Accordion>
+              </div>
             )
           })}
         </div>

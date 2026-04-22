@@ -5,7 +5,8 @@ import {
   Play,
   CheckCircle,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Award
 } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
@@ -16,6 +17,7 @@ import { Progress } from '../components/ui/progress';
 import { trainingLevels } from '../data/trainingData';
 import { levelQuizzes } from '../data/quizData';
 import Quiz from '../components/Quiz';
+import CertificateView from '../components/CertificateView';
 
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
@@ -28,6 +30,7 @@ export function ModulePlayerPage() {
   const isCompleted = user?.completedModules?.includes(`module-${currentModule.number}`);
   const isLastModuleOfLevel = currentLevel.modules[currentLevel.modules.length - 1].number === currentModule.number;
   const hasPassedLevelAssessment = user?.completedModules?.includes(`quiz-${levelId}`);
+  const isFinalLevel = currentLevel.level === trainingLevels[trainingLevels.length - 1].level;
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -35,11 +38,13 @@ export function ModulePlayerPage() {
 
   const [isVideoCompleted, setIsVideoCompleted] = useState(false);
   const [showQuiz, setShowQuiz] = useState(shouldShowQuiz && isLastModuleOfLevel);
+  const [showFinalCertificate, setShowFinalCertificate] = useState(false);
 
   // Reset states when module changes
   React.useEffect(() => {
     setIsVideoCompleted(false);
     setShowQuiz(shouldShowQuiz && isLastModuleOfLevel);
+    setShowFinalCertificate(false);
   }, [moduleId, levelId, shouldShowQuiz]);
 
   const handleVideoEnded = () => {
@@ -56,7 +61,12 @@ export function ModulePlayerPage() {
       await updateProgress(`quiz-${levelId}`);
       setShowQuiz(false);
       setIsVideoCompleted(false);
-      handleNext();
+      
+      // If it's not the final level, move to next. 
+      // If it IS the final level, stay here so they can click 'View Certificate'
+      if (!isFinalLevel) {
+        handleNext();
+      }
     }
   };
 
@@ -202,8 +212,8 @@ export function ModulePlayerPage() {
                   <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressValue)}% Complete</span>
                 </div>
                 <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
-                  <div 
-                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]" 
+                  <div
+                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]"
                     style={{ width: `${progressValue}%` }}
                   />
                 </div>
@@ -240,7 +250,6 @@ export function ModulePlayerPage() {
                   Level {currentLevel.level} - {currentLevel.title}
                 </h3>
               </div>
-              {/* Progress indicator removed per user request */}
             </div>
 
             {/* Module List */}
@@ -358,7 +367,7 @@ export function ModulePlayerPage() {
                     </button>
                   );
                 })}
-                
+
                 {/* Level Assessment Quiz Sidebar Item */}
                 <button
                   onClick={() => {
@@ -382,20 +391,6 @@ export function ModulePlayerPage() {
                     display: 'flex', alignItems: 'center', gap: '0.85rem',
                     position: 'relative',
                     marginTop: '4px'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!showQuiz) {
-                      e.currentTarget.style.background = 'rgba(44,95,45,0.03)';
-                      e.currentTarget.style.border = '1.5px solid rgba(44,95,45,0.08)';
-                      e.currentTarget.style.transform = 'translateX(2px)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!showQuiz) {
-                      e.currentTarget.style.background = 'transparent';
-                      e.currentTarget.style.border = '1.5px solid transparent';
-                      e.currentTarget.style.transform = 'translateX(0)';
-                    }
                   }}
                 >
                   {/* Active left accent */}
@@ -425,7 +420,7 @@ export function ModulePlayerPage() {
                       color: showQuiz ? '#1a1a2e' : '#555',
                       transition: 'color 0.25s ease',
                     }}>
-                      Level Assessment
+                      {isFinalLevel ? 'Final Assessment' : 'Level Assessment'}
                     </p>
                   </div>
                 </button>
@@ -452,175 +447,123 @@ export function ModulePlayerPage() {
           <main className="module-content custom-scrollbar" style={{ padding: '1rem' }}>
             <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
 
-              {/* Module Info Card - Premium Design (Moved ABOVE Video Player) */}
-              <div style={{
-                background: 'white',
-                borderRadius: '1.25rem',
-                boxShadow: '0 10px 40px rgba(44,95,45,0.08), 0 1px 3px rgba(0,0,0,0.04)',
-                border: '1px solid rgba(44,95,45,0.06)',
-                flexShrink: 0,
-                overflow: 'hidden',
-                marginBottom: '1rem',
-              }}>
-
-                {/* Top accent bar */}
+              {/* Module Info Card - Hidden when Certificate is shown */}
+              {!showFinalCertificate && (
                 <div style={{
-                  height: '4px',
-                  background: '#2C5F2D',
-                }} />
+                  background: 'white',
+                  borderRadius: '1.25rem',
+                  boxShadow: '0 10px 40px rgba(44,95,45,0.08), 0 1px 3px rgba(0,0,0,0.04)',
+                  border: '1px solid rgba(44,95,45,0.06)',
+                  flexShrink: 0,
+                  overflow: 'hidden',
+                  marginBottom: '1rem',
+                }}>
+                  {/* Top accent bar */}
+                  <div style={{ height: '4px', background: '#2C5F2D' }} />
 
-                <div style={{ padding: '1.25rem 1.5rem' }}>
-                  {/* Header Row: Info + Navigation */}
-                  <div style={{
-                    display: 'flex', flexWrap: 'wrap', gap: '1rem',
-                    justifyContent: 'space-between', alignItems: 'flex-start'
-                  }}>
-
-                    {/* Left: Module Info */}
-                    <div style={{ flex: 1, minWidth: '220px' }}>
-                      {/* Badges */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
-                        <span style={{
-                          background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
-                          color: 'white',
-                          padding: '4px 14px', borderRadius: '999px', fontSize: '0.7rem',
-                          fontWeight: 800, letterSpacing: '0.04em',
-                          boxShadow: '0 2px 8px rgba(44,95,45,0.2)',
-                        }}>
-                          MODULE {currentModule.number}
-                        </span>
-                        {isCompleted && (
+                  <div style={{ padding: '1.25rem 1.5rem' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <div style={{ flex: 1, minWidth: '220px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
                           <span style={{
-                            background: 'linear-gradient(135deg, #dcfce7, #bbf7d0)',
-                            color: '#15803d',
-                            padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem',
-                            fontWeight: 800,
-                            display: 'flex', alignItems: 'center', gap: '5px',
-                            border: '1px solid rgba(22,163,106,0.15)',
+                            background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
+                            color: 'white',
+                            padding: '4px 14px', borderRadius: '999px', fontSize: '0.7rem',
+                            fontWeight: 800, letterSpacing: '0.04em',
+                            boxShadow: '0 2px 8px rgba(44,95,45,0.2)',
                           }}>
-                            <CheckCircle style={{ width: 13, height: 13 }} /> Completed
+                            MODULE {currentModule.number}
                           </span>
-                        )}
+                          {isCompleted && (
+                            <span style={{
+                              background: 'linear-gradient(135deg, #dcfce7, #bbf7d0)',
+                              color: '#15803d',
+                              padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem',
+                              fontWeight: 800,
+                              display: 'flex', alignItems: 'center', gap: '5px',
+                              border: '1px solid rgba(22,163,106,0.15)',
+                            }}>
+                              <CheckCircle style={{ width: 13, height: 13 }} /> Completed
+                            </span>
+                          )}
+                        </div>
+                        <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1a1a2e', lineHeight: 1.3, letterSpacing: '-0.01em', marginBottom: '0.35rem' }}>
+                          {currentModule.title}
+                        </h2>
+                        <p style={{ color: '#6b7280', fontSize: '0.88rem', lineHeight: 1.6, fontWeight: 500, margin: 0 }}>
+                          {currentModule.description}
+                        </p>
                       </div>
 
-                      {/* Title */}
-                      <h2 style={{
-                        fontSize: '1.35rem', fontWeight: 800, color: '#1a1a2e',
-                        lineHeight: 1.3, letterSpacing: '-0.01em', marginBottom: '0.35rem',
-                      }}>
-                        {currentModule.title}
-                      </h2>
-
-                      {/* Description */}
-                      <p style={{
-                        color: '#6b7280', fontSize: '0.88rem', lineHeight: 1.6,
-                        fontWeight: 500, margin: 0,
-                      }}>
-                        {currentModule.description}
-                      </p>
-                    </div>
-
-                    {/* Right: Navigation Buttons */}
-                    <div style={{ display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'center', paddingTop: '0.25rem' }}>
-                      <button
-                        onClick={handlePrevious}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: '5px',
-                          padding: '0.6rem 1.2rem', borderRadius: '12px',
-                          border: '1.5px solid #e5e7eb', background: 'white',
-                          color: '#374151', fontWeight: 700, fontSize: '0.82rem',
-                          cursor: 'pointer', transition: 'all 0.25s ease',
-                          boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#C9A961';
-                          e.currentTarget.style.color = '#2C5F2D';
-                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(201,169,97,0.15)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#e5e7eb';
-                          e.currentTarget.style.color = '#374151';
-                          e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.04)';
-                        }}
-                      >
-                        <ChevronLeft style={{ width: 15, height: 15 }} /> Back
-                      </button>
-                      
-                      {/* Show Take Assessment button if it's the last module AND (video is done OR already passed) */}
-                      {isLastModuleOfLevel && (isVideoCompleted || isCompleted) && !showQuiz && (
+                      <div style={{ display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'center', paddingTop: '0.25rem' }}>
                         <button
-                          onClick={() => setShowQuiz(true)}
+                          onClick={handlePrevious}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '5px',
-                            padding: '0.6rem 1.4rem', borderRadius: '12px',
-                            border: 'none',
-                            background: 'linear-gradient(135deg, #C9A961, #d4b872)',
-                            color: 'white', fontWeight: 800, fontSize: '0.85rem',
+                            padding: '0.6rem 1.2rem', borderRadius: '12px',
+                            border: '1.5px solid #e5e7eb', background: 'white',
+                            color: '#374151', fontWeight: 700, fontSize: '0.82rem',
                             cursor: 'pointer', transition: 'all 0.25s ease',
-                            boxShadow: '0 4px 15px rgba(201,169,97,0.3)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(201,169,97,0.45)';
-                            e.currentTarget.style.transform = 'translateY(-1px)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(201,169,97,0.3)';
-                            e.currentTarget.style.transform = 'translateY(0)';
                           }}
                         >
-                          {hasPassedLevelAssessment ? 'Review Assessment' : 'Take Level Assessment'}
+                          <ChevronLeft style={{ width: 15, height: 15 }} /> Back
                         </button>
-                      )}
-                      
-                      {/* Only show NEXT if they actually passed the quiz (or are on a non-final module) */}
-                      {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
-                        <button
-                          onClick={handleNext}
-                          disabled={!isCompleted}
-                          style={{
-                            display: 'flex', alignItems: 'center', gap: '5px',
-                            padding: '0.6rem 1.4rem', borderRadius: '12px',
-                            border: 'none',
-                            background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
-                            color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
-                            cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
-                            boxShadow: isCompleted ? '0 4px 15px rgba(44,95,45,0.25)' : 'none',
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!isCompleted) return;
-                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
-                            e.currentTarget.style.transform = 'translateY(-1px)';
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isCompleted) return;
-                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                          }}
-                        >
-                          Next <ChevronRight style={{ width: 15, height: 15 }} />
-                        </button>
-                      )}
+
+                        {isLastModuleOfLevel && (isVideoCompleted || isCompleted) && !showQuiz && (
+                          <button
+                            onClick={() => setShowQuiz(true)}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: '5px',
+                              padding: '0.6rem 1.4rem', borderRadius: '12px',
+                              background: 'linear-gradient(135deg, #C9A961, #d4b872)',
+                              color: 'white', fontWeight: 800, fontSize: '0.85rem',
+                              cursor: 'pointer', transition: 'all 0.25s ease',
+                            }}
+                          >
+                            {hasPassedLevelAssessment ? 'Review Assessment' : 'Take Level Assessment'}
+                          </button>
+                        )}
+
+
+                        {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
+                          <button
+                            onClick={handleNext}
+                            disabled={!isCompleted}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: '5px',
+                              padding: '0.6rem 1.4rem', borderRadius: '12px',
+                              background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
+                              color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
+                              cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
+                            }}
+                          >
+                            Next <ChevronRight style={{ width: 15, height: 15 }} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Video Player Box or Quiz - Fits available height */}
+              {/* Main Display Area (Video/Quiz/Certificate) */}
               <div style={{
                 borderRadius: '1.25rem', overflow: 'visible',
-                background: showQuiz ? 'transparent' : 'black', position: 'relative',
-                boxShadow: showQuiz ? 'none' : '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
-                flex: 1,
-                minHeight: '200px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingBottom: '2rem'
+                background: (showQuiz || showFinalCertificate) ? 'transparent' : 'black', position: 'relative',
+                flex: 1, minHeight: '200px', display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+                paddingBottom: '2rem', marginTop: showFinalCertificate ? '1rem' : '0'
               }}>
-                {showQuiz && levelId && levelQuizzes[levelId] ? (
-                  <Quiz 
-                    quiz={levelQuizzes[levelId]} 
-                    onComplete={handleQuizComplete} 
+                {showFinalCertificate && isFinalLevel && hasPassedLevelAssessment ? (
+                  <CertificateView 
+                    userName={user?.name || 'Student'} 
+                    onBack={() => setShowFinalCertificate(false)}
+                  />
+                ) : showQuiz && levelId && levelQuizzes[levelId] ? (
+                  <Quiz
+                    quiz={levelQuizzes[levelId]}
+                    onComplete={handleQuizComplete}
+                    isFinalLevel={isFinalLevel}
+                    onViewCertificate={() => setShowFinalCertificate(true)}
                   />
                 ) : (
                   <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
