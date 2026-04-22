@@ -62,116 +62,133 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete }) => {
 
   if (reviewMode) {
     return (
-      <div className="w-full max-w-full mx-auto bg-white rounded-2xl shadow-[0_10px_40px_rgba(44,95,45,0.08)] overflow-hidden flex flex-col h-full min-h-[400px]">
-        {/* Header */}
-        <div className="p-6 bg-gray-50 border-b border-gray-100 flex-shrink-0 flex items-center justify-between">
-          <div>
-            <h2 className="text-xl font-bold text-[#2C5F2D]">Review Questions</h2>
-            <p className="text-sm text-gray-500">Your Score: {score}%</p>
+      <>
+        <style>{`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(44, 95, 45, 0.2);
+            border-radius: 10px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(44, 95, 45, 0.4);
+          }
+        `}</style>
+        <div className="w-full max-w-full mx-auto bg-white rounded-2xl shadow-[0_10px_40px_rgba(44,95,45,0.08)] overflow-hidden flex flex-col h-[650px]">
+          {/* Header */}
+          <div className="p-6 bg-gray-50 border-b border-gray-100 flex-shrink-0 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-[#2C5F2D]">Review Questions</h2>
+              <p className="text-sm text-gray-500">Your Score: {score}%</p>
+            </div>
+            <button
+              onClick={() => setReviewMode(false)}
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to Results
+            </button>
           </div>
-          <button
-            onClick={() => setReviewMode(false)}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-semibold"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to Results
-          </button>
-        </div>
 
-        {/* Scrollable Questions List */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-12 bg-white scroll-smooth">
-          {quiz.questions.map((q, qIndex) => {
-            const userAnswer = answers[qIndex];
-            const isCorrect = userAnswer === q.correctAnswerIndex;
+          {/* Scrollable Questions List */}
+          <div className="flex-1 overflow-y-auto p-8 space-y-12 bg-white scroll-smooth custom-scrollbar">
+            {quiz.questions.map((q, qIndex) => {
+              const userAnswer = answers[qIndex];
+              const isCorrect = userAnswer === q.correctAnswerIndex;
 
-            return (
-              <div key={q.id} className="pb-12 border-b border-gray-100 last:border-0">
-                {/* Question Header */}
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-sm font-bold text-[#C9A961] uppercase tracking-wider">
-                    Question {qIndex + 1}
-                  </span>
-                  {isCorrect ? (
-                    <span className="flex items-center gap-1.5 text-green-600 font-bold text-sm bg-green-50 px-3 py-1 rounded-full">
-                      <CheckCircle className="w-4 h-4" /> Correct
+              return (
+                <div key={q.id} className="pb-12 border-b border-gray-100 last:border-0">
+                  {/* Question Header */}
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-sm font-bold text-[#C9A961] uppercase tracking-wider">
+                      Question {qIndex + 1}
                     </span>
-                  ) : (
-                    <span className="flex items-center gap-1.5 text-red-600 font-bold text-sm bg-red-50 px-3 py-1 rounded-full">
-                      <XCircle className="w-4 h-4" /> Incorrect
-                    </span>
-                  )}
-                </div>
+                    {isCorrect ? (
+                      <span className="flex items-center gap-1.5 text-green-600 font-bold text-sm bg-green-50 px-3 py-1 rounded-full">
+                        <CheckCircle className="w-4 h-4" /> Correct
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 text-red-600 font-bold text-sm bg-red-50 px-3 py-1 rounded-full">
+                        <XCircle className="w-4 h-4" /> Incorrect
+                      </span>
+                    )}
+                  </div>
 
-                <h3 className="text-2xl font-bold text-gray-900 mb-8 leading-tight">
-                  {q.question}
-                </h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-8 leading-tight">
+                    {q.question}
+                  </h3>
 
-                {/* Options */}
-                <div className="flex flex-col gap-3">
-                  {q.options.map((option, optIndex) => {
-                    const isCorrectOption = optIndex === q.correctAnswerIndex;
-                    const isUserSelected = userAnswer === optIndex;
-                    
-                    let borderClass = 'border-gray-200';
-                    let bgClass = 'bg-white';
-                    let indicatorBorder = 'border-gray-300';
-                    let indicatorBg = 'bg-white';
-                    
-                    if (isCorrectOption) {
-                      borderClass = 'border-green-500 bg-green-50/50';
-                      indicatorBorder = 'border-green-500';
-                      indicatorBg = 'bg-green-500';
-                    } else if (isUserSelected && !isCorrect) {
-                      borderClass = 'border-red-500 bg-red-50/50';
-                      indicatorBorder = 'border-red-500';
-                      indicatorBg = 'bg-red-500';
-                    }
+                  {/* Options */}
+                  <div className="flex flex-col gap-3">
+                    {q.options.map((option, optIndex) => {
+                      const isCorrectOption = optIndex === q.correctAnswerIndex;
+                      const isUserSelected = userAnswer === optIndex;
 
-                    return (
-                      <div
-                        key={optIndex}
-                        className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${borderClass} ${bgClass}`}
-                      >
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${indicatorBorder} ${indicatorBg}`}>
-                          {(isCorrectOption || isUserSelected) && (
-                            <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                          )}
-                        </div>
-                        
-                        <div className="flex-1 flex items-center justify-between">
-                          <span className={`text-lg ${isCorrectOption ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
-                            {option}
-                          </span>
-                          
-                          {isCorrectOption && (
-                            <span className="text-green-600 text-xs font-bold uppercase tracking-widest bg-green-100 px-2 py-0.5 rounded">
-                              Correct Answer
+                      let borderClass = 'border-gray-200';
+                      let bgClass = 'bg-white';
+                      let indicatorBorder = 'border-gray-300';
+                      let indicatorBg = 'bg-white';
+
+                      if (isCorrectOption) {
+                        borderClass = 'border-[#2C5F2D] bg-[#F1F9F4] border-[3px]';
+                        indicatorBorder = 'border-[#2C5F2D]';
+                        indicatorBg = 'bg-[#2C5F2D]';
+                      } else if (isUserSelected && !isCorrect) {
+                        borderClass = 'border-red-500 bg-red-50/50';
+                        indicatorBorder = 'border-red-500';
+                        indicatorBg = 'bg-red-500';
+                      }
+
+                      return (
+                        <div
+                          key={optIndex}
+                          className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${borderClass} ${bgClass}`}
+                        >
+                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${indicatorBorder} ${indicatorBg}`}>
+                            {(isCorrectOption || isUserSelected) && (
+                              <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                            )}
+                          </div>
+
+                          <div className="flex-1 flex items-center justify-between">
+                            <span className={`text-lg ${isCorrectOption ? 'text-[#2C5F2D] font-bold' : 'text-gray-700'}`}>
+                              {option}
                             </span>
-                          )}
-                          {isUserSelected && !isCorrect && (
-                            <span className="text-red-600 text-xs font-bold uppercase tracking-widest bg-red-100 px-2 py-0.5 rounded">
-                              Your Selection
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-center">
-          <button
-            onClick={handleRetry}
-            className="px-6 py-2 bg-[#2C5F2D] text-white rounded-xl font-bold hover:bg-[#1a3a1b] transition-colors shadow-md flex items-center gap-2"
-          >
-            <RefreshCw className="w-4 h-4" /> Try Quiz Again
-          </button>
+                            {isCorrectOption && (
+                              <span className="text-green-600 text-xs font-bold uppercase tracking-widest bg-green-100 px-2 py-0.5 rounded">
+                                Correct Answer
+                              </span>
+                            )}
+                            {isUserSelected && !isCorrect && (
+                              <span className="text-red-600 text-xs font-bold uppercase tracking-widest bg-red-100 px-2 py-0.5 rounded">
+                                Your Selection
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Footer */}
+          <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-center flex-shrink-0">
+            <button
+              onClick={handleRetry}
+              className="px-6 py-2 bg-[#2C5F2D] text-white rounded-xl font-bold hover:bg-[#1a3a1b] transition-colors shadow-md flex items-center gap-2"
+            >
+              <RefreshCw className="w-4 h-4" /> Try Quiz Again
+            </button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
