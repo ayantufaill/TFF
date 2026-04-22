@@ -13,7 +13,7 @@ const courses = [
     id: 1,
     title: 'Foundations of Aqeedah',
     category: 'Aqeedah',
-    image: 'https://picsum.photos/seed/aqeedah/600/400',
+    image: 'https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop',
     type: 'Course',
     subtitle: '5 Levels • 15 Modules',
     // Course 1 uses module-1 through module-15
@@ -24,7 +24,7 @@ const courses = [
     id: 2,
     title: 'Learn to Pray – Salah Guide',
     category: 'Fiqh',
-    image: 'https://picsum.photos/seed/salah/600/400',
+    image: '/images/salah-guide.jpg',
     type: 'Guided Module',
     subtitle: '5 Levels • 15 Modules',
     // Course 2 uses module-16 through module-30
@@ -35,7 +35,7 @@ const courses = [
     id: 3,
     title: 'Seerah – Life of the Prophet ﷺ',
     category: 'Seerah',
-    image: 'https://picsum.photos/seed/seerah/600/400',
+    image: '/images/seerah-guide.jpg',
     type: 'Specialization',
     subtitle: '5 Levels • 15 Modules',
     // Course 3 uses module-31 through module-45
@@ -170,7 +170,7 @@ export function DashboardPage() {
                               <Progress
                                 value={calculatedProgress}
                                 className="h-2 bg-gray-100 rounded-full"
-                                indicatorClassName="bg-gradient-to-r from-[#2C5F2D] to-[#C9A961] rounded-full transition-all duration-1000"
+                                indicatorClassName="bg-[#2C5F2D] rounded-full transition-all duration-1000"
                               />
                             </div>
                           </div>
