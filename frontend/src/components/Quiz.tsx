@@ -7,13 +7,14 @@ interface QuizProps {
   onComplete: (passed: boolean) => void;
   isFinalLevel?: boolean;
   onViewCertificate?: () => void;
+  alreadyPassed?: boolean;
 }
 
-export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onViewCertificate }) => {
+export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onViewCertificate, alreadyPassed }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState(0);
+  const [showResults, setShowResults] = useState(alreadyPassed || false);
+  const [score, setScore] = useState(alreadyPassed ? 100 : 0);
   const [reviewMode, setReviewMode] = useState(false);
 
   const question = quiz.questions[currentQuestionIndex];
