@@ -180,19 +180,29 @@ export function ActualTrainingPage() {
           ) : (
             <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 mt-8">
               <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold">Your Progress</h3>
-                  <span className="text-sm">{Math.round(((user.completedModules?.length || 0) / 15) * 100)}% Complete</span>
-                </div>
-                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
-                  <div
-                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]"
-                    style={{ width: `${(user.completedModules?.length || 0) / 15 * 100}%` }}
-                  />
-                </div>
-                <p className="text-sm text-gray-100">
-                  You have completed {user.completedModules?.length || 0} out of 15 modules. Keep going!
-                </p>
+                {(() => {
+                  const totalModules = trainingLevels.reduce((acc, l) => acc + l.modules.length, 0);
+                  const completedCount = user.completedModules?.filter(id => id.startsWith('module-')).length || 0;
+                  const progressPercentage = (completedCount / totalModules) * 100;
+                  
+                  return (
+                    <>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold">Your Progress</h3>
+                        <span className="text-sm">{Math.round(progressPercentage)}% Complete</span>
+                      </div>
+                      <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
+                        <div
+                          className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+                          style={{ width: `${progressPercentage}%` }}
+                        />
+                      </div>
+                      <p className="text-sm text-gray-100">
+                        You have completed {completedCount} out of {totalModules} modules. Keep going!
+                      </p>
+                    </>
+                  );
+                })()}
               </CardContent>
             </Card>
           )}

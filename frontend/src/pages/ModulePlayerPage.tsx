@@ -101,8 +101,8 @@ export function ModulePlayerPage() {
     }
   };
 
-  const totalModules = 15;
-  const completedCount = user?.completedModules?.length || 0;
+  const totalModules = trainingLevels.reduce((acc, level) => acc + level.modules.length, 0);
+  const completedCount = user?.completedModules?.filter(id => id.startsWith('module-')).length || 0;
   const progressValue = (completedCount / totalModules) * 100;
 
   return (
@@ -564,6 +564,7 @@ export function ModulePlayerPage() {
                     onComplete={handleQuizComplete}
                     isFinalLevel={isFinalLevel}
                     onViewCertificate={() => setShowFinalCertificate(true)}
+                    alreadyPassed={hasPassedLevelAssessment}
                   />
                 ) : (
                   <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
