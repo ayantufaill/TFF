@@ -184,7 +184,7 @@ export function ActualTrainingPage() {
                   const totalModules = trainingLevels.reduce((acc, l) => acc + l.modules.length, 0);
                   const completedCount = user.completedModules?.filter(id => id.startsWith('module-')).length || 0;
                   const progressPercentage = (completedCount / totalModules) * 100;
-                  
+
                   return (
                     <>
                       <div className="flex items-center justify-between mb-3">
