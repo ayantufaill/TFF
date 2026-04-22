@@ -466,7 +466,7 @@ export function ModulePlayerPage() {
                 {/* Top accent bar */}
                 <div style={{
                   height: '4px',
-                  background: 'linear-gradient(90deg, #2C5F2D, #C9A961, #2C5F2D)',
+                  background: '#2C5F2D',
                 }} />
 
                 <div style={{ padding: '1.25rem 1.5rem' }}>

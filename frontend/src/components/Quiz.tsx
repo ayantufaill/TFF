@@ -108,7 +108,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete }) => {
         </div>
         <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-[#2C5F2D] to-[#C9A961] transition-all duration-300"
+            className="h-full bg-[#2C5F2D] transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -133,10 +133,10 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete }) => {
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                  isSelected ? 'border-[#C9A961]' : 'border-gray-300'
+                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
+                  isSelected ? 'border-[#C9A961] bg-[#C9A961]' : 'border-gray-300 bg-white'
                 }`}>
-                  {isSelected && <div className="w-3 h-3 rounded-full bg-[#C9A961]" />}
+                  {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
                 </div>
                 <span className={`text-lg ${isSelected ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
                   {option}
@@ -152,25 +152,27 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete }) => {
         <button
           onClick={handlePrev}
           disabled={currentQuestionIndex === 0}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold transition-colors ${
+          className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-colors ${
             currentQuestionIndex === 0 
               ? 'text-gray-400 cursor-not-allowed' 
               : 'text-gray-700 hover:bg-gray-200'
           }`}
         >
-          <ChevronLeft className="w-5 h-5" /> Previous
+          <span className="py-1"><ChevronLeft className="w-5 h-5 inline-block mr-1 -mt-0.5" /> Previous</span>
         </button>
         
         <button
           onClick={handleNext}
           disabled={answers[currentQuestionIndex] === undefined}
-          className={`flex items-center gap-2 px-8 py-2.5 rounded-lg font-bold transition-all shadow-md ${
+          className={`flex items-center gap-2 px-10 py-3 text-lg rounded-xl font-bold transition-all shadow-md ${
             answers[currentQuestionIndex] === undefined
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-[#2C5F2D] text-white hover:bg-[#1a3a1b] hover:-translate-y-0.5 hover:shadow-lg'
           }`}
         >
-          {isLastQuestion ? 'Submit Assessment' : 'Next Question'} 
+          <span className="py-2">
+            {isLastQuestion ? 'Submit Assessment' : 'Next Question'}
+          </span>
           {!isLastQuestion && <ChevronRight className="w-5 h-5" />}
         </button>
       </div>
