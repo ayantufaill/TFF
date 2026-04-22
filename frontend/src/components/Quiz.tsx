@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Quiz as QuizType } from '../data/quizData';
 import { ChevronRight, ChevronLeft, CheckCircle, XCircle, RefreshCw, ArrowLeft, Check } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 interface QuizProps {
   quiz: any;
@@ -11,11 +12,32 @@ interface QuizProps {
 }
 
 export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onViewCertificate, alreadyPassed }) => {
+  const { user, updateProgress } = useAuth();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [showResults, setShowResults] = useState(alreadyPassed || false);
   const [score, setScore] = useState(alreadyPassed ? 100 : 0);
   const [reviewMode, setReviewMode] = useState(false);
+
+  useEffect(() => {
+    if (alreadyPassed && user?.quizAnswers && user.quizAnswers[quiz.id]) {
+      const savedAnswers = user.quizAnswers[quiz.id];
+      const answersObj: Record<number, number> = {};
+      savedAnswers.forEach((ans, idx) => {
+        if (ans !== null && ans !== undefined) answersObj[idx] = ans;
+      });
+      setAnswers(answersObj);
+      
+      // Recalculate score from saved answers to be accurate
+      let correct = 0;
+      quiz.questions.forEach((q: any, index: number) => {
+        if (answersObj[index] === q.correctAnswerIndex) {
+          correct++;
+        }
+      });
+      setScore((correct / quiz.questions.length) * 100);
+    }
+  }, [alreadyPassed, user?.quizAnswers, quiz.id, quiz.questions]);
 
   const question = quiz.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
@@ -49,6 +71,12 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
     const percentage = (correct / quiz.questions.length) * 100;
     setScore(percentage);
     setShowResults(true);
+
+    // Save answers to database memory
+    const answersArray = quiz.questions.map((_: any, i: number) => 
+      answers[i] !== undefined ? answers[i] : null
+    );
+    updateProgress(undefined, { [quiz.id]: answersArray });
   };
 
   const handleRetry = () => {
