@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  quizAnswers: {
+    type: Map,
+    of: [Number],
+    default: {}
+  },
   currentStreak: {
     type: Number,
     default: 0
