@@ -234,10 +234,20 @@ export function ActualTrainingPage() {
       {/* Training Levels */}
       <section className="py-12 bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {levels.map((level) => (
-            <div key={level.level}>
+          {levels.map((level, levelIndex) => {
+            const isFirstLevel = levelIndex === 0;
+            const prevLevelPassed = isFirstLevel ? true : user?.completedModules?.includes(`quiz-${levels[levelIndex - 1].level}`);
+            
+            return (
+            <div key={level.level} className={!prevLevelPassed ? 'opacity-70 pointer-events-none grayscale-[30%]' : ''}>
               {/* Level Header */}
-              <div className={`bg-gradient-to-r ${level.color} text-white rounded-2xl p-8 mb-6`}>
+              <div className={`bg-gradient-to-r ${level.color} text-white rounded-2xl p-8 mb-6 relative overflow-hidden`}>
+                {!prevLevelPassed && (
+                  <div className="absolute top-4 right-6 bg-black/20 px-3 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm">
+                    <Lock className="w-4 h-4" />
+                    <span className="text-sm font-bold tracking-wider uppercase">Locked</span>
+                  </div>
+                )}
                 <div className="flex items-center gap-4 mb-2">
                   <Badge className="bg-white/20 text-white text-lg px-4 py-1">
                     Level {level.level}
@@ -247,6 +257,11 @@ export function ActualTrainingPage() {
                   </Badge>
                 </div>
                 <h2 className="text-3xl font-bold">{level.title}</h2>
+                {!prevLevelPassed && (
+                  <p className="mt-4 text-white/80 font-medium">
+                    Pass Level {levels[levelIndex - 1].level} Assessment to unlock this level
+                  </p>
+                )}
               </div>
 
               {/* Modules Accordion */}
@@ -338,7 +353,8 @@ export function ActualTrainingPage() {
                 })}
               </Accordion>
             </div>
-          ))}
+            )
+          })}
         </div>
       </section>
 

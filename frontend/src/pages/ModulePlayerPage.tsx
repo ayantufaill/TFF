@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router';
+import { useParams, Link, useNavigate, useLocation } from 'react-router';
 import {
   ChevronLeft,
   Play,
@@ -14,6 +14,8 @@ import { Card, CardContent } from '../components/ui/card';
 import { Progress } from '../components/ui/progress';
 
 import { trainingLevels } from '../data/trainingData';
+import { levelQuizzes } from '../data/quizData';
+import Quiz from '../components/Quiz';
 
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
@@ -24,6 +26,39 @@ export function ModulePlayerPage() {
   const currentModule = currentLevel.modules.find(m => String(m.number) === moduleId) || currentLevel.modules[0];
 
   const isCompleted = user?.completedModules?.includes(`module-${currentModule.number}`);
+  const isLastModuleOfLevel = currentLevel.modules[currentLevel.modules.length - 1].number === currentModule.number;
+  const hasPassedLevelAssessment = user?.completedModules?.includes(`quiz-${levelId}`);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldShowQuiz = searchParams.get('quiz') === 'true';
+
+  const [isVideoCompleted, setIsVideoCompleted] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(shouldShowQuiz && isLastModuleOfLevel);
+
+  // Reset states when module changes
+  React.useEffect(() => {
+    setIsVideoCompleted(false);
+    setShowQuiz(shouldShowQuiz && isLastModuleOfLevel);
+  }, [moduleId, levelId, shouldShowQuiz]);
+
+  const handleVideoEnded = () => {
+    if (isLastModuleOfLevel) {
+      setIsVideoCompleted(true);
+    } else {
+      updateProgress(`module-${currentModule.number}`);
+    }
+  };
+
+  const handleQuizComplete = async (passed: boolean) => {
+    if (passed) {
+      await updateProgress(`module-${currentModule.number}`);
+      await updateProgress(`quiz-${levelId}`);
+      setShowQuiz(false);
+      setIsVideoCompleted(false);
+      handleNext();
+    }
+  };
 
   const handleNext = () => {
     if (!isCompleted) return;
@@ -323,6 +358,77 @@ export function ModulePlayerPage() {
                     </button>
                   );
                 })}
+                
+                {/* Level Assessment Quiz Sidebar Item */}
+                <button
+                  onClick={() => {
+                    const lastModule = currentLevel.modules[currentLevel.modules.length - 1];
+                    if (currentModule.number === lastModule.number) {
+                      setShowQuiz(true);
+                    } else {
+                      navigate(`/training/module/${levelId}/${lastModule.number}?quiz=true`);
+                    }
+                  }}
+                  style={{
+                    width: '100%', textAlign: 'left',
+                    padding: '0.85rem 1rem', borderRadius: '14px',
+                    background: showQuiz
+                      ? 'linear-gradient(135deg, rgba(44,95,45,0.06), rgba(201,169,97,0.08))'
+                      : 'transparent',
+                    border: showQuiz ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
+                    boxShadow: showQuiz ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                    display: 'flex', alignItems: 'center', gap: '0.85rem',
+                    position: 'relative',
+                    marginTop: '4px'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!showQuiz) {
+                      e.currentTarget.style.background = 'rgba(44,95,45,0.03)';
+                      e.currentTarget.style.border = '1.5px solid rgba(44,95,45,0.08)';
+                      e.currentTarget.style.transform = 'translateX(2px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!showQuiz) {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.border = '1.5px solid transparent';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }
+                  }}
+                >
+                  {/* Active left accent */}
+                  {showQuiz && (
+                    <div style={{
+                      position: 'absolute', left: 0, top: '20%', bottom: '20%',
+                      width: '3px', borderRadius: '0 4px 4px 0',
+                      background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
+                    }} />
+                  )}
+
+                  <div style={{ flexShrink: 0 }}>
+                    <div style={{
+                      width: '36px', height: '36px', borderRadius: '50%',
+                      border: showQuiz ? '2.5px solid #C9A961' : '2px solid #e0e0e0',
+                      background: showQuiz ? 'rgba(201,169,97,0.08)' : '#fafafa',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all 0.25s ease',
+                    }}>
+                      <span style={{ fontSize: '1.2rem' }}>📝</span>
+                    </div>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{
+                      fontSize: '0.95rem', fontWeight: showQuiz ? 800 : 600,
+                      lineHeight: 1.4, margin: 0,
+                      color: showQuiz ? '#1a1a2e' : '#555',
+                      transition: 'color 0.25s ease',
+                    }}>
+                      Level Assessment
+                    </p>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -439,41 +545,71 @@ export function ModulePlayerPage() {
                       >
                         <ChevronLeft style={{ width: 15, height: 15 }} /> Back
                       </button>
-                      <button
-                        onClick={handleNext}
-                        disabled={!isCompleted}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: '5px',
-                          padding: '0.6rem 1.4rem', borderRadius: '12px',
-                          border: 'none',
-                          background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
-                          color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
-                          cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
-                          boxShadow: isCompleted ? '0 4px 15px rgba(44,95,45,0.25)' : 'none',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isCompleted) return;
-                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
-                          e.currentTarget.style.transform = 'translateY(-1px)';
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isCompleted) return;
-                          e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
-                          e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                      >
-                        Next <ChevronRight style={{ width: 15, height: 15 }} />
-                      </button>
+                      
+                      {/* Show Take Assessment button if it's the last module AND (video is done OR already passed) */}
+                      {isLastModuleOfLevel && (isVideoCompleted || isCompleted) && !showQuiz && (
+                        <button
+                          onClick={() => setShowQuiz(true)}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            padding: '0.6rem 1.4rem', borderRadius: '12px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #C9A961, #d4b872)',
+                            color: 'white', fontWeight: 800, fontSize: '0.85rem',
+                            cursor: 'pointer', transition: 'all 0.25s ease',
+                            boxShadow: '0 4px 15px rgba(201,169,97,0.3)',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(201,169,97,0.45)';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(201,169,97,0.3)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          {hasPassedLevelAssessment ? 'Review Assessment' : 'Take Level Assessment'}
+                        </button>
+                      )}
+                      
+                      {/* Only show NEXT if they actually passed the quiz (or are on a non-final module) */}
+                      {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
+                        <button
+                          onClick={handleNext}
+                          disabled={!isCompleted}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            padding: '0.6rem 1.4rem', borderRadius: '12px',
+                            border: 'none',
+                            background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
+                            color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
+                            cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
+                            boxShadow: isCompleted ? '0 4px 15px rgba(44,95,45,0.25)' : 'none',
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isCompleted) return;
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isCompleted) return;
+                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          Next <ChevronRight style={{ width: 15, height: 15 }} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Video Player Box - Fits available height */}
+              {/* Video Player Box or Quiz - Fits available height */}
               <div style={{
                 borderRadius: '1.25rem', overflow: 'visible',
-                background: 'black', position: 'relative',
-                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
+                background: showQuiz ? 'transparent' : 'black', position: 'relative',
+                boxShadow: showQuiz ? 'none' : '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
                 flex: 1,
                 minHeight: '200px',
                 display: 'flex',
@@ -481,13 +617,20 @@ export function ModulePlayerPage() {
                 justifyContent: 'center',
                 paddingBottom: '2rem'
               }}>
-                <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
-                  <SecurePlayer
-                    key={currentModule.number}
-                    videoId={currentModule.videoId}
-                    onEnded={() => updateProgress(`module-${currentModule.number}`)}
+                {showQuiz && levelId && levelQuizzes[levelId] ? (
+                  <Quiz 
+                    quiz={levelQuizzes[levelId]} 
+                    onComplete={handleQuizComplete} 
                   />
-                </div>
+                ) : (
+                  <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
+                    <SecurePlayer
+                      key={currentModule.number}
+                      videoId={currentModule.videoId}
+                      onEnded={handleVideoEnded}
+                    />
+                  </div>
+                )}
               </div>
 
             </div>
