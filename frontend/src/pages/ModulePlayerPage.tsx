@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router';
+import { useParams, Link, useNavigate, useLocation } from 'react-router';
 import {
   ChevronLeft,
   Play,
@@ -10,74 +10,69 @@ import {
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
 import SecurePlayer from '../components/SecurePlayer';
+import { Card, CardContent } from '../components/ui/card';
+import { Progress } from '../components/ui/progress';
 
-// Replicating the data exactly for the photocopy
-const levelsData = [
-  {
-    level: 1,
-    title: 'Health And Happiness',
-    modules: [
-      {
-        number: 1,
-        title: 'True Good Health & Happiness; Submission to God',
-        description: 'Understanding the core connection between spiritual submission and physical wellbeing.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Health and happiness basics', 'The role of submission', 'Connecting with the Creator'],
-      },
-      {
-        number: 2,
-        title: 'The Quran – Understand Your Purpose in Life',
-        description: 'Exploring how the Quran defines our existence and ultimate goals.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Quranic wisdom', 'Defining purpose', 'Life mapping'],
-      },
-      {
-        number: 3,
-        title: 'The Prayer – Your Gateway to Optimism and Happiness',
-        description: 'How regular prayer transforms your mental and spiritual state.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Power of Salah', 'Building optimism', 'Daily connection'],
-      },
-      {
-        number: 4,
-        title: 'Shukr – The Power of being Thankful & Grateful',
-        description: 'The science and spirituality of gratitude in Islam.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['The practice of Shukr', 'Emotional benefits', 'Grateful living'],
-      },
-      {
-        number: 5,
-        title: 'Relationships & Good Character – Making a Better World',
-        description: 'Developing Akhlaq to improve social bonds.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Good character', 'Healthy relationships', 'Social impact'],
-      },
-      {
-        number: 6,
-        title: 'Strong in Spirit & Body – Being Active & Healthy',
-        description: 'The importance of physical health in the life of a believer.',
-        videoId: 'pzFILwLcJlE',
-        topics: ['Physical fitness', 'Spiritual strength', 'Holistic health'],
-      }
-    ],
-  }
-];
+import { trainingLevels } from '../data/trainingData';
+import { levelQuizzes } from '../data/quizData';
+import Quiz from '../components/Quiz';
 
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateProgress } = useAuth();
 
-  const currentLevel = levelsData[0];
+  const currentLevel = trainingLevels.find(l => String(l.level) === levelId) || trainingLevels[0];
   const currentModule = currentLevel.modules.find(m => String(m.number) === moduleId) || currentLevel.modules[0];
 
   const isCompleted = user?.completedModules?.includes(`module-${currentModule.number}`);
+  const isLastModuleOfLevel = currentLevel.modules[currentLevel.modules.length - 1].number === currentModule.number;
+  const hasPassedLevelAssessment = user?.completedModules?.includes(`quiz-${levelId}`);
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const shouldShowQuiz = searchParams.get('quiz') === 'true';
+
+  const [isVideoCompleted, setIsVideoCompleted] = useState(false);
+  const [showQuiz, setShowQuiz] = useState(shouldShowQuiz && isLastModuleOfLevel);
+
+  // Reset states when module changes
+  React.useEffect(() => {
+    setIsVideoCompleted(false);
+    setShowQuiz(shouldShowQuiz && isLastModuleOfLevel);
+  }, [moduleId, levelId, shouldShowQuiz]);
+
+  const handleVideoEnded = () => {
+    if (isLastModuleOfLevel) {
+      setIsVideoCompleted(true);
+    } else {
+      updateProgress(`module-${currentModule.number}`);
+    }
+  };
+
+  const handleQuizComplete = async (passed: boolean) => {
+    if (passed) {
+      await updateProgress(`module-${currentModule.number}`);
+      await updateProgress(`quiz-${levelId}`);
+      setShowQuiz(false);
+      setIsVideoCompleted(false);
+      handleNext();
+    }
+  };
 
   const handleNext = () => {
+    if (!isCompleted) return;
     const currentIndex = currentLevel.modules.findIndex(m => String(m.number) === moduleId);
     if (currentIndex < currentLevel.modules.length - 1) {
       const nextModule = currentLevel.modules[currentIndex + 1];
       navigate(`/training/module/${levelId}/${nextModule.number}`);
+    } else {
+      const currentLevelIndex = trainingLevels.findIndex(l => String(l.level) === levelId);
+      if (currentLevelIndex < trainingLevels.length - 1) {
+        const nextLevel = trainingLevels[currentLevelIndex + 1];
+        const nextModule = nextLevel.modules[0];
+        navigate(`/training/module/${nextLevel.level}/${nextModule.number}`);
+      }
     }
   };
 
@@ -86,12 +81,19 @@ export function ModulePlayerPage() {
     if (currentIndex > 0) {
       const prevModule = currentLevel.modules[currentIndex - 1];
       navigate(`/training/module/${levelId}/${prevModule.number}`);
+    } else {
+      const currentLevelIndex = trainingLevels.findIndex(l => String(l.level) === levelId);
+      if (currentLevelIndex > 0) {
+        const prevLevel = trainingLevels[currentLevelIndex - 1];
+        const prevModule = prevLevel.modules[prevLevel.modules.length - 1];
+        navigate(`/training/module/${prevLevel.level}/${prevModule.number}`);
+      }
     }
   };
 
   const totalModules = 15;
   const completedCount = user?.completedModules?.length || 0;
-  const progressValue = completedCount > 0 ? (completedCount / totalModules) * 100 : 20.0;
+  const progressValue = (completedCount / totalModules) * 100;
 
   return (
     <>
@@ -104,10 +106,10 @@ export function ModulePlayerPage() {
         .module-page-container {
           display: flex;
           flex-direction: column;
-          height: calc(100vh - 64px);
+          min-height: calc(100vh - 64px);
           background-color: #FAF8F3;
           font-family: ui-sans-serif, system-ui, sans-serif;
-          overflow: hidden;
+          overflow: auto;
         }
 
         .module-layout {
@@ -115,7 +117,7 @@ export function ModulePlayerPage() {
           flex-direction: column;
           flex: 1;
           min-height: 0;
-          overflow: hidden;
+          overflow: visible;
         }
         
         .module-sidebar {
@@ -135,7 +137,7 @@ export function ModulePlayerPage() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          overflow: hidden;
+          overflow: visible;
           position: relative;
           align-self: stretch;
           min-height: 0;
@@ -143,7 +145,8 @@ export function ModulePlayerPage() {
 
         @media (min-width: 768px) {
           .module-page-container {
-            height: calc(100vh - 80px);
+            min-height: calc(100vh - 80px);
+            height: auto;
           }
           .module-layout {
             flex-direction: row;
@@ -192,38 +195,23 @@ export function ModulePlayerPage() {
             </p>
 
             {/* Large Progress Card */}
-            <div style={{
-              background: 'rgba(255,255,255,0.1)',
-              backdropFilter: 'blur(10px)',
-              padding: '1rem 2rem',
-              borderRadius: '1rem',
-              border: '1px solid rgba(255,255,255,0.15)',
-              textAlign: 'left',
-              maxWidth: '500px',
-              margin: '0 auto',
-              boxShadow: '0 15px 35px rgba(0,0,0,0.2)'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
-                  Your Overall Progress
-                </span>
-                <span style={{ fontSize: '1rem', fontWeight: 800, color: '#C9A961' }}>
-                  {progressValue.toFixed(1)}% Complete
-                </span>
-              </div>
-
-              <div style={{ height: '14px', background: 'rgba(0,0,0,0.3)', borderRadius: '999px', overflow: 'hidden', marginBottom: '0.75rem' }}>
-                <div style={{
-                  height: '100%', width: `${progressValue}%`,
-                  background: 'linear-gradient(90deg, #C9A961, #F3E5AB, #C9A961)',
-                  borderRadius: '999px',
-                  transition: 'width 1s ease',
-                }} />
-              </div>
-              <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>
-                You have completed {completedCount} out of {totalModules} modules. Keep going!
-              </p>
-            </div>
+            <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 mt-8 text-left text-white shadow-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-white">Your Progress</h3>
+                  <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressValue)}% Complete</span>
+                </div>
+                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
+                  <div 
+                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]" 
+                    style={{ width: `${progressValue}%` }}
+                  />
+                </div>
+                <p className="text-sm text-gray-200">
+                  You have completed {completedCount} out of {totalModules} modules. Keep going!
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
@@ -246,33 +234,13 @@ export function ModulePlayerPage() {
                   background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
                 }} />
                 <h3 style={{
-                  fontSize: '0.8rem', fontWeight: 900, color: '#2C5F2D',
+                  fontSize: '0.9rem', fontWeight: 900, color: '#2C5F2D',
                   textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0,
                 }}>
-                  Course Modules
+                  Level {currentLevel.level} - {currentLevel.title}
                 </h3>
               </div>
-              {/* Progress indicator */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                padding: '6px 12px', borderRadius: '8px',
-                background: 'rgba(44,95,45,0.05)',
-              }}>
-                <div style={{
-                  flex: 1, height: '4px', borderRadius: '999px',
-                  background: 'rgba(44,95,45,0.1)', overflow: 'hidden',
-                }}>
-                  <div style={{
-                    height: '100%', borderRadius: '999px',
-                    width: `${(completedCount / currentLevel.modules.length) * 100}%`,
-                    background: 'linear-gradient(90deg, #2C5F2D, #C9A961)',
-                    transition: 'width 0.8s ease',
-                  }} />
-                </div>
-                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#2C5F2D', whiteSpace: 'nowrap' }}>
-                  {completedCount}/{currentLevel.modules.length}
-                </span>
-              </div>
+              {/* Progress indicator removed per user request */}
             </div>
 
             {/* Module List */}
@@ -281,11 +249,17 @@ export function ModulePlayerPage() {
                 {currentLevel.modules.map((m, index) => {
                   const isActive = String(m.number) === moduleId;
                   const completed = user?.completedModules?.includes(`module-${m.number}`);
+                  const isPrevCompleted = index === 0 ? true : user?.completedModules?.includes(`module-${currentLevel.modules[index - 1].number}`);
+                  const isUnlocked = completed || isPrevCompleted || isActive;
 
                   return (
                     <button
                       key={m.number}
-                      onClick={() => navigate(`/training/module/${levelId}/${m.number}`)}
+                      onClick={() => {
+                        if (isUnlocked) {
+                          navigate(`/training/module/${levelId}/${m.number}`);
+                        }
+                      }}
                       style={{
                         width: '100%', textAlign: 'left',
                         padding: '0.85rem 1rem', borderRadius: '14px',
@@ -294,19 +268,21 @@ export function ModulePlayerPage() {
                           : 'transparent',
                         border: isActive ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
                         boxShadow: isActive ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
-                        cursor: 'pointer', transition: 'all 0.25s ease',
+                        cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.25s ease',
                         display: 'flex', alignItems: 'center', gap: '0.85rem',
                         position: 'relative',
+                        opacity: isUnlocked ? 1 : 0.6,
                       }}
                       onMouseEnter={(e) => {
-                        if (!isActive) {
+                        if (!isActive && isUnlocked) {
                           e.currentTarget.style.background = 'rgba(44,95,45,0.03)';
                           e.currentTarget.style.border = '1.5px solid rgba(44,95,45,0.08)';
                           e.currentTarget.style.transform = 'translateX(2px)';
                         }
                       }}
                       onMouseLeave={(e) => {
-                        if (!isActive) {
+                        if (!isActive && isUnlocked) {
                           e.currentTarget.style.background = 'transparent';
                           e.currentTarget.style.border = '1.5px solid transparent';
                           e.currentTarget.style.transform = 'translateX(0)';
@@ -354,15 +330,15 @@ export function ModulePlayerPage() {
                       {/* Title */}
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{
-                          fontSize: '0.82rem', fontWeight: isActive ? 800 : 600,
+                          fontSize: '0.95rem', fontWeight: isActive ? 800 : 600,
                           lineHeight: 1.4, margin: 0,
-                          color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : '#555',
+                          color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : isUnlocked ? '#555' : '#9ca3af',
                           transition: 'color 0.25s ease',
                         }}>
                           {m.title}
                         </p>
                         {completed && !isActive && (
-                          <span style={{ fontSize: '0.65rem', color: '#16a34a', fontWeight: 600 }}>
+                          <span style={{ fontSize: '0.75rem', color: '#16a34a', fontWeight: 600 }}>
                             ✓ Completed
                           </span>
                         )}
@@ -382,6 +358,77 @@ export function ModulePlayerPage() {
                     </button>
                   );
                 })}
+                
+                {/* Level Assessment Quiz Sidebar Item */}
+                <button
+                  onClick={() => {
+                    const lastModule = currentLevel.modules[currentLevel.modules.length - 1];
+                    if (currentModule.number === lastModule.number) {
+                      setShowQuiz(true);
+                    } else {
+                      navigate(`/training/module/${levelId}/${lastModule.number}?quiz=true`);
+                    }
+                  }}
+                  style={{
+                    width: '100%', textAlign: 'left',
+                    padding: '0.85rem 1rem', borderRadius: '14px',
+                    background: showQuiz
+                      ? 'linear-gradient(135deg, rgba(44,95,45,0.06), rgba(201,169,97,0.08))'
+                      : 'transparent',
+                    border: showQuiz ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
+                    boxShadow: showQuiz ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                    display: 'flex', alignItems: 'center', gap: '0.85rem',
+                    position: 'relative',
+                    marginTop: '4px'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!showQuiz) {
+                      e.currentTarget.style.background = 'rgba(44,95,45,0.03)';
+                      e.currentTarget.style.border = '1.5px solid rgba(44,95,45,0.08)';
+                      e.currentTarget.style.transform = 'translateX(2px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!showQuiz) {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.border = '1.5px solid transparent';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }
+                  }}
+                >
+                  {/* Active left accent */}
+                  {showQuiz && (
+                    <div style={{
+                      position: 'absolute', left: 0, top: '20%', bottom: '20%',
+                      width: '3px', borderRadius: '0 4px 4px 0',
+                      background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
+                    }} />
+                  )}
+
+                  <div style={{ flexShrink: 0 }}>
+                    <div style={{
+                      width: '36px', height: '36px', borderRadius: '50%',
+                      border: showQuiz ? '2.5px solid #C9A961' : '2px solid #e0e0e0',
+                      background: showQuiz ? 'rgba(201,169,97,0.08)' : '#fafafa',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all 0.25s ease',
+                    }}>
+                      <span style={{ fontSize: '1.2rem' }}>📝</span>
+                    </div>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{
+                      fontSize: '0.95rem', fontWeight: showQuiz ? 800 : 600,
+                      lineHeight: 1.4, margin: 0,
+                      color: showQuiz ? '#1a1a2e' : '#555',
+                      transition: 'color 0.25s ease',
+                    }}>
+                      Level Assessment
+                    </p>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -391,7 +438,7 @@ export function ModulePlayerPage() {
               background: 'linear-gradient(180deg, transparent, rgba(44,95,45,0.03))',
             }}>
               <p style={{
-                fontSize: '0.7rem', color: '#6b7280', fontWeight: 600,
+                fontSize: '0.85rem', color: '#6b7280', fontWeight: 600,
                 textAlign: 'center', margin: 0, lineHeight: 1.5,
               }}>
                 🕌 Keep learning — every step brings you closer to understanding
@@ -405,24 +452,7 @@ export function ModulePlayerPage() {
           <main className="module-content custom-scrollbar" style={{ padding: '1rem' }}>
             <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
 
-              {/* Video Player Box - Now fits available height */}
-              <div style={{
-                borderRadius: '1.25rem', overflow: 'hidden',
-                background: 'black', position: 'relative',
-                boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
-                marginBottom: '1rem',
-                flex: 1,
-                minHeight: '200px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
-                  <SecurePlayer videoId={currentModule.videoId} />
-                </div>
-              </div>
-
-              {/* Module Info Card - Premium Design */}
+              {/* Module Info Card - Premium Design (Moved ABOVE Video Player) */}
               <div style={{
                 background: 'white',
                 borderRadius: '1.25rem',
@@ -430,12 +460,13 @@ export function ModulePlayerPage() {
                 border: '1px solid rgba(44,95,45,0.06)',
                 flexShrink: 0,
                 overflow: 'hidden',
+                marginBottom: '1rem',
               }}>
 
                 {/* Top accent bar */}
                 <div style={{
                   height: '4px',
-                  background: 'linear-gradient(90deg, #2C5F2D, #C9A961, #2C5F2D)',
+                  background: '#2C5F2D',
                 }} />
 
                 <div style={{ padding: '1.25rem 1.5rem' }}>
@@ -514,31 +545,92 @@ export function ModulePlayerPage() {
                       >
                         <ChevronLeft style={{ width: 15, height: 15 }} /> Back
                       </button>
-                      <button
-                        onClick={handleNext}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: '5px',
-                          padding: '0.6rem 1.4rem', borderRadius: '12px',
-                          border: 'none',
-                          background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
-                          color: 'white', fontWeight: 700, fontSize: '0.82rem',
-                          cursor: 'pointer', transition: 'all 0.25s ease',
-                          boxShadow: '0 4px 15px rgba(44,95,45,0.25)',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
-                          e.currentTarget.style.transform = 'translateY(-1px)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
-                          e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                      >
-                        Next <ChevronRight style={{ width: 15, height: 15 }} />
-                      </button>
+                      
+                      {/* Show Take Assessment button if it's the last module AND (video is done OR already passed) */}
+                      {isLastModuleOfLevel && (isVideoCompleted || isCompleted) && !showQuiz && (
+                        <button
+                          onClick={() => setShowQuiz(true)}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            padding: '0.6rem 1.4rem', borderRadius: '12px',
+                            border: 'none',
+                            background: 'linear-gradient(135deg, #C9A961, #d4b872)',
+                            color: 'white', fontWeight: 800, fontSize: '0.85rem',
+                            cursor: 'pointer', transition: 'all 0.25s ease',
+                            boxShadow: '0 4px 15px rgba(201,169,97,0.3)',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(201,169,97,0.45)';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(201,169,97,0.3)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          {hasPassedLevelAssessment ? 'Review Assessment' : 'Take Level Assessment'}
+                        </button>
+                      )}
+                      
+                      {/* Only show NEXT if they actually passed the quiz (or are on a non-final module) */}
+                      {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
+                        <button
+                          onClick={handleNext}
+                          disabled={!isCompleted}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '5px',
+                            padding: '0.6rem 1.4rem', borderRadius: '12px',
+                            border: 'none',
+                            background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
+                            color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
+                            cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
+                            boxShadow: isCompleted ? '0 4px 15px rgba(44,95,45,0.25)' : 'none',
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isCompleted) return;
+                            e.currentTarget.style.boxShadow = '0 6px 20px rgba(44,95,45,0.35)';
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isCompleted) return;
+                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(44,95,45,0.25)';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          Next <ChevronRight style={{ width: 15, height: 15 }} />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Video Player Box or Quiz - Fits available height */}
+              <div style={{
+                borderRadius: '1.25rem', overflow: 'visible',
+                background: showQuiz ? 'transparent' : 'black', position: 'relative',
+                boxShadow: showQuiz ? 'none' : '0 20px 40px -10px rgba(0, 0, 0, 0.25)',
+                flex: 1,
+                minHeight: '200px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingBottom: '2rem'
+              }}>
+                {showQuiz && levelId && levelQuizzes[levelId] ? (
+                  <Quiz 
+                    quiz={levelQuizzes[levelId]} 
+                    onComplete={handleQuizComplete} 
+                  />
+                ) : (
+                  <div style={{ aspectRatio: '16/9', width: '100%', maxWidth: '100%', height: 'auto', position: 'relative' }}>
+                    <SecurePlayer
+                      key={currentModule.number}
+                      videoId={currentModule.videoId}
+                      onEnded={handleVideoEnded}
+                    />
+                  </div>
+                )}
               </div>
 
             </div>

@@ -1,14 +1,66 @@
-import React from 'react';
-import { Plyr } from 'plyr-react';
+import React, { useRef, useEffect } from 'react';
+import { Plyr, APITypes } from 'plyr-react';
 import "plyr/dist/plyr.css";
 
 // Force Vite Refresh - Secure Player Implementation
 
 interface SecurePlayerProps {
   videoId: string;
+  onEnded?: () => void;
 }
 
-const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId }) => {
+const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId, onEnded }) => {
+  const ref = useRef<APITypes>(null);
+  const onEndedRef = useRef(onEnded);
+  const hasCompletedRef = useRef(false);
+
+  useEffect(() => {
+    onEndedRef.current = onEnded;
+  }, [onEnded]);
+
+  useEffect(() => {
+    hasCompletedRef.current = false;
+  }, [videoId]);
+
+  useEffect(() => {
+    let bound = false;
+    let intervalId: NodeJS.Timeout;
+
+    const tryBind = () => {
+      const player = ref.current?.plyr;
+      if (player && player.on && !bound) {
+        const handleEnded = () => {
+          if (hasCompletedRef.current) return;
+          hasCompletedRef.current = true;
+          if (onEndedRef.current) onEndedRef.current();
+        };
+
+        const handleTimeUpdate = () => {
+          if (hasCompletedRef.current) return;
+          if (player.duration > 0 && player.currentTime >= player.duration - 1) {
+            handleEnded();
+          }
+        };
+
+        player.on('ended', handleEnded);
+        player.on('timeupdate', handleTimeUpdate);
+        bound = true;
+
+        if (intervalId) clearInterval(intervalId);
+      }
+    };
+
+    tryBind();
+
+    if (!bound) {
+      intervalId = setInterval(tryBind, 200);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, []);
+
   const plyrSource: any = {
     type: 'video',
     sources: [
@@ -44,11 +96,11 @@ const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId }) => {
   };
 
   return (
-    <div className="secure-player-wrapper w-full rounded-[2rem] overflow-hidden bg-black shadow-2xl relative">
-      <Plyr source={plyrSource} options={plyrOptions} />
+    <div className="secure-player-wrapper w-full rounded-[2rem] overflow-visible bg-black shadow-2xl relative">
+      <Plyr ref={ref} source={plyrSource} options={plyrOptions} />
 
       {/* Additional Click-Shield for the YouTube Logo area inside the player */}
-      <div className="absolute bottom-0 right-0 w-24 h-12 z-50 bg-transparent cursor-default"></div>
+      <div className="absolute bottom-4 right-12 w-16 h-8 z-10 bg-transparent cursor-default"></div>
     </div>
   );
 };
