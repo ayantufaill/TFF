@@ -56,7 +56,14 @@ export function TrainingPage() {
   // Search Params - Default to Lesson 1 if none is specified
   const [searchParams] = useSearchParams();
   const rawModuleId = searchParams.get('module');
-  const activeModuleId = rawModuleId || '1';
+
+  // Auto-detect the next module the user needs to complete
+  const getNextModuleId = () => {
+    if (rawModuleId) return rawModuleId;
+    return ''; // Return empty string to keep it closed by default
+  };
+
+  const activeModuleId = getNextModuleId();
   const activeModuleValue = `module-${activeModuleId}`;
   
   // Track which level is currently being viewed
@@ -775,8 +782,8 @@ export function TrainingPage() {
             <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold">Your Academy Progress</h3>
-                  <span className="text-sm">{userProgress}% Complete</span>
+                  <h3 className="font-semibold text-white">Your Academy Progress</h3>
+                  <span className="text-sm font-bold text-[#C9A961]">{userProgress}% Complete</span>
                 </div>
                 <Progress value={userProgress} className="h-3 mb-2" indicatorClassName="bg-[#C9A961]" />
                 <p className="text-sm text-gray-100 opacity-80 group-hover:opacity-100 transition-opacity">
@@ -911,6 +918,9 @@ export function TrainingPage() {
                             const params = new URLSearchParams(searchParams);
                             params.set('module', String(module.number));
                             navigate(`?${params.toString()}`, { replace: true });
+                            if (user) {
+                              updateProgress(undefined, undefined, module.id);
+                            }
                           }}
                           className={`relative flex flex-col gap-2.5 px-7 py-6 text-left transition-all duration-500 group rounded-2xl ${
                             moduleIdx < level.modules.length - 1 ? 'mb-4' : ''

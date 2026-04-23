@@ -6,7 +6,7 @@ import { Badge } from '../components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
@@ -141,16 +141,47 @@ function AuthForm() {
 
 export function ActualTrainingPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateProgress } = useAuth();
   const [searchParams] = useSearchParams();
-  const [activeModule, setActiveModule] = useState<string | undefined>(undefined);
+  const [activeModule, setActiveModule] = useState<string>('');
 
   useEffect(() => {
+    // Only expand if a specific module is requested via the URL (deep-linking)
     const moduleId = searchParams.get('module');
     if (moduleId) {
       setActiveModule(`module-${moduleId}`);
     }
   }, [searchParams]);
+
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleAccordionChange = (value: string) => {
+    setActiveModule(value);
+
+    // Update the URL to stay in sync with the expanded module
+    if (value.startsWith('module-')) {
+      const num = value.replace('module-', '');
+      const params = new URLSearchParams(window.location.search);
+      params.set('module', num);
+      navigate(`?${params.toString()}`, { replace: true });
+
+      // Save to localStorage immediately for instant persistence
+      if (user) {
+        localStorage.setItem(`lastViewed_${user.id}`, value);
+      }
+    }
+
+    // Debounce the database update to prevent server spam
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    if (value && user) {
+      saveTimeoutRef.current = setTimeout(() => {
+        updateProgress(undefined, undefined, value);
+      }, 500); // Faster sync to avoid losing data on navigation
+    }
+  };
 
   const levels = trainingLevels;
 
@@ -188,8 +219,8 @@ export function ActualTrainingPage() {
                   return (
                     <>
                       <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-semibold">Your Progress</h3>
-                        <span className="text-sm">{Math.round(progressPercentage)}% Complete</span>
+                        <h3 className="font-semibold text-white">Your Progress</h3>
+                        <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressPercentage)}% Complete</span>
                       </div>
                       <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
                         <div
@@ -252,12 +283,7 @@ export function ActualTrainingPage() {
               <div key={level.level} className={!prevLevelPassed ? 'opacity-70 pointer-events-none grayscale-[30%]' : ''}>
                 {/* Level Header */}
                 <div className={`bg-gradient-to-r ${level.color} text-white rounded-2xl p-8 mb-6 relative overflow-hidden`}>
-                  {!prevLevelPassed && (
-                    <div className="absolute top-4 right-6 bg-black/20 px-3 py-1.5 rounded-lg flex items-center gap-2 backdrop-blur-sm">
-                      <Lock className="w-4 h-4" />
-                      <span className="text-sm font-bold tracking-wider uppercase">Locked</span>
-                    </div>
-                  )}
+                  {/* Removed Locked label per user request */}
                   <div className="flex items-center gap-4 mb-2">
                     <Badge className="bg-white/20 text-white text-lg px-4 py-1">
                       Level {level.level}
@@ -278,8 +304,8 @@ export function ActualTrainingPage() {
                 <Accordion
                   type="single"
                   collapsible
-                  value={activeModule}
-                  onValueChange={setActiveModule}
+                  value={level.modules.some(m => `module-${m.number}` === activeModule) ? activeModule : ""}
+                  onValueChange={handleAccordionChange}
                   className="space-y-4"
                 >
                   {level.modules.map((module) => {
@@ -326,7 +352,7 @@ export function ActualTrainingPage() {
                             </div>
 
                             {/* Formats */}
-                            <div>
+                            {/* <div>
                               <h4 className="font-semibold text-[#2C5F2D] mb-3">Available Formats:</h4>
                               <div className="flex flex-wrap gap-2">
                                 {module.formats.map((format, idx) => (
@@ -336,7 +362,7 @@ export function ActualTrainingPage() {
                                   </Badge>
                                 ))}
                               </div>
-                            </div>
+                            </div> */}
 
                             {/* Actions */}
                             <div className="flex flex-wrap gap-3 pt-4">
@@ -347,10 +373,10 @@ export function ActualTrainingPage() {
                                 <Play className="w-4 h-4 mr-2" />
                                 Start Module
                               </Button>
-                              <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                              {/* <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
                                 <Download className="w-4 h-4 mr-2" />
                                 Download PDF
-                              </Button>
+                              </Button> */}
                               <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
                                 <Headphones className="w-4 h-4 mr-2" />
                                 Audio Version

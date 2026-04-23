@@ -109,8 +109,13 @@ export function DashboardPage() {
                   const completedInCourse = user.completedModules?.filter(m => course.moduleIds.includes(m)).length || 0;
                   const calculatedProgress = Math.round((completedInCourse / 15) * 100);
 
+                  // Dynamically determine where to send the user based on their progress
+                  const targetModuleNum = (user.suggestedModuleId && course.moduleIds.includes(user.suggestedModuleId))
+                    ? user.suggestedModuleId.replace('module-', '')
+                    : course.firstModule;
+
                   return (
-                    <Link to={`/training/curriculum?module=${course.firstModule}`} key={course.id} className="block group">
+                    <Link to={`/training/curriculum?module=${targetModuleNum}`} key={course.id} className="block group">
                       <Card
                         className="relative border border-[#C9A961]/30 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(44,95,45,0.15)] transition-all duration-500 h-full"
                         style={{ borderRadius: '24px', overflow: 'hidden' }}

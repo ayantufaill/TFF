@@ -178,10 +178,8 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
                           key={optIndex}
                           className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${borderClass} ${bgClass}`}
                         >
-                          <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${indicatorBorder} ${indicatorBg}`}>
-                            {(isCorrectOption || isUserSelected) && (
-                              <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                            )}
+                          <div className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center flex-shrink-0 font-bold text-sm transition-all ${indicatorBorder} ${indicatorBg} ${isCorrectOption || isUserSelected ? 'text-white' : 'text-gray-500'}`}>
+                            {String.fromCharCode(65 + optIndex)}
                           </div>
 
                           <div className="flex-1 flex items-center justify-between">
@@ -313,9 +311,11 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
                   : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }`}
               >
-                <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${isSelected ? 'border-[#C9A961] bg-[#C9A961]' : 'border-gray-300 bg-white'
+                <div className={`w-8 h-8 rounded-lg border-2 flex items-center justify-center flex-shrink-0 font-bold text-sm transition-all ${isSelected 
+                  ? 'border-[#C9A961] bg-[#C9A961] text-white' 
+                  : 'border-gray-300 bg-white text-gray-500'
                   }`}>
-                  {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
+                  {String.fromCharCode(65 + index)}
                 </div>
                 <span className={`text-lg ${isSelected ? 'text-gray-900 font-semibold' : 'text-gray-700'}`}>
                   {option}
