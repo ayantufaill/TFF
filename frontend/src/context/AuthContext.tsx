@@ -6,6 +6,8 @@ interface User {
   name: string;
   email: string;
   completedModules?: string[];
+  lastViewedModuleId?: string;
+  suggestedModuleId?: string;
   currentStreak?: number;
   longestStreak?: number;
   lastActivityDate?: string;
@@ -19,7 +21,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
-  updateProgress: (moduleId?: string, quizAnswers?: Record<string, number[]>) => Promise<void>;
+  updateProgress: (moduleId?: string, quizAnswers?: Record<string, number[]>, lastViewedModuleId?: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (email: string, otp: string, newPassword: string) => Promise<void>;
 }
@@ -70,10 +72,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
-  const updateProgress = async (moduleId?: string, quizAnswers?: Record<string, number[]>) => {
+  const updateProgress = async (moduleId?: string, quizAnswers?: Record<string, number[]>, lastViewedModuleId?: string) => {
     if (!user) return;
     try {
-      const res = await api.post('/user/progress', { moduleId, quizAnswers });
+      const res = await api.post('/user/progress', { moduleId, quizAnswers, lastViewedModuleId });
       setUser(res.data); // The response is now the full user object
     } catch (err) {
       console.error('Error updating progress:', err);

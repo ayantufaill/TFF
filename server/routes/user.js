@@ -3,11 +3,45 @@ const User = require('../models/User');
 const auth = require('../middleware/auth');
 const router = express.Namespace ? express.Router() : express.Router();
 
+const getSuggestedModuleId = (user) => {
+  // Ensure we have a plain object to work with
+  const userObj = typeof user.toObject === 'function' ? user.toObject() : user;
+  const lastViewed = userObj.lastViewedModuleId;
+
+  // 1. Priority: Always return to the last viewed module if it exists
+  if (lastViewed && lastViewed !== 'module-0') {
+    return String(lastViewed);
+  }
+  
+  // 2. Fallback: First uncompleted module
+  const completedModules = Array.isArray(userObj.completedModules) ? userObj.completedModules : [];
+  // Support both "module-1" and "1" formats just in case
+  const completedSet = new Set();
+  completedModules.forEach(id => {
+    const sId = String(id);
+    completedSet.add(sId);
+    if (sId.startsWith('module-')) {
+      completedSet.add(sId.replace('module-', ''));
+    } else {
+      completedSet.add(`module-${sId}`);
+    }
+  });
+  
+  for (let i = 1; i <= 15; i++) {
+    const moduleId = `module-${i}`;
+    if (!completedSet.has(moduleId) && !completedSet.has(String(i))) {
+      return moduleId;
+    }
+  }
+  
+  return 'module-1';
+};
+
 // @route   POST api/user/progress
 // @desc    Update user progress (add completed module)
 // @access  Private
 router.post('/progress', auth, async (req, res) => {
-    const { moduleId, quizAnswers } = req.body;
+    const { moduleId, quizAnswers, lastViewedModuleId } = req.body;
   
     try {
       const user = await User.findById(req.user.id);
@@ -15,9 +49,15 @@ router.post('/progress', auth, async (req, res) => {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      // Update progress
+      // Update progress - ensure no duplicates
       if (moduleId && !user.completedModules.includes(moduleId)) {
         user.completedModules.push(moduleId);
+        user.markModified('completedModules'); // Explicitly mark for Mongoose save
+      }
+
+      // Update last viewed module
+      if (lastViewedModuleId) {
+        user.lastViewedModuleId = lastViewedModuleId;
       }
   
       // Update quiz answers if provided
@@ -27,39 +67,42 @@ router.post('/progress', auth, async (req, res) => {
         });
       }
 
-    // Streak Logic
+    // Streak Logic - Simplified and safer
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     
     let lastActivity = null;
-    if (user.lastActivityDate) {
+    if (user.lastActivityDate && typeof user.lastActivityDate.getFullYear === 'function') {
       lastActivity = new Date(user.lastActivityDate.getFullYear(), user.lastActivityDate.getMonth(), user.lastActivityDate.getDate());
     }
 
     if (!lastActivity) {
-      // First activity ever
       user.currentStreak = 1;
     } else {
       const diffTime = today.getTime() - lastActivity.getTime();
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
       if (diffDays === 1) {
-        // Consecutive day
         user.currentStreak += 1;
       } else if (diffDays > 1) {
-        // Streak broken
         user.currentStreak = 1;
       }
-      // If diffDays === 0, it's the same day, no change to streak
     }
 
     user.lastActivityDate = now;
-    if (user.currentStreak > user.longestStreak) {
+    if (user.currentStreak > (user.longestStreak || 0)) {
       user.longestStreak = user.currentStreak;
     }
 
+    console.log(`Saving progress for ${user.email}...`);
     await user.save();
-    res.json(user); // Return the full user object to update frontend context
+    console.log(`Progress saved successfully for ${user.email}.`);
+    
+    // Convert to object and add suggestedModuleId
+    const userObj = user.toObject();
+    userObj.suggestedModuleId = getSuggestedModuleId(user);
+    
+    res.json(userObj); // Return the full user object to update frontend context
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -72,7 +115,9 @@ router.post('/progress', auth, async (req, res) => {
 router.get('/profile', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    const userObj = user.toObject();
+    userObj.suggestedModuleId = getSuggestedModuleId(user);
+    res.json(userObj);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

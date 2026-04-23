@@ -48,16 +48,14 @@ export function ModulePlayerPage() {
   }, [moduleId, levelId, shouldShowQuiz]);
 
   const handleVideoEnded = () => {
+    updateProgress(`module-${currentModule.number}`);
     if (isLastModuleOfLevel) {
       setIsVideoCompleted(true);
-    } else {
-      updateProgress(`module-${currentModule.number}`);
     }
   };
 
   const handleQuizComplete = async (passed: boolean) => {
     if (passed) {
-      await updateProgress(`module-${currentModule.number}`);
       await updateProgress(`quiz-${levelId}`);
       setShowQuiz(false);
       setIsVideoCompleted(false);
