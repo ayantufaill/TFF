@@ -304,19 +304,21 @@ export default function AdminPanel() {
                   </Badge>
                 </div>
                 <div className="space-y-4">
-                  <h1 className="admin-title text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-none">{activeCourse.title}</h1>
+                  <div className="flex items-center justify-between gap-4 flex-wrap">
+                    <h1 className="admin-title text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-none">{activeCourse.title}</h1>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline" className="bg-white rounded-xl h-9 px-4 font-bold border-gray-200" onClick={() => setEditingCourse(activeCourse)}>
+                        <Settings className="w-4 h-4 mr-2" /> Settings
+                      </Button>
+                      <Button variant="outline" className="bg-white rounded-xl h-9 px-4 font-bold text-red-500 hover:bg-red-50 hover:text-red-600 border-red-100" onClick={() => setDeleteTarget({ type: 'course', id: activeCourse._id })}>
+                        <Trash2 className="w-4 h-4 mr-2" /> Delete
+                      </Button>
+                      <Button className="bg-[#2C5F2D] text-white rounded-xl h-9 px-5 font-bold shadow-sm" onClick={() => setEditingLevel({ mainCourseId: activeTab, level: activeCourse.levels.length + 1, title: '', subtitle: '', color: 'from-[#2C5F2D] to-[#4A8B4D]' })}>
+                        <Plus className="w-4 h-4 mr-2" /> New Level
+                      </Button>
+                    </div>
+                  </div>
                   <p className="text-lg text-gray-500 font-medium max-w-2xl leading-relaxed">{activeCourse.description}</p>
-                </div>
-                <div className="admin-header-actions flex items-center gap-3" style={{ flexWrap: 'wrap' }}>
-                  <Button variant="outline" className="bg-white rounded-xl h-10 px-5 font-bold border-gray-200" onClick={() => setEditingCourse(activeCourse)}>
-                    <Settings className="w-4 h-4 mr-2" /> Settings
-                  </Button>
-                  <Button variant="outline" className="bg-white rounded-xl h-10 px-5 font-bold text-red-500 hover:bg-red-50 hover:text-red-600 border-red-100" onClick={() => setDeleteTarget({ type: 'course', id: activeCourse._id })}>
-                    <Trash2 className="w-4 h-4 mr-2" /> Delete
-                  </Button>
-                  <Button className="bg-[#2C5F2D] text-white rounded-xl h-10 px-6 font-bold shadow-sm" onClick={() => setEditingLevel({ mainCourseId: activeTab, level: activeCourse.levels.length + 1, title: '', subtitle: '', color: 'from-[#2C5F2D] to-[#4A8B4D]' })}>
-                    <Plus className="w-4 h-4 mr-2" /> New Level
-                  </Button>
                 </div>
               </header>
 
@@ -327,76 +329,76 @@ export default function AdminPanel() {
                     {idx > 0 && <div className="h-32 border-t border-gray-100/50 mt-16 mb-16" />}
                     <div className="flex flex-col gap-10">
                       <div className="flex items-center justify-between mb-8">
-                      <div className="flex items-center gap-6">
-                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center text-white text-xl font-bold shadow-sm ring-4 ring-white`}>
-                          {level.level}
+                        <div className="flex items-center gap-6">
+                          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center text-white text-xl font-bold shadow-sm ring-4 ring-white`}>
+                            {level.level}
+                          </div>
+                          <div>
+                            <h3 className="text-2xl font-bold text-gray-900 leading-none mb-1 tracking-tight">{level.title}</h3>
+                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{level.subtitle}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-2xl font-bold text-gray-900 leading-none mb-1 tracking-tight">{level.title}</h3>
-                          <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{level.subtitle}</p>
+                        <div className="flex gap-2">
+                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => setEditingLevel(level)}>
+                            <Edit className="w-4 h-4 mr-2" /> Level
+                          </Button>
+                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-red-500" onClick={() => setDeleteTarget({ type: 'level', id: level._id })}>
+                            <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          </Button>
+                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => loadAssessment(level._id, level.level)}>
+                            <Sparkles className="w-4 h-4 mr-2" /> Quiz
+                          </Button>
                         </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => setEditingLevel(level)}>
-                          <Edit className="w-4 h-4 mr-2" /> Level
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-red-500" onClick={() => setDeleteTarget({ type: 'level', id: level._id })}>
-                          <Trash2 className="w-4 h-4 mr-2" /> Delete
-                        </Button>
-                        <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => loadAssessment(level._id, level.level)}>
-                          <Sparkles className="w-4 h-4 mr-2" /> Quiz
-                        </Button>
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-                      {level.modules.map((module) => (
-                        <Card key={module._id} className="border-gray-100 hover:border-[#C9A961]/30 hover:shadow-lg transition-all rounded-[1.5rem] overflow-hidden bg-white group">
-                          <CardContent className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[10px] font-bold text-gray-400 group-hover:bg-[#C9A961] group-hover:text-white transition-colors">
-                                  {module.number}
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+                        {level.modules.map((module) => (
+                          <Card key={module._id} className="border-gray-100 hover:border-[#C9A961]/30 hover:shadow-lg transition-all rounded-[1.5rem] overflow-hidden bg-white group">
+                            <CardContent className="p-6">
+                              <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-[10px] font-bold text-gray-400 group-hover:bg-[#C9A961] group-hover:text-white transition-colors">
+                                    {module.number}
+                                  </div>
+                                  <h4 className="font-bold text-gray-800 line-clamp-1 text-[15px]">{module.title}</h4>
                                 </div>
-                                <h4 className="font-bold text-gray-800 line-clamp-1 text-[15px]">{module.title}</h4>
+                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <button onClick={() => setEditingModule(module)} className="p-1.5 text-gray-400 hover:text-[#2C5F2D]">
+                                    <Edit className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button onClick={() => setDeleteTarget({ type: 'module', id: module._id })} className="p-1.5 text-gray-400 hover:text-red-500">
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
                               </div>
-                              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => setEditingModule(module)} className="p-1.5 text-gray-400 hover:text-[#2C5F2D]">
-                                  <Edit className="w-3.5 h-3.5" />
+                              <p className="text-xs text-gray-500 font-medium mb-6 line-clamp-2 leading-relaxed h-8">
+                                {module.description || 'No module description provided yet.'}
+                              </p>
+                              <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                                <div className="flex items-center gap-2">
+                                  <div className={`w-1.5 h-1.5 rounded-full ${module.videoId ? 'bg-green-500' : 'bg-gray-200'}`} />
+                                  <span className={`text-[9px] font-bold uppercase tracking-widest ${module.videoId ? 'text-green-600' : 'text-gray-300'}`}>
+                                    {module.videoId ? 'Ready' : 'Pending'}
+                                  </span>
+                                </div>
+                                <button className="text-[9px] font-bold text-[#C9A961] uppercase tracking-widest flex items-center gap-1">
+                                  Preview <ChevronRight className="w-3 h-3" />
                                 </button>
-                                <button onClick={() => setDeleteTarget({ type: 'module', id: module._id })} className="p-1.5 text-gray-400 hover:text-red-500">
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
                               </div>
-                            </div>
-                            <p className="text-xs text-gray-500 font-medium mb-6 line-clamp-2 leading-relaxed h-8">
-                              {module.description || 'No module description provided yet.'}
-                            </p>
-                            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-                              <div className="flex items-center gap-2">
-                                <div className={`w-1.5 h-1.5 rounded-full ${module.videoId ? 'bg-green-500' : 'bg-gray-200'}`} />
-                                <span className={`text-[9px] font-bold uppercase tracking-widest ${module.videoId ? 'text-green-600' : 'text-gray-300'}`}>
-                                  {module.videoId ? 'Ready' : 'Pending'}
-                                </span>
-                              </div>
-                              <button className="text-[9px] font-bold text-[#C9A961] uppercase tracking-widest flex items-center gap-1">
-                                Preview <ChevronRight className="w-3 h-3" />
-                              </button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))}
+                            </CardContent>
+                          </Card>
+                        ))}
 
-                      <button
-                        onClick={() => setEditingModule({ courseId: level._id, number: level.modules.length + 1, title: '', topics: [], formats: [] })}
-                        className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-100 rounded-[1.5rem] hover:border-[#C9A961]/30 hover:bg-white transition-all group"
-                      >
-                        <Plus className="w-5 h-5 text-gray-300 group-hover:text-[#C9A961] mb-2" />
-                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">New Module</span>
-                      </button>
+                        <button
+                          onClick={() => setEditingModule({ courseId: level._id, number: level.modules.length + 1, title: '', topics: [], formats: [] })}
+                          className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-100 rounded-[1.5rem] hover:border-[#C9A961]/30 hover:bg-white transition-all group"
+                        >
+                          <Plus className="w-5 h-5 text-gray-300 group-hover:text-[#C9A961] mb-2" />
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">New Module</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
                 ))}
               </div>
             </div>
@@ -498,8 +500,8 @@ export default function AdminPanel() {
               </div>
               <div className="dialog-field">
                 <label>Video ID or Link (YouTube)</label>
-                <input 
-                  value={editingModule?.videoId || ''} 
+                <input
+                  value={editingModule?.videoId || ''}
                   onChange={e => {
                     const val = e.target.value;
                     // Extract ID if it's a URL
@@ -507,8 +509,8 @@ export default function AdminPanel() {
                     const match = val.match(regExp);
                     const videoId = (match && match[7].length === 11) ? match[7] : val;
                     setEditingModule(prev => ({ ...prev!, videoId }));
-                  }} 
-                  placeholder="e.g., https://www.youtube.com/watch?v=..." 
+                  }}
+                  placeholder="e.g., https://www.youtube.com/watch?v=..."
                 />
               </div>
             </div>
