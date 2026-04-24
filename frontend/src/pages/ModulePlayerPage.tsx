@@ -35,7 +35,7 @@ export function ModulePlayerPage() {
 
   const currentCourse = courses.find(c => c.levels.some(l => l._id === levelId));
 
-  const isCompleted = user?.completedModules?.includes(`module-${currentModule?._id}`) || user?.completedModules?.includes(`module-${currentModule?.number}`);
+  const isCompleted = user?.completedModules?.some(id => id === `module-${String(currentModule?._id)}` || id === `module-${String(currentModule?.number)}`);
   const isLastModuleOfLevel = currentLevel && currentModule && currentLevel.modules[currentLevel.modules.length - 1]._id === currentModule._id;
   const hasPassedLevelAssessment = user?.completedModules?.includes(`quiz-${levelId}`);
 
@@ -145,8 +145,10 @@ export function ModulePlayerPage() {
   };
 
   const totalModules = currentCourse?.levels.reduce((acc, l) => acc + l.modules.length, 0) || 0;
-  const courseModuleIds = currentCourse?.levels.flatMap(l => l.modules.map(m => `module-${m._id}`)) || [];
-  const completedCount = user?.completedModules?.filter(id => courseModuleIds.includes(id)).length || 0;
+  const courseModules = currentCourse?.levels.flatMap(l => l.modules) || [];
+  const completedCount = courseModules.filter(m => 
+    user?.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+  ).length;
   const progressValue = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
 
   if (loading) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Synchronizing your path...</div>;

@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
-import { ArrowLeft, Menu, X, LogOut } from 'lucide-react';
+import { ArrowLeft, Menu, X, LogOut, User } from 'lucide-react';
 import { Button } from './ui/button';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 // Relative path so logo loads when app is opened as file (e.g. dist/index.html) or from any base URL
@@ -24,11 +24,29 @@ const navLinks = [
 
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuth();
-   const location = useLocation();
-   const navigate = useNavigate();
-   const isAdmin = location.pathname.startsWith('/admin');
-   const showBack = location.pathname !== '/' && location.pathname !== '';
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isAdmin = location.pathname.startsWith('/admin');
+  const showBack = location.pathname !== '/' && location.pathname !== '';
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setDropdownOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     logout();
@@ -38,6 +56,12 @@ export function Layout() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] flex flex-col overflow-x-hidden">
+      <style>{`
+        @keyframes fadeInDropdown {
+          from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
       <header className="bg-white shadow-sm sticky top-0 z-50 relative h-16 sm:h-20 min-h-[4rem]">
         {/* Back – desktop only: top-left (web unchanged) */}
         {showBack ? (
@@ -111,14 +135,39 @@ export function Layout() {
                 );
               })}
               {user && (
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-gray-700 hover:text-red-600 transition-colors py-2 px-3 rounded-md hover:bg-red-50 ml-2"
-                  title="Logout"
-                >
-                  <LogOut className="w-5 h-5" />
-                  <span className="font-medium">Logout</span>
-                </button>
+                <div className="relative ml-2" ref={dropdownRef}>
+                  <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 border-2 border-white/50"
+                    title={user.name}
+                  >
+                    {user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
+                  </button>
+                  {dropdownOpen && (
+                    <div
+                      className="absolute right-0 mt-3 bg-white rounded-2xl shadow-2xl border border-gray-100 py-3 z-[9999] overflow-hidden"
+                      style={{ width: '200px', minWidth: '200px', animation: 'fadeInDropdown 0.18s ease-out' }}
+                    >
+                      <div className="px-8 py-5 border-b border-gray-50 ml-1">
+                        <p className="font-bold text-gray-900 text-base truncate">{user.name}</p>
+                        <p className="text-xs text-gray-400 font-medium truncate">{user.email}</p>
+                      </div>
+                      <Link
+                        to="/profile"
+                        onClick={() => setDropdownOpen(false)}
+                        className="flex items-center gap-4 px-8 py-4 text-sm font-semibold text-gray-700 hover:bg-[#2C5F2D]/5 hover:text-[#2C5F2D] transition-colors ml-1"
+                      >
+                        <User className="w-5 h-5 text-[#2C5F2D]/70" /> My Profile
+                      </Link>
+                      <button
+                        onClick={() => { setDropdownOpen(false); handleLogout(); }}
+                        className="w-full flex items-center gap-4 px-8 py-4 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors ml-1"
+                      >
+                        <LogOut className="w-5 h-5" /> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
             </nav>
 
@@ -161,13 +210,23 @@ export function Layout() {
               );
             })}
             {user && (
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-red-600 hover:bg-red-50 transition-colors mt-4 border-t border-gray-100"
-              >
-                <LogOut className="w-6 h-6" />
-                <span>Logout ({user.name})</span>
-              </button>
+              <>
+                <Link
+                  to="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-[#2C5F2D] hover:bg-[#2C5F2D]/5 transition-colors mt-4 border-t border-gray-100"
+                >
+                  <User className="w-6 h-6" />
+                  <span>Profile ({user.name})</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="w-6 h-6" />
+                  <span>Logout</span>
+                </button>
+              </>
             )}
           </nav>
         </div>

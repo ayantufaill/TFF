@@ -16,6 +16,7 @@ import { TrainingPage } from "./pages/TrainingPage";
 import { ActualTrainingPage } from "./pages/actualtrainingpage";
 import { ModulePlayerPage } from "./pages/ModulePlayerPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { ProfilePage } from "./pages/ProfilePage";
 // import { CoursesPage } from "./pages/CoursesPage";
 import { DonatePage } from "./pages/DonatePage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
@@ -58,6 +59,7 @@ export const router = createBrowserRouter([
       { path: "training/curriculum", Component: ActualTrainingPage },
       { path: "training/module/:levelId/:moduleId", Component: ModulePlayerPage },
       { path: "Training/dashboard", Component: DashboardPage },
+      { path: "profile", Component: ProfilePage },
       // { path: "courses", Component: CoursesPage },
       { path: "playlist", Component: PlaylistPage },
       { path: "downloads", Component: DownloadsPage },

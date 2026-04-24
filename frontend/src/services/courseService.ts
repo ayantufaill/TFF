@@ -66,24 +66,28 @@ export const getAssessment = async (levelId: string): Promise<Assessment> => {
   return res.data;
 };
 
-// Admin actions
+// Admin actions — map _id → id so the backend knows to UPDATE instead of CREATE
 export const saveMainCourse = async (data: Partial<MainCourse>) => {
-  const res = await api.post('/courses/admin/main', data);
+  const { _id, ...rest } = data as any;
+  const res = await api.post('/courses/admin/main', { ...rest, id: _id });
   return res.data;
 };
 
 export const saveLevel = async (data: Partial<Level>) => {
-  const res = await api.post('/courses/admin/levels', data);
+  const { _id, ...rest } = data as any;
+  const res = await api.post('/courses/admin/levels', { ...rest, id: _id });
   return res.data;
 };
 
 export const saveModule = async (data: Partial<Module>) => {
-  const res = await api.post('/courses/admin/modules', data);
+  const { _id, ...rest } = data as any;
+  const res = await api.post('/courses/admin/modules', { ...rest, id: _id });
   return res.data;
 };
 
 export const saveAssessment = async (data: Partial<Assessment>) => {
-  const res = await api.post('/courses/admin/assessments', data);
+  const { _id, ...rest } = data as any;
+  const res = await api.post('/courses/admin/assessments', { ...rest, id: _id });
   return res.data;
 };
 
