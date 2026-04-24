@@ -171,7 +171,10 @@ export function ModulePlayerPage() {
             quiz={currentAssessment}
             onComplete={handleQuizComplete}
             isFinalLevel={isFinalLevelOfCourse}
-            onViewCertificate={() => setShowFinalCertificate(true)}
+            onViewCertificate={async () => {
+              await handleQuizComplete(true);
+              setShowFinalCertificate(true);
+            }}
             alreadyPassed={hasPassedLevelAssessment}
           />
         </div>

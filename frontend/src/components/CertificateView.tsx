@@ -20,7 +20,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
     try {
       const element = certificateRef.current;
       console.log('Capturing element:', element);
-      
+
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
@@ -38,7 +38,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
           root.style.setProperty('--ring', '#3b82f6');
           root.style.setProperty('--background', '#ffffff');
           root.style.setProperty('--foreground', '#000000');
-          
+
           // Force all elements to have standard outline-color to prevent crash
           const all = clonedDoc.getElementsByTagName('*');
           for (let i = 0; i < all.length; i++) {
@@ -54,17 +54,17 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
           console.error('Error: Failed to create image blob.');
           return;
         }
-        
+
         const fileName = `TFF-Certificate-${userName.trim().replace(/\s+/g, '-')}.png`;
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
-        
+
         // Append to DOM for best compatibility
         document.body.appendChild(link);
         link.click();
-        
+
         // Clean up
         setTimeout(() => {
           document.body.removeChild(link);
@@ -131,91 +131,71 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
               }
             `}</style>
             <div id="certificate-root" className="absolute inset-0">
-            {/* Ornate Border Overlay */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                border: '2px solid #C9A961',
-                margin: '10px',
-                background: 'radial-gradient(#C9A961 0.5px, transparent 0.5px)',
-                backgroundSize: '10px 10px',
-                opacity: 0.15
-              }}
-            />
+              {/* Ornate Border Overlay */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  border: '2px solid #C9A961',
+                  margin: '10px',
+                  background: 'radial-gradient(#C9A961 0.5px, transparent 0.5px)',
+                  backgroundSize: '10px 10px',
+                  opacity: 0.15
+                }}
+              />
 
-            {/* Certificate Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center">
-              <div className="mb-6">
-                <div 
-                  className="w-20 h-20 bg-[#2C5F2D] rounded-full flex items-center justify-center relative"
-                  style={{ boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
+              {/* Certificate Content */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center">
+                <div className="mb-6">
+                  <img
+                    src="/logo.svg"
+                    alt="TFF Seal"
+                    className="h-16 w-auto object-contain mb-5"
+                  />
+                </div>
+
+                <h1 className="text-4xl font-extrabold text-[#2C5F2D] mb-2 uppercase tracking-widest">
+                  Certificate of Completion
+                </h1>
+                <div className="w-32 h-1 bg-[#C9A961] mb-8" />
+
+                <p className="text-lg italic mb-2" style={{ color: '#4B5563' }}>This is to certify that</p>
+
+                <h2
+                  className="text-5xl font-bold mb-6 font-serif border-b-2 pb-2 px-8 uppercase"
+                  style={{ color: '#111827', borderBottomColor: '#F3F4F6' }}
                 >
-                  <Award className="w-12 h-12 text-[#C9A961]" />
-                  <div 
-                    className="absolute -bottom-1 -right-1 rounded-full p-1 border-2 border-white"
-                    style={{ backgroundColor: '#C9A961' }}
-                  >
-                    <CheckCircle className="w-4 h-4 text-white" />
+                  {userName}
+                </h2>
+
+                <p className="text-lg max-w-lg leading-relaxed mb-8" style={{ color: '#374151' }}>
+                  has successfully completed the comprehensive training program
+                  <span className="block font-bold text-[#2C5F2D] mt-1">"Foundations of Faith & Islamic Practice"</span>
+                  at Two Finger Foundation (TFF).
+                </p>
+
+                <div className="mt-auto w-full flex justify-between items-end px-4">
+                  <div className="flex flex-col items-center">
+                    <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
+                    <div className="flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#6B7280' }}>
+                      <Calendar className="w-4 h-4" /> {today}
+                    </div>
+                    <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Date of Achievement</span>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <img
+                      src="/logo.svg"
+                      alt="TFF Seal"
+                      className="h-12 w-auto object-contain mb-2"
+                    />
+                    <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
+                    <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Official Certification</span>
                   </div>
                 </div>
               </div>
-
-              <h1 className="text-4xl font-extrabold text-[#2C5F2D] mb-2 uppercase tracking-widest">
-                Certificate of Completion
-              </h1>
-              <div className="w-32 h-1 bg-[#C9A961] mb-8" />
-
-              <p className="text-lg italic mb-2" style={{ color: '#4B5563' }}>This is to certify that</p>
-
-              <h2 
-                className="text-5xl font-bold mb-6 font-serif border-b-2 pb-2 px-8 uppercase"
-                style={{ color: '#111827', borderBottomColor: '#F3F4F6' }}
-              >
-                {userName}
-              </h2>
-
-              <p className="text-lg max-w-lg leading-relaxed mb-8" style={{ color: '#374151' }}>
-                has successfully completed the comprehensive training program
-                <span className="block font-bold text-[#2C5F2D] mt-1">"Foundations of Faith & Islamic Practice"</span>
-                at Two Finger Foundation (TFF).
-              </p>
-
-              <div className="mt-auto w-full flex justify-between items-end px-4">
-                <div className="flex flex-col items-center">
-                  <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
-                  <div className="flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#6B7280' }}>
-                    <Calendar className="w-4 h-4" /> {today}
-                  </div>
-                  <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Date of Achievement</span>
-                </div>
-
-                <div className="flex flex-col items-center">
-                  <div className="mb-2 text-[#2C5F2D] font-bold italic text-xl font-serif">
-                    TFF
-                  </div>
-                  <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
-                  <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Official Certification</span>
-                </div>
-              </div>
-            </div>
 
               {/* Corner Accents */}
-              <div 
-                className="absolute top-0 left-0 w-16 h-16 m-4" 
-                style={{ borderTop: '4px solid #C9A961', borderLeft: '4px solid #C9A961' }} 
-              />
-              <div 
-                className="absolute top-0 right-0 w-16 h-16 m-4" 
-                style={{ borderTop: '4px solid #C9A961', borderRight: '4px solid #C9A961' }} 
-              />
-              <div 
-                className="absolute bottom-0 left-0 w-16 h-16 m-4" 
-                style={{ borderBottom: '4px solid #C9A961', borderLeft: '4px solid #C9A961' }} 
-              />
-              <div 
-                className="absolute bottom-0 right-0 w-16 h-16 m-4" 
-                style={{ borderBottom: '4px solid #C9A961', borderRight: '4px solid #C9A961' }} 
-              />
+
             </div>
           </div>
         </div>
