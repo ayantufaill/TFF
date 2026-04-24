@@ -11,6 +11,7 @@ interface User {
   currentStreak?: number;
   longestStreak?: number;
   lastActivityDate?: string;
+  role?: 'user' | 'admin';
   quizAnswers?: Record<string, number[]>;
 }
 

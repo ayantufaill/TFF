@@ -54,16 +54,30 @@
     build: {
       target: 'esnext',
       outDir: 'dist',
-      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
+              if (id.includes('lucide-react')) {
+                return 'vendor-lucide';
+              }
+              if (id.includes('@radix-ui')) {
+                return 'vendor-radix';
+              }
+              if (id.includes('recharts')) {
+                return 'vendor-recharts';
+              }
+              if (id.includes('plyr')) {
+                return 'vendor-plyr';
+              }
+              if (id.includes('html2canvas')) {
+                return 'vendor-utils';
+              }
               return 'vendor';
             }
-          }
-        }
-      }
+          },
+        },
+      },
     },
     server: {
       port: 3000,
