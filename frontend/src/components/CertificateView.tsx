@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Download, Calendar, ArrowLeft } from 'lucide-react';
+import { Download, ArrowLeft } from 'lucide-react';
 import html2canvas from 'html2canvas';
 
 // ─── Converts /logo.svg → PNG data URL via an offscreen canvas ───
@@ -154,15 +154,16 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
                 <div className="mt-auto w-full flex justify-between items-end px-4">
                   <div className="flex flex-col items-center">
                     <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
-                    <div className="flex items-center gap-1.5 text-sm font-semibold" style={{ color: '#6B7280' }}>
-                      <Calendar className="w-4 h-4" /> {today}
-                    </div>
+                    <span className="text-sm font-semibold" style={{ color: '#6B7280' }}>{today}</span>
                     <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Date of Achievement</span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <img src="/logo.svg" alt="TFF Seal" width="60" height="60"
-                      className="h-12 w-auto object-contain mb-2" />
+                    {/* ✅ Signature added here */}
+                    <img src="/signature.png" alt="Signature"
+                      style={{ height: '48px', width: 'auto', objectFit: 'contain', marginBottom: '4px' }} />
+                    {/* <img src="/logo.svg" alt="TFF Seal" width="60" height="60"
+                      className="h-12 w-auto object-contain mb-2" /> */}
                     <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
                     <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Official Certification</span>
                   </div>
