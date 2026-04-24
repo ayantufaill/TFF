@@ -7,18 +7,25 @@ const router = express.Namespace ? express.Router() : express.Router();
 // @desc    Update user progress (add completed module)
 // @access  Private
 router.post('/progress', auth, async (req, res) => {
-  const { moduleId } = req.body;
-
-  try {
-    const user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Update progress
-    if (!user.completedModules.includes(moduleId)) {
-      user.completedModules.push(moduleId);
-    }
+    const { moduleId, quizAnswers } = req.body;
+  
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Update progress
+      if (moduleId && !user.completedModules.includes(moduleId)) {
+        user.completedModules.push(moduleId);
+      }
+  
+      // Update quiz answers if provided
+      if (quizAnswers && typeof quizAnswers === 'object') {
+        Object.keys(quizAnswers).forEach(quizId => {
+          user.quizAnswers.set(quizId, quizAnswers[quizId]);
+        });
+      }
 
     // Streak Logic
     const now = new Date();
