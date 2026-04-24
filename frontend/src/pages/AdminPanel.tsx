@@ -497,8 +497,19 @@ export default function AdminPanel() {
                 <input type="number" value={editingModule?.number || 0} onChange={e => setEditingModule(prev => ({ ...prev!, number: parseInt(e.target.value) }))} />
               </div>
               <div className="dialog-field">
-                <label>Video ID (YouTube)</label>
-                <input value={editingModule?.videoId || ''} onChange={e => setEditingModule(prev => ({ ...prev!, videoId: e.target.value }))} placeholder="f9A0Tvxu2_I" />
+                <label>Video ID or Link (YouTube)</label>
+                <input 
+                  value={editingModule?.videoId || ''} 
+                  onChange={e => {
+                    const val = e.target.value;
+                    // Extract ID if it's a URL
+                    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                    const match = val.match(regExp);
+                    const videoId = (match && match[7].length === 11) ? match[7] : val;
+                    setEditingModule(prev => ({ ...prev!, videoId }));
+                  }} 
+                  placeholder="e.g., https://www.youtube.com/watch?v=..." 
+                />
               </div>
             </div>
             <div className="dialog-field">
