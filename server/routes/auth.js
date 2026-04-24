@@ -29,7 +29,7 @@ router.post('/register', async (req, res) => {
     await user.save();
     console.log('✅ User saved successfully, generating token...');
 
-    const payload = { user: { id: user.id } };
+    const payload = { user: { id: user.id, role: user.role } };
 
     jwt.sign(
       payload,
@@ -40,7 +40,7 @@ router.post('/register', async (req, res) => {
           console.error('❌ JWT Sign Error:', err);
           throw err;
         }
-        res.json({ token, user: { id: user.id, name: user.name, email: user.email, completedModules: user.completedModules } });
+        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, completedModules: user.completedModules } });
       }
     );
   } catch (err) {
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 
-    const payload = { user: { id: user.id } };
+    const payload = { user: { id: user.id, role: user.role } };
 
     jwt.sign(
       payload,
@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
           console.error('❌ JWT Sign Error:', err);
           throw err;
         }
-        res.json({ token, user: { id: user.id, name: user.name, email: user.email, completedModules: user.completedModules } });
+        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, completedModules: user.completedModules } });
       }
     );
   } catch (err) {

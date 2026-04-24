@@ -187,3 +187,271 @@
 html {
   font-size: var(--font-size);
 }
+
+/* ===== Admin Panel Mobile Responsive Sidebar ===== */
+.admin-sidebar {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* Mobile: hide sidebar by default */
+@media (max-width: 1023px) {
+  .admin-sidebar {
+    display: none;
+  }
+  .admin-sidebar.sidebar-open {
+    display: flex;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    z-index: 45;
+    width: 85vw;
+    max-width: 400px;
+    box-shadow: 8px 0 32px rgba(0,0,0,0.15);
+  }
+  .admin-mobile-toggle {
+    display: flex !important;
+  }
+  .admin-mobile-close {
+    display: flex !important;
+  }
+  .admin-header-actions {
+    flex-wrap: wrap;
+  }
+  .admin-content-padding {
+    padding: 1.25rem !important;
+  }
+  .admin-title {
+    font-size: 1.75rem !important;
+  }
+  .admin-level-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1.5rem !important;
+  }
+  .admin-level-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+/* Desktop: always show sidebar, hide mobile toggle */
+@media (min-width: 1024px) {
+  .admin-sidebar {
+    display: flex;
+    width: 400px;
+    min-width: 400px;
+  }
+  .admin-mobile-toggle {
+    display: none !important;
+  }
+  .admin-mobile-close {
+    display: none !important;
+  }
+}
+
+.admin-sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .admin-sidebar-backdrop.sidebar-open {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+}
+
+/* ===== Premium Dialog/Modal Styles ===== */
+.admin-dialog {
+  width: 90vw;
+  max-width: 540px;
+  border-radius: 1.5rem;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.25),
+    0 10px 20px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.admin-dialog-wide {
+  max-width: 720px;
+}
+
+.admin-dialog .dialog-accent-bar {
+  height: 4px;
+  border-radius: 0;
+}
+
+.admin-dialog .dialog-header {
+  padding: 28px 32px 0 32px;
+}
+
+.admin-dialog .dialog-header h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.admin-dialog .dialog-header p {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.admin-dialog .dialog-body {
+  padding: 24px 32px 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-dialog .dialog-field label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+.admin-dialog .dialog-field input,
+.admin-dialog .dialog-field textarea {
+  width: 100%;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #111827;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.admin-dialog .dialog-field input:focus,
+.admin-dialog .dialog-field textarea:focus {
+  border-color: #2C5F2D;
+  box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
+  background: #fff;
+}
+
+.admin-dialog .dialog-field input::placeholder,
+.admin-dialog .dialog-field textarea::placeholder {
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+.admin-dialog .dialog-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.admin-dialog .dialog-field input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.admin-dialog .dialog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.admin-dialog .dialog-footer {
+  padding: 20px 32px;
+  background: #f9fafb;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-dialog .dialog-footer .btn-cancel {
+  flex: 0 0 auto;
+  padding: 0 24px;
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  background: transparent;
+  border: 1.5px solid #e5e7eb;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-dialog .dialog-footer .btn-cancel:hover {
+  background: #fff;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.admin-dialog .dialog-footer .btn-save {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #fff;
+  background: #2C5F2D;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(44, 95, 45, 0.25);
+}
+
+.admin-dialog .dialog-footer .btn-save:hover {
+  background: #245025;
+  box-shadow: 0 4px 12px rgba(44, 95, 45, 0.35);
+}
+
+.admin-dialog .dialog-footer .btn-danger {
+  background: #ef4444;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+
+.admin-dialog .dialog-footer .btn-danger:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+/* Close button positioning override */
+.admin-dialog [data-radix-collection-item] {
+  z-index: 10;
+}
+
+@media (max-width: 640px) {
+  .admin-dialog {
+    width: 95vw;
+    max-width: none;
+  }
+  .admin-dialog .dialog-header {
+    padding: 20px 20px 0 20px;
+  }
+  .admin-dialog .dialog-body {
+    padding: 16px 20px 20px 20px;
+  }
+  .admin-dialog .dialog-footer {
+    padding: 16px 20px;
+  }
+  .admin-dialog .dialog-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-dialog .dialog-header h2 {
+    font-size: 1.25rem;
+  }
+}

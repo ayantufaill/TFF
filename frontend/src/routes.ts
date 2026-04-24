@@ -4,6 +4,7 @@ import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
 import { DownloadsPage } from "./pages/DownloadsPage";
 import { ArticlesPage } from "./pages/ArticlesPage";
+import ErrorPage from "./pages/ErrorPage";
 // Lazy load other routes
 const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage").then(m => ({ default: m.UnderConstructionPage })));
 // Deploy only homepage – other routes commented out
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: Layout,
+    errorElement: React.createElement(ErrorPage),
     children: [
       { index: true, Component: HomePage },
       { path: "privacy-policy", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
@@ -60,6 +62,7 @@ export const router = createBrowserRouter([
       { path: "playlist", Component: PlaylistPage },
       { path: "downloads", Component: DownloadsPage },
       { path: "articles", Component: ArticlesPage },
+      { path: "admin", Component: lazy(() => import("./pages/AdminPanel")) },
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },

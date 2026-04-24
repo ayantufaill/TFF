@@ -37,13 +37,14 @@ const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId, onEnded }) => {
 
         const handleTimeUpdate = () => {
           if (hasCompletedRef.current) return;
-          if (player.duration > 0 && player.currentTime >= player.duration - 1) {
+          if (player.duration > 0 && player.currentTime >= player.duration - 2) {
             handleEnded();
           }
         };
 
         player.on('ended', handleEnded);
         player.on('timeupdate', handleTimeUpdate);
+        player.on('seeked', handleTimeUpdate);
         bound = true;
 
         if (intervalId) clearInterval(intervalId);
@@ -89,6 +90,7 @@ const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId, onEnded }) => {
       showinfo: 0,
       iv_load_policy: 3,
       modestbranding: 1,
+      origin: window.location.origin
     },
     // Prevent the YouTube logo from being clickable by overlaying our own UI
     hideControls: false,

@@ -9,8 +9,8 @@ const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
 
 const navLinks = [
   { label: 'Home', to: '/' },
-//   { label: 'Dashboard', to: '/dashboard', authOnly: true },
-//   { label: 'Courses', to: '/courses' },
+  //   { label: 'Dashboard', to: '/dashboard', authOnly: true },
+  //   { label: 'Courses', to: '/courses' },
   { label: 'About Us', to: '/about-us' },
   { label: 'Discovering Islam', to: '/discovering-islam' },
   { label: 'Programs', to: '/programs' },
@@ -19,14 +19,16 @@ const navLinks = [
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },
   { label: 'Articles', to: '/articles' },
+  { label: 'Admin Panel', to: '/admin', adminOnly: true },
 ];
 
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, logout } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const showBack = location.pathname !== '/' && location.pathname !== '';
+   const location = useLocation();
+   const navigate = useNavigate();
+   const isAdmin = location.pathname.startsWith('/admin');
+   const showBack = location.pathname !== '/' && location.pathname !== '';
 
   const handleLogout = () => {
     logout();
@@ -78,7 +80,7 @@ export function Layout() {
                   alt="Two Finger Foundation"
                   width={48}
                   height={48}
-                  fetchPriority="high"
+                  fetchpriority="high"
                   className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                 />
               </div>
@@ -93,6 +95,7 @@ export function Layout() {
               {navLinks.filter(link => {
                 if ((link as any).authOnly && !user) return false;
                 if ((link as any).guestOnly && user) return false;
+                if ((link as any).adminOnly && user?.role !== 'admin') return false;
                 return true;
               }).map((link) => {
                 const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
@@ -100,9 +103,8 @@ export function Layout() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className={`transition-colors whitespace-nowrap ${
-                      isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
-                    }`}
+                    className={`transition-colors whitespace-nowrap ${isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
+                      }`}
                   >
                     {link.label}
                   </Link>
@@ -142,6 +144,7 @@ export function Layout() {
             {navLinks.filter(link => {
               if ((link as any).authOnly && !user) return false;
               if ((link as any).guestOnly && user) return false;
+              if ((link as any).adminOnly && user?.role !== 'admin') return false;
               return true;
             }).map((link) => {
               const isActive = location.pathname === link.to || (link.to === '/' && location.pathname === '/');
@@ -150,9 +153,8 @@ export function Layout() {
                   key={link.label}
                   to={link.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-4 px-4 rounded-lg text-lg font-medium transition-colors ${
-                    isActive ? 'bg-[#C9A961]/15 text-[#2C5F2D]' : 'text-[#2C5F2D] hover:bg-[#2C5F2D]/5'
-                  }`}
+                  className={`block py-4 px-4 rounded-lg text-lg font-medium transition-colors ${isActive ? 'bg-[#C9A961]/15 text-[#2C5F2D]' : 'text-[#2C5F2D] hover:bg-[#2C5F2D]/5'
+                    }`}
                 >
                   {link.label}
                 </Link>
@@ -177,7 +179,7 @@ export function Layout() {
       </main>
 
       {/* Footer – About TFF ke upar zyada green; © 2026 neeche se upar */}
-      <footer className="bg-[#2C5F2D] text-white mt-36 sm:mt-44 lg:mt-56">
+      <footer className={`bg-[#2C5F2D] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 'clamp(28px, 3.5vw, 48px)', paddingBottom: 'clamp(20px, 2.5vw, 36px)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* About */}
