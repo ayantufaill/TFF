@@ -318,7 +318,7 @@ export default function AdminPanel() {
                       </Button>
                     </div>
                   </div>
-                  <p className="text-lg text-gray-500 font-medium max-w-2xl leading-relaxed">{activeCourse.description}</p>
+                  <p className="text-md text-gray-500 font-medium max-w-2xl leading-relaxed">{activeCourse.description}</p>
                 </div>
               </header>
 
@@ -422,6 +422,20 @@ export default function AdminPanel() {
             <div className="dialog-field">
               <label>Description</label>
               <textarea value={editingCourse?.description || ''} onChange={e => setEditingCourse(prev => ({ ...prev!, description: e.target.value }))} placeholder="Describe what students will learn..." />
+            </div>
+            <div className="dialog-field">
+              <label>Cover Image URL</label>
+              <input value={editingCourse?.image || ''} onChange={e => setEditingCourse(prev => ({ ...prev!, image: e.target.value }))} placeholder="https://example.com/image.jpg" />
+              {editingCourse?.image && (
+                <div style={{ marginTop: '10px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #e5e7eb', maxHeight: '160px' }}>
+                  <img
+                    src={editingCourse.image}
+                    alt="Preview"
+                    style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }}
+                    onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </div>
+              )}
             </div>
             <div className="dialog-grid">
               <div className="dialog-field">

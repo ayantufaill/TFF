@@ -40,9 +40,11 @@ export function DashboardPage() {
     );
   }
 
-  const totalCompletedCount = user.completedModules?.filter(id => id.startsWith('module-')).length || 0;
-  const totalModulesCount = courses.reduce((acc, course) => 
-    acc + course.levels.reduce((lAcc, l) => lAcc + l.modules.length, 0), 0);
+  const allModules = courses.flatMap(c => c.levels.flatMap(l => l.modules));
+  const totalCompletedCount = allModules.filter(m => 
+    user.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+  ).length;
+  const totalModulesCount = allModules.length;
 
   if (isLoading) return <div className="p-20 text-center text-[#2C5F2D] font-bold">Loading your dashboard...</div>;
 
@@ -88,12 +90,14 @@ export function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {courses.map((course) => {
                   const courseModules = course.levels.flatMap(l => l.modules);
-                  const completedInCourse = user.completedModules?.filter(m => courseModules.some(mod => `module-${mod.number}` === m)).length || 0;
+                  const completedInCourse = courseModules.filter(m => 
+                    user.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+                  ).length;
                   const totalInCourse = courseModules.length;
                   const calculatedProgress = totalInCourse > 0 ? Math.round((completedInCourse / totalInCourse) * 100) : 0;
 
                   // Find first uncompleted module
-                  const nextModule = courseModules.find(m => !user.completedModules?.includes(`module-${m.number}`)) || courseModules[0];
+                  const nextModule = courseModules.find(m => !user.completedModules?.includes(`module-${m._id}`) && !user.completedModules?.includes(`module-${m.number}`)) || courseModules[0];
                   const targetLevelId = course.levels.find(l => l.modules.some(m => m._id === nextModule?._id))?._id || course.levels[0]?._id;
 
                   return (

@@ -1,4 +1,4 @@
-import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, ArrowLeft, Star, Shield } from 'lucide-react';
+import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Play, Mail, Lock, ArrowLeft, Star, Shield, Eye, EyeOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
@@ -52,6 +52,9 @@ export function TrainingPage() {
   const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Search Params - Default to Lesson 1 if none is specified
   const [searchParams] = useSearchParams();
@@ -577,30 +580,46 @@ export function TrainingPage() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="new-password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">New Password</Label>
-                        <div className="relative group">
+                        <div className="relative group w-full">
                           <Input 
                             id="new-password" 
-                            type="password" 
+                            type={showNewPassword ? 'text' : 'password'} 
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             placeholder="••••••••" 
-                            className="px-4 h-14 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
+                            className="px-4 h-14 pr-12 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
                             required 
                           />
+                          <button
+                            type="button"
+                            onClick={() => setShowNewPassword(!showNewPassword)}
+                            className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                            style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
+                          >
+                            {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
                         </div>
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="confirm-password" internal-role="confirm-pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">Confirm Password</Label>
-                        <div className="relative group">
+                        <div className="relative group w-full">
                           <Input 
                             id="confirm-password" 
-                            type="password" 
+                            type={showConfirmPassword ? 'text' : 'password'} 
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="••••••••" 
-                            className="px-4 h-14 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
+                            className="px-4 h-14 pr-12 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
                             required 
                           />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                            style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -673,16 +692,24 @@ export function TrainingPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D]">Password</Label>
-                    <div className="relative group">
+                    <div className="relative group w-full">
                       <Input 
                         id="password" 
-                        type="password" 
+                        type={showPassword ? 'text' : 'password'} 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••" 
-                        className="px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all" 
+                        className="px-4 h-12 pr-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all" 
                         required 
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                        style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
                     </div>
                   </div>
 

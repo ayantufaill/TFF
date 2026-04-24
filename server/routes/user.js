@@ -124,4 +124,47 @@ router.get('/profile', auth, async (req, res) => {
   }
 });
 
+// @route   PUT api/user/profile
+// @desc    Update user name and/or password
+// @access  Private
+router.put('/profile', auth, async (req, res) => {
+  const { name, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update name if provided
+    if (name && name.trim().length >= 2) {
+      user.name = name.trim();
+    }
+
+    // Update password if provided
+    if (currentPassword && newPassword) {
+      const bcrypt = require('bcryptjs');
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Current password is incorrect' });
+      }
+      if (newPassword.length < 5) {
+        return res.status(400).json({ message: 'New password must be at least 5 characters' });
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+
+    await user.save();
+
+    const userObj = user.toObject();
+    delete userObj.password;
+    userObj.suggestedModuleId = getSuggestedModuleId(user);
+    res.json(userObj);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router;

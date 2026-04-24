@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, ArrowLeft, Shield } from 'lucide-react';
+import { Mail, Lock, ArrowLeft, Shield, Eye, EyeOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -33,6 +33,9 @@ export function AuthForm() {
   const [forgotStep, setForgotStep] = useState<1 | 2 | 3>(1);
   const [authError, setAuthError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,8 +108,40 @@ export function AuthForm() {
                 <Input type="text" placeholder="OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
               ) : (
                 <>
-                  <Input type="password" placeholder="New Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                  <Input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                  <div className="relative">
+                    <Input 
+                      type={showNewPassword ? 'text' : 'password'} 
+                      placeholder="New Password" 
+                      value={newPassword} 
+                      onChange={(e) => setNewPassword(e.target.value)} 
+                      className="pr-10"
+                      required 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2C5F2D]"
+                    >
+                      {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <Input 
+                      type={showConfirmPassword ? 'text' : 'password'} 
+                      placeholder="Confirm Password" 
+                      value={confirmPassword} 
+                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                      className="pr-10"
+                      required 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2C5F2D]"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </>
               )}
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
@@ -118,7 +153,23 @@ export function AuthForm() {
             <form onSubmit={handleAuth} className="space-y-4">
               {authMode === 'signup' && <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />}
               <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <div className="relative">
+                <Input 
+                  type={showPassword ? 'text' : 'password'} 
+                  placeholder="Password" 
+                  value={password} 
+                  onChange={(e) => setPassword(e.target.value)} 
+                  className="pr-10"
+                  required 
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2C5F2D]"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
               <Button type="submit" className="w-full bg-[#2C5F2D] text-white">
                 {authMode === 'login' ? 'Login' : 'Sign Up'}
