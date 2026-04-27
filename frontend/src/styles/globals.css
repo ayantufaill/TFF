@@ -200,6 +200,7 @@ html {
   .admin-sidebar {
     display: none;
   }
+
   .admin-sidebar.sidebar-open {
     display: flex;
     position: fixed;
@@ -209,28 +210,35 @@ html {
     z-index: 45;
     width: 85vw;
     max-width: 400px;
-    box-shadow: 8px 0 32px rgba(0,0,0,0.15);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.15);
   }
+
   .admin-mobile-toggle {
     display: flex !important;
   }
+
   .admin-mobile-close {
     display: flex !important;
   }
+
   .admin-header-actions {
     flex-wrap: wrap;
   }
+
   .admin-content-padding {
     padding: 1.25rem !important;
   }
+
   .admin-title {
     font-size: 1.75rem !important;
   }
+
   .admin-level-header {
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 1.5rem !important;
   }
+
   .admin-level-actions {
     width: 100%;
     justify-content: flex-start;
@@ -245,9 +253,11 @@ html {
     width: 400px;
     min-width: 400px;
   }
+
   .admin-mobile-toggle {
     display: none !important;
   }
+
   .admin-mobile-close {
     display: none !important;
   }
@@ -439,18 +449,23 @@ html {
     width: 95vw;
     max-width: none;
   }
+
   .admin-dialog .dialog-header {
     padding: 20px 20px 0 20px;
   }
+
   .admin-dialog .dialog-body {
     padding: 16px 20px 20px 20px;
   }
+
   .admin-dialog .dialog-footer {
     padding: 16px 20px;
   }
+
   .admin-dialog .dialog-grid {
     grid-template-columns: 1fr;
   }
+
   .admin-dialog .dialog-header h2 {
     font-size: 1.25rem;
   }

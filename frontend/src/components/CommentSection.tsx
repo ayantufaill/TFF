@@ -128,8 +128,8 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
     const isOwner = user?._id === comment.userId._id;
 
     return (
-      <div key={comment._id} className={`mt-6 ${depth > 0 ? 'ml-8 border-l-2 border-gray-100 pl-4' : ''}`}>
-        <div className="flex gap-4">
+      <div key={comment._id} className={`mt-6 ${depth > 0 ? 'ml-3 sm:ml-8 border-l-2 border-gray-100 pl-3 sm:pl-4' : ''}`}>
+        <div className="flex gap-3 sm:gap-4">
           <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
             {comment.userId.avatar && <AvatarImage src={comment.userId.avatar} />}
             <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
@@ -244,9 +244,9 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
   const rootComments = comments.filter(c => !c.parentId);
 
   return (
-    <div className="mt-8 bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="mt-8 bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
       <div 
-        className="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition-colors"
+        className="p-4 sm:p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center gap-3">
@@ -254,26 +254,27 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
             <MessageSquare className="w-5 h-5 text-[#2C5F2D]" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900 leading-none mb-1">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 leading-none mb-1">
               {comments.length} Comments
             </h3>
-            <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Join the discussion</p>
+            <p className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider">Join the discussion</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 text-[#2C5F2D] font-bold text-sm uppercase tracking-widest">
-          {isExpanded ? 'Collapse' : 'Expand Comments'}
-          {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        <div className="flex items-center gap-1 sm:gap-2 text-[#2C5F2D] font-bold text-[10px] sm:text-sm uppercase tracking-widest">
+          <span className="hidden xs:inline">{isExpanded ? 'Collapse' : 'Expand Comments'}</span>
+          <span className="xs:hidden">{isExpanded ? 'Hide' : 'Show'}</span>
+          {isExpanded ? <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5" /> : <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />}
         </div>
       </div>
 
       <Separator className="bg-gray-100" />
 
       {isExpanded && (
-        <div className="p-8">
+        <div className="p-4 sm:p-8">
           {user ? (
-            <div className="mb-10">
-              <div className="flex gap-4 mb-4">
+            <div className="mb-8 sm:mb-10">
+              <div className="flex gap-3 sm:gap-4 mb-4">
                 <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
                   {user.avatar && <AvatarImage src={user.avatar} />}
                   <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
@@ -291,7 +292,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                     <Button 
                       onClick={handleSubmitComment}
                       disabled={loading || !newComment.trim()}
-                      className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold px-8 py-6 rounded-2xl shadow-lg shadow-[#2C5F2D]/10 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold px-5 py-5 sm:px-8 sm:py-6 rounded-xl sm:rounded-2xl shadow-lg shadow-[#2C5F2D]/10 transition-all hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
                     >
                       <Send className="w-4 h-4 mr-2" /> Post Comment
                     </Button>
