@@ -416,7 +416,7 @@ export function ModulePlayerPage() {
                 {renderPlayerContent(false)}
               </div>
               
-              {currentModule && !showQuiz && <CommentSection moduleId={currentModule._id} />}
+              {currentModule && !showQuiz && !showFinalCertificate && <CommentSection moduleId={currentModule._id} />}
             </div>
           </main>
         </div>
