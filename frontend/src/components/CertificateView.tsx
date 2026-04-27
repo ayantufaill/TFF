@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Download, ArrowLeft } from 'lucide-react';
 import html2canvas from 'html2canvas';
 
@@ -33,6 +33,24 @@ interface CertificateViewProps {
 
 const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        // Padding/gap consideration: 32px (16px each side)
+        const availableWidth = containerWidth - 32;
+        const newScale = Math.min(availableWidth / 800, 1);
+        setScale(newScale);
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
@@ -89,30 +107,43 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
     <div className="w-full flex flex-col items-center animate-in fade-in duration-700">
 
       {/* Controls */}
-      <div className="w-full flex justify-between items-center mb-8 px-2">
+      <div className="w-full flex flex-row justify-between items-center mb-6 px-4 gap-4">
         <button onClick={onBack}
-          className="flex items-center gap-2 text-[#2C5F2D] font-bold hover:text-[#1a3a1b] transition-all group">
+          className="flex items-center gap-2 text-[#2C5F2D] font-bold hover:text-[#1a3a1b] transition-all group whitespace-nowrap">
           <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          <span className="text-lg">Back to Lesson</span>
+          <span className="text-sm sm:text-lg">Back to Lesson</span>
         </button>
         <button onClick={handleDownload}
-          className="flex items-center gap-2 px-8 py-3 bg-[#2C5F2D] text-white rounded-full font-bold hover:bg-[#1a3a1b] transition-all shadow-lg active:scale-95">
-          <Download className="w-5 h-5" />
-          <span className="text-lg">Download Certificate</span>
+          className="flex items-center gap-2 px-4 sm:px-8 py-2 sm:py-3 bg-[#2C5F2D] text-white rounded-full font-bold hover:bg-[#1a3a1b] transition-all shadow-lg active:scale-95 whitespace-nowrap">
+          <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-sm sm:text-lg">Download Certificate</span>
         </button>
       </div>
 
       {/* Certificate Frame */}
-      <div className="w-full overflow-hidden flex justify-center bg-white/50 backdrop-blur-sm p-4 sm:p-8 border border-gray-100"
-        style={{ borderRadius: '1.5rem', boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.06)' }}>
-        <div className="w-full overflow-x-auto flex justify-center py-4">
+      <div ref={containerRef} className="w-full flex justify-center bg-white/50 backdrop-blur-sm p-2 sm:p-8 border border-gray-100"
+        style={{ borderRadius: '1.5rem', boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.06)', minHeight: scale < 1 ? `${560 * scale + 40}px` : 'auto' }}>
+        <div className="w-full flex justify-center py-4 overflow-hidden">
 
-          <div ref={certificateRef}
-            className="relative bg-white flex-shrink-0"
+          <div 
+            className="flex-shrink-0 transition-transform duration-300 ease-out"
             style={{
-              width: '800px', height: '560px', fontFamily: "'Playfair Display', serif",
-              border: '20px solid #2C5F2D', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', outline: 'none'
+              width: '800px', 
+              height: '560px', 
+              transform: `scale(${scale})`,
+              transformOrigin: 'top center',
+              marginBottom: scale < 1 ? `-${560 * (1 - scale)}px` : '0'
             }}>
+            <div ref={certificateRef}
+              className="relative bg-white"
+              style={{
+                width: '800px', 
+                height: '560px', 
+                fontFamily: "'Playfair Display', serif",
+                border: '20px solid #2C5F2D', 
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', 
+                outline: 'none'
+              }}>
 
             <div id="certificate-root" className="absolute inset-0">
               {/* Ornate Border */}
@@ -172,6 +203,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
