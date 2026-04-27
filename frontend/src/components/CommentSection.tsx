@@ -130,10 +130,10 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
     return (
       <div key={comment._id} className={`mt-6 ${depth > 0 ? 'ml-8 border-l-2 border-gray-100 pl-4' : ''}`}>
         <div className="flex gap-4">
-          <Avatar className="w-10 h-10 border-2 border-white shadow-sm">
+          <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
             {comment.userId.avatar && <AvatarImage src={comment.userId.avatar} />}
-            <AvatarFallback className="bg-[#2C5F2D] text-white font-bold">
-              {comment.userId.name.charAt(0).toUpperCase()}
+            <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
+              {comment.userId.name.trim().charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
@@ -274,10 +274,10 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
           {user ? (
             <div className="mb-10">
               <div className="flex gap-4 mb-4">
-                <Avatar className="w-10 h-10 border-2 border-white shadow-sm">
+                <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
                   {user.avatar && <AvatarImage src={user.avatar} />}
-                  <AvatarFallback className="bg-[#2C5F2D] text-white font-bold">
-                    {user.name.charAt(0).toUpperCase()}
+                  <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
+                    {user.name.trim().charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-3">
