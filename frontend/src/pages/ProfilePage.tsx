@@ -121,205 +121,202 @@ export function ProfilePage() {
       </section>
 
       {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 -mt-8 relative z-10 space-y-6">
-        {/* Personal Info Card */}
-        <Card className="border-gray-100 shadow-lg overflow-hidden" style={{ borderRadius: '24px' }}>
-          <div className="h-1.5 bg-gradient-to-r from-[#2C5F2D] to-[#C9A961]" />
-          <CardContent className="p-8">
-            <h2 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center gap-3">
-              <User className="w-5 h-5 text-[#2C5F2D]" /> Personal Information
-            </h2>
-
-            {/* Name */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-[#2C5F2D]/10 flex items-center justify-center flex-shrink-0">
-                    <User className="w-5 h-5 text-[#2C5F2D]" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Full Name</p>
-                    {editingName ? (
-                      <input
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
-                        autoFocus
-                      />
-                    ) : (
-                      <p className="text-gray-900 font-bold text-[15px] truncate">{user.name}</p>
-                    )}
-                  </div>
-                </div>
-                {editingName ? (
-                  <div className="flex gap-2 ml-4 flex-shrink-0">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start">
+          {/* Personal Info Card */}
+          <Card className="border-none shadow-2xl shadow-gray-200/50 overflow-hidden bg-white" style={{ borderRadius: '32px' }}>
+            <CardContent className="p-0 flex flex-col h-full">
+              <div className="p-8 pb-3 flex-1">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-[#2C5F2D]/10 flex items-center justify-center">
+                      <User className="w-5 h-5 text-[#2C5F2D]" />
+                    </div>
+                    Personal Profile
+                  </h2>
+                  {!editingName && (
                     <button
-                      onClick={() => { setEditingName(false); setName(user.name); }}
-                      className="px-4 py-2 text-xs font-bold text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors"
+                      onClick={() => setEditingName(true)}
+                      className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-[#2C5F2D] bg-[#2C5F2D]/5 rounded-xl hover:bg-[#2C5F2D]/10 transition-all active:scale-95"
                     >
-                      Cancel
+                      <Edit3 className="w-3.5 h-3.5" /> Edit Profile
                     </button>
-                    <button
-                      onClick={handleSaveName}
-                      disabled={saving}
-                      className="px-4 py-2 text-xs font-bold text-white bg-[#2C5F2D] rounded-xl hover:bg-[#234F24] transition-colors flex items-center gap-1.5 disabled:opacity-50"
-                    >
-                      <Save className="w-3.5 h-3.5" /> Save
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={() => setEditingName(true)}
-                    className="p-2.5 text-gray-400 hover:text-[#C9A961] hover:bg-white rounded-xl transition-all flex-shrink-0"
-                  >
-                    <Edit3 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              {/* Email (read-only) */}
-              <div className="flex items-center p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                <div className="flex items-center gap-4 flex-1">
-                  <div className="w-10 h-10 rounded-xl bg-[#C9A961]/10 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-[#C9A961]" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Email Address</p>
-                    <p className="text-gray-900 font-bold text-[15px]">{user.email}</p>
-                  </div>
-                </div>
-                <Badge variant="outline" className="text-gray-400 border-gray-200 text-[9px] uppercase tracking-widest font-bold flex-shrink-0">
-                  Read Only
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Security Card */}
-        <Card className="border-gray-100 shadow-lg overflow-hidden" style={{ borderRadius: '24px' }}>
-          <div className="h-1.5 bg-gradient-to-r from-[#C9A961] to-[#2C5F2D]" />
-          <CardContent className="p-8">
-            <h2 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center gap-3">
-              <Lock className="w-5 h-5 text-[#C9A961]" /> Security
-            </h2>
-
-            {!changingPassword ? (
-              <div className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#2C5F2D]/10 flex items-center justify-center">
-                    <Lock className="w-5 h-5 text-[#2C5F2D]" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Password</p>
-                    <p className="text-gray-900 font-bold text-[15px]">••••••••••</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setChangingPassword(true)}
-                  className="px-5 py-2.5 text-xs font-bold text-[#2C5F2D] bg-white border-2 border-[#2C5F2D]/20 rounded-xl hover:border-[#2C5F2D] hover:bg-[#2C5F2D]/5 transition-all flex items-center gap-2"
-                >
-                  Change Password <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Current password */}
-                <div className="relative">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Current Password</label>
-                  <div className="relative">
-                    <input
-                      type={showCurrentPw ? 'text' : 'password'}
-                      value={currentPassword}
-                      onChange={e => setCurrentPassword(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
-                      placeholder="Enter current password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowCurrentPw(!showCurrentPw)}
-                      className="absolute z-10 text-gray-400 hover:text-gray-600"
-                      style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
-                    >
-                      {showCurrentPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* New password */}
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">New Password</label>
-                  <div className="relative">
-                    <input
-                      type={showNewPw ? 'text' : 'password'}
-                      value={newPassword}
-                      onChange={e => setNewPassword(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
-                      placeholder="Enter new password (min 5 chars)"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowNewPw(!showNewPw)}
-                      className="absolute z-10 text-gray-400 hover:text-gray-600"
-                      style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
-                    >
-                      {showNewPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Confirm password */}
-                <div>
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 block">Confirm New Password</label>
-                  <div className="relative">
-                    <input
-                      type={showConfirmPw ? 'text' : 'password'}
-                      value={confirmPassword}
-                      onChange={e => setConfirmPassword(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
-                      placeholder="Confirm new password"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowConfirmPw(!showConfirmPw)}
-                      className="absolute z-10 text-gray-400 hover:text-gray-600"
-                      style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
-                    >
-                      {showConfirmPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                  {confirmPassword && newPassword !== confirmPassword && (
-                    <p className="text-red-500 text-xs font-semibold mt-2">Passwords do not match</p>
                   )}
                 </div>
 
-                <div className="flex gap-3 pt-2">
-                  <button
-                    onClick={() => {
-                      setChangingPassword(false);
-                      setCurrentPassword('');
-                      setNewPassword('');
-                      setConfirmPassword('');
-                    }}
-                    className="flex-1 px-4 py-3 text-sm font-bold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleChangePassword}
-                    disabled={saving || !currentPassword || !newPassword || newPassword !== confirmPassword}
-                    className="flex-1 px-4 py-3 text-sm font-bold text-white bg-[#2C5F2D] rounded-xl hover:bg-[#234F24] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  >
-                    <Lock className="w-4 h-4" /> Update Password
-                  </button>
+                <div className="space-y-3">
+                  {/* Name Field */}
+                  <div className={`p-4 rounded-[24px] border-2 transition-all ${editingName ? 'border-[#2C5F2D] bg-white shadow-lg shadow-[#2C5F2D]/5' : 'border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100'}`}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <User className="w-3.5 h-3.5 text-gray-400" />
+                          <label className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Full Name</label>
+                        </div>
+
+                        {editingName ? (
+                          <div className="space-y-4">
+                            <input
+                              value={name}
+                              onChange={e => setName(e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm font-bold text-gray-900 outline-none focus:bg-white focus:border-[#2C5F2D] transition-all"
+                              placeholder="Enter your name"
+                              autoFocus
+                            />
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => { setEditingName(false); setName(user.name); }}
+                                className="flex-1 py-3 text-xs font-bold text-gray-500 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+                              >
+                                Discard
+                              </button>
+                              <button
+                                onClick={handleSaveName}
+                                disabled={saving}
+                                className="flex-[2] py-3 text-xs font-bold text-white bg-[#2C5F2D] rounded-xl hover:bg-[#234F24] shadow-lg shadow-[#2C5F2D]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                              >
+                                <Save className="w-3.5 h-3.5" /> Save Changes
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-gray-900 font-bold text-lg leading-tight truncate">{user.name}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="p-4 rounded-[24px] border-2 border-gray-50 bg-gray-50/30">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Mail className="w-3.5 h-3.5 text-[#C9A961]" />
+                          <label className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Email Address</label>
+                        </div>
+                        <p className="text-gray-900 font-bold text-base leading-tight truncate">{user.email}</p>
+                      </div>
+                      <div className="px-3 py-1.5 bg-[#2C5F2D] rounded-lg shadow-sm flex items-center gap-2 flex-shrink-0">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+                        <span className="text-[9px] font-black text-white uppercase tracking-widest">Verified</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+
+              <div className="py-3 px-6 bg-gray-50/50 border-t border-gray-50 flex items-center justify-center gap-6 mt-auto">
+                <div className="text-center">
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-xs font-bold text-gray-700">Active</span>
+                  </div>
+                </div>
+                <div className="w-px h-8 bg-gray-200" />
+                <div className="text-center">
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Access</p>
+                  <div className="flex items-center justify-center h-4">
+                    <span className="text-xs font-bold text-[#C9A961]">{user.role === 'admin' ? 'Admin' : 'Full'}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Security Card */}
+          <Card className="border-none shadow-2xl shadow-gray-200/50 overflow-hidden bg-white" style={{ borderRadius: '32px' }}>
+            <CardContent className="p-0 flex flex-col h-full">
+              <div className="p-6 pb-2 flex-1">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-2xl bg-[#C9A961]/10 flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-[#C9A961]" />
+                    </div>
+                    Account Security
+                  </h2>
+                </div>
+
+                {!changingPassword ? (
+                  <div className="p-4 rounded-[24px] border-2 border-gray-50 bg-gray-50/50 hover:bg-white hover:border-gray-100 transition-all group">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <Lock className="w-3.5 h-3.5 text-gray-400" />
+                          <label className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Password</label>
+                        </div>
+                        <p className="text-gray-900 font-bold text-base leading-tight">••••••••••••</p>
+                      </div>
+                      <button
+                        onClick={() => setChangingPassword(true)}
+                        className="px-5 py-2.5 text-xs font-bold text-[#C9A961] bg-white border-2 border-[#C9A961]/20 rounded-xl hover:border-[#C9A961] hover:bg-[#C9A961]/5 transition-all flex items-center gap-2 shadow-sm"
+                      >
+                        Change <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    <div className="space-y-1">
+                      {['Current', 'New', 'Confirm'].map((label, idx) => (
+                        <div key={label}>
+                          <div className="flex items-center gap-2 mb-2">
+                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{label} Password</label>
+                          </div>
+                          <div className="relative">
+                            <input
+                              type={label === 'Current' ? (showCurrentPw ? 'text' : 'password') : label === 'New' ? (showNewPw ? 'text' : 'password') : (showConfirmPw ? 'text' : 'password')}
+                              value={label === 'Current' ? currentPassword : label === 'New' ? newPassword : confirmPassword}
+                              onChange={e => label === 'Current' ? setCurrentPassword(e.target.value) : label === 'New' ? setNewPassword(e.target.value) : setConfirmPassword(e.target.value)}
+                              className="w-full bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 pr-12 text-sm font-bold text-gray-900 outline-none focus:bg-white focus:border-[#C9A961] transition-all"
+                              placeholder={`Enter ${label.toLowerCase()} password`}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => label === 'Current' ? setShowCurrentPw(!showCurrentPw) : label === 'New' ? setShowNewPw(!showNewPw) : setShowConfirmPw(!showConfirmPw)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+                            >
+                              {(label === 'Current' ? showCurrentPw : label === 'New' ? showNewPw : showConfirmPw) ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <button
+                        onClick={() => { setChangingPassword(false); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); }}
+                        className="flex-1 py-3 text-xs font-bold text-gray-500 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleChangePassword}
+                        disabled={saving || !currentPassword || !newPassword || newPassword !== confirmPassword}
+                        className="flex-[2] py-3 text-xs font-bold text-white bg-[#C9A961] rounded-xl hover:bg-[#b89a58] shadow-lg shadow-[#C9A961]/20 transition-all flex items-center justify-center gap-2 disabled:opacity-40"
+                      >
+                        <Lock className="w-3.5 h-3.5" /> Update Password
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="py-3 px-6 bg-[#C9A961]/5 border-t border-[#C9A961]/10 flex items-center justify-between mt-auto">
+                <div>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Security Score</p>
+                  <span className="text-xs font-bold text-gray-700">Excellent</span>
+                </div>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map(i => <div key={i} className="w-4 h-1 rounded-full bg-[#C9A961]" />)}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Stats Card */}
-        <Card className="border-gray-100 shadow-lg overflow-hidden" style={{ borderRadius: '24px' }}>
+        <Card className="border-gray-100 shadow-lg overflow-hidden mt-16" style={{ borderRadius: '24px' }}>
           <div className="h-1.5 bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D]" />
           <CardContent className="p-8">
             <h2 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center gap-3">
