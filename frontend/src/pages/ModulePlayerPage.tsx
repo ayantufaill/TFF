@@ -6,7 +6,8 @@ import {
   CheckCircle,
   ChevronRight,
   Sparkles,
-  Award
+  Award,
+  BookOpen
 } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
@@ -18,6 +19,7 @@ import { Button } from '../components/ui/button';
 import { getCourses, getAssessment, MainCourse, Level, Module, Assessment } from '../services/courseService';
 import Quiz from '../components/Quiz';
 import CertificateView from '../components/CertificateView';
+import CommentSection from '../components/CommentSection';
 
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
@@ -268,22 +270,53 @@ export function ModulePlayerPage() {
         .module-page-container {
           display: flex;
           flex-direction: column;
-          min-height: calc(100vh - 64px);
+          height: calc(100vh - 64px);
           background-color: #FAF8F3;
+          overflow: hidden;
         }
-        .module-layout { display: flex; flex: 1; }
+        .module-layout { 
+          display: flex; 
+          flex: 1; 
+          overflow: hidden;
+        }
         .module-sidebar {
           width: 400px;
           background: white;
-          border-right: 1px solid #f3f4f6;
+          border-right: 4px solid rgba(44,95,45,0.1);
           display: flex;
           flex-direction: column;
-          box-shadow: 20px 0 50px rgba(44,95,45,0.02);
+          flex-shrink: 0;
+          z-index: 10;
         }
-        .module-content { flex: 1; padding: 2rem; overflow-y: auto; }
+        .module-content { 
+          flex: 1; 
+          padding: 2.5rem; 
+          overflow-y: auto;
+          background-color: #FAF8F3;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #e5e7eb;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #d1d5db;
+        }
         @media (max-width: 1024px) {
-          .module-layout { flex-direction: column; }
-          .module-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #f3f4f6; }
+          .module-page-container { height: auto; overflow: visible; }
+          .module-layout { flex-direction: column; overflow: visible; }
+          .module-sidebar { 
+            width: 100%; 
+            height: auto; 
+            border-right: none; 
+            border-bottom: 1px solid #f3f4f6; 
+          }
+          .module-content { overflow-y: visible; }
         }
       `}</style>
 
@@ -310,11 +343,22 @@ export function ModulePlayerPage() {
 
         <div className="module-layout">
           <aside className="module-sidebar">
-            <div className="p-6 border-b bg-gray-50/50">
-              <h3 className="text-xs font-black text-[#2C5F2D] uppercase tracking-widest mb-1">Current Syllabus</h3>
-              <p className="text-sm text-gray-500 font-medium line-clamp-1">{currentLevel.subtitle}</p>
+            <div className="p-6 border-b border-gray-50 bg-white">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-[#2C5F2D] flex items-center justify-center shadow-sm">
+                  <BookOpen className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl font-bold text-gray-900 leading-none mb-1 tracking-tight">Syllabus</h2>
+                  <p className="text-[10px] font-bold text-[#C9A961] uppercase tracking-widest">{currentLevel.title}</p>
+                </div>
+              </div>
+              <p className="text-xs text-gray-400 font-medium line-clamp-1">{currentLevel.subtitle}</p>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+            
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar bg-white">
+              <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-4">Course Modules</h3>
+              
               {currentLevel.modules.map((m, idx) => {
                 const isActive = String(m.number) === String(moduleId);
                 const completed = user?.completedModules?.includes(`module-${m._id}`) || user?.completedModules?.includes(`module-${m.number}`);
@@ -325,33 +369,42 @@ export function ModulePlayerPage() {
                   <button
                     key={m._id}
                     onClick={() => unlocked && navigate(`/training/module/${levelId}/${m.number}`)}
-                    className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 ${isActive ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm' :
-                        unlocked ? 'hover:bg-gray-50 border-2 border-transparent' : 'opacity-50 grayscale cursor-not-allowed border-2 border-transparent'
-                      }`}
+                    className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 border-2 ${isActive 
+                      ? 'bg-white border-[#2C5F2D] shadow-sm' 
+                      : unlocked 
+                        ? 'bg-white border-transparent hover:bg-gray-50 text-gray-600' 
+                        : 'bg-white border-transparent opacity-50 grayscale cursor-not-allowed'
+                    }`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold ${completed ? 'bg-[#2C5F2D] text-white shadow-lg shadow-[#2C5F2D]/20' :
-                        isActive ? 'bg-white border-2 border-[#C9A961] text-[#C9A961]' : 'bg-gray-100 text-gray-400'
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-sm ${completed ? 'bg-[#2C5F2D] text-white' :
+                        isActive ? 'bg-white border-2 border-[#2C5F2D] text-[#2C5F2D]' : 'bg-gray-100 text-gray-400'
                       }`}>
                       {completed ? <CheckCircle className="w-5 h-5" /> : m.number}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`font-bold text-sm truncate ${isActive ? 'text-gray-900' : 'text-gray-600'}`}>{m.title}</p>
+                      <p className={`font-bold text-sm truncate ${isActive ? 'text-[#2C5F2D]' : 'text-gray-700'}`}>{m.title}</p>
+                      <p className={`text-[10px] font-bold uppercase tracking-widest mt-0.5 ${isActive ? 'text-[#2C5F2D]/60' : 'text-gray-400'}`}>
+                        {completed ? 'Completed' : 'Learning Module'}
+                      </p>
                     </div>
-                    {isActive && <Play className="w-4 h-4 text-[#C9A961] fill-current" />}
+                    {isActive && <Play className="w-4 h-4 text-[#2C5F2D] fill-current" />}
                   </button>
                 );
               })}
 
               <button
                 onClick={() => (isLastModuleOfLevel || user?.role === 'admin') && setShowQuiz(true)}
-                className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 mt-4 ${showQuiz ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm' : 'border-2 border-transparent hover:bg-gray-50'
+                className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 mt-6 border-2 ${showQuiz ? 'bg-white border-[#C9A961] shadow-sm' : 'bg-white border-transparent hover:bg-gray-50'
                   }`}
               >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg ${showQuiz ? 'bg-white border-2 border-[#C9A961]' : 'bg-gray-100'
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg ${showQuiz ? 'bg-white border-2 border-[#C9A961]' : 'bg-gray-100'
                   }`}>
                   📝
                 </div>
-                <div className="flex-1 font-bold text-sm text-gray-600">Level Assessment</div>
+                <div className="flex-1">
+                  <p className={`font-bold text-sm ${showQuiz ? 'text-[#C9A961]' : 'text-gray-700'}`}>Level Assessment</p>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Final Test</p>
+                </div>
               </button>
             </div>
           </aside>
@@ -362,6 +415,8 @@ export function ModulePlayerPage() {
               <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
                 {renderPlayerContent(false)}
               </div>
+              
+              {currentModule && !showQuiz && <CommentSection moduleId={currentModule._id} />}
             </div>
           </main>
         </div>
