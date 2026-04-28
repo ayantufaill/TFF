@@ -282,7 +282,30 @@ export function ActualTrainingPage() {
     }
   };
 
-  if (isLoading) return <div className="p-20 text-center text-[#2C5F2D] font-bold">Loading your learning path...</div>;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#FAF8F3]">
+        <div className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="h-12 w-3/4 bg-white/20 rounded-xl animate-pulse mx-auto mb-6" />
+            <div className="h-6 w-1/2 bg-white/10 rounded-lg animate-pulse mx-auto" />
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+          {[1, 2].map(i => (
+            <div key={i} className="space-y-6">
+              <div className="h-32 bg-gray-200/50 rounded-2xl animate-pulse" />
+              <div className="space-y-4">
+                {[1, 2, 3].map(j => (
+                  <div key={j} className="h-20 bg-white border-2 border-gray-100 rounded-xl animate-pulse" />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

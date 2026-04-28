@@ -479,8 +479,25 @@ export function TrainingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[85vh] flex items-center justify-center bg-[#FAF8F3]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C5F2D]"></div>
+      <div className="min-h-[85vh] flex flex-col items-center justify-center px-4 py-12 bg-[#FAF8F3]">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center space-y-4">
+            <div className="h-10 w-48 bg-gray-200 rounded-lg animate-pulse mx-auto" />
+            <div className="h-2 w-20 bg-[#C9A961]/20 rounded-full mx-auto" />
+            <div className="h-4 w-64 bg-gray-100 rounded-lg animate-pulse mx-auto" />
+          </div>
+          <div className="bg-white border border-gray-100 shadow-xl rounded-2xl p-8 space-y-6">
+            <div className="space-y-2">
+              <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+              <div className="h-12 w-full bg-gray-50 rounded-xl animate-pulse" />
+            </div>
+            <div className="space-y-2">
+              <div className="h-4 w-24 bg-gray-100 rounded animate-pulse" />
+              <div className="h-12 w-full bg-gray-50 rounded-xl animate-pulse" />
+            </div>
+            <div className="h-14 w-full bg-gray-200 rounded-xl animate-pulse mt-4" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -698,10 +715,10 @@ export function TrainingPage() {
                         <div className="space-y-2">
                           <Label htmlFor="phone" className="text-sm font-semibold text-[#2C5F2D]">Phone Number</Label>
                           <div className="flex gap-3">
-                            <CountryPicker 
+                            <CountryPicker
                               id="countryCode"
-                              value={countryCode} 
-                              onChange={setCountryCode} 
+                              value={countryCode}
+                              onChange={setCountryCode}
                               mode="dial"
                               className="w-32"
                             />
@@ -720,10 +737,10 @@ export function TrainingPage() {
 
                         <div className="space-y-2">
                           <Label htmlFor="country" className="text-sm font-semibold text-[#2C5F2D]">Country</Label>
-                          <CountryPicker 
+                          <CountryPicker
                             id="country"
-                            value={country} 
-                            onChange={setCountry} 
+                            value={country}
+                            onChange={setCountry}
                             mode="name"
                             placeholder="Select your country"
                           />
@@ -798,14 +815,14 @@ export function TrainingPage() {
                     </Button>
 
                     {/* Repositioned Google Login Button */}
-                    <div className="relative pt-6 pb-2">
+                    {/* <div className="relative pt-6 pb-2">
                       <div className="absolute inset-0 flex items-center pr-8 pl-8">
                         <span className="w-full border-t border-gray-100" />
                       </div>
                       <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold text-gray-400">
                         <span className="bg-white px-3">Or explore with</span>
                       </div>
-                    </div>
+                    </div> */}
 
                     {/* <Button 
                     type="button"
@@ -1130,8 +1147,8 @@ export function TrainingPage() {
                                         toast.success('MashaAllah!', { description: `You've completed: ${module.title}` });
                                       }}
                                       className={`h-12 border-gray-100 font-bold rounded-xl text-xs transition-all ${user?.completedModules?.includes(module.id)
-                                          ? 'bg-green-50 text-green-700 border-green-200'
-                                          : 'text-[#2C5F2D] hover:bg-[#FAF8F3]'
+                                        ? 'bg-green-50 text-green-700 border-green-200'
+                                        : 'text-[#2C5F2D] hover:bg-[#FAF8F3]'
                                         }`}
                                     >
                                       <CheckCircle className="w-4 h-4 mr-2" />

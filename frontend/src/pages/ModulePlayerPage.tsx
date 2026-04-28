@@ -153,7 +153,23 @@ export function ModulePlayerPage() {
   ).length;
   const progressValue = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
 
-  if (loading) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Synchronizing your path...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#FAF8F3]">
+        <div className="bg-[#2C5F2D] py-12 px-8 text-center space-y-6">
+          <div className="h-8 w-1/2 bg-white/20 rounded-lg animate-pulse mx-auto" />
+          <div className="h-24 w-full max-w-2xl bg-white/10 rounded-2xl animate-pulse mx-auto" />
+        </div>
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 p-8">
+          <div className="w-full lg:w-[400px] h-[600px] bg-white rounded-3xl animate-pulse" />
+          <div className="flex-1 space-y-6">
+            <div className="h-[400px] bg-black rounded-3xl animate-pulse" />
+            <div className="h-32 bg-white rounded-3xl animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (!currentLevel || !currentModule) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Module not found.</div>;
 
   const renderPlayerContent = (isMobile: boolean) => {

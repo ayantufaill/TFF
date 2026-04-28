@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -40,6 +40,7 @@ import {
 } from "../components/ui/alert-dialog";
 
 export default function AdminPanel() {
+  const navigate = useNavigate();
   const [courses, setCourses] = useState<MainCourse[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingCourse, setEditingCourse] = useState<Partial<MainCourse> | null>(null);
@@ -49,6 +50,9 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [courseError, setCourseError] = useState<string | null>(null);
+  const [imageMetadata, setImageMetadata] = useState<{ width: number; height: number; approved: boolean } | null>(null);
+  const [isValidatingImage, setIsValidatingImage] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -68,12 +72,69 @@ export default function AdminPanel() {
     }
   };
 
+  const validateImageDimensions = (url: string): Promise<{ width: number; height: number; approved: boolean }> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        // Ideal size: 1280x720. We approve if it's at least this size OR matches the 16:9 ratio closely
+        const isIdeal = img.width >= 1280 && img.height >= 720;
+        const ratio = img.width / img.height;
+        const is169 = Math.abs(ratio - 1.77) < 0.1;
+        resolve({ width: img.width, height: img.height, approved: isIdeal || is169 });
+      };
+      img.onerror = () => resolve({ width: 0, height: 0, approved: false });
+      img.src = url;
+    });
+  };
+
+  useEffect(() => {
+    if (editingCourse?.image) {
+      setIsValidatingImage(true);
+      validateImageDimensions(editingCourse.image).then(meta => {
+        setImageMetadata(meta);
+        setIsValidatingImage(false);
+      });
+    } else {
+      setImageMetadata(null);
+    }
+  }, [editingCourse?.image]);
+
   const handleSaveCourse = async () => {
     if (!editingCourse) return;
+
+    // Strict Validation
+    if (!editingCourse.title?.trim()) {
+      setCourseError("Course Title is must");
+      return;
+    }
+    if (!editingCourse.description?.trim()) {
+      setCourseError("Description is must otherwise we don't make our course");
+      return;
+    }
+    if (!editingCourse.image?.trim()) {
+      setCourseError("Cover Image URL is must");
+      return;
+    }
+    if (!editingCourse.category?.trim()) {
+      setCourseError("Category is must");
+      return;
+    }
+    if (editingCourse.order === undefined || editingCourse.order === null) {
+      setCourseError("Display Order is must");
+      return;
+    }
+
+    // Image Approval Check
+    if (imageMetadata && !imageMetadata.approved) {
+      setCourseError("Image size must be 1280x720 for perfect display");
+      return;
+    }
+
     try {
       await saveMainCourse(editingCourse);
       toast.success('Course manifest updated');
       setEditingCourse(null);
+      setCourseError(null);
       fetchData();
     } catch (err) {
       toast.error('Failed to commit course changes');
@@ -307,6 +368,9 @@ export default function AdminPanel() {
                   <div className="flex items-center justify-between gap-4 flex-wrap">
                     <h1 className="admin-title text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-none">{activeCourse.title}</h1>
                     <div className="flex items-center gap-2">
+                      <Button variant="outline" className="bg-white rounded-xl h-9 px-3 sm:px-4 font-bold border-gray-200" onClick={() => navigate(`/training/curriculum?course=${activeCourse._id}`)}>
+                        <ExternalLink className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Preview Course</span>
+                      </Button>
                       <Button variant="outline" className="bg-white rounded-xl h-9 px-3 sm:px-4 font-bold border-gray-200" onClick={() => setEditingCourse(activeCourse)}>
                         <Settings className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Settings</span>
                       </Button>
@@ -381,7 +445,10 @@ export default function AdminPanel() {
                                     {module.videoId ? 'Ready' : 'Pending'}
                                   </span>
                                 </div>
-                                <button className="text-[9px] font-bold text-[#C9A961] uppercase tracking-widest flex items-center gap-1">
+                                <button 
+                                  onClick={() => navigate(`/training/module/${level._id}/${module.number}`)}
+                                  className="text-[9px] font-bold text-[#C9A961] uppercase tracking-widest flex items-center gap-1 hover:text-[#B89751] transition-colors"
+                                >
                                   Preview <ChevronRight className="w-3 h-3" />
                                 </button>
                               </div>
@@ -407,25 +474,64 @@ export default function AdminPanel() {
       </section>
 
       {/* Course Editor Dialog */}
-      <Dialog open={!!editingCourse} onOpenChange={(open) => !open && setEditingCourse(null)}>
+      <Dialog open={!!editingCourse} onOpenChange={(open) => {
+        if (!open) {
+          setEditingCourse(null);
+          setCourseError(null);
+          setImageMetadata(null);
+        }
+      }}>
         <DialogContent className="admin-dialog">
           <div className="dialog-accent-bar" style={{ background: '#2C5F2D' }} />
           <div className="dialog-header">
             <DialogTitle><h2>{editingCourse?._id ? 'Edit Course' : 'Create New Course'}</h2></DialogTitle>
-            <DialogDescription><p>Define the foundation for this learning path.</p></DialogDescription>
+            <DialogDescription><p>Define the foundation for this learning path. All fields are mandatory.</p></DialogDescription>
           </div>
           <div className="dialog-body">
+            {courseError && (
+              <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs font-bold rounded flex items-center gap-2 animate-in fade-in zoom-in-95">
+                <div className="w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">!</div>
+                {courseError}
+              </div>
+            )}
             <div className="dialog-field">
-              <label>Course Title</label>
+              <label>Course Title <span className="text-red-500">*</span></label>
               <input value={editingCourse?.title || ''} onChange={e => setEditingCourse(prev => ({ ...prev!, title: e.target.value }))} placeholder="e.g., Foundations of Faith" />
             </div>
             <div className="dialog-field">
-              <label>Description</label>
+              <label>Description <span className="text-red-500">*</span></label>
               <textarea value={editingCourse?.description || ''} onChange={e => setEditingCourse(prev => ({ ...prev!, description: e.target.value }))} placeholder="Describe what students will learn..." />
             </div>
             <div className="dialog-field">
-              <label>Cover Image URL</label>
-              <input value={editingCourse?.image || ''} onChange={e => setEditingCourse(prev => ({ ...prev!, image: e.target.value }))} placeholder="https://example.com/image.jpg" />
+              <div className="flex justify-between items-end mb-1">
+                <label className="mb-0">Cover Image URL <span className="text-red-500">*</span></label>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Ideal: 1280x720 (16:9)</span>
+              </div>
+              <div className="relative">
+                <input
+                  className={imageMetadata && !imageMetadata.approved ? 'border-red-300' : ''}
+                  value={editingCourse?.image || ''}
+                  onChange={e => setEditingCourse(prev => ({ ...prev!, image: e.target.value }))}
+                  placeholder="https://example.com/image.jpg"
+                />
+                {editingCourse?.image && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {isValidatingImage ? (
+                      <div className="w-4 h-4 border-2 border-gray-200 border-t-[#C9A961] rounded-full animate-spin" />
+                    ) : imageMetadata?.approved ? (
+                      <Check className="w-4 h-4 text-green-500" />
+                    ) : (
+                      <X className="w-4 h-4 text-red-500" />
+                    )}
+                  </div>
+                )}
+              </div>
+              {imageMetadata && (
+                <p className={`text-[10px] font-bold mt-1 uppercase tracking-tight ${imageMetadata.approved ? 'text-green-600' : 'text-red-500'}`}>
+                  {imageMetadata.approved ? `Perfect Size: ${imageMetadata.width}x${imageMetadata.height} Approved` : `Size Mismatch: ${imageMetadata.width}x${imageMetadata.height} (1280x720 Required)`}
+                </p>
+              )}
+
               {editingCourse?.image && (
                 <div style={{ marginTop: '10px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #e5e7eb', maxHeight: '160px' }}>
                   <img
@@ -439,18 +545,23 @@ export default function AdminPanel() {
             </div>
             <div className="dialog-grid">
               <div className="dialog-field">
-                <label>Category</label>
+                <label>Category <span className="text-red-500">*</span></label>
                 <input value={editingCourse?.category || ''} onChange={e => setEditingCourse(prev => ({ ...prev!, category: e.target.value }))} />
               </div>
               <div className="dialog-field">
-                <label>Display Order</label>
+                <label>Display Order <span className="text-red-500">*</span></label>
                 <input type="number" value={editingCourse?.order || 0} onChange={e => setEditingCourse(prev => ({ ...prev!, order: parseInt(e.target.value) }))} />
               </div>
             </div>
           </div>
           <div className="dialog-footer">
-            <button className="btn-cancel" onClick={() => setEditingCourse(null)}>Cancel</button>
-            <button className="btn-save" onClick={handleSaveCourse}>Save Changes</button>
+            <button className="btn-cancel" onClick={() => { setEditingCourse(null); setCourseError(null); }}>Cancel</button>
+            <button
+              className={`btn-save ${imageMetadata && !imageMetadata.approved ? 'opacity-50 grayscale' : ''}`}
+              onClick={handleSaveCourse}
+            >
+              Save Changes
+            </button>
           </div>
         </DialogContent>
       </Dialog>

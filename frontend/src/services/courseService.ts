@@ -54,15 +54,28 @@ export interface Assessment {
 let cachedCourses: MainCourse[] | null = null;
 
 export const getCourses = async (): Promise<MainCourse[]> => {
+  // Try to get from localStorage first for instant load
+  const cachedData = localStorage.getItem('tff_courses_cache');
+  if (cachedData && !cachedCourses) {
+    try {
+      cachedCourses = JSON.parse(cachedData);
+    } catch (e) {
+      console.error('Failed to parse cached courses', e);
+    }
+  }
+
   if (cachedCourses) {
-    // Fetch in background to keep data fresh but return cached immediately
+    // Fetch in background to keep data fresh
     api.get('/courses').then(res => {
       cachedCourses = res.data;
+      localStorage.setItem('tff_courses_cache', JSON.stringify(res.data));
     }).catch(err => console.error('Background fetch failed:', err));
     return cachedCourses;
   }
+
   const res = await api.get('/courses');
   cachedCourses = res.data;
+  localStorage.setItem('tff_courses_cache', JSON.stringify(res.data));
   return res.data;
 };
 
