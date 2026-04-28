@@ -305,13 +305,13 @@ export default function AdminPanel() {
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between gap-4 flex-wrap">
-                    <h1 className="admin-title text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-none">{activeCourse.title}</h1>
+                    <h1 className="admin-title text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 tracking-tight leading-none">{activeCourse.title}</h1>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" className="bg-white rounded-xl h-9 px-4 font-bold border-gray-200" onClick={() => setEditingCourse(activeCourse)}>
-                        <Settings className="w-4 h-4 mr-2" /> Settings
+                      <Button variant="outline" className="bg-white rounded-xl h-9 px-3 sm:px-4 font-bold border-gray-200" onClick={() => setEditingCourse(activeCourse)}>
+                        <Settings className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Settings</span>
                       </Button>
-                      <Button variant="outline" className="bg-white rounded-xl h-9 px-4 font-bold text-red-500 hover:bg-red-50 hover:text-red-600 border-red-100" onClick={() => setDeleteTarget({ type: 'course', id: activeCourse._id })}>
-                        <Trash2 className="w-4 h-4 mr-2" /> Delete
+                      <Button variant="outline" className="bg-white rounded-xl h-9 px-3 sm:px-4 font-bold text-red-500 hover:bg-red-50 hover:text-red-600 border-red-100" onClick={() => setDeleteTarget({ type: 'course', id: activeCourse._id })}>
+                        <Trash2 className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Delete</span>
                       </Button>
                       <Button className="bg-[#2C5F2D] text-white rounded-xl h-9 px-5 font-bold shadow-sm" onClick={() => setEditingLevel({ mainCourseId: activeTab, level: activeCourse.levels.length + 1, title: '', subtitle: '', color: 'from-[#2C5F2D] to-[#4A8B4D]' })}>
                         <Plus className="w-4 h-4 mr-2" /> New Level
@@ -328,25 +328,25 @@ export default function AdminPanel() {
                   <div key={level._id} className="w-full">
                     {idx > 0 && <div className="h-32 border-t border-gray-100/50 mt-16 mb-16" />}
                     <div className="flex flex-col gap-10">
-                      <div className="flex items-center justify-between mb-8">
-                        <div className="flex items-center gap-6">
-                          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center text-white text-xl font-bold shadow-sm ring-4 ring-white`}>
+                      <div className="admin-level-header flex items-center justify-between mb-8">
+                        <div className="flex items-center gap-3 sm:gap-6">
+                          <div className={`flex-none w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${level.color} flex items-center justify-center text-white text-base sm:text-xl font-bold shadow-sm ring-2 sm:ring-4 ring-white`}>
                             {level.level}
                           </div>
                           <div>
-                            <h3 className="text-2xl font-bold text-gray-900 leading-none mb-1 tracking-tight">{level.title}</h3>
-                            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{level.subtitle}</p>
+                            <h3 className="text-lg sm:text-2xl font-bold text-gray-900 leading-tight mb-1 tracking-tight">{level.title}</h3>
+                            <p className="text-[10px] sm:text-[11px] font-bold text-gray-400 uppercase tracking-widest">{level.subtitle}</p>
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => setEditingLevel(level)}>
-                            <Edit className="w-4 h-4 mr-2" /> Level
+                        <div className="admin-level-actions flex gap-1 sm:gap-2">
+                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961] px-2 sm:px-3" onClick={() => setEditingLevel(level)}>
+                            <Edit className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Level</span>
                           </Button>
-                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-red-500" onClick={() => setDeleteTarget({ type: 'level', id: level._id })}>
-                            <Trash2 className="w-4 h-4 mr-2" /> Delete
+                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-red-500 px-2 sm:px-3" onClick={() => setDeleteTarget({ type: 'level', id: level._id })}>
+                            <Trash2 className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Delete</span>
                           </Button>
-                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => loadAssessment(level._id, level.level)}>
-                            <Sparkles className="w-4 h-4 mr-2" /> Quiz
+                          <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961] px-2 sm:px-3" onClick={() => loadAssessment(level._id, level.level)}>
+                            <Sparkles className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Quiz</span>
                           </Button>
                         </div>
                       </div>

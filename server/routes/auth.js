@@ -13,7 +13,8 @@ if (!process.env.JWT_SECRET) {
 // @desc    Register user
 // @access  Public
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password, phone, country } = req.body;
+  const name = `${firstName || ''} ${lastName || ''}`.trim();
 
   try {
     let user = await User.findOne({ email });
@@ -21,7 +22,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    user = new User({ name, email, password });
+    user = new User({ name, email, password, phone, country });
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);

@@ -30,7 +30,11 @@ function AuthForm() {
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [countryCode, setCountryCode] = useState('+1');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [country, setCountry] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -51,7 +55,8 @@ function AuthForm() {
         toast.success('Welcome back!');
         navigate('/Training/dashboard');
       } else {
-        await register(name, email, password);
+        const fullPhone = `${countryCode} ${phoneNumber}`.trim();
+        await register(firstName, lastName, email, password, fullPhone, country);
         toast.success('Account created!');
         navigate('/Training/dashboard');
       }
@@ -157,7 +162,31 @@ function AuthForm() {
             </form>
           ) : (
             <form onSubmit={handleAuth} className="space-y-4">
-              {authMode === 'signup' && <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />}
+              {authMode === 'signup' && (
+                <>
+                  <div className="flex gap-2">
+                    <Input placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                    <Input placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+                  </div>
+                  <div className="flex gap-2">
+                    <select
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="flex h-10 w-24 items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      required
+                    >
+                      <option value="+1">+1 (US/CA)</option>
+                      <option value="+44">+44 (UK)</option>
+                      <option value="+91">+91 (IN)</option>
+                      <option value="+92">+92 (PK)</option>
+                      <option value="+971">+971 (UAE)</option>
+                      <option value="+61">+61 (AU)</option>
+                    </select>
+                    <Input type="tel" placeholder="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} required className="flex-1" />
+                  </div>
+                  <Input placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} required />
+                </>
+              )}
               <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               <div className="relative w-full">
                 <Input 

@@ -9,7 +9,9 @@ import { Label } from '../components/ui/label';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router';
 import { useAuth } from '../context/AuthContext';
-import { toast } from 'sonner'; 
+import { countries } from '../data/countries';
+import { CountryPicker } from '../components/CountryPicker';
+import { toast } from 'sonner';
 
 const LoadingOverlay = ({ message }: { message: string }) => (
   <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-2xl animate-in fade-in duration-300">
@@ -17,7 +19,7 @@ const LoadingOverlay = ({ message }: { message: string }) => (
       {/* Dynamic rolling slider effect */}
       <div className="absolute inset-0 rounded-full border-[6px] border-[#2C5F2D]/5 border-t-[#C9A961] animate-[spin_1s_cubic_bezier(0.55,0.055,0.675,0.19)_infinite]" />
       <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#2C5F2D] animate-[spin_1.5s_cubic_bezier(0.215,0.61,0.355,1)_infinite_reverse]" />
-      
+
       {/* Center glowing element */}
       <div className="absolute inset-[30%] rounded-full bg-gradient-to-br from-[#2C5F2D] to-[#C9A961] opacity-20 animate-pulse" />
     </div>
@@ -25,7 +27,7 @@ const LoadingOverlay = ({ message }: { message: string }) => (
       <h3 className="text-lg font-bold text-[#2C5F2D] tracking-tight">{message}</h3>
       <p className="mt-1 text-[#8B7355] font-semibold text-xs animate-pulse">Please wait while we process...</p>
     </div>
-    
+
     <style>{`
       @keyframes spin {
         from { transform: rotate(0deg); }
@@ -41,11 +43,15 @@ export function TrainingPage() {
   const { user, login, register, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
-  
+
   // Form State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [countryCode, setCountryCode] = useState('+1');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [country, setCountry] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -68,7 +74,7 @@ export function TrainingPage() {
 
   const activeModuleId = getNextModuleId();
   const activeModuleValue = `module-${activeModuleId}`;
-  
+
   // Track which level is currently being viewed
   const [selectedLevelId, setSelectedLevelId] = useState(1);
 
@@ -86,10 +92,10 @@ export function TrainingPage() {
       navigate('/Training/dashboard');
     }
   }, [user, loading, navigate, rawModuleId]);
-  
 
-  const userProgress = user?.completedModules?.length 
-    ? Math.round((user.completedModules.length / 15) * 100) 
+
+  const userProgress = user?.completedModules?.length
+    ? Math.round((user.completedModules.length / 15) * 100)
     : 0;
 
   const levels = [
@@ -374,7 +380,8 @@ export function TrainingPage() {
         });
         navigate('/Training/dashboard');
       } else {
-        await register(name, email, password);
+        const fullPhone = `${countryCode} ${phoneNumber}`.trim();
+        await register(firstName, lastName, email, password, fullPhone, country);
         toast.success('Account created!', {
           description: 'Welcome to the TFF training community.',
         });
@@ -396,7 +403,7 @@ export function TrainingPage() {
     e.preventDefault();
     setAuthError('');
     setIsSubmitting(true);
-    
+
     try {
       await forgotPassword(email);
       setForgotStep(2);
@@ -423,10 +430,10 @@ export function TrainingPage() {
       });
       return;
     }
-    
+
     setAuthError('');
     setIsSubmitting(true);
-    
+
     try {
       await resetPassword(email, otp, newPassword);
       toast.success('Password reset!', {
@@ -482,9 +489,9 @@ export function TrainingPage() {
     return (
       <div className="min-h-[85vh] flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden bg-[#FAF8F3]">
         {/* Subtle Geometric Background Pattern (matching HomePage) */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-             style={{ backgroundImage: 'url(/pattern-geometric.svg)', backgroundSize: '100px 100px' }} />
-        
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{ backgroundImage: 'url(/pattern-geometric.svg)', backgroundSize: '100px 100px' }} />
+
         <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-[#2C5F2D] mb-3">Training Access</h1>
@@ -498,258 +505,309 @@ export function TrainingPage() {
             {isSubmitting && <LoadingOverlay message={authMode === 'forgot' ? (forgotStep === 1 ? "Sending Code..." : "Resetting Password...") : "Processing..."} />}
 
             <Card className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
-            <CardHeader className="pb-4 pt-8 text-center">
-              <CardTitle className="text-2xl font-bold text-[#2C5F2D]">
-                {authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Reset Password' : 'Join the Community'}
-              </CardTitle>
-              <CardDescription className="text-gray-500 font-medium">
-                {authMode === 'login' 
-                  ? 'Sign in to continue your learning journey' 
-                  : authMode === 'forgot'
-                  ? 'Follow the steps to recover your access'
-                  : 'Start your foundation in faith today'}
-              </CardDescription>
-            </CardHeader>
+              <CardHeader className="pb-4 pt-8 text-center">
+                <CardTitle className="text-2xl font-bold text-[#2C5F2D]">
+                  {authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Reset Password' : 'Join the Community'}
+                </CardTitle>
+                <CardDescription className="text-gray-500 font-medium">
+                  {authMode === 'login'
+                    ? 'Sign in to continue your learning journey'
+                    : authMode === 'forgot'
+                      ? 'Follow the steps to recover your access'
+                      : 'Start your foundation in faith today'}
+                </CardDescription>
+              </CardHeader>
 
-            {authMode === 'forgot' ? (
-              <form onSubmit={forgotStep === 1 ? handleForgotPassword : forgotStep === 2 ? (e) => { e.preventDefault(); setForgotStep(3); } : handleResetPassword}>
-                <CardContent className="space-y-6 px-8 pb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  <div className="flex justify-center mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 1 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
-                      <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 2 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
-                      <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 3 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
-                    </div>
-                  </div>
-
-                  {forgotStep === 1 ? (
-                    <div className="space-y-4 animate-in fade-in duration-500">
-                      <div className="text-center space-y-2">
-                        <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <Mail className="w-8 h-8 text-[#C9A961]" />
-                        </div>
-                        <h3 className="text-xl font-bold text-[#2C5F2D]">Verify your Email</h3>
-                        <p className="text-sm text-gray-500">Enter the email associated with your account</p>
+              {authMode === 'forgot' ? (
+                <form onSubmit={forgotStep === 1 ? handleForgotPassword : forgotStep === 2 ? (e) => { e.preventDefault(); setForgotStep(3); } : handleResetPassword}>
+                  <CardContent className="space-y-6 px-8 pb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex justify-center mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 1 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
+                        <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 2 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
+                        <div className={`w-8 h-2 rounded-full transition-all duration-500 ${forgotStep === 3 ? 'bg-[#C9A961] w-12' : 'bg-gray-200'}`} />
                       </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="forgot-email" className="text-sm font-semibold text-[#2C5F2D] ml-1">Email Address</Label>
-                        <div className="relative group">
-                          <Input 
-                            id="forgot-email" 
-                            type="email" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="name@example.com" 
-                            className="px-4 h-14 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
-                            required 
+                    </div>
+
+                    {forgotStep === 1 ? (
+                      <div className="space-y-4 animate-in fade-in duration-500">
+                        <div className="text-center space-y-2">
+                          <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <Mail className="w-8 h-8 text-[#C9A961]" />
+                          </div>
+                          <h3 className="text-xl font-bold text-[#2C5F2D]">Verify your Email</h3>
+                          <p className="text-sm text-gray-500">Enter the email associated with your account</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="forgot-email" className="text-sm font-semibold text-[#2C5F2D] ml-1">Email Address</Label>
+                          <div className="relative group">
+                            <Input
+                              id="forgot-email"
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="name@example.com"
+                              className="px-4 h-14 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none"
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ) : forgotStep === 2 ? (
+                      <div className="space-y-4 animate-in fade-in duration-500">
+                        <div className="text-center space-y-2">
+                          <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <Shield className="w-8 h-8 text-[#C9A961]" />
+                          </div>
+                          <h3 className="text-xl font-bold text-[#2C5F2D]">Check your Inbox</h3>
+                          <p className="text-sm text-gray-500">Enter the 6-digit code sent to <br /><span className="text-[#2C5F2D] font-bold">{email}</span></p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="otp" className="text-sm font-semibold text-[#2C5F2D] ml-1 text-center block">Verification Code</Label>
+                          <Input
+                            id="otp"
+                            type="text"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                            placeholder="••••••"
+                            maxLength={6}
+                            className="h-16 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 text-center tracking-[0.8em] font-extrabold text-3xl text-[#2C5F2D] rounded-xl bg-white/50 focus:bg-white transition-all"
+                            required
                           />
                         </div>
                       </div>
-                    </div>
-                  ) : forgotStep === 2 ? (
-                    <div className="space-y-4 animate-in fade-in duration-500">
-                      <div className="text-center space-y-2">
-                        <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <Shield className="w-8 h-8 text-[#C9A961]" />
+                    ) : (
+                      <div className="space-y-4 animate-in fade-in duration-500">
+                        <div className="text-center space-y-2">
+                          <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <Lock className="w-8 h-8 text-[#C9A961]" />
+                          </div>
+                          <h3 className="text-xl font-bold text-[#2C5F2D]">New Password</h3>
+                          <p className="text-sm text-gray-500">Set a strong password for your account</p>
                         </div>
-                        <h3 className="text-xl font-bold text-[#2C5F2D]">Check your Inbox</h3>
-                        <p className="text-sm text-gray-500">Enter the 6-digit code sent to <br/><span className="text-[#2C5F2D] font-bold">{email}</span></p>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="otp" className="text-sm font-semibold text-[#2C5F2D] ml-1 text-center block">Verification Code</Label>
-                        <Input 
-                          id="otp" 
-                          type="text" 
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value)}
-                          placeholder="••••••" 
-                          maxLength={6}
-                          className="h-16 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 text-center tracking-[0.8em] font-extrabold text-3xl text-[#2C5F2D] rounded-xl bg-white/50 focus:bg-white transition-all" 
-                          required 
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-4 animate-in fade-in duration-500">
-                      <div className="text-center space-y-2">
-                        <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <Lock className="w-8 h-8 text-[#C9A961]" />
+                        <div className="space-y-2">
+                          <Label htmlFor="new-password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">New Password</Label>
+                          <div className="relative group w-full">
+                            <Input
+                              id="new-password"
+                              type={showNewPassword ? 'text' : 'password'}
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              placeholder="••••••••"
+                              className="px-4 h-14 pr-12 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none"
+                              required
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowNewPassword(!showNewPassword)}
+                              className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                              style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
+                            >
+                              {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
+                          </div>
                         </div>
-                        <h3 className="text-xl font-bold text-[#2C5F2D]">New Password</h3>
-                        <p className="text-sm text-gray-500">Set a strong password for your account</p>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="new-password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">New Password</Label>
-                        <div className="relative group w-full">
-                          <Input 
-                            id="new-password" 
-                            type={showNewPassword ? 'text' : 'password'} 
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            placeholder="••••••••" 
-                            className="px-4 h-14 pr-12 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
-                            required 
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
-                            style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
-                          >
-                            {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                          </button>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="confirm-password" internal-role="confirm-pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">Confirm Password</Label>
-                        <div className="relative group w-full">
-                          <Input 
-                            id="confirm-password" 
-                            type={showConfirmPassword ? 'text' : 'password'} 
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder="••••••••" 
-                            className="px-4 h-14 pr-12 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none" 
-                            required 
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
-                            style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
-                          >
-                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                          </button>
+                        <div className="space-y-2">
+                          <Label htmlFor="confirm-password" internal-role="confirm-pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">Confirm Password</Label>
+                          <div className="relative group w-full">
+                            <Input
+                              id="confirm-password"
+                              type={showConfirmPassword ? 'text' : 'password'}
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              placeholder="••••••••"
+                              className="px-4 h-14 pr-12 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 rounded-xl bg-white/50 focus:bg-white transition-all outline-none"
+                              required
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                              className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                              style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
+                            >
+                              {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {authError && (
-                    <div className="p-4 text-sm bg-red-50 text-red-600 border-l-4 border-red-500 rounded-lg font-bold flex items-start gap-3 animate-in fade-in zoom-in-95 duration-300">
-                      <div className="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5">!</div>
-                      <span>{authError}</span>
-                    </div>
-                  )}
-
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full bg-[#2C5F2D] hover:bg-[#234F24] text-white h-14 text-lg font-bold rounded-xl shadow-lg shadow-green-900/10 transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
-                  >
-                    {isSubmitting ? (
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                        Processing...
+                    {authError && (
+                      <div className="p-4 text-sm bg-red-50 text-red-600 border-l-4 border-red-500 rounded-lg font-bold flex items-start gap-3 animate-in fade-in zoom-in-95 duration-300">
+                        <div className="w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] mt-0.5">!</div>
+                        <span>{authError}</span>
                       </div>
-                    ) : forgotStep === 1 ? 'Send Code' : forgotStep === 2 ? 'Next' : 'Reset Password'}
-                  </Button>
-                </CardContent>
-                <CardFooter className="pb-32 pt-4 flex justify-center">
-                  <button 
-                    type="button" 
-                    onClick={() => { setAuthMode('login'); setForgotStep(1); setAuthError(''); }}
-                    className="text-sm font-bold text-gray-500 hover:text-[#C9A961] transition-all flex items-center gap-2 group px-4 py-2 rounded-lg hover:bg-[#C9A961]/5"
-                  >
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    Back to Login
-                  </button>
-                </CardFooter>
-              </form>
-            ) : (
-              <form onSubmit={handleAuth}>
-                <CardContent className="space-y-4 px-8 pb-4">
-                  {authMode === 'signup' && (
+                    )}
+
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#2C5F2D] hover:bg-[#234F24] text-white h-14 text-lg font-bold rounded-xl shadow-lg shadow-green-900/10 transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
+                          Processing...
+                        </div>
+                      ) : forgotStep === 1 ? 'Send Code' : forgotStep === 2 ? 'Next' : 'Reset Password'}
+                    </Button>
+                  </CardContent>
+                  <CardFooter className="pb-32 pt-4 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() => { setAuthMode('login'); setForgotStep(1); setAuthError(''); }}
+                      className="text-sm font-bold text-gray-500 hover:text-[#C9A961] transition-all flex items-center gap-2 group px-4 py-2 rounded-lg hover:bg-[#C9A961]/5"
+                    >
+                      <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                      Back to Login
+                    </button>
+                  </CardFooter>
+                </form>
+              ) : (
+                <form onSubmit={handleAuth}>
+                  <CardContent className="space-y-4 px-8 pb-4">
+                    {authMode === 'signup' && (
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
+                        <div className="flex gap-3">
+                          <div className="flex-1 space-y-2">
+                            <Label htmlFor="firstName" className="text-sm font-semibold text-[#2C5F2D]">First Name</Label>
+                            <Input
+                              id="firstName"
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
+                              placeholder="e.g. John"
+                              autoComplete="given-name"
+                              className="px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all"
+                              required
+                            />
+                          </div>
+                          <div className="flex-1 space-y-2">
+                            <Label htmlFor="lastName" className="text-sm font-semibold text-[#2C5F2D]">Last Name</Label>
+                            <Input
+                              id="lastName"
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                              placeholder="e.g. Doe"
+                              autoComplete="family-name"
+                              className="px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="phone" className="text-sm font-semibold text-[#2C5F2D]">Phone Number</Label>
+                          <div className="flex gap-3">
+                            <CountryPicker 
+                              id="countryCode"
+                              value={countryCode} 
+                              onChange={setCountryCode} 
+                              mode="dial"
+                              className="w-32"
+                            />
+                            <Input
+                              id="phone"
+                              type="tel"
+                              value={phoneNumber}
+                              onChange={(e) => setPhoneNumber(e.target.value)}
+                              placeholder="Phone Number"
+                              autoComplete="tel"
+                              className="flex-1 px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="country" className="text-sm font-semibold text-[#2C5F2D]">Country</Label>
+                          <CountryPicker 
+                            id="country"
+                            value={country} 
+                            onChange={setCountry} 
+                            mode="name"
+                            placeholder="Select your country"
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm font-semibold text-[#2C5F2D]">Full Name</Label>
+                      <Label htmlFor="email" className="text-sm font-semibold text-[#2C5F2D]">Email Address</Label>
                       <div className="relative group">
-                        <Input 
-                          id="name" 
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="e.g. Abdullah Ahmed" 
-                          className="px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all" 
-                          required 
+                        <Input
+                          id="email"
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="e.g. john@example.com"
+                          autoComplete="email"
+                          className="px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all"
+                          required
                         />
                       </div>
                     </div>
-                  )}
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold text-[#2C5F2D]">Email Address</Label>
-                    <div className="relative group">
-                      <Input 
-                        id="email" 
-                        type="email" 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="name@example.com" 
-                        className="px-4 h-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all" 
-                        required 
-                      />
-                    </div>
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D]">Password</Label>
-                    <div className="relative group w-full">
-                      <Input 
-                        id="password" 
-                        type={showPassword ? 'text' : 'password'} 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••" 
-                        className="px-4 h-12 pr-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all" 
-                        required 
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
-                        style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
-                      >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                      </button>
+                    <div className="space-y-2">
+                      <Label htmlFor="password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D]">Password</Label>
+                      <div className="relative group w-full">
+                        <Input
+                          id="password"
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="••••••••"
+                          autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
+                          className="px-4 h-12 pr-12 border-gray-200 focus:border-[#C9A961] focus:ring-[#C9A961]/10 transition-all"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                          style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  {authError && (
-                    <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-100 rounded-lg font-medium text-center">
-                      {authError}
+                    {authError && (
+                      <div className="p-3 text-xs bg-red-50 text-red-600 border border-red-100 rounded-lg font-medium text-center">
+                        {authError}
+                      </div>
+                    )}
+
+                    {authMode === 'login' && (
+                      <div className="flex justify-end pr-1">
+                        <button
+                          type="button"
+                          onClick={() => { setAuthMode('forgot'); setForgotStep(1); setAuthError(''); }}
+                          className="text-xs text-[#C9A961] font-bold hover:underline"
+                        >
+                          Forgot password?
+                        </button>
+                      </div>
+                    )}
+
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-[#2C5F2D] hover:bg-[#234F24] text-white h-14 text-lg font-bold rounded-xl shadow-md transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
+                    >
+                      {isSubmitting ? 'Processing...' : (authMode === 'login' ? 'Login Now' : 'Create My Account')}
+                    </Button>
+
+                    {/* Repositioned Google Login Button */}
+                    <div className="relative pt-6 pb-2">
+                      <div className="absolute inset-0 flex items-center pr-8 pl-8">
+                        <span className="w-full border-t border-gray-100" />
+                      </div>
+                      <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold text-gray-400">
+                        <span className="bg-white px-3">Or explore with</span>
+                      </div>
                     </div>
-                  )}
 
-                  {authMode === 'login' && (
-                    <div className="flex justify-end pr-1">
-                      <button 
-                        type="button" 
-                        onClick={() => { setAuthMode('forgot'); setForgotStep(1); setAuthError(''); }}
-                        className="text-xs text-[#C9A961] font-bold hover:underline"
-                      >
-                        Forgot password?
-                      </button>
-                    </div>
-                  )}
-
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full bg-[#2C5F2D] hover:bg-[#234F24] text-white h-14 text-lg font-bold rounded-xl shadow-md transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
-                  >
-                    {isSubmitting ? 'Processing...' : (authMode === 'login' ? 'Login Now' : 'Create My Account')}
-                  </Button>
-
-                  {/* Repositioned Google Login Button */}
-                  <div className="relative pt-6 pb-2">
-                    <div className="absolute inset-0 flex items-center pr-8 pl-8">
-                      <span className="w-full border-t border-gray-100" />
-                    </div>
-                    <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold text-gray-400">
-                      <span className="bg-white px-3">Or explore with</span>
-                    </div>
-                  </div>
-
-                  <Button 
+                    {/* <Button 
                     type="button"
                     variant="outline" 
                     onClick={() => login('demo@example.com', 'password123')} // Placeholder for demo
@@ -757,27 +815,27 @@ export function TrainingPage() {
                   >
                     <GoogleIcon />
                     Continue with Google
-                  </Button>
-                </CardContent>
+                  </Button> */}
+                  </CardContent>
 
-                <CardFooter className="flex flex-col space-y-4 pb-4 pt-1">
-                  <div className="text-center text-sm w-full">
-                    <span className="text-gray-500 font-medium">
-                      {authMode === 'login' ? "Don't have an account?" : "Already joined us?"}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                      className="ml-2 text-[#C9A961] font-extrabold hover:text-[#B89751] transition-colors"
-                    >
-                      {authMode === 'login' ? 'Sign Up' : 'Login'}
-                    </button>
-                  </div>
-                </CardFooter>
-              </form>
-            )}
-          </Card>
-        </div>
+                  <CardFooter className="flex flex-col space-y-4 pb-4 pt-1">
+                    <div className="text-center text-sm w-full">
+                      <span className="text-gray-500 font-medium">
+                        {authMode === 'login' ? "Don't have an account?" : "Already joined us?"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
+                        className="ml-2 text-[#C9A961] font-extrabold hover:text-[#B89751] transition-colors"
+                      >
+                        {authMode === 'login' ? 'Sign Up' : 'Login'}
+                      </button>
+                    </div>
+                  </CardFooter>
+                </form>
+              )}
+            </Card>
+          </div>
 
           {/* Mini Trust Row */}
           <div className="mt-4 flex justify-center items-center gap-6 opacity-60">
@@ -803,7 +861,7 @@ export function TrainingPage() {
               Continue your step-by-step journey to understand and practice Islam with confidence
             </p>
           </div>
-          
+
           {/* Progress Tracker */}
           <Link to="/training/curriculum" className="block group">
             <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300">
@@ -828,8 +886,8 @@ export function TrainingPage() {
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Your Learning Path</h2>
             <p className="text-gray-600 leading-relaxed mb-8">
-              Our training program is organized into 5 progressive levels with 15 comprehensive modules. 
-              Each module includes multiple formats (reading, video, audio) to suit your learning style. 
+              Our training program is organized into 5 progressive levels with 15 comprehensive modules.
+              Each module includes multiple formats (reading, video, audio) to suit your learning style.
               Take your time, learn at your own pace, and build a strong foundation in your faith.
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -858,21 +916,20 @@ export function TrainingPage() {
       {/* Training Levels Section */}
       <section className="py-12 bg-[#FAF8F3]">
         <div className="w-full mx-auto px-4 lg:px-6">
-          
+
           {/* Level Switcher Hero Tab Bar */}
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {levels.map((l) => (
               <button
                 key={l.level}
                 onClick={() => setSelectedLevelId(l.level)}
-                className={`group relative flex flex-col items-center p-1 transition-all duration-300 ${
-                  selectedLevelId === l.level ? 'scale-110' : 'opacity-60 hover:opacity-100 hover:scale-105'
-                }`}
+                className={`group relative flex flex-col items-center p-1 transition-all duration-300 ${selectedLevelId === l.level ? 'scale-110' : 'opacity-60 hover:opacity-100 hover:scale-105'
+                  }`}
               >
                 <div className={`
                   flex flex-col items-center justify-center w-24 h-24 rounded-2xl border-2 transition-all shadow-sm
-                  ${selectedLevelId === l.level 
-                    ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] border-[#C9A961] shadow-xl shadow-green-900/20' 
+                  ${selectedLevelId === l.level
+                    ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] border-[#C9A961] shadow-xl shadow-green-900/20'
                     : 'bg-white border-gray-100'
                   }
                 `}>
@@ -884,7 +941,7 @@ export function TrainingPage() {
                   </p>
                 </div>
                 {selectedLevelId === l.level && (
-                   <div className="absolute -bottom-2 w-2 h-2 rounded-full bg-[#C9A961] animate-pulse" />
+                  <div className="absolute -bottom-2 w-2 h-2 rounded-full bg-[#C9A961] animate-pulse" />
                 )}
               </button>
             ))}
@@ -893,114 +950,110 @@ export function TrainingPage() {
           {levels
             .filter((level) => level.level === selectedLevelId)
             .map((level) => (
-            <Card key={level.level} className="overflow-hidden border-none rounded-[3rem] shadow-[0_40px_120px_rgba(0,0,0,0.06)] bg-white min-h-[750px] border border-gray-100">
-              {/* Unified Level Header */}
-              <div
-                className="relative overflow-hidden p-8 text-white border-b border-[#C9A961]/10"
-                style={{
-                  backgroundImage: `linear-gradient(90deg, ${level.darkFrom}, ${level.darkTo}), radial-gradient(circle at 18% 35%, ${level.glow}55 0%, transparent 62%)`,
-                  backgroundBlendMode: 'normal',
-                }}
-              >
+              <Card key={level.level} className="overflow-hidden border-none rounded-[3rem] shadow-[0_40px_120px_rgba(0,0,0,0.06)] bg-white min-h-[750px] border border-gray-100">
+                {/* Unified Level Header */}
                 <div
-                  className="pointer-events-none absolute inset-0"
+                  className="relative overflow-hidden p-8 text-white border-b border-[#C9A961]/10"
                   style={{
-                    background:
-                      'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 22%, rgba(255,255,255,0) 55%)',
+                    backgroundImage: `linear-gradient(90deg, ${level.darkFrom}, ${level.darkTo}), radial-gradient(circle at 18% 35%, ${level.glow}55 0%, transparent 62%)`,
+                    backgroundBlendMode: 'normal',
                   }}
-                  aria-hidden
-                />
-                <div className="flex items-center gap-4 mb-2">
-                  <Badge className="bg-white/15 text-white text-lg px-4 py-1">
-                    Level {level.level}
-                  </Badge>
-                  <Badge className="bg-white/15 text-white">
-                    {level.subtitle}
-                  </Badge>
+                >
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 22%, rgba(255,255,255,0) 55%)',
+                    }}
+                    aria-hidden
+                  />
+                  <div className="flex items-center gap-4 mb-2">
+                    <Badge className="bg-white/15 text-white text-lg px-4 py-1">
+                      Level {level.level}
+                    </Badge>
+                    <Badge className="bg-white/15 text-white">
+                      {level.subtitle}
+                    </Badge>
+                  </div>
+                  <h2 className="text-3xl font-bold">{level.title}</h2>
                 </div>
-                <h2 className="text-3xl font-bold">{level.title}</h2>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
-                {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
-                <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-white">
-                  <div className="pl-10 pr-8 pt-8 pb-7 border-b border-gray-100 bg-white sticky top-0 z-20">
-                    <h3 className="text-[11px] font-black text-[#2C5F2D] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
-                    <div className="flex flex-col gap-3">
+                <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
+                  {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
+                  <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-white">
+                    <div className="pl-10 pr-8 pt-8 pb-7 border-b border-gray-100 bg-white sticky top-0 z-20">
+                      <h3 className="text-[11px] font-black text-[#2C5F2D] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
+                      <div className="flex flex-col gap-3">
                         <div className="flex items-baseline justify-between">
-                            <p className="text-sm font-black text-[#2C5F2D]">Level {level.level}</p>
-                            <span className="text-[10px] font-bold text-[#8B7355] bg-[#C9A961]/10 px-2 py-0.5 rounded-full">{userProgress}%</span>
+                          <p className="text-sm font-black text-[#2C5F2D]">Level {level.level}</p>
+                          <span className="text-[10px] font-bold text-[#8B7355] bg-[#C9A961]/10 px-2 py-0.5 rounded-full">{userProgress}%</span>
                         </div>
                         <Progress value={userProgress} className="h-1.5 bg-[#C9A961]/15 rounded-full [&>div]:bg-gradient-to-r [&>div]:from-[#C9A961] [&>div]:to-[#2C5F2D] [&>div]:rounded-full" />
+                      </div>
                     </div>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }} className="pt-4 pb-6 px-4">
-                    {level.modules.map((module, moduleIdx) => {
-                      const isActive = activeModuleId === module.id || activeModuleId === String(module.number);
-                      const isCompleted = user?.completedModules?.includes(module.id);
-                      
-                      return (
-                        <button
-                          key={module.id}
-                          onClick={() => {
-                            const params = new URLSearchParams(searchParams);
-                            params.set('module', String(module.number));
-                            navigate(`?${params.toString()}`, { replace: true });
-                            if (user) {
-                              updateProgress(undefined, undefined, module.id);
-                            }
-                          }}
-                          className={`relative flex flex-col gap-2.5 px-7 py-6 text-left transition-all duration-500 group rounded-2xl ${
-                            moduleIdx < level.modules.length - 1 ? 'mb-4' : ''
-                          } ${
-                            isActive 
-                              ? 'bg-gray-50 shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10' 
-                              : 'hover:bg-gray-50/80 opacity-75 hover:opacity-100 hover:translate-x-1'
-                          }`}
-                        >
-                          {/* Active Backdrop Tint */}
-                          {isActive && (
-                            <div className="absolute inset-0 bg-[#2C5F2D]/[0.02] rounded-2xl pointer-events-none" />
-                          )}
-                          {isActive && (
-                            <div className="absolute left-1 top-4 bottom-4 w-1.5 bg-gradient-to-b from-[#C9A961] to-[#8B7355] rounded-full shadow-[0_0_10px_rgba(201,169,97,0.4)]" />
-                          )}
-                          
-                          <div className="flex flex-col gap-2 min-w-0 pl-2">
-                            <div className="flex items-center justify-between">
-                                <span className={`text-[10px] font-black px-4 py-1.5 rounded-lg uppercase tracking-tight ${
-                                    isActive ? 'bg-[#2C5F2D] text-white shadow-sm' : 'bg-gray-100 text-gray-500'
-                                }`}>
-                                    Module {module.number}
+                    <div style={{ display: 'flex', flexDirection: 'column' }} className="pt-4 pb-6 px-4">
+                      {level.modules.map((module, moduleIdx) => {
+                        const isActive = activeModuleId === module.id || activeModuleId === String(module.number);
+                        const isCompleted = user?.completedModules?.includes(module.id);
+
+                        return (
+                          <button
+                            key={module.id}
+                            onClick={() => {
+                              const params = new URLSearchParams(searchParams);
+                              params.set('module', String(module.number));
+                              navigate(`?${params.toString()}`, { replace: true });
+                              if (user) {
+                                updateProgress(undefined, undefined, module.id);
+                              }
+                            }}
+                            className={`relative flex flex-col gap-2.5 px-7 py-6 text-left transition-all duration-500 group rounded-2xl ${moduleIdx < level.modules.length - 1 ? 'mb-4' : ''
+                              } ${isActive
+                                ? 'bg-gray-50 shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10'
+                                : 'hover:bg-gray-50/80 opacity-75 hover:opacity-100 hover:translate-x-1'
+                              }`}
+                          >
+                            {/* Active Backdrop Tint */}
+                            {isActive && (
+                              <div className="absolute inset-0 bg-[#2C5F2D]/[0.02] rounded-2xl pointer-events-none" />
+                            )}
+                            {isActive && (
+                              <div className="absolute left-1 top-4 bottom-4 w-1.5 bg-gradient-to-b from-[#C9A961] to-[#8B7355] rounded-full shadow-[0_0_10px_rgba(201,169,97,0.4)]" />
+                            )}
+
+                            <div className="flex flex-col gap-2 min-w-0 pl-2">
+                              <div className="flex items-center justify-between">
+                                <span className={`text-[10px] font-black px-4 py-1.5 rounded-lg uppercase tracking-tight ${isActive ? 'bg-[#2C5F2D] text-white shadow-sm' : 'bg-gray-100 text-gray-500'
+                                  }`}>
+                                  Module {module.number}
                                 </span>
                                 {isCompleted ? (
-                                    <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
-                                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
-                                    </div>
+                                  <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center border border-green-500/20">
+                                    <CheckCircle className="w-3.5 h-3.5 text-green-600" />
+                                  </div>
                                 ) : (
-                                    <Play className={`w-4 h-4 transition-transform duration-500 ${isActive ? 'text-[#C9A961] scale-125' : 'text-gray-300'}`} />
+                                  <Play className={`w-4 h-4 transition-transform duration-500 ${isActive ? 'text-[#C9A961] scale-125' : 'text-gray-300'}`} />
                                 )}
-                            </div>
-                            <h4 className={`font-black text-[13px] leading-snug transition-colors line-clamp-2 mt-0.5 ${
-                                isActive ? 'text-[#2C5F2D]' : 'text-gray-600'
-                            }`}>
+                              </div>
+                              <h4 className={`font-black text-[13px] leading-snug transition-colors line-clamp-2 mt-0.5 ${isActive ? 'text-[#2C5F2D]' : 'text-gray-600'
+                                }`}>
                                 {module.title}
-                            </h4>
-                          </div>
-                          
-                          <div className="flex items-center gap-2 mt-0.5 pl-2">
-                            <span className={`text-[10px] font-bold flex items-center gap-2 uppercase tracking-wider ${isActive ? 'text-[#8B7355]' : 'text-gray-400'}`}>
+                              </h4>
+                            </div>
+
+                            <div className="flex items-center gap-2 mt-0.5 pl-2">
+                              <span className={`text-[10px] font-bold flex items-center gap-2 uppercase tracking-wider ${isActive ? 'text-[#8B7355]' : 'text-gray-400'}`}>
                                 <Video className="w-3.5 h-3.5 opacity-70" />
                                 12 MINS
-                            </span>
-                          </div>
-                        </button>
-                      );
-                    })}
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
 
-                {/* Right Content Area: Multi-Column Focus */}
-                <div className="flex-1 min-w-0 bg-white relative flex flex-col">
+                  {/* Right Content Area: Multi-Column Focus */}
+                  <div className="flex-1 min-w-0 bg-white relative flex flex-col">
                     {level.modules
                       .filter(module => activeModuleId === module.id || activeModuleId === String(module.number))
                       .map((module) => {
@@ -1009,92 +1062,91 @@ export function TrainingPage() {
                         const nextModule = levels.flatMap(l => l.modules)[currentModuleIndex + 1];
 
                         return (
-                        <div key={module.id} className="h-full w-full animate-in fade-in slide-in-from-right-4 duration-700 p-8 lg:p-10">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 720px', gap: '1.5rem', alignItems: 'stretch', width: '100%' }}>
-                            
-                            {/* Left Column: Lesson Details (Main Content) */}
-                            <div className="min-w-0 space-y-12">
+                          <div key={module.id} className="h-full w-full animate-in fade-in slide-in-from-right-4 duration-700 p-8 lg:p-10">
+                            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 720px', gap: '1.5rem', alignItems: 'stretch', width: '100%' }}>
+
+                              {/* Left Column: Lesson Details (Main Content) */}
+                              <div className="min-w-0 space-y-12">
                                 <div className="max-w-3xl">
-                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A961]/10 text-[#2C5F2D] text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-[#C9A961]/20 shadow-sm shadow-[#C9A961]/5">
-                                        <Star className="w-3.5 h-3.5 text-[#C9A961] fill-[#C9A961]/20" />
-                                        Module {module.number} • Level {level.level}
-                                    </div>
-                                    <h1 className="text-4xl lg:text-5xl font-black text-[#2C5F2D] mb-8 tracking-tight leading-[1.05] animate-in slide-in-from-left duration-700">
-                                        {module.title}
-                                    </h1>
-                                    <p className="text-lg text-gray-500 leading-relaxed font-medium mb-10 border-l-4 border-gray-100 pl-6 py-2 italic">
-                                        {module.description}
-                                    </p>
+                                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A961]/10 text-[#2C5F2D] text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-[#C9A961]/20 shadow-sm shadow-[#C9A961]/5">
+                                    <Star className="w-3.5 h-3.5 text-[#C9A961] fill-[#C9A961]/20" />
+                                    Module {module.number} • Level {level.level}
+                                  </div>
+                                  <h1 className="text-4xl lg:text-5xl font-black text-[#2C5F2D] mb-8 tracking-tight leading-[1.05] animate-in slide-in-from-left duration-700">
+                                    {module.title}
+                                  </h1>
+                                  <p className="text-lg text-gray-500 leading-relaxed font-medium mb-10 border-l-4 border-gray-100 pl-6 py-2 italic">
+                                    {module.description}
+                                  </p>
                                 </div>
 
                                 <div className="space-y-6 bg-white p-8 rounded-[2rem] border border-[#C9A961]/10 shadow-[0_20px_40px_rgba(201,169,97,0.03)] group/goals">
-                                    <h4 className="text-xs font-black text-[#2C5F2D] flex items-center gap-3 uppercase tracking-[0.25em]">
-                                        <div className="w-8 h-8 rounded-full bg-[#C9A961]/10 flex items-center justify-center">
-                                            <BookOpen className="w-4 h-4 text-[#C9A961]" />
+                                  <h4 className="text-xs font-black text-[#2C5F2D] flex items-center gap-3 uppercase tracking-[0.25em]">
+                                    <div className="w-8 h-8 rounded-full bg-[#C9A961]/10 flex items-center justify-center">
+                                      <BookOpen className="w-4 h-4 text-[#C9A961]" />
+                                    </div>
+                                    Mastery Goals
+                                  </h4>
+                                  <ul className="space-y-5">
+                                    {module.topics.map((topic, idx) => (
+                                      <li key={idx} className="flex items-start gap-4 text-sm text-[#4E4E4E] font-bold transition-all hover:translate-x-1 duration-300">
+                                        <div className="mt-0.5 w-5 h-5 rounded-full bg-green-50 flex items-center justify-center shrink-0 border border-green-100">
+                                          <CheckCircle className="w-3 h-3 text-green-600" />
                                         </div>
-                                        Mastery Goals
-                                    </h4>
-                                    <ul className="space-y-5">
-                                        {module.topics.map((topic, idx) => (
-                                            <li key={idx} className="flex items-start gap-4 text-sm text-[#4E4E4E] font-bold transition-all hover:translate-x-1 duration-300">
-                                                <div className="mt-0.5 w-5 h-5 rounded-full bg-green-50 flex items-center justify-center shrink-0 border border-green-100">
-                                                    <CheckCircle className="w-3 h-3 text-green-600" />
-                                                </div>
-                                                {topic}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                        {topic}
+                                      </li>
+                                    ))}
+                                  </ul>
                                 </div>
 
                                 <div className="pt-10 space-y-6">
-                                    {nextModule ? (
-                                        <Button 
-                                            onClick={() => {
-                                                const params = new URLSearchParams(searchParams);
-                                                params.set('module', String(nextModule.number));
-                                                navigate(`?${params.toString()}`);
-                                            }}
-                                            className="w-full max-w-xl bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] hover:from-[#234F24] hover:to-[#3e7540] text-white font-black h-16 rounded-2xl shadow-xl shadow-green-900/20 transition-all hover:scale-[1.03] active:scale-95 text-lg tracking-tight"
-                                        >
-                                            Next Lesson
-                                            <ArrowLeft className="w-5 h-5 ml-3 rotate-180" />
-                                        </Button>
-                                    ) : (
-                                        <div className="flex items-center gap-4 p-5 bg-gold-50 text-[#8B7355] rounded-2xl font-bold border-2 border-[#C9A961]/20">
-                                            <Star className="w-8 h-8 text-[#C9A961]" />
-                                            <div>
-                                                <p className="text-xs opacity-60 uppercase tracking-widest">Congratulations</p>
-                                                <p className="text-lg">You've finished the course!</p>
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    <div className="flex flex-col gap-6">
-                                        <Button 
-                                            variant="outline" 
-                                            onClick={async () => {
-                                                await updateProgress(module.id);
-                                                toast.success('MashaAllah!', { description: `You've completed: ${module.title}` });
-                                            }}
-                                            className={`h-12 border-gray-100 font-bold rounded-xl text-xs transition-all ${
-                                                user?.completedModules?.includes(module.id) 
-                                                ? 'bg-green-50 text-green-700 border-green-200' 
-                                                : 'text-[#2C5F2D] hover:bg-[#FAF8F3]'
-                                            }`}
-                                        >
-                                            <CheckCircle className="w-4 h-4 mr-2" />
-                                            {user?.completedModules?.includes(module.id) ? 'Completed' : 'Mark Done'}
-                                        </Button>
-                                        <Button variant="outline" className="h-12 border-gray-100 text-[#2C5F2D] hover:bg-[#FAF8F3] font-bold rounded-xl text-xs">
-                                            <Download className="w-4 h-4 mr-2" />
-                                            Resources
-                                        </Button>
+                                  {nextModule ? (
+                                    <Button
+                                      onClick={() => {
+                                        const params = new URLSearchParams(searchParams);
+                                        params.set('module', String(nextModule.number));
+                                        navigate(`?${params.toString()}`);
+                                      }}
+                                      className="w-full max-w-xl bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] hover:from-[#234F24] hover:to-[#3e7540] text-white font-black h-16 rounded-2xl shadow-xl shadow-green-900/20 transition-all hover:scale-[1.03] active:scale-95 text-lg tracking-tight"
+                                    >
+                                      Next Lesson
+                                      <ArrowLeft className="w-5 h-5 ml-3 rotate-180" />
+                                    </Button>
+                                  ) : (
+                                    <div className="flex items-center gap-4 p-5 bg-gold-50 text-[#8B7355] rounded-2xl font-bold border-2 border-[#C9A961]/20">
+                                      <Star className="w-8 h-8 text-[#C9A961]" />
+                                      <div>
+                                        <p className="text-xs opacity-60 uppercase tracking-widest">Congratulations</p>
+                                        <p className="text-lg">You've finished the course!</p>
+                                      </div>
                                     </div>
-                                </div>
-                            </div>
+                                  )}
 
-                            {/* Right Column: Cinematic Video Player (Sticky Focus) */}
-                            <div style={{ width: '720px' }} className="animate-in fade-in slide-in-from-right duration-1000 delay-300">
+                                  <div className="flex flex-col gap-6">
+                                    <Button
+                                      variant="outline"
+                                      onClick={async () => {
+                                        await updateProgress(module.id);
+                                        toast.success('MashaAllah!', { description: `You've completed: ${module.title}` });
+                                      }}
+                                      className={`h-12 border-gray-100 font-bold rounded-xl text-xs transition-all ${user?.completedModules?.includes(module.id)
+                                          ? 'bg-green-50 text-green-700 border-green-200'
+                                          : 'text-[#2C5F2D] hover:bg-[#FAF8F3]'
+                                        }`}
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2" />
+                                      {user?.completedModules?.includes(module.id) ? 'Completed' : 'Mark Done'}
+                                    </Button>
+                                    <Button variant="outline" className="h-12 border-gray-100 text-[#2C5F2D] hover:bg-[#FAF8F3] font-bold rounded-xl text-xs">
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Resources
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Right Column: Cinematic Video Player (Sticky Focus) */}
+                              <div style={{ width: '720px' }} className="animate-in fade-in slide-in-from-right duration-1000 delay-300">
                                 <div className="sticky top-10 w-full h-full flex flex-col">
                                   <div className="bg-[#0A0A0A] rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.3)] border-[8px] border-white ring-1 ring-gray-200 relative group transition-transform duration-500 hover:scale-[1.02] flex-1" style={{ minHeight: '450px' }}>
                                     <iframe
@@ -1106,33 +1158,33 @@ export function TrainingPage() {
                                       referrerPolicy="strict-origin-when-cross-origin"
                                       loading="lazy"
                                     ></iframe>
-                                </div>
-                                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 px-2">
+                                  </div>
+                                  <div className="mt-6 flex flex-wrap items-center justify-between gap-4 px-2">
                                     <div className="flex items-center gap-3">
-                                        <Badge variant="outline" className="border-[#C9A961]/20 text-[#8B7355] px-3 py-1.5 rounded-lg text-xs font-bold bg-white">
-                                            <Video className="w-3.5 h-3.5 mr-2 text-[#C9A961]" />
-                                            Master Class
-                                        </Badge>
-                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">~15 min</p>
+                                      <Badge variant="outline" className="border-[#C9A961]/20 text-[#8B7355] px-3 py-1.5 rounded-lg text-xs font-bold bg-white">
+                                        <Video className="w-3.5 h-3.5 mr-2 text-[#C9A961]" />
+                                        Master Class
+                                      </Badge>
+                                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">~15 min</p>
                                     </div>
                                     <div className="flex gap-1.5">
-                                        {module.formats.map((f, i) => (
-                                            <div key={i} className="w-7 h-7 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400">
-                                                {formatIcon(f)}
-                                            </div>
-                                        ))}
+                                      {module.formats.map((f, i) => (
+                                        <div key={i} className="w-7 h-7 rounded-lg bg-gray-50 flex items-center justify-center text-gray-400">
+                                          {formatIcon(f)}
+                                        </div>
+                                      ))}
                                     </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            ))}
         </div>
       </section>
 

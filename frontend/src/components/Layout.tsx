@@ -183,13 +183,14 @@ export function Layout() {
         </div>
       </header>
 
-      {/* Mobile-only full-screen menu overlay – main content ko cover, nav clear */}
+      {/* Mobile-only dropdown menu */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-x-0 bottom-0 top-16 sm:top-20 z-40 lg:hidden bg-[#FAF8F3]"
+          className="fixed top-[72px] sm:top-[88px] right-4 sm:right-6 w-[260px] sm:w-[280px] bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 overflow-y-auto lg:hidden transition-all"
+          style={{ zIndex: 99999, maxHeight: 'calc(100vh - 100px)' }}
           aria-hidden="false"
         >
-          <nav className="pt-6 px-6 pb-8 flex flex-col gap-1" aria-label="Main">
+          <nav className="p-2 flex flex-col" aria-label="Main">
             {navLinks.filter(link => {
               if ((link as any).authOnly && !user) return false;
               if ((link as any).guestOnly && user) return false;
@@ -202,7 +203,7 @@ export function Layout() {
                   key={link.label}
                   to={link.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-4 px-4 rounded-lg text-lg font-medium transition-colors ${isActive ? 'bg-[#C9A961]/15 text-[#2C5F2D]' : 'text-[#2C5F2D] hover:bg-[#2C5F2D]/5'
+                  className={`block py-3 px-4 rounded-xl text-[15px] font-semibold transition-colors ${isActive ? 'bg-[#C9A961]/15 text-[#2C5F2D]' : 'text-gray-700 hover:bg-gray-50 hover:text-[#2C5F2D]'
                     }`}
                 >
                   {link.label}
@@ -211,19 +212,20 @@ export function Layout() {
             })}
             {user && (
               <>
+                <div className="h-[1px] bg-gray-100 my-1 mx-2" />
                 <Link
                   to="/profile"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-[#2C5F2D] hover:bg-[#2C5F2D]/5 transition-colors mt-4 border-t border-gray-100"
+                  className="flex items-center gap-3 py-3 px-4 rounded-xl text-[15px] font-semibold text-gray-700 hover:bg-gray-50 hover:text-[#2C5F2D] transition-colors"
                 >
-                  <User className="w-6 h-6" />
-                  <span>Profile ({user.name})</span>
+                  <User className="w-5 h-5" />
+                  <span className="truncate">Profile ({user.name.split(' ')[0]})</span>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-red-600 hover:bg-red-50 transition-colors"
+                  className="flex items-center gap-3 py-3 px-4 rounded-xl text-[15px] font-semibold text-red-600 hover:bg-red-50 transition-colors"
                 >
-                  <LogOut className="w-6 h-6" />
+                  <LogOut className="w-5 h-5" />
                   <span>Logout</span>
                 </button>
               </>

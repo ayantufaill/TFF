@@ -5,6 +5,8 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { useAuth } from '../context/AuthContext';
+import { countries } from '../data/countries';
+import { CountryPicker } from './CountryPicker';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 
@@ -26,7 +28,11 @@ export function AuthForm() {
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [countryCode, setCountryCode] = useState('+1');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [country, setCountry] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,7 +53,8 @@ export function AuthForm() {
         toast.success('Welcome back!');
         navigate('/Training/dashboard');
       } else {
-        await register(name, email, password);
+        const fullPhone = `${countryCode} ${phoneNumber}`.trim();
+        await register(firstName, lastName, email, password, fullPhone, country);
         toast.success('Account created!');
         navigate('/Training/dashboard');
       }
@@ -151,8 +158,33 @@ export function AuthForm() {
             </form>
           ) : (
             <form onSubmit={handleAuth} className="space-y-4">
-              {authMode === 'signup' && <Input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />}
-              <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              {authMode === 'signup' && (
+                <>
+                  <div className="flex gap-2">
+                    <Input placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="given-name" required />
+                    <Input placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="family-name" required />
+                  </div>
+                   <div className="flex gap-2">
+                    <div className="w-32">
+                      <CountryPicker 
+                        id="signup-country-code"
+                        value={countryCode} 
+                        onChange={setCountryCode} 
+                        mode="dial"
+                      />
+                    </div>
+                    <Input type="tel" placeholder="Phone Number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} autoComplete="tel" required className="flex-1" />
+                  </div>
+                   <CountryPicker 
+                    id="signup-country"
+                    value={country} 
+                    onChange={setCountry} 
+                    mode="name"
+                    placeholder="Select Country"
+                  />
+                </>
+              )}
+              <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required />
               <div className="relative">
                 <Input 
                   type={showPassword ? 'text' : 'password'} 
@@ -160,6 +192,7 @@ export function AuthForm() {
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)} 
                   className="pr-10"
+                  autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
                   required 
                 />
                 <button

@@ -51,8 +51,18 @@ export interface Assessment {
   questions: QuizQuestion[];
 }
 
+let cachedCourses: MainCourse[] | null = null;
+
 export const getCourses = async (): Promise<MainCourse[]> => {
+  if (cachedCourses) {
+    // Fetch in background to keep data fresh but return cached immediately
+    api.get('/courses').then(res => {
+      cachedCourses = res.data;
+    }).catch(err => console.error('Background fetch failed:', err));
+    return cachedCourses;
+  }
   const res = await api.get('/courses');
+  cachedCourses = res.data;
   return res.data;
 };
 

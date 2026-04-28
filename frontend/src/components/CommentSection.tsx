@@ -121,39 +121,45 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
     }
   };
 
-  const renderComment = (comment: Comment, depth = 0) => {
+  const renderComment = (comment: Comment, depth = 0, parentComment?: Comment) => {
     const replies = comments.filter(c => c.parentId === comment._id);
     const isReplying = replyTo === comment._id;
     const isEditing = editingId === comment._id;
     const isOwner = user?._id === comment.userId._id;
 
     return (
-      <div key={comment._id} className={`mt-6 ${depth > 0 ? 'ml-3 sm:ml-8 border-l-2 border-gray-100 pl-3 sm:pl-4' : ''}`}>
+      <div key={comment._id} className={`${depth > 0 ? 'mt-4' : 'mt-6'}`}>
         <div className="flex gap-3 sm:gap-4">
-          <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
-            {comment.userId.avatar && <AvatarImage src={comment.userId.avatar} />}
-            <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
-              {comment.userId.name.trim().charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
+          <div className="flex flex-col items-center">
+            <Avatar className={`${depth > 0 ? 'w-8 h-8' : 'w-10 h-10'} border-2 border-white shadow-sm flex-shrink-0 z-10 relative`}>
+              {comment.userId.avatar && <AvatarImage src={comment.userId.avatar} />}
+              <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center text-sm">
+                {comment.userId.name.trim().charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            {replies.length > 0 && (
+              <div className="w-0.5 h-full bg-gray-100 my-2 rounded-full hidden sm:block"></div>
+            )}
+          </div>
+          
+          <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold text-gray-900 text-sm">{comment.userId.name}</span>
                 <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
                   {timeAgo(new Date(comment.createdAt))} ago
                 </span>
               </div>
-              
+
               {isOwner && !isEditing && (
                 <div className="flex items-center gap-1">
-                  <button 
+                  <button
                     onClick={() => { setEditingId(comment._id); setEditContent(comment.content); }}
                     className="p-1 text-gray-400 hover:text-[#2C5F2D] transition-colors"
                   >
                     <Edit2 className="w-4 h-4" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => setDeleteTargetId(comment._id)}
                     className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                   >
@@ -171,16 +177,16 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                   className="min-h-[100px] rounded-xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none text-sm"
                 />
                 <div className="flex justify-end gap-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => { setEditingId(null); setEditContent(''); }}
                     className="text-gray-500 font-bold h-8 px-3"
                   >
                     <X className="w-3.5 h-3.5 mr-1.5" /> Cancel
                   </Button>
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     onClick={() => handleUpdateComment(comment._id)}
                     disabled={loading || !editContent.trim()}
                     className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold h-8 px-4"
@@ -192,9 +198,9 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
             ) : (
               <>
                 <p className="text-gray-700 text-sm leading-relaxed mb-3">{comment.content}</p>
-                
+
                 {user && (
-                  <button 
+                  <button
                     onClick={() => setReplyTo(isReplying ? null : comment._id)}
                     className="flex items-center gap-1.5 text-[11px] font-bold text-[#2C5F2D] hover:text-[#1e421e] uppercase tracking-widest transition-colors"
                   >
@@ -214,16 +220,16 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                   className="min-h-[80px] rounded-xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none text-sm"
                 />
                 <div className="flex justify-end gap-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => setReplyTo(null)}
                     className="text-gray-500 font-bold h-8 px-3"
                   >
                     Cancel
                   </Button>
-                  <Button 
-                    size="sm" 
+                  <Button
+                    size="sm"
                     onClick={() => handleSubmitReply(comment._id)}
                     disabled={loading || !replyContent.trim()}
                     className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold h-8 px-4"
@@ -233,10 +239,14 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                 </div>
               </div>
             )}
+
+            {replies.length > 0 && (
+              <div className="mt-4">
+                {replies.map(reply => renderComment(reply, depth + 1, comment))}
+              </div>
+            )}
           </div>
         </div>
-
-        {replies.map(reply => renderComment(reply, depth + 1))}
       </div>
     );
   };
@@ -245,7 +255,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
 
   return (
     <div className="mt-8 bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
-      <div 
+      <div
         className="p-4 sm:p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50/50 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
@@ -260,7 +270,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
             <p className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider">Join the discussion</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-1 sm:gap-2 text-[#2C5F2D] font-bold text-[10px] sm:text-sm uppercase tracking-widest">
           <span className="hidden xs:inline">{isExpanded ? 'Collapse' : 'Expand Comments'}</span>
           <span className="xs:hidden">{isExpanded ? 'Hide' : 'Show'}</span>
@@ -289,7 +299,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                     className="min-h-[120px] rounded-2xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none p-4 text-sm"
                   />
                   <div className="flex justify-end">
-                    <Button 
+                    <Button
                       onClick={handleSubmitComment}
                       disabled={loading || !newComment.trim()}
                       className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold px-5 py-5 sm:px-8 sm:py-6 rounded-xl sm:rounded-2xl shadow-lg shadow-[#2C5F2D]/10 transition-all hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
@@ -303,8 +313,8 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
           ) : (
             <div className="bg-gray-50 rounded-2xl p-6 text-center mb-10 border border-dashed border-gray-200">
               <p className="text-gray-500 font-medium mb-4">Please log in to participate in the discussion.</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="border-[#2C5F2D] text-[#2C5F2D] font-bold px-6"
                 onClick={() => window.location.href = '/login'}
               >
@@ -338,14 +348,14 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
             </AlertDialogDescription>
           </div>
           <div className="dialog-footer">
-            <button 
-              className="btn-cancel" 
+            <button
+              className="btn-cancel"
               onClick={() => setDeleteTargetId(null)}
             >
               Cancel
             </button>
-            <button 
-              className="btn-save btn-danger" 
+            <button
+              className="btn-save btn-danger"
               onClick={handleDeleteComment}
             >
               Delete Permanently

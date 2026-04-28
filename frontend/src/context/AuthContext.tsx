@@ -20,7 +20,7 @@ interface AuthContextType {
   token: string | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  register: (firstName: string, lastName: string, email: string, password: string, phone: string, country: string) => Promise<void>;
   logout: () => void;
   updateProgress: (moduleId?: string, quizAnswers?: Record<string, number[]>, lastViewedModuleId?: string) => Promise<void>;
   updateProfile: (data: { name?: string; currentPassword?: string; newPassword?: string }) => Promise<void>;
@@ -60,8 +60,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userData);
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    const res = await api.post('/auth/register', { name, email, password });
+  const register = async (firstName: string, lastName: string, email: string, password: string, phone: string, country: string) => {
+    const res = await api.post('/auth/register', { firstName, lastName, email, password, phone, country });
     const { token: newToken, user: userData } = res.data;
     localStorage.setItem('token', newToken);
     setToken(newToken);
