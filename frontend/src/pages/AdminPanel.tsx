@@ -50,7 +50,7 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [courseError, setCourseError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const [imageMetadata, setImageMetadata] = useState<{ width: number; height: number; approved: boolean } | null>(null);
   const [isValidatingImage, setIsValidatingImage] = useState(false);
 
@@ -104,29 +104,29 @@ export default function AdminPanel() {
 
     // Strict Validation
     if (!editingCourse.title?.trim()) {
-      setCourseError("Course Title is must");
+      setFormError("Course Title is must");
       return;
     }
     if (!editingCourse.description?.trim()) {
-      setCourseError("Description is must otherwise we don't make our course");
+      setFormError("Description is must otherwise we don't make our course");
       return;
     }
     if (!editingCourse.image?.trim()) {
-      setCourseError("Cover Image URL is must");
+      setFormError("Cover Image URL is must");
       return;
     }
     if (!editingCourse.category?.trim()) {
-      setCourseError("Category is must");
+      setFormError("Category is must");
       return;
     }
     if (editingCourse.order === undefined || editingCourse.order === null) {
-      setCourseError("Display Order is must");
+      setFormError("Display Order is must");
       return;
     }
 
     // Image Approval Check
     if (imageMetadata && !imageMetadata.approved) {
-      setCourseError("Image size must be 1280x720 for perfect display");
+      setFormError("Image size must be 1280x720 for perfect display");
       return;
     }
 
@@ -134,33 +134,68 @@ export default function AdminPanel() {
       await saveMainCourse(editingCourse);
       toast.success('Course manifest updated');
       setEditingCourse(null);
-      setCourseError(null);
+      setFormError(null);
       fetchData();
     } catch (err) {
+      setFormError("Failed to commit course changes to server");
       toast.error('Failed to commit course changes');
     }
   };
 
   const handleSaveLevel = async () => {
     if (!editingLevel) return;
+
+    // Validation
+    if (!editingLevel.title?.trim()) {
+      setFormError("Level Title is required");
+      return;
+    }
+    if (!editingLevel.subtitle?.trim()) {
+      setFormError("Subtitle is required for better context");
+      return;
+    }
+    if (editingLevel.level === undefined || editingLevel.level === null) {
+      setFormError("Level Number is mandatory");
+      return;
+    }
+
     try {
       await saveLevel(editingLevel);
       toast.success('Curriculum level updated');
       setEditingLevel(null);
+      setFormError(null);
       fetchData();
     } catch (err) {
+      setFormError("Failed to update level structure");
       toast.error('Failed to update level structure');
     }
   };
 
   const handleSaveModule = async () => {
     if (!editingModule) return;
+
+    // Validation
+    if (!editingModule.title?.trim()) {
+      setFormError("Module Title is must");
+      return;
+    }
+    if (!editingModule.description?.trim()) {
+      setFormError("Module Description is required");
+      return;
+    }
+    if (editingModule.number === undefined || editingModule.number === null) {
+      setFormError("Module Number is required");
+      return;
+    }
+
     try {
       await saveModule(editingModule);
       toast.success('Learning module synchronized');
       setEditingModule(null);
+      setFormError(null);
       fetchData();
     } catch (err) {
+      setFormError("Failed to save module data");
       toast.error('Failed to save module data');
     }
   };
@@ -477,7 +512,7 @@ export default function AdminPanel() {
       <Dialog open={!!editingCourse} onOpenChange={(open) => {
         if (!open) {
           setEditingCourse(null);
-          setCourseError(null);
+          setFormError(null);
           setImageMetadata(null);
         }
       }}>
@@ -488,10 +523,36 @@ export default function AdminPanel() {
             <DialogDescription><p>Define the foundation for this learning path. All fields are mandatory.</p></DialogDescription>
           </div>
           <div className="dialog-body">
-            {courseError && (
-              <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-xs font-bold rounded flex items-center gap-2 animate-in fade-in zoom-in-95">
-                <div className="w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">!</div>
-                {courseError}
+            {formError && (
+              <div style={{ 
+                marginBottom: '1.5rem', 
+                padding: '1rem', 
+                backgroundColor: '#fef2f2', 
+                border: '1px solid #fee2e2', 
+                borderRadius: '1rem', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.75rem' 
+              }} className="animate-in fade-in slide-in-from-top-2">
+                <div style={{ 
+                  width: '1.25rem', 
+                  height: '1.25rem', 
+                  backgroundColor: '#ef4444', 
+                  color: 'white', 
+                  borderRadius: '50%', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: '10px', 
+                  fontWeight: '900',
+                  flexShrink: 0
+                }}>!</div>
+                <p style={{ 
+                  margin: 0, 
+                  fontSize: '0.875rem', 
+                  fontWeight: '700', 
+                  color: '#b91c1c' 
+                }}>{formError}</p>
               </div>
             )}
             <div className="dialog-field">
@@ -555,7 +616,7 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="dialog-footer">
-            <button className="btn-cancel" onClick={() => { setEditingCourse(null); setCourseError(null); }}>Cancel</button>
+            <button className="btn-cancel" onClick={() => { setEditingCourse(null); setFormError(null); }}>Cancel</button>
             <button
               className={`btn-save ${imageMetadata && !imageMetadata.approved ? 'opacity-50 grayscale' : ''}`}
               onClick={handleSaveCourse}
@@ -567,7 +628,12 @@ export default function AdminPanel() {
       </Dialog>
 
       {/* Level Editor Dialog */}
-      <Dialog open={!!editingLevel} onOpenChange={(open) => !open && setEditingLevel(null)}>
+      <Dialog open={!!editingLevel} onOpenChange={(open) => {
+        if (!open) {
+          setEditingLevel(null);
+          setFormError(null);
+        }
+      }}>
         <DialogContent className="admin-dialog">
           <div className="dialog-accent-bar" style={{ background: '#C9A961' }} />
           <div className="dialog-header">
@@ -575,6 +641,38 @@ export default function AdminPanel() {
             <DialogDescription><p>Configure a curriculum milestone.</p></DialogDescription>
           </div>
           <div className="dialog-body">
+            {formError && (
+              <div style={{ 
+                marginBottom: '1.5rem', 
+                padding: '1rem', 
+                backgroundColor: '#fef2f2', 
+                border: '1px solid #fee2e2', 
+                borderRadius: '1rem', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.75rem' 
+              }} className="animate-in fade-in slide-in-from-top-2">
+                <div style={{ 
+                  width: '1.25rem', 
+                  height: '1.25rem', 
+                  backgroundColor: '#ef4444', 
+                  color: 'white', 
+                  borderRadius: '50%', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: '10px', 
+                  fontWeight: '900',
+                  flexShrink: 0
+                }}>!</div>
+                <p style={{ 
+                  margin: 0, 
+                  fontSize: '0.875rem', 
+                  fontWeight: '700', 
+                  color: '#b91c1c' 
+                }}>{formError}</p>
+              </div>
+            )}
             <div className="dialog-field">
               <label>Level Title</label>
               <input value={editingLevel?.title || ''} onChange={e => setEditingLevel(prev => ({ ...prev!, title: e.target.value }))} placeholder="e.g., Level 1: Foundations" />
@@ -595,14 +693,19 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="dialog-footer">
-            <button className="btn-cancel" onClick={() => setEditingLevel(null)}>Cancel</button>
+            <button className="btn-cancel" onClick={() => { setEditingLevel(null); setFormError(null); }}>Cancel</button>
             <button className="btn-save" onClick={handleSaveLevel}>Save Level</button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Module Editor Dialog */}
-      <Dialog open={!!editingModule} onOpenChange={(open) => !open && setEditingModule(null)}>
+      <Dialog open={!!editingModule} onOpenChange={(open) => {
+        if (!open) {
+          setEditingModule(null);
+          setFormError(null);
+        }
+      }}>
         <DialogContent className="admin-dialog">
           <div className="dialog-accent-bar" style={{ background: '#2C5F2D' }} />
           <div className="dialog-header">
@@ -610,6 +713,38 @@ export default function AdminPanel() {
             <DialogDescription><p>Configure individual learning components.</p></DialogDescription>
           </div>
           <div className="dialog-body" style={{ maxHeight: '55vh', overflowY: 'auto' }}>
+            {formError && (
+              <div style={{ 
+                marginBottom: '1.5rem', 
+                padding: '1rem', 
+                backgroundColor: '#fef2f2', 
+                border: '1px solid #fee2e2', 
+                borderRadius: '1rem', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.75rem' 
+              }} className="animate-in fade-in slide-in-from-top-2">
+                <div style={{ 
+                  width: '1.25rem', 
+                  height: '1.25rem', 
+                  backgroundColor: '#ef4444', 
+                  color: 'white', 
+                  borderRadius: '50%', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontSize: '10px', 
+                  fontWeight: '900',
+                  flexShrink: 0
+                }}>!</div>
+                <p style={{ 
+                  margin: 0, 
+                  fontSize: '0.875rem', 
+                  fontWeight: '700', 
+                  color: '#b91c1c' 
+                }}>{formError}</p>
+              </div>
+            )}
             <div className="dialog-field">
               <label>Module Title</label>
               <input value={editingModule?.title || ''} onChange={e => setEditingModule(prev => ({ ...prev!, title: e.target.value }))} placeholder="e.g., Welcome to Islam" />
@@ -645,7 +780,7 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="dialog-footer">
-            <button className="btn-cancel" onClick={() => setEditingModule(null)}>Cancel</button>
+            <button className="btn-cancel" onClick={() => { setEditingModule(null); setFormError(null); }}>Cancel</button>
             <button className="btn-save" onClick={handleSaveModule}>Save Module</button>
           </div>
         </DialogContent>
