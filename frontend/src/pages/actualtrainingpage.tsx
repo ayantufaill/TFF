@@ -118,13 +118,13 @@ function AuthForm() {
               ) : (
                 <>
                   <div className="relative w-full">
-                    <Input 
-                      type={showNewPassword ? 'text' : 'password'} 
-                      placeholder="New Password" 
-                      value={newPassword} 
-                      onChange={(e) => setNewPassword(e.target.value)} 
+                    <Input
+                      type={showNewPassword ? 'text' : 'password'}
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                       className="pr-10"
-                      required 
+                      required
                     />
                     <button
                       type="button"
@@ -136,13 +136,13 @@ function AuthForm() {
                     </button>
                   </div>
                   <div className="relative w-full">
-                    <Input 
-                      type={showConfirmPassword ? 'text' : 'password'} 
-                      placeholder="Confirm Password" 
-                      value={confirmPassword} 
-                      onChange={(e) => setConfirmPassword(e.target.value)} 
+                    <Input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       className="pr-10"
-                      required 
+                      required
                     />
                     <button
                       type="button"
@@ -189,13 +189,13 @@ function AuthForm() {
               )}
               <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               <div className="relative w-full">
-                <Input 
-                  type={showPassword ? 'text' : 'password'} 
-                  placeholder="Password" 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="pr-10"
-                  required 
+                  required
                 />
                 <button
                   type="button"
@@ -291,9 +291,9 @@ export function ActualTrainingPage() {
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/arabesque-thin.png')]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-8">
-            <Link to="/Training/dashboard" className="inline-flex items-center text-white/60 hover:text-white mb-6 transition-colors">
+            {/* <Link to="/Training/dashboard" className="inline-flex items-center text-white/60 hover:text-white mb-6 transition-colors">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Courses
-            </Link>
+            </Link> */}
             <h1 className="text-4xl md:text-5xl font-bold mb-6">{activeCourse?.title || 'Training Program'}</h1>
             <p className="text-xl text-gray-100 max-w-3xl mx-auto">
               {activeCourse?.description || 'Your personalized spiritual journey'}
@@ -310,7 +310,7 @@ export function ActualTrainingPage() {
                 {(() => {
                   const courseModules = levels.flatMap(l => l.modules);
                   const totalModules = courseModules.length;
-                  const completedCount = courseModules.filter(m => 
+                  const completedCount = courseModules.filter(m =>
                     user.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
                   ).length;
                   const progressPercentage = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
@@ -345,7 +345,7 @@ export function ActualTrainingPage() {
           {levels.length === 0 ? (
             <div className="text-center py-20 text-gray-400 font-bold">No levels defined for this course yet.</div>
           ) : (
-            levels.sort((a,b) => a.level - b.level).map((level, levelIndex) => {
+            levels.sort((a, b) => a.level - b.level).map((level, levelIndex) => {
               const isFirstLevel = levelIndex === 0;
               const prevLevelPassed = isFirstLevel ? true : user?.completedModules?.includes(`quiz-${levels[levelIndex - 1]._id}`);
 

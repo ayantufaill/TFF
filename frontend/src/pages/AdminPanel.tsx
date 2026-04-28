@@ -529,8 +529,8 @@ export default function AdminPanel() {
               </div>
             </div>
             <div className="dialog-field">
-              <label>Topics (comma separated)</label>
-              <input value={editingModule?.topics?.join(', ') || ''} onChange={e => setEditingModule(prev => ({ ...prev!, topics: e.target.value.split(',').map(t => t.trim()) }))} />
+              <label>Topics (separated by |)</label>
+              <input value={editingModule?.topics?.join(' | ') || ''} onChange={e => setEditingModule(prev => ({ ...prev!, topics: e.target.value.split('|').map(t => t.trim()).filter(t => t !== '') }))} />
             </div>
           </div>
           <div className="dialog-footer">
