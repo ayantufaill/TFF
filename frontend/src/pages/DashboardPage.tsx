@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookOpen, CheckCircle, Clock, Star, Play, Award, LayoutDashboard, Search, Filter } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
@@ -44,6 +44,14 @@ const courses = [
   },
 ];
 
+const [isLoading, setIsLoading] = useState(true);
+
+useEffect(() => {
+  // Static data — just wait for auth context to settle
+  const timer = setTimeout(() => setIsLoading(false), 500);
+  return () => clearTimeout(timer);
+}, []);
+
 export function DashboardPage() {
   const { user } = useAuth();
 
@@ -55,6 +63,36 @@ export function DashboardPage() {
           <Link to="/training">
             <Button className="bg-[#2C5F2D] hover:bg-[#234F24] text-white">Go to Login</Button>
           </Link>
+        </div>
+      </div>
+    );
+  }
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#FAF8F3]">
+        <div className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="h-10 w-64 bg-white/20 rounded-lg animate-pulse mb-2" />
+            <div className="h-4 w-48 bg-white/10 rounded-lg animate-pulse" />
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8 mt-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[1, 2].map((i) => (
+                  <div key={i} className="bg-white rounded-[24px] p-6 space-y-4 border border-gray-100 shadow-sm">
+                    <div className="h-48 bg-gray-100 rounded-2xl animate-pulse" />
+                    <div className="h-6 w-3/4 bg-gray-100 rounded-lg animate-pulse" />
+                    <div className="h-4 w-1/2 bg-gray-100 rounded-lg animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-12 mt-12">
+              <div className="bg-white rounded-[24px] p-6 h-64 border border-gray-100 shadow-sm animate-pulse" />
+            </div>
+          </div>
         </div>
       </div>
     );
