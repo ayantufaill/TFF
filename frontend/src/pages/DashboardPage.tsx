@@ -44,15 +44,15 @@ const courses = [
   },
 ];
 
-const [isLoading, setIsLoading] = useState(true);
-
-useEffect(() => {
-  // Static data — just wait for auth context to settle
-  const timer = setTimeout(() => setIsLoading(false), 500);
-  return () => clearTimeout(timer);
-}, []);
-
 export function DashboardPage() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Static data — just wait for auth context to settle
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const { user } = useAuth();
 
   if (!user) {

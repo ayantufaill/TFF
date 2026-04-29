@@ -78,7 +78,7 @@ export function Layout() {
                   alt="Two Finger Foundation"
                   width={48}
                   height={48}
-                  fetchPriority="high"
+                  fetchpriority="high"
                   className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                 />
               </div>
