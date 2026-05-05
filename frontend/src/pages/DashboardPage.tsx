@@ -9,14 +9,6 @@ import { Badge } from '../components/ui/badge';
 import { Link } from 'react-router';
 
 export function DashboardPage() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Static data — just wait for auth context to settle
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
   const { user } = useAuth();
   const [courses, setCourses] = useState<MainCourse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
