@@ -4,6 +4,7 @@ import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
 import { DownloadsPage } from "./pages/DownloadsPage";
 import { ArticlesPage } from "./pages/ArticlesPage";
+import ErrorPage from "./pages/ErrorPage";
 // Lazy load other routes
 const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage").then(m => ({ default: m.UnderConstructionPage })));
 // Deploy only homepage – other routes commented out
@@ -15,6 +16,7 @@ import { TrainingPage } from "./pages/TrainingPage";
 import { ActualTrainingPage } from "./pages/actualtrainingpage";
 import { ModulePlayerPage } from "./pages/ModulePlayerPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { ProfilePage } from "./pages/ProfilePage";
 // import { CoursesPage } from "./pages/CoursesPage";
 import { DonatePage } from "./pages/DonatePage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
@@ -35,6 +37,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: Layout,
+    errorElement: React.createElement(ErrorPage),
     children: [
       { index: true, Component: HomePage },
       { path: "privacy-policy", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
@@ -56,10 +59,12 @@ export const router = createBrowserRouter([
       { path: "training/curriculum", Component: ActualTrainingPage },
       { path: "training/module/:levelId/:moduleId", Component: ModulePlayerPage },
       { path: "Training/dashboard", Component: DashboardPage },
+      { path: "profile", Component: ProfilePage },
       // { path: "courses", Component: CoursesPage },
       { path: "playlist", Component: PlaylistPage },
       { path: "downloads", Component: DownloadsPage },
       { path: "articles", Component: ArticlesPage },
+      { path: "admin", Component: lazy(() => import("./pages/AdminPanel")) },
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },

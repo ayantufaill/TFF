@@ -1,0 +1,407 @@
+require('dotenv').config({ path: './server/.env' });
+const mongoose = require('mongoose');
+const Course = require('../models/Course');
+const Module = require('../models/Module');
+const Assessment = require('../models/Assessment');
+
+const trainingLevels = [
+  {
+    level: 1,
+    title: 'Foundations of Faith',
+    subtitle: 'Beginner',
+    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    modules: [
+      {
+        number: 1,
+        title: 'Welcome to Islam',
+        description: 'Reassurance and clarity about accepting Islam. Myths, mercy, and common questions.',
+        formats: ['Reading guide', 'Short video', 'Audio reassurance'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Understanding your decision to embrace Islam',
+          'Common myths and misconceptions',
+          'The mercy and forgiveness of Allah',
+          'Your rights as a new Muslim',
+        ],
+      },
+      {
+        number: 2,
+        title: 'Core Beliefs (Aqeedah – Simplified)',
+        description: 'Explains Allah, Tawheed, Prophethood, and Afterlife in simple terms.',
+        formats: ['Illustrated reading notes', 'Audio', 'Whiteboard-style videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Who is Allah? Understanding Tawheed (Oneness of God)',
+          'Belief in the Prophets and Messengers',
+          'Understanding the Quran',
+          'Life after death and the Day of Judgment',
+        ],
+      },
+      {
+        number: 3,
+        title: 'The Shahadah Explained',
+        description: 'Deepens understanding of the Shahadah in daily life and its significance.',
+        formats: ['Reading', 'Short reflection audio'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'The meaning of "La ilaha illa Allah"',
+          'The meaning of "Muhammad Rasulullah"',
+          'Living by the Shahadah daily',
+          'The commitment you\'ve made',
+        ],
+      },
+    ],
+  },
+  {
+    level: 2,
+    title: 'Daily Practice',
+    subtitle: 'Essential Worship',
+    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    modules: [
+      {
+        number: 4,
+        title: 'Cleanliness & Preparation (Taharah)',
+        description: 'Step-by-step guidance on Wudu (ablution) and Ghusl (full bath).',
+        formats: ['Reading guide', 'Videos', 'Audio reminders'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Importance of cleanliness in Islam',
+          'How to perform Wudu step-by-step',
+          'When Wudu is required',
+          'How to perform Ghusl (full bath)',
+        ],
+      },
+      {
+        number: 5,
+        title: 'Salah (Prayer) – Step by Step',
+        description: 'Explanation of prayer times, how to perform Salah without Arabic, and common mistakes.',
+        formats: ['Printable guides', 'Video walkthroughs', 'Slow-paced recitations'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Understanding the five daily prayers',
+          'How to pray step-by-step (beginner-friendly)',
+          'What to say in prayer (transliteration provided)',
+          'Common mistakes and how to avoid them',
+        ],
+      },
+      {
+        number: 6,
+        title: 'Duas & Connection with Allah',
+        description: 'Teaching how to make Dua, daily remembrance, and emotional connection with Allah.',
+        formats: ['Dua cards', 'Audio recitations', 'Motivational videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'What is Dua and why it matters',
+          'Essential daily Duas',
+          'How to make personal Dua in your language',
+          'Dhikr (remembrance) throughout the day',
+        ],
+      },
+    ],
+  },
+  {
+    level: 3,
+    title: 'Lifestyle & Identity',
+    subtitle: 'Building Your Muslim Life',
+    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    modules: [
+      {
+        number: 7,
+        title: 'Halal & Haram Basics',
+        description: 'Core principles of Halal and Haram, including food and lifestyle choices.',
+        formats: ['Reading guides', 'Explainer videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Understanding Halal and Haram',
+          'Halal food and dietary guidelines',
+          'Lifestyle choices in Islam',
+          'Practical tips for everyday life',
+        ],
+      },
+      {
+        number: 8,
+        title: 'Family & Social Life',
+        description: 'Guidance on managing family relationships and responding to criticisms.',
+        formats: ['Reading', 'Audio counseling talks'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Dealing with family who don\'t understand',
+          'Maintaining good relationships',
+          'How to respond to questions and criticism',
+          'Finding balance and patience',
+        ],
+      },
+      {
+        number: 9,
+        title: 'Emotional Wellbeing & Mental Health',
+        description: 'Support for loneliness and handling emotional ups and downs after reversion.',
+        formats: ['Audio reflections', 'Support videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'It\'s normal to feel overwhelmed',
+          'Dealing with loneliness and isolation',
+          'Finding peace through faith',
+          'When and how to seek support',
+        ],
+      },
+    ],
+  },
+  {
+    level: 4,
+    title: 'Growth & Confidence',
+    subtitle: 'Deepening Your Faith',
+    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    modules: [
+      {
+        number: 10,
+        title: 'Character & Manners (Akhlaq)',
+        description: 'Focus on developing good character: honesty, patience, kindness, and dealing with frustration.',
+        formats: ['Reading', 'Story-based videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'The importance of good character in Islam',
+          'Patience (Sabr) and gratitude (Shukr)',
+          'Honesty, kindness, and generosity',
+          'Controlling anger and dealing with difficulty',
+        ],
+      },
+      {
+        number: 11,
+        title: 'Knowledge Development Path',
+        description: 'Guidance on what knowledge to seek first and how to avoid confusion.',
+        formats: ['Reading roadmap', 'Guidance video'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Prioritizing Islamic knowledge',
+          'Reliable sources and teachers',
+          'Avoiding confusion and extremes',
+          'Building a learning routine',
+        ],
+      },
+      {
+        number: 12,
+        title: 'Community & Belonging',
+        description: 'How to integrate into a Muslim community, mosque etiquette, and how to serve humanity.',
+        formats: ['Reading', 'Short videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Finding your local Muslim community',
+          'Mosque etiquette and participation',
+          'Building meaningful friendships',
+          'Serving others and giving back',
+        ],
+      },
+    ],
+  },
+  {
+    level: 5,
+    title: 'Long-Term Practice & Stability',
+    subtitle: 'Lifelong Journey',
+    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    modules: [
+      {
+        number: 13,
+        title: 'Ramadan & Fasting',
+        description: 'Preparation for Ramadan and understanding fasting for new Muslims.',
+        formats: ['Reading', 'Explainer videos'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'What is Ramadan and why it matters',
+          'How to fast step-by-step',
+          'Spiritual benefits of fasting',
+          'Preparing for your first Ramadan',
+        ],
+      },
+      {
+        number: 14,
+        title: 'Islamic Ethics & Purpose',
+        description: 'Balancing work, family, and worship while understanding the purpose of life in Islam.',
+        formats: ['Reflection reading', 'Motivational audio'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'The purpose of life in Islam',
+          'Balancing dunya (worldly life) and akhirah (hereafter)',
+          'Work ethic and professional conduct',
+          'Family responsibilities and worship',
+        ],
+      },
+      {
+        number: 15,
+        title: 'Long-Term Support',
+        description: 'Staying consistent in faith and building a lifelong relationship with Allah.',
+        formats: ['Audio reminders', 'Closing video series'],
+        videoId: 'pzFILwLcJlE',
+        topics: [
+          'Dealing with spiritual ups and downs',
+          'Staying consistent in practice',
+          'Continuing to grow and learn',
+          'Your ongoing journey with Allah',
+        ],
+      },
+    ],
+  },
+];
+
+const ramadanQuestions = [
+  {
+    question: "During Ramadan, from what time do Muslims begin their fast each day?",
+    options: [
+      "Sunrise (Fajr Adhan)",
+      "Midnight",
+      "Before Fajr Adhan (Suhoor time ends)",
+      "After Fajr prayer is completed"
+    ],
+    correctAnswerIndex: 2
+  },
+  {
+    question: "What is the meal called that Muslims eat before the fast begins at dawn?",
+    options: [
+      "Iftar",
+      "Suhoor",
+      "Sahur al-Kabeer",
+      "Qiyaam"
+    ],
+    correctAnswerIndex: 1
+  },
+  {
+    question: "What breaks the fast at sunset in Ramadan?",
+    options: [
+      "Maghrib prayer",
+      "Isha prayer",
+      "Iftar — eating/drinking after Maghrib Adhan",
+      "Completing Taraweeh prayer"
+    ],
+    correctAnswerIndex: 2
+  },
+  {
+    question: "Which of the following does NOT invalidate the fast?",
+    options: [
+      "Eating intentionally",
+      "Drinking water",
+      "Forgetting and eating accidentally",
+      "Intentional vomiting"
+    ],
+    correctAnswerIndex: 2
+  },
+  {
+    question: "Who is EXEMPT from fasting during Ramadan?",
+    options: [
+      "Healthy adult men only",
+      "All Muslims above age 10",
+      "Travelers, the ill, pregnant/nursing women, and the elderly",
+      "Only children under 7"
+    ],
+    correctAnswerIndex: 2
+  },
+  {
+    question: "What is the ruling on making up missed fasts (Qada)?",
+    options: [
+      "It is optional",
+      "It is obligatory to make them up before the next Ramadan",
+      "Missed fasts cannot be made up",
+      "Only one missed fast needs to be made up"
+    ],
+    correctAnswerIndex: 1
+  },
+  {
+    question: "What is the name of the night in the last 10 days of Ramadan considered better than 1,000 months?",
+    options: [
+      "Laylatul Miraj",
+      "Laylatul Qadr",
+      "Laylatul Bara'at",
+      "Laylatul Jumuah"
+    ],
+    correctAnswerIndex: 1
+  },
+  {
+    question: "Which of the following IS allowed while fasting?",
+    options: [
+      "Smoking",
+      "Taking oral medicine",
+      "Using a Miswak (teeth-cleaning stick)",
+      "Drinking water due to thirst"
+    ],
+    correctAnswerIndex: 2
+  },
+  {
+    question: "What is the charity that must be given at the end of Ramadan before Eid prayer?",
+    options: [
+      "Zakat al-Maal",
+      "Sadaqah Nafilah",
+      "Zakat al-Fitr (Fitrana)",
+      "Kaffarah"
+    ],
+    correctAnswerIndex: 2
+  },
+  {
+    question: "What is the special nightly prayer performed during Ramadan called?",
+    options: [
+      "Tahajjud",
+      "Ishraq",
+      "Taraweeh",
+      "Duha"
+    ],
+    correctAnswerIndex: 2
+  }
+];
+
+const seed = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ Connected to MongoDB');
+
+    // Clear existing data
+    await Course.deleteMany({});
+    await Module.deleteMany({});
+    await Assessment.deleteMany({});
+    console.log('🗑️  Cleared existing data');
+
+    for (const levelData of trainingLevels) {
+      const course = new Course({
+        level: levelData.level,
+        title: levelData.title,
+        subtitle: levelData.subtitle,
+        description: '', // Not in static data, but added field
+        color: levelData.color,
+        order: levelData.level
+      });
+      await course.save();
+      console.log(`📚 Created Course: ${course.title}`);
+
+      for (const moduleData of levelData.modules) {
+        const module = new Module({
+          courseId: course._id,
+          number: moduleData.number,
+          title: moduleData.title,
+          description: moduleData.description,
+          videoId: moduleData.videoId,
+          topics: moduleData.topics,
+          formats: moduleData.formats,
+          order: moduleData.number
+        });
+        await module.save();
+        console.log(`  📝 Created Module: ${module.title}`);
+      }
+
+      // Create assessment for each level (using ramadanQuestions for all as placeholder from quizData.ts)
+      const assessment = new Assessment({
+        courseId: course._id,
+        level: course.level,
+        title: `Level ${course.level} Assessment`,
+        description: `Test your knowledge to unlock Level ${course.level + 1}.`,
+        passingScore: 60,
+        questions: ramadanQuestions
+      });
+      await assessment.save();
+      console.log(`  ❓ Created Assessment for Level ${course.level}`);
+    }
+
+    console.log('✅ Seeding completed!');
+    process.exit();
+  } catch (err) {
+    console.error('❌ Seeding failed:', err);
+    process.exit(1);
+  }
+};
+
+seed();

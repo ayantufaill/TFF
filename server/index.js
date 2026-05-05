@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const courseRoutes = require('./routes/courses');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(cors());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/courses', courseRoutes);
 
 // Database Connection
 if (process.env.MONGODB_URI.includes('cluster0.mongodb.net')) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router';
 import {
   ChevronLeft,
@@ -13,9 +13,9 @@ import { useAuth } from '../context/AuthContext';
 import SecurePlayer from '../components/SecurePlayer';
 import { Card, CardContent } from '../components/ui/card';
 import { Progress } from '../components/ui/progress';
+import { Button } from '../components/ui/button';
 
-import { trainingLevels } from '../data/trainingData';
-import { levelQuizzes } from '../data/quizData';
+import { getCourses, getAssessment, MainCourse, Level, Module, Assessment } from '../services/courseService';
 import Quiz from '../components/Quiz';
 import CertificateView from '../components/CertificateView';
 
@@ -24,13 +24,22 @@ export function ModulePlayerPage() {
   const navigate = useNavigate();
   const { user, updateProgress } = useAuth();
 
-  const currentLevel = trainingLevels.find(l => String(l.level) === levelId) || trainingLevels[0];
-  const currentModule = currentLevel.modules.find(m => String(m.number) === moduleId) || currentLevel.modules[0];
+  const [courses, setCourses] = useState<MainCourse[]>([]);
+  const [currentAssessment, setCurrentAssessment] = useState<Assessment | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const isCompleted = user?.completedModules?.includes(`module-${currentModule.number}`);
-  const isLastModuleOfLevel = currentLevel.modules[currentLevel.modules.length - 1].number === currentModule.number;
+  // Derived state from courses data
+  const allLevels = courses.flatMap(c => c.levels);
+  const currentLevel = allLevels.find(l => l._id === levelId);
+  const currentModule = currentLevel?.modules.find(m => String(m.number) === String(moduleId));
+
+  const currentCourse = courses.find(c => c.levels.some(l => l._id === levelId));
+
+  const isCompleted = user?.completedModules?.some(id => id === `module-${String(currentModule?._id)}` || id === `module-${String(currentModule?.number)}`);
+  const isLastModuleOfLevel = currentLevel && currentModule && currentLevel.modules[currentLevel.modules.length - 1]._id === currentModule._id;
   const hasPassedLevelAssessment = user?.completedModules?.includes(`quiz-${levelId}`);
-  const isFinalLevel = currentLevel.level === trainingLevels[trainingLevels.length - 1].level;
+
+  const isFinalLevelOfCourse = currentCourse && currentCourse.levels[currentCourse.levels.length - 1]._id === levelId;
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -40,89 +49,134 @@ export function ModulePlayerPage() {
   const [showQuiz, setShowQuiz] = useState(shouldShowQuiz && isLastModuleOfLevel);
   const [showFinalCertificate, setShowFinalCertificate] = useState(false);
 
-  // Reset states when module changes
-  React.useEffect(() => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getCourses();
+        setCourses(data);
+        if (levelId) {
+          const quiz = await getAssessment(levelId);
+          setCurrentAssessment(quiz);
+        }
+      } catch (err) {
+        console.error('Failed to fetch data', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [levelId]);
+
+  useEffect(() => {
     setIsVideoCompleted(false);
     setShowQuiz(shouldShowQuiz && isLastModuleOfLevel);
     setShowFinalCertificate(false);
-  }, [moduleId, levelId, shouldShowQuiz]);
+  }, [moduleId, levelId, shouldShowQuiz, isLastModuleOfLevel]);
 
   const handleVideoEnded = () => {
-    updateProgress(`module-${currentModule.number}`);
-    if (isLastModuleOfLevel) {
+    if (currentModule) {
+      updateProgress(`module-${currentModule._id}`);
       setIsVideoCompleted(true);
     }
   };
 
   const handleQuizComplete = async (passed: boolean) => {
-    if (passed) {
+    if (passed && levelId) {
       await updateProgress(`quiz-${levelId}`);
       setShowQuiz(false);
       setIsVideoCompleted(false);
-      
-      // If it's not the final level, move to next. 
-      // If it IS the final level, stay here so they can click 'View Certificate'
-      if (!isFinalLevel) {
+
+      if (!isFinalLevelOfCourse) {
         handleNext();
       }
     }
   };
 
   const handleNext = () => {
-    if (!isCompleted) return;
-    const currentIndex = currentLevel.modules.findIndex(m => String(m.number) === moduleId);
-    if (currentIndex < currentLevel.modules.length - 1) {
+    const isAdmin = user?.role === 'admin';
+    const canGoNext = isCompleted || isVideoCompleted || isAdmin;
+
+    if (!canGoNext || !currentLevel || !currentModule) return;
+
+    const currentIndex = currentLevel.modules.findIndex(m => String(m._id) === String(currentModule._id));
+
+    if (currentIndex !== -1 && currentIndex < currentLevel.modules.length - 1) {
+      // Next module in same level
       const nextModule = currentLevel.modules[currentIndex + 1];
       navigate(`/training/module/${levelId}/${nextModule.number}`);
     } else {
-      const currentLevelIndex = trainingLevels.findIndex(l => String(l.level) === levelId);
-      if (currentLevelIndex < trainingLevels.length - 1) {
-        const nextLevel = trainingLevels[currentLevelIndex + 1];
-        const nextModule = nextLevel.modules[0];
-        navigate(`/training/module/${nextLevel.level}/${nextModule.number}`);
+      // Last module of level -> check for next level
+      const currentLevelIndex = currentCourse?.levels.findIndex(l => l._id === levelId) ?? -1;
+      if (currentCourse && currentLevelIndex !== -1 && currentLevelIndex < currentCourse.levels.length - 1) {
+        const nextLevel = currentCourse.levels[currentLevelIndex + 1];
+        if (nextLevel.modules.length > 0) {
+          navigate(`/training/module/${nextLevel._id}/${nextLevel.modules[0].number}`);
+        }
+      } else {
+        // Last level of course -> check for next course
+        const currentCourseIndex = courses.findIndex(c => c._id === currentCourse?._id);
+        if (currentCourseIndex !== -1 && currentCourseIndex < courses.length - 1) {
+          const nextCourse = courses[currentCourseIndex + 1];
+          if (nextCourse.levels.length > 0 && nextCourse.levels[0].modules.length > 0) {
+            const nl = nextCourse.levels[0];
+            navigate(`/training/module/${nl._id}/${nl.modules[0].number}`);
+          }
+        }
       }
     }
   };
 
   const handlePrevious = () => {
-    const currentIndex = currentLevel.modules.findIndex(m => String(m.number) === moduleId);
+    if (!currentLevel || !currentModule) return;
+    const currentIndex = currentLevel.modules.findIndex(m => String(m._id) === String(currentModule._id));
+
     if (currentIndex > 0) {
       const prevModule = currentLevel.modules[currentIndex - 1];
       navigate(`/training/module/${levelId}/${prevModule.number}`);
     } else {
-      const currentLevelIndex = trainingLevels.findIndex(l => String(l.level) === levelId);
-      if (currentLevelIndex > 0) {
-        const prevLevel = trainingLevels[currentLevelIndex - 1];
-        const prevModule = prevLevel.modules[prevLevel.modules.length - 1];
-        navigate(`/training/module/${prevLevel.level}/${prevModule.number}`);
+      const currentLevelIndex = currentCourse?.levels.findIndex(l => l._id === levelId) ?? -1;
+      if (currentCourse && currentLevelIndex > 0) {
+        const prevLevel = currentCourse.levels[currentLevelIndex - 1];
+        if (prevLevel.modules.length > 0) {
+          navigate(`/training/module/${prevLevel._id}/${prevLevel.modules[prevLevel.modules.length - 1].number}`);
+        }
       }
     }
   };
 
-  const totalModules = trainingLevels.reduce((acc, level) => acc + level.modules.length, 0);
-  const completedCount = user?.completedModules?.filter(id => id.startsWith('module-')).length || 0;
-  const progressValue = (completedCount / totalModules) * 100;
+  const totalModules = currentCourse?.levels.reduce((acc, l) => acc + l.modules.length, 0) || 0;
+  const courseModules = currentCourse?.levels.flatMap(l => l.modules) || [];
+  const completedCount = courseModules.filter(m => 
+    user?.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+  ).length;
+  const progressValue = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
+
+  if (loading) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Synchronizing your path...</div>;
+  if (!currentLevel || !currentModule) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Module not found.</div>;
 
   const renderPlayerContent = (isMobile: boolean) => {
-    if (showFinalCertificate && isFinalLevel && hasPassedLevelAssessment) {
+    if (showFinalCertificate && isFinalLevelOfCourse && hasPassedLevelAssessment) {
       return (
         <div className={isMobile ? "mt-4" : ""}>
-          <CertificateView 
-            userName={user?.name || 'Student'} 
+          <CertificateView
+            userName={user?.name || 'Student'}
             onBack={() => setShowFinalCertificate(false)}
           />
         </div>
       );
     }
 
-    if (showQuiz && levelId && levelQuizzes[levelId]) {
+    if (showQuiz && currentAssessment) {
       return (
         <div className={isMobile ? "mt-4" : ""}>
           <Quiz
-            quiz={levelQuizzes[levelId]}
+            quiz={currentAssessment}
             onComplete={handleQuizComplete}
-            isFinalLevel={isFinalLevel}
-            onViewCertificate={() => setShowFinalCertificate(true)}
+            isFinalLevel={isFinalLevelOfCourse}
+            onViewCertificate={async () => {
+              await handleQuizComplete(true);
+              setShowFinalCertificate(true);
+            }}
             alreadyPassed={hasPassedLevelAssessment}
           />
         </div>
@@ -132,7 +186,7 @@ export function ModulePlayerPage() {
     return (
       <div className={`relative w-full ${isMobile ? "mt-4" : ""}`} style={{ aspectRatio: '16/9' }}>
         <SecurePlayer
-          key={currentModule.number}
+          key={currentModule._id}
           videoId={currentModule.videoId}
           onEnded={handleVideoEnded}
         />
@@ -140,446 +194,172 @@ export function ModulePlayerPage() {
     );
   };
 
-  const renderModuleInfoCard = () => (
-    <div style={{
-      background: 'white',
-      borderRadius: '1.25rem',
-      boxShadow: '0 10px 40px rgba(44,95,45,0.08), 0 1px 3px rgba(0,0,0,0.04)',
-      border: '1px solid rgba(44,95,45,0.06)',
-      overflow: 'hidden',
-      marginBottom: '1rem',
-    }}>
-      <div style={{ height: '4px', background: '#2C5F2D' }} />
-      <div style={{ padding: '1.25rem 1.5rem' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div style={{ flex: 1, minWidth: '220px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
-              <span style={{
-                background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
-                color: 'white',
-                padding: '4px 14px', borderRadius: '999px', fontSize: '0.7rem',
-                fontWeight: 800, letterSpacing: '0.04em',
-                boxShadow: '0 2px 8px rgba(44,95,45,0.2)',
-              }}>
-                MODULE {currentModule.number}
-              </span>
-              {isCompleted && (
-                <span style={{
-                  background: 'linear-gradient(135deg, #dcfce7, #bbf7d0)',
-                  color: '#15803d',
-                  padding: '4px 12px', borderRadius: '999px', fontSize: '0.7rem',
-                  fontWeight: 800,
-                  display: 'flex', alignItems: 'center', gap: '5px',
-                  border: '1px solid rgba(22,163,106,0.15)',
-                }}>
-                  <CheckCircle style={{ width: 13, height: 13 }} /> Completed
-                </span>
+  const renderModuleInfoCard = () => {
+    const isAdmin = user?.role === 'admin';
+    const canGoNext = isCompleted || isVideoCompleted || isAdmin;
+
+    return (
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+        <div className="h-1 bg-[#2C5F2D]" />
+        <div className="p-6">
+          <div className="flex flex-wrap gap-4 justify-between items-start">
+            <div className="flex-1 min-w-[220px]">
+              <div className="flex items-center gap-2 mb-3">
+                <Badge className="bg-[#2C5F2D] text-white px-3 py-1 font-bold text-[10px] tracking-widest uppercase">
+                  MODULE {currentModule.number}
+                </Badge>
+                {isCompleted && (
+                  <Badge variant="outline" className="text-[#15803d] border-[#bbf7d0] bg-[#f0fdf4] font-bold text-[10px] uppercase">
+                    <CheckCircle className="w-3 h-3 mr-1" /> Completed
+                  </Badge>
+                )}
+                {isAdmin && (
+                  <Badge variant="outline" className="text-[#C9A961] border-[#C9A961] bg-[#FAF8F3] font-bold text-[10px] uppercase">
+                    Admin Preview Mode
+                  </Badge>
+                )}
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2 leading-tight">
+                {currentModule.title}
+              </h2>
+              <p className="text-gray-500 text-sm leading-relaxed max-w-2xl">
+                {currentModule.description}
+              </p>
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                variant="outline"
+                onClick={handlePrevious}
+                className="border-gray-200 text-gray-600 font-bold hover:bg-gray-50"
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" /> Back
+              </Button>
+
+              {isLastModuleOfLevel && (isVideoCompleted || isCompleted || isAdmin) && !showQuiz && (
+                <Button
+                  onClick={() => setShowQuiz(true)}
+                  className="bg-[#C9A961] hover:bg-[#B89751] text-white font-bold"
+                >
+                  {hasPassedLevelAssessment ? 'Review Quiz' : 'Take Quiz'}
+                </Button>
+              )}
+
+              {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
+                <Button
+                  onClick={handleNext}
+                  disabled={!canGoNext}
+                  className={`font-bold ${canGoNext ? 'bg-[#2C5F2D] hover:bg-[#234F24] text-white' : 'bg-gray-100 text-gray-400'}`}
+                >
+                  Next <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
               )}
             </div>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#1a1a2e', lineHeight: 1.3, letterSpacing: '-0.01em', marginBottom: '0.35rem' }}>
-              {currentModule.title}
-            </h2>
-            <p style={{ color: '#6b7280', fontSize: '0.88rem', lineHeight: 1.6, fontWeight: 500, margin: 0 }}>
-              {currentModule.description}
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', gap: '0.6rem', flexShrink: 0, alignItems: 'center', paddingTop: '0.25rem' }}>
-            <button
-              onClick={handlePrevious}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '5px',
-                padding: '0.6rem 1.2rem', borderRadius: '12px',
-                border: '1.5px solid #e5e7eb', background: 'white',
-                color: '#374151', fontWeight: 700, fontSize: '0.82rem',
-                cursor: 'pointer', transition: 'all 0.25s ease',
-              }}
-            >
-              <ChevronLeft style={{ width: 15, height: 15 }} /> Back
-            </button>
-
-            {isLastModuleOfLevel && (isVideoCompleted || isCompleted) && !showQuiz && (
-              <button
-                onClick={() => setShowQuiz(true)}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '5px',
-                  padding: '0.6rem 1.4rem', borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #C9A961, #d4b872)',
-                  color: 'white', fontWeight: 800, fontSize: '0.85rem',
-                  cursor: 'pointer', transition: 'all 0.25s ease',
-                }}
-              >
-                {hasPassedLevelAssessment ? 'Review Assessment' : 'Take Level Assessment'}
-              </button>
-            )}
-
-            {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
-              <button
-                onClick={handleNext}
-                disabled={!isCompleted}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: '5px',
-                  padding: '0.6rem 1.4rem', borderRadius: '12px',
-                  background: isCompleted ? 'linear-gradient(135deg, #2C5F2D, #3a7a3d)' : '#e5e7eb',
-                  color: isCompleted ? 'white' : '#9ca3af', fontWeight: 700, fontSize: '0.82rem',
-                  cursor: isCompleted ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease',
-                }}
-              >
-                Next <ChevronRight style={{ width: 15, height: 15 }} />
-              </button>
-            )}
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <>
       <style>{`
-        /* Remove the large footer margin on the module player page */
-        footer {
-          margin-top: 0 !important;
-        }
-
+        footer { margin-top: 0 !important; }
         .module-page-container {
           display: flex;
           flex-direction: column;
           min-height: calc(100vh - 64px);
           background-color: #FAF8F3;
-          font-family: ui-sans-serif, system-ui, sans-serif;
-          overflow: auto;
         }
-
-        .module-layout {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-          min-height: 0;
-          overflow: visible;
-        }
-        
+        .module-layout { display: flex; flex: 1; }
         .module-sidebar {
-          width: 100%;
+          width: 400px;
+          background: white;
+          border-right: 1px solid #f3f4f6;
           display: flex;
           flex-direction: column;
-          flex-shrink: 0;
-          background-color: white;
-          border-right: 1px solid #f3f4f6;
-          overflow-y: auto;
-          box-shadow: 0 20px 50px rgba(44,95,45,0.06);
-          z-index: 10;
-          align-self: stretch;
+          box-shadow: 20px 0 50px rgba(44,95,45,0.02);
         }
-
-        .module-content {
-          display: none;
-          flex: 1;
-          flex-direction: column;
-          overflow: visible;
-          position: relative;
-          align-self: stretch;
-          min-height: 0;
-        }
-
-        @media (min-width: 768px) {
-          .module-page-container {
-            min-height: calc(100vh - 80px);
-            height: auto;
-          }
-          .module-layout {
-            flex-direction: row;
-            align-items: stretch;
-          }
-          .module-sidebar {
-            width: 350px;
-            height: auto;
-          }
-          .module-content {
-            display: flex;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .module-sidebar {
-            width: 400px;
-          }
+        .module-content { flex: 1; padding: 2rem; overflow-y: auto; }
+        @media (max-width: 1024px) {
+          .module-layout { flex-direction: column; }
+          .module-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #f3f4f6; }
         }
       `}</style>
 
       <div className="module-page-container">
+        <section className="bg-[#2C5F2D] text-white py-12 px-8 relative overflow-hidden text-center">
+          <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque-thin.png')]" />
+          <div className="relative z-10 max-w-4xl mx-auto">
+            <h1 className="text-3xl font-black mb-2 tracking-tight">Level {currentLevel.level}: {currentLevel.title}</h1>
+            <p className="text-white/70 font-medium mb-8">Part of the {currentCourse?.title} Course</p>
 
-        {/* ============================================================
-            HERO / PROGRESS SECTION - NOW FULL WIDTH
-            ============================================================ */}
-        <section style={{
-          background: '#2C5F2D',
-          color: 'white',
-          padding: '2rem 2rem',
-          position: 'relative',
-          overflow: 'hidden',
-          flexShrink: 0,
-          textAlign: 'center',
-          borderBottom: '1px solid rgba(255,255,255,0.1)'
-        }}>
-          <div style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: "url('https://www.transparenttextures.com/patterns/arabesque-thin.png')",
-            opacity: 0.05,
-          }} />
-
-          <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-              Training & Support for New Muslims
-            </h1>
-            <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.9)', marginBottom: '1rem', fontWeight: 500, lineHeight: 1.4 }}>
-              A comprehensive, step-by-step journey to help you understand and practice Islam with confidence
-            </p>
-
-            {/* Large Progress Card */}
-            <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 mt-8 text-left text-white shadow-2xl">
+            <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 text-left text-white">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold text-white">Your Progress</h3>
-                  <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressValue)}% Complete</span>
+                  <h3 className="font-semibold text-white">Your Training Progress</h3>
+                  <span className="text-sm font-bold text-[#C9A961]">{Math.round(progressValue)}%</span>
                 </div>
-                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 mb-2 relative">
-                  <div
-                    className="h-full bg-white transition-all duration-700 shadow-[0_0_12px_rgba(255,255,255,0.9)]"
-                    style={{ width: `${progressValue}%` }}
-                  />
+                <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden border border-white/10 relative">
+                  <div className="h-full bg-white transition-all duration-1000 shadow-[0_0_15px_rgba(255,255,255,0.5)]" style={{ width: `${progressValue}%` }} />
                 </div>
-                <p className="text-sm text-gray-200">
-                  You have completed {completedCount} out of {totalModules} modules. Keep going!
-                </p>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        <div className="module-layout" style={{ margin: '1rem 0' }}>
-
-          {/* ============================================================
-              LEFT COLUMN (SIDEBAR): COURSE MODULES
-              ============================================================ */}
-          <aside className="module-sidebar custom-scrollbar">
-
-            {/* Sidebar Header */}
-            <div style={{
-              padding: '1.25rem 1.25rem 1rem',
-              borderBottom: '1px solid rgba(44,95,45,0.08)',
-              background: 'linear-gradient(180deg, rgba(44,95,45,0.03), transparent)',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.75rem' }}>
-                <div style={{
-                  width: '5px', height: '24px', borderRadius: '4px',
-                  background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
-                }} />
-                <h3 style={{
-                  fontSize: '0.9rem', fontWeight: 900, color: '#2C5F2D',
-                  textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0,
-                }}>
-                  Level {currentLevel.level} - {currentLevel.title}
-                </h3>
-              </div>
+        <div className="module-layout">
+          <aside className="module-sidebar">
+            <div className="p-6 border-b bg-gray-50/50">
+              <h3 className="text-xs font-black text-[#2C5F2D] uppercase tracking-widest mb-1">Current Syllabus</h3>
+              <p className="text-sm text-gray-500 font-medium line-clamp-1">{currentLevel.subtitle}</p>
             </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+              {currentLevel.modules.map((m, idx) => {
+                const isActive = String(m.number) === String(moduleId);
+                const completed = user?.completedModules?.includes(`module-${m._id}`) || user?.completedModules?.includes(`module-${m.number}`);
+                const isAdmin = user?.role === 'admin';
+                const unlocked = idx === 0 || user?.completedModules?.includes(`module-${currentLevel.modules[idx - 1]._id}`) || user?.completedModules?.includes(`module-${currentLevel.modules[idx - 1].number}`) || completed || isActive || isAdmin;
 
-            {/* Module List */}
-            <div style={{ padding: '0.75rem', flex: 1 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {currentLevel.modules.map((m, index) => {
-                  const isActive = String(m.number) === moduleId;
-                  const completed = user?.completedModules?.includes(`module-${m.number}`);
-                  const isPrevCompleted = index === 0 ? true : user?.completedModules?.includes(`module-${currentLevel.modules[index - 1].number}`);
-                  const isUnlocked = completed || isPrevCompleted || isActive;
-
-                  return (
-                    <div key={m.number}>
-                      <button
-                        onClick={() => {
-                          if (isUnlocked) {
-                            navigate(`/training/module/${levelId}/${m.number}`);
-                          }
-                        }}
-                        style={{
-                          width: '100%', textAlign: 'left',
-                          padding: '0.85rem 1rem', borderRadius: '14px',
-                          background: isActive
-                            ? 'linear-gradient(135deg, rgba(44,95,45,0.06), rgba(201,169,97,0.08))'
-                            : 'transparent',
-                          border: isActive ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
-                          boxShadow: isActive ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
-                          cursor: isUnlocked ? 'pointer' : 'not-allowed',
-                          transition: 'all 0.25s ease',
-                          display: 'flex', alignItems: 'center', gap: '0.85rem',
-                          position: 'relative',
-                          opacity: isUnlocked ? 1 : 0.6,
-                        }}
-                      >
-                        {/* Active left accent */}
-                        {isActive && (
-                          <div style={{
-                            position: 'absolute', left: 0, top: '20%', bottom: '20%',
-                            width: '3px', borderRadius: '0 4px 4px 0',
-                            background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
-                          }} />
-                        )}
-
-                        {/* Circle indicator */}
-                        <div style={{ flexShrink: 0 }}>
-                          {completed ? (
-                            <div style={{
-                              width: '36px', height: '36px', borderRadius: '50%',
-                              background: 'linear-gradient(135deg, #2C5F2D, #3a7a3d)',
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              boxShadow: '0 3px 10px rgba(44,95,45,0.25)',
-                            }}>
-                              <CheckCircle style={{ width: 17, height: 17, color: 'white' }} />
-                            </div>
-                          ) : (
-                            <div style={{
-                              width: '36px', height: '36px', borderRadius: '50%',
-                              border: isActive ? '2.5px solid #C9A961' : '2px solid #e0e0e0',
-                              background: isActive ? 'rgba(201,169,97,0.08)' : '#fafafa',
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              transition: 'all 0.25s ease',
-                            }}>
-                              <span style={{
-                                fontSize: '0.75rem', fontWeight: 800,
-                                color: isActive ? '#C9A961' : '#9ca3af',
-                              }}>
-                                {m.number}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Title */}
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <p style={{
-                            fontSize: '0.95rem', fontWeight: isActive ? 800 : 600,
-                            lineHeight: 1.4, margin: 0,
-                            color: isActive ? '#1a1a2e' : completed ? '#2C5F2D' : isUnlocked ? '#555' : '#9ca3af',
-                            transition: 'color 0.25s ease',
-                          }}>
-                            {m.title}
-                          </p>
-                        </div>
-
-                        {/* Active play icon */}
-                        {isActive && (
-                          <div style={{
-                            flexShrink: 0, width: '28px', height: '28px', borderRadius: '50%',
-                            background: 'linear-gradient(135deg, #C9A961, #d4b872)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            boxShadow: '0 2px 8px rgba(201,169,97,0.3)',
-                          }}>
-                            <Play style={{ width: 12, height: 12, color: 'white', fill: 'white' }} />
-                          </div>
-                        )}
-                      </button>
-
-                      {/* Mobile Accordion Content */}
-                      {isActive && !showQuiz && !showFinalCertificate && (
-                        <div className="md:hidden pt-2 pb-4">
-                          {renderModuleInfoCard()}
-                          {renderPlayerContent(true)}
-                        </div>
-                      )}
+                return (
+                  <button
+                    key={m._id}
+                    onClick={() => unlocked && navigate(`/training/module/${levelId}/${m.number}`)}
+                    className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 ${isActive ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm' :
+                        unlocked ? 'hover:bg-gray-50 border-2 border-transparent' : 'opacity-50 grayscale cursor-not-allowed border-2 border-transparent'
+                      }`}
+                  >
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold ${completed ? 'bg-[#2C5F2D] text-white shadow-lg shadow-[#2C5F2D]/20' :
+                        isActive ? 'bg-white border-2 border-[#C9A961] text-[#C9A961]' : 'bg-gray-100 text-gray-400'
+                      }`}>
+                      {completed ? <CheckCircle className="w-5 h-5" /> : m.number}
                     </div>
-                  );
-                })}
-
-                {/* Level Assessment Quiz Sidebar Item */}
-                <button
-                  onClick={() => {
-                    const lastModule = currentLevel.modules[currentLevel.modules.length - 1];
-                    if (currentModule.number === lastModule.number) {
-                      setShowQuiz(true);
-                    } else {
-                      navigate(`/training/module/${levelId}/${lastModule.number}?quiz=true`);
-                    }
-                  }}
-                  style={{
-                    width: '100%', textAlign: 'left',
-                    padding: '0.85rem 1rem', borderRadius: '14px',
-                    background: showQuiz
-                      ? 'linear-gradient(135deg, rgba(44,95,45,0.06), rgba(201,169,97,0.08))'
-                      : 'transparent',
-                    border: showQuiz ? '1.5px solid rgba(201,169,97,0.25)' : '1.5px solid transparent',
-                    boxShadow: showQuiz ? '0 4px 16px rgba(44,95,45,0.06)' : 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    display: 'flex', alignItems: 'center', gap: '0.85rem',
-                    position: 'relative',
-                    marginTop: '4px'
-                  }}
-                >
-                  {/* Active left accent */}
-                  {showQuiz && (
-                    <div style={{
-                      position: 'absolute', left: 0, top: '20%', bottom: '20%',
-                      width: '3px', borderRadius: '0 4px 4px 0',
-                      background: 'linear-gradient(180deg, #C9A961, #2C5F2D)',
-                    }} />
-                  )}
-
-                  <div style={{ flexShrink: 0 }}>
-                    <div style={{
-                      width: '36px', height: '36px', borderRadius: '50%',
-                      border: showQuiz ? '2.5px solid #C9A961' : '2px solid #e0e0e0',
-                      background: showQuiz ? 'rgba(201,169,97,0.08)' : '#fafafa',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'all 0.25s ease',
-                    }}>
-                      <span style={{ fontSize: '1.2rem' }}>📝</span>
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-bold text-sm truncate ${isActive ? 'text-gray-900' : 'text-gray-600'}`}>{m.title}</p>
                     </div>
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{
-                      fontSize: '0.95rem', fontWeight: showQuiz ? 800 : 600,
-                      lineHeight: 1.4, margin: 0,
-                      color: showQuiz ? '#1a1a2e' : '#555',
-                      transition: 'color 0.25s ease',
-                    }}>
-                      {isFinalLevel ? 'Final Assessment' : 'Level Assessment'}
-                    </p>
-                  </div>
-                </button>
-                {/* Mobile Quiz Content */}
-                {showQuiz && (
-                  <div className="md:hidden pt-4 pb-8 px-2">
-                    {renderPlayerContent(true)}
-                  </div>
-                )}
-              </div>
-            </div>
+                    {isActive && <Play className="w-4 h-4 text-[#C9A961] fill-current" />}
+                  </button>
+                );
+              })}
 
-            {/* Sidebar Footer */}
-            <div style={{
-              padding: '1rem 1.25rem', borderTop: '1px solid rgba(44,95,45,0.08)',
-              background: 'linear-gradient(180deg, transparent, rgba(44,95,45,0.03))',
-            }}>
-              <p style={{
-                fontSize: '0.85rem', color: '#6b7280', fontWeight: 600,
-                textAlign: 'center', margin: 0, lineHeight: 1.5,
-              }}>
-                🕌 Keep learning — every step brings you closer to understanding
-              </p>
+              <button
+                onClick={() => (isLastModuleOfLevel || user?.role === 'admin') && setShowQuiz(true)}
+                className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 mt-4 ${showQuiz ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm' : 'border-2 border-transparent hover:bg-gray-50'
+                  }`}
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg ${showQuiz ? 'bg-white border-2 border-[#C9A961]' : 'bg-gray-100'
+                  }`}>
+                  📝
+                </div>
+                <div className="flex-1 font-bold text-sm text-gray-600">Level Assessment</div>
+              </button>
             </div>
           </aside>
 
-          {/* ============================================================
-            RIGHT COLUMN (MAIN CONTENT): VIDEO PLAYER & INFO
-            ============================================================ */}
-          <main className="module-content custom-scrollbar" style={{ padding: '1rem' }}>
-            <div style={{ maxWidth: '900px', margin: '0 auto', width: '100%' }}>
+          <main className="module-content">
+            <div className="max-w-4xl mx-auto">
               {!showFinalCertificate && renderModuleInfoCard()}
-              <div style={{
-                borderRadius: '1.25rem', overflow: 'hidden',
-                background: (showQuiz || showFinalCertificate) ? 'transparent' : 'black',
-                paddingBottom: '2rem'
-              }}>
+              <div className="bg-black rounded-3xl overflow-hidden shadow-2xl">
                 {renderPlayerContent(false)}
               </div>
             </div>
