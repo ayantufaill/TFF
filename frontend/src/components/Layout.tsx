@@ -13,7 +13,7 @@ const navLinks = [
   //   { label: 'Courses', to: '/courses' },
   { label: 'About Us', to: '/about-us' },
   { label: 'Discovering Islam', to: '/discovering-islam' },
-  { label: 'Programs', to: '/programs' },
+  // { label: 'Programs', to: '/programs' },
   { label: 'Training', to: '/Training/dashboard', authOnly: true },
   { label: 'Training', to: '/training', guestOnly: true },
   { label: 'Playlist', to: '/playlist' },
@@ -104,7 +104,7 @@ export function Layout() {
                   alt="Two Finger Foundation"
                   width={48}
                   height={48}
-                  fetchpriority="high"
+                  fetchPriority="high"
                   className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
                 />
               </div>

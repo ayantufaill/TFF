@@ -11,7 +11,7 @@ const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage")
 import { AboutPage } from "./pages/AboutPage";
 import { DiscoveringIslamPage } from "./pages/DiscoveringIslamPage";
 import { PlaylistPage } from "./pages/PlaylistPage";
-import { ProgramsPage } from "./pages/ProgramsPage";
+// import { ProgramsPage } from "./pages/ProgramsPage";
 import { TrainingPage } from "./pages/TrainingPage";
 import { ActualTrainingPage } from "./pages/actualtrainingpage";
 import { ModulePlayerPage } from "./pages/ModulePlayerPage";
@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
       { path: "get-help", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "about-us", Component: AboutPage },
       { path: "discovering-islam", Component: DiscoveringIslamPage },
-      { path: "programs", Component: ProgramsPage },
+      // { path: "programs", Component: ProgramsPage },
       { path: "training", Component: TrainingPage },
       { path: "training/curriculum", Component: ActualTrainingPage },
       { path: "training/module/:levelId/:moduleId", Component: ModulePlayerPage },
