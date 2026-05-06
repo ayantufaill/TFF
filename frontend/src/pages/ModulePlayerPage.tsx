@@ -160,6 +160,8 @@ export function ModulePlayerPage() {
         <div className={isMobile ? "mt-4" : ""}>
           <CertificateView
             userName={user?.name || 'Student'}
+            courseName={currentCourse?.title}
+            completedModules={currentCourse?.levels.map(l => l.title)}
             onBack={() => setShowFinalCertificate(false)}
           />
         </div>

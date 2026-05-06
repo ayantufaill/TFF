@@ -65,6 +65,7 @@ export const router = createBrowserRouter([
       { path: "downloads", Component: DownloadsPage },
       { path: "articles", Component: ArticlesPage },
       { path: "admin", Component: lazy(() => import("./pages/AdminPanel")) },
+      { path: "verify/:certId", Component: lazy(() => import("./pages/VerifyPage")) },
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },

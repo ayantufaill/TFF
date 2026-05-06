@@ -1,22 +1,20 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { Download, ArrowLeft } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import { QRCodeSVG } from 'qrcode.react';
 
-// ─── Converts /logo.svg → PNG data URL via an offscreen canvas ───
+// ─── SVG → PNG for html2canvas ───────────────────────────────────
 const svgToPngDataUrl = async (svgUrl: string, size = 220): Promise<string> => {
   const res = await fetch(svgUrl);
   const svgText = await res.text();
   const blob = new Blob([svgText], { type: 'image/svg+xml' });
   const blobUrl = URL.createObjectURL(blob);
-
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = size;
-      canvas.height = size;
-      const ctx = canvas.getContext('2d')!;
-      ctx.drawImage(img, 0, 0, size, size);
+      canvas.width = size; canvas.height = size;
+      canvas.getContext('2d')!.drawImage(img, 0, 0, size, size);
       URL.revokeObjectURL(blobUrl);
       resolve(canvas.toDataURL('image/png'));
     };
@@ -25,35 +23,85 @@ const svgToPngDataUrl = async (svgUrl: string, size = 220): Promise<string> => {
   });
 };
 
-// ─── Component ───────────────────────────────────────────────────
+// ─── Deterministic certificate ID from user name + date ──────────
+const generateCertId = (userName: string, date: string): string => {
+  const seed = (userName + date).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  const part = (n: number) => String((seed * (n + 1) * 7919) % 10000).padStart(4, '0');
+  return `TFF-${part(1)}-${part(2)}-${part(3)}`;
+};
+
+// ─── Encode certificate data into URL ────────────────────────────
+const buildVerifyUrl = (certId: string, userName: string, courseName: string, date: string): string => {
+  const payload = btoa(JSON.stringify({ certId, userName, courseName, date }));
+  const base = typeof window !== 'undefined' ? window.location.origin : 'https://twofingerfoundation.org';
+  return `${base}/verify/${certId}?d=${payload}`;
+};
+
+// ─── Types ───────────────────────────────────────────────────────
 interface CertificateViewProps {
   userName: string;
+  courseName?: string;
+  completedModules?: string[];
   onBack: () => void;
 }
 
-const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) => {
+// ─── Component ───────────────────────────────────────────────────
+const CertificateView: React.FC<CertificateViewProps> = ({
+  userName,
+  courseName = 'Foundations of Faith & Islamic Practice',
+  completedModules = [],
+  onBack,
+}) => {
   const certificateRef = useRef<HTMLDivElement>(null);
+
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  });
+
+  const certId = useMemo(() => generateCertId(userName, today), [userName, today]);
+  const verifyUrl = useMemo(() => buildVerifyUrl(certId, userName, courseName, today), [certId, userName, courseName, today]);
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
-
     try {
-      // 1️⃣  Convert SVG logo → PNG data URL BEFORE html2canvas runs
       const logoPng = await svgToPngDataUrl('/logo.svg');
 
+      // Convert the QR code SVG inside the certificate to a PNG for html2canvas
+      const qrSvgEl = certificateRef.current.querySelector<SVGElement>('.cert-qr svg');
+      let qrPngUrl = '';
+      if (qrSvgEl) {
+        const serialized = new XMLSerializer().serializeToString(qrSvgEl);
+        const qrBlob = new Blob([serialized], { type: 'image/svg+xml' });
+        const qrBlobUrl = URL.createObjectURL(qrBlob);
+        qrPngUrl = await new Promise<string>((res, rej) => {
+          const i = new Image();
+          i.onload = () => {
+            const c = document.createElement('canvas');
+            c.width = 90; c.height = 90;
+            c.getContext('2d')!.drawImage(i, 0, 0, 90, 90);
+            URL.revokeObjectURL(qrBlobUrl);
+            res(c.toDataURL('image/png'));
+          };
+          i.onerror = rej;
+          i.src = qrBlobUrl;
+        });
+      }
+
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        scrollX: 0,
-        scrollY: 0,
+        scale: 2, useCORS: true, allowTaint: true,
+        backgroundColor: '#ffffff', scrollX: 0, scrollY: 0,
         onclone: (clonedDoc) => {
-          // 2️⃣  Swap every SVG src → PNG data URL in the cloned DOM
           clonedDoc.querySelectorAll<HTMLImageElement>('img[src="/logo.svg"]')
             .forEach(img => { img.src = logoPng; });
 
-          // Fix oklch / outline issues
+          // Replace QR SVG with a PNG img in the clone
+          if (qrPngUrl) {
+            const qrWrapper = clonedDoc.querySelector('.cert-qr');
+            if (qrWrapper) {
+              qrWrapper.innerHTML = `<img src="${qrPngUrl}" width="90" height="90" style="display:block;" />`;
+            }
+          }
+
           const root = clonedDoc.documentElement;
           root.style.setProperty('--border', '#e5e7eb');
           root.style.setProperty('--ring', '#3b82f6');
@@ -69,21 +117,17 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `TFF-Certificate-${userName.trim().replace(/\s+/g, '-')}.png`;
+        link.download = `TFF-Certificate-${certId}.png`;
         document.body.appendChild(link);
         link.click();
         setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(url); }, 100);
       }, 'image/png', 1.0);
 
-    } catch (error) {
-      console.error('Certificate generation error:', error);
+    } catch (err) {
+      console.error('Certificate generation error:', err);
       alert('Sorry, could not generate your certificate. Please try again.');
     }
   };
-
-  const today = new Date().toLocaleDateString('en-US', {
-    year: 'numeric', month: 'long', day: 'numeric',
-  });
 
   return (
     <div className="w-full flex flex-col items-center animate-in fade-in duration-700">
@@ -102,76 +146,181 @@ const CertificateView: React.FC<CertificateViewProps> = ({ userName, onBack }) =
         </button>
       </div>
 
-      {/* Certificate Frame */}
-      <div className="w-full overflow-hidden flex justify-center bg-white/50 backdrop-blur-sm p-4 sm:p-8 border border-gray-100"
-        style={{ borderRadius: '1.5rem', boxShadow: 'inset 0 2px 4px 0 rgba(0,0,0,0.06)' }}>
-        <div className="w-full overflow-x-auto flex justify-center py-4">
+      {/* Scroll wrapper */}
+      <div className="w-full overflow-x-auto flex justify-center py-4">
 
-          <div ref={certificateRef}
-            className="relative bg-white flex-shrink-0"
+        {/* ── Certificate ─────────────────────────────────────────── */}
+        <div
+          ref={certificateRef}
+          className="relative bg-white flex-shrink-0"
+          style={{
+            width: '900px', height: '636px',
+            fontFamily: "'Georgia', 'Times New Roman', serif",
+            border: '18px solid #C9A961',
+            boxShadow: '0 25px 60px -10px rgba(0,0,0,0.3)',
+            outline: 'none',
+          }}
+        >
+          {/* Inner gold border line */}
+          <div className="absolute inset-[8px] pointer-events-none" style={{ border: '2px solid #C9A961' }} />
+
+          {/* Subtle background texture */}
+          <div className="absolute inset-0 pointer-events-none"
             style={{
-              width: '800px', height: '560px', fontFamily: "'Playfair Display', serif",
-              border: '20px solid #2C5F2D', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', outline: 'none'
-            }}>
+              background: 'radial-gradient(ellipse at 50% 0%, rgba(201,169,97,0.07) 0%, transparent 70%)',
+            }} />
 
-            <div id="certificate-root" className="absolute inset-0">
-              {/* Ornate Border */}
-              <div className="absolute inset-0 pointer-events-none"
-                style={{
-                  border: '2px solid #C9A961', margin: '10px',
-                  background: 'radial-gradient(#C9A961 0.5px, transparent 0.5px)',
-                  backgroundSize: '10px 10px', opacity: 0.15
-                }} />
+          {/* ── Content ─────────────────────────────────────────── */}
+          <div className="absolute inset-0 flex flex-col" style={{ padding: '32px 48px 24px' }}>
 
-              {/* Content */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-16 text-center">
-                <div className="mb-6">
-                  {/* ✅ No change needed in JSX — the swap happens inside onclone */}
-                  <img src="/logo.svg" alt="TFF Logo" width="110" height="110"
-                    className="h-32 w-auto object-contain mb-4" />
+            {/* ── Top row: Logo | Title ─── */}
+            <div className="flex items-center justify-between mb-4">
+              <img src="/logo.svg" alt="TFF Logo" width="80" height="80"
+                style={{ height: '80px', width: 'auto', objectFit: 'contain' }} />
+
+              <div className="text-center flex-1 px-4">
+                <div style={{ color: '#2C5F2D', fontSize: '11px', letterSpacing: '3px', fontFamily: 'Georgia, serif', textTransform: 'uppercase', marginBottom: '4px' }}>
+                  بسم الله الرحمن الرحيم
                 </div>
-
-                <h1 className="text-4xl font-extrabold text-[#2C5F2D] mb-2 uppercase tracking-widest">
-                  Certificate of Completion
-                </h1>
-                <div className="w-32 h-1 bg-[#C9A961] mb-8" />
-
-                <p className="text-lg italic mb-2" style={{ color: '#4B5563' }}>This is to certify that</p>
-
-                <h2 className="text-5xl font-bold mb-6 font-serif border-b-2 pb-2 px-8 uppercase"
-                  style={{ color: '#111827', borderBottomColor: '#F3F4F6' }}>
-                  {userName}
-                </h2>
-
-                <p className="text-lg max-w-lg leading-relaxed mb-8" style={{ color: '#374151' }}>
-                  has successfully completed the comprehensive training program
-                  <span className="block font-bold text-[#2C5F2D] mt-1">
-                    "Foundations of Faith & Islamic Practice"
-                  </span>
-                  at Two Finger Foundation (TFF).
-                </p>
-
-                <div className="mt-auto w-full flex justify-between items-end px-4">
-                  <div className="flex flex-col items-center">
-                    <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
-                    <span className="text-sm font-semibold" style={{ color: '#6B7280' }}>{today}</span>
-                    <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Date of Achievement</span>
-                  </div>
-
-                  <div className="flex flex-col items-center">
-                    {/* ✅ Signature added here */}
-                    <img src="/signature.png" alt="Signature"
-                      style={{ height: '48px', width: 'auto', objectFit: 'contain', marginBottom: '4px' }} />
-                    {/* <img src="/logo.svg" alt="TFF Seal" width="60" height="60"
-                      className="h-12 w-auto object-contain mb-2" /> */}
-                    <div className="w-40 h-0.5 mb-2" style={{ backgroundColor: '#D1D5DB' }} />
-                    <span className="text-xs uppercase tracking-tighter" style={{ color: '#9CA3AF' }}>Official Certification</span>
-                  </div>
+                <div style={{ color: '#1a1a1a', fontSize: '22px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', lineHeight: 1.2 }}>
+                  Two Finger Foundation
+                </div>
+                <div style={{ color: '#4a4a4a', fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', marginTop: '2px' }}>
+                  Islamic Education &amp; Training
                 </div>
               </div>
+
+              {/* Decorative right seal placeholder */}
+              <div style={{ width: '80px' }} />
+            </div>
+
+            {/* ── Gold divider ─── */}
+            <div style={{ height: '2px', background: 'linear-gradient(to right, transparent, #C9A961, #C9A961, transparent)', margin: '0 0 16px' }} />
+
+            {/* ── Certifies that ─── */}
+            <div className="text-center" style={{ marginBottom: '8px' }}>
+              <span style={{ color: '#555', fontSize: '14px', fontStyle: 'italic', letterSpacing: '1px' }}>
+                This certifies that
+              </span>
+            </div>
+
+            {/* ── Student Name ─── */}
+            <div className="text-center" style={{ marginBottom: '10px' }}>
+              <div style={{
+                color: '#111',
+                fontSize: '36px',
+                fontWeight: '700',
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                borderBottom: '2px solid #C9A961',
+                display: 'inline-block',
+                paddingBottom: '4px',
+                paddingLeft: '32px',
+                paddingRight: '32px',
+              }}>
+                {userName}
+              </div>
+            </div>
+
+            {/* ── Award text ─── */}
+            <div className="text-center" style={{ marginBottom: '6px' }}>
+              <span style={{ color: '#444', fontSize: '13px' }}>
+                has successfully completed the comprehensive training program
+              </span>
+            </div>
+
+            <div className="text-center" style={{ marginBottom: '6px' }}>
+              <span style={{ color: '#2C5F2D', fontSize: '16px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                "{courseName}"
+              </span>
+            </div>
+
+            <div className="text-center" style={{ marginBottom: '10px', color: '#555', fontSize: '12px' }}>
+              at Two Finger Foundation (TFF)
+            </div>
+
+            {/* ── Modules list ─── */}
+            {completedModules.length > 0 && (
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ color: '#444', fontSize: '11px', textAlign: 'center', marginBottom: '6px' }}>
+                  by completing the following modules:
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 32px', padding: '0 48px' }}>
+                  {completedModules.map((mod, i) => (
+                    <div key={i} style={{ color: '#333', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ color: '#C9A961', fontSize: '10px' }}>◆</span>
+                      {mod}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── Gold divider ─── */}
+            <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, #C9A961, transparent)', margin: '4px 0 12px' }} />
+
+            {/* ── Bottom row: Seal | Signature | QR+Info ─── */}
+            <div className="flex items-end justify-between" style={{ marginTop: 'auto' }}>
+
+              {/* Seal */}
+              <div className="flex flex-col items-center" style={{ width: '120px' }}>
+                <div style={{
+                  width: '80px', height: '80px', borderRadius: '50%',
+                  border: '2px solid #2C5F2D',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  color: '#2C5F2D', fontSize: '7px', letterSpacing: '1px', textAlign: 'center',
+                  textTransform: 'uppercase', padding: '8px', lineHeight: 1.4,
+                }}>
+                  <div style={{ fontSize: '8px', fontWeight: '700' }}>TFF</div>
+                  <div>Two Finger</div>
+                  <div>Foundation</div>
+                  <div style={{ fontSize: '6px', marginTop: '2px' }}>Est. 2024</div>
+                </div>
+                <span style={{ color: '#888', fontSize: '9px', marginTop: '4px', letterSpacing: '1px' }}>SEAL</span>
+              </div>
+
+              {/* Signature */}
+              <div className="flex flex-col items-center" style={{ flex: 1, paddingBottom: '4px' }}>
+                <img src="/signature.png" alt="Signature"
+                  style={{ height: '44px', width: 'auto', objectFit: 'contain', marginBottom: '4px' }} />
+                <div style={{ width: '140px', height: '1px', backgroundColor: '#D1D5DB', marginBottom: '4px' }} />
+                <div style={{ color: '#555', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Director, TFF
+                </div>
+                <div style={{ color: '#888', fontSize: '9px', marginTop: '1px' }}>
+                  Official Signature
+                </div>
+              </div>
+
+              {/* QR Code + Info */}
+              <div className="flex flex-col items-end" style={{ width: '180px', gap: '4px' }}>
+                <div className="cert-qr" style={{ marginBottom: '6px' }}>
+                  <QRCodeSVG
+                    value={verifyUrl}
+                    size={90}
+                    bgColor="#ffffff"
+                    fgColor="#1a1a1a"
+                    level="M"
+                  />
+                </div>
+                <div style={{ color: '#444', fontSize: '9px', textAlign: 'right' }}>
+                  <span style={{ color: '#888' }}>Date: </span>
+                  {today}
+                </div>
+                <div style={{ color: '#444', fontSize: '9px', textAlign: 'right' }}>
+                  <span style={{ color: '#888' }}>Cert No.: </span>
+                  <span style={{ fontWeight: '600', letterSpacing: '0.5px' }}>{certId}</span>
+                </div>
+                <div style={{ color: '#2C5F2D', fontSize: '8px', textAlign: 'right', wordBreak: 'break-all' }}>
+                  twofingerfoundation.org/verify
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
+        {/* ── End Certificate ──────────────────────────────────── */}
+
       </div>
     </div>
   );
