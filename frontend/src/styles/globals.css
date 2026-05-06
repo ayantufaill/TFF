@@ -1,5 +1,22 @@
 @custom-variant dark (&:is(.dark *));
 
+button,
+a,
+[role="button"],
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[role="option"],
+[role="checkbox"],
+[role="radio"],
+[role="switch"],
+select,
+label[for],
+[onClick],
+.cursor-pointer {
+  cursor: pointer;
+}
+
 :root {
   --font-size: 14px;
   --background: #ffffff;
