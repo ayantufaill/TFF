@@ -54,12 +54,25 @@ const CertificateView: React.FC<CertificateViewProps> = ({
 }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
 
-  const today = new Date().toLocaleDateString('en-US', {
-    year: 'numeric', month: 'long', day: 'numeric',
-  });
+  // Persist cert ID + date in localStorage so the same cert is shown every time
+  const { certId, certDate } = useMemo(() => {
+    const storageKey = `tff-cert-${userName.trim().toLowerCase().replace(/\s+/g, '-')}`;
+    const stored = localStorage.getItem(storageKey);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed.certId && parsed.certDate) return parsed;
+      } catch { /* ignore */ }
+    }
+    const certDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric',
+    });
+    const certId = generateCertId(userName, certDate);
+    localStorage.setItem(storageKey, JSON.stringify({ certId, certDate }));
+    return { certId, certDate };
+  }, [userName]);
 
-  const certId = useMemo(() => generateCertId(userName, today), [userName, today]);
-  const verifyUrl = useMemo(() => buildVerifyUrl(certId, userName, courseName, today), [certId, userName, courseName, today]);
+  const verifyUrl = useMemo(() => buildVerifyUrl(certId, userName, courseName, certDate), [certId, userName, courseName, certDate]);
 
   const handleDownload = async () => {
     if (!certificateRef.current) return;
@@ -314,7 +327,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
                 </div>
                 <div style={{ color: '#444', fontSize: '9px', textAlign: 'right' }}>
                   <span style={{ color: '#888' }}>Date: </span>
-                  {today}
+                  {certDate}
                 </div>
                 <div style={{ color: '#444', fontSize: '9px', textAlign: 'right' }}>
                   <span style={{ color: '#888' }}>Cert No.: </span>
@@ -332,19 +345,6 @@ const CertificateView: React.FC<CertificateViewProps> = ({
 
       </div>
 
-      {/* Verify link — visible on screen only, not in downloaded image */}
-      <div className="mt-6 flex flex-col items-center gap-2">
-        <p className="text-sm text-gray-500">Scan the QR code or tap below to verify this certificate:</p>
-        <a
-          href={verifyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-6 py-2 bg-[#2C5F2D]/10 border border-[#2C5F2D] text-[#2C5F2D] rounded-full text-sm font-semibold hover:bg-[#2C5F2D] hover:text-white transition-all"
-        >
-          🔗 Verify Certificate — {certId}
-        </a>
-        <p className="text-xs text-gray-400 break-all max-w-xl text-center">{verifyUrl}</p>
-      </div>
     </div>
   );
 };
