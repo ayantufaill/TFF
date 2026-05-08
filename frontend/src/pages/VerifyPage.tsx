@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import { CheckCircle, XCircle, Shield } from 'lucide-react';
 
 interface CertData {
   certId: string;
@@ -14,14 +13,12 @@ const VerifyPage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const certData = useMemo<CertData | null>(() => {
-    // New short format: ?n=name&c=course&dt=date
     const n = searchParams.get('n');
     const c = searchParams.get('c');
     const dt = searchParams.get('dt');
     if (n && c && dt) {
       return { certId: certId ?? '', userName: n, courseName: c, date: dt };
     }
-    // Legacy base64 format: ?d=<payload>
     const raw = searchParams.get('d');
     if (!raw) return null;
     try {
@@ -34,86 +31,181 @@ const VerifyPage: React.FC = () => {
   const isValid = certData !== null;
 
   return (
-    <div className="min-h-screen bg-[#f9f6f0] flex items-center justify-center px-4 py-16">
-      <div className="w-full max-w-lg">
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f0f4f0 0%, #faf8f3 50%, #f0f4f0 100%)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px 16px',
+      fontFamily: "'Georgia', 'Times New Roman', serif",
+    }}>
 
-        {/* Header */}
-        <div className="text-center mb-8">
-          <img src="/logo.svg" alt="TFF Logo" className="h-16 w-auto mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-[#2C5F2D] tracking-wide uppercase">
-            Two Finger Foundation
-          </h1>
-          <p className="text-sm text-gray-500 mt-1 tracking-widest uppercase">Certificate Verification</p>
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <img src="/logo.svg" alt="TFF Logo" style={{ height: '72px', width: 'auto', marginBottom: '12px' }} />
+        <div style={{ color: '#2C5F2D', fontSize: '22px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
+          Two Finger Foundation
+        </div>
+        <div style={{ color: '#888', fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', marginTop: '4px' }}>
+          Certificate Verification Portal
+        </div>
+      </div>
+
+      {/* Main card */}
+      <div style={{
+        background: '#fff',
+        borderRadius: '16px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.12)',
+        overflow: 'hidden',
+        width: '100%',
+        maxWidth: '560px',
+        border: '1px solid #e8e4dc',
+      }}>
+
+        {/* Status banner */}
+        <div style={{
+          background: isValid ? '#2C5F2D' : '#b91c1c',
+          padding: '20px 32px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+        }}>
+          <div style={{
+            width: '48px', height: '48px', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.2)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '24px', flexShrink: 0,
+          }}>
+            {isValid ? '✓' : '✗'}
+          </div>
+          <div>
+            <div style={{ color: '#fff', fontWeight: '700', fontSize: '18px' }}>
+              {isValid ? 'Certificate Verified' : 'Certificate Not Found'}
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', marginTop: '2px' }}>
+              {isValid
+                ? 'This certificate is authentic and was issued by Two Finger Foundation.'
+                : 'No certificate data found. The link may be incomplete or invalid.'}
+            </div>
+          </div>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+        {/* Gold divider */}
+        <div style={{ height: '3px', background: 'linear-gradient(to right, #C9A961, #e8d5a3, #C9A961)' }} />
 
-          {/* Status banner */}
-          <div className={`px-8 py-5 flex items-center gap-4 ${isValid ? 'bg-[#2C5F2D]' : 'bg-[#dc2626]'}`}>
-            {isValid
-              ? <CheckCircle className="w-8 h-8 text-white flex-shrink-0" />
-              : <XCircle className="w-8 h-8 text-white flex-shrink-0" />
-            }
-            <div>
-              <div className="text-white font-bold text-lg">
-                {isValid ? 'Certificate Verified' : 'Invalid Certificate'}
+        {/* Certificate details */}
+        {isValid && certData ? (
+          <div style={{ padding: '32px' }}>
+
+            {/* Mini certificate display */}
+            <div style={{
+              border: '2px solid #C9A961',
+              borderRadius: '8px',
+              padding: '24px',
+              background: 'linear-gradient(135deg, #fdfcf8 0%, #faf6ed 100%)',
+              marginBottom: '24px',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              {/* Background pattern */}
+              <div style={{
+                position: 'absolute', inset: 0, pointerEvents: 'none',
+                background: 'radial-gradient(ellipse at top right, rgba(201,169,97,0.08) 0%, transparent 60%)',
+              }} />
+
+              <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+                <div style={{ color: '#888', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '8px' }}>
+                  This certifies that
+                </div>
+                <div style={{
+                  color: '#111', fontSize: '26px', fontWeight: '700',
+                  textTransform: 'uppercase', letterSpacing: '1px',
+                  borderBottom: '2px solid #C9A961',
+                  display: 'inline-block', paddingBottom: '4px',
+                  paddingLeft: '16px', paddingRight: '16px',
+                }}>
+                  {certData.userName}
+                </div>
               </div>
-              <div className="text-white/80 text-sm">
-                {isValid
-                  ? 'This certificate is authentic and was issued by TFF.'
-                  : 'This certificate could not be verified. It may be tampered or invalid.'
-                }
+
+              <div style={{ textAlign: 'center', color: '#444', fontSize: '13px', marginBottom: '4px' }}>
+                has successfully completed
+              </div>
+              <div style={{
+                textAlign: 'center', color: '#2C5F2D',
+                fontSize: '15px', fontWeight: '700',
+                textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px',
+              }}>
+                "{certData.courseName}"
+              </div>
+              <div style={{ textAlign: 'center', color: '#666', fontSize: '12px' }}>
+                at Two Finger Foundation (TFF)
+              </div>
+            </div>
+
+            {/* Details grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+              <DetailBox label="Date of Completion" value={certData.date} />
+              <DetailBox label="Certificate No." value={certData.certId} mono />
+            </div>
+
+            {/* Issued by */}
+            <div style={{
+              textAlign: 'center', padding: '12px',
+              background: '#f8f9f8', borderRadius: '8px',
+              border: '1px solid #e0e8e0',
+            }}>
+              <span style={{ color: '#2C5F2D', fontSize: '12px', fontWeight: '600' }}>
+                ✓ Officially issued by Two Finger Foundation
+              </span>
+              <div style={{ color: '#888', fontSize: '11px', marginTop: '2px' }}>
+                Islamic Education &amp; Training
               </div>
             </div>
           </div>
-
-          {/* Details */}
-          {isValid && certData && (
-            <div className="px-8 py-6 space-y-5">
-
-              <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
-                <Shield className="w-5 h-5 text-[#C9A961] flex-shrink-0" />
-                <span className="text-sm text-gray-500 uppercase tracking-wider font-semibold">Certificate Details</span>
-              </div>
-
-              <Row label="Awarded To" value={certData.userName} large />
-              <Row label="Program Completed" value={certData.courseName} />
-              <Row label="Date of Completion" value={certData.date} />
-              <Row label="Certificate No." value={certData.certId} mono />
-
-              {/* Gold divider */}
-              <div className="h-px bg-gradient-to-r from-transparent via-[#C9A961] to-transparent my-4" />
-
-              <p className="text-xs text-gray-400 text-center">
-                Issued by Two Finger Foundation &mdash; Islamic Education &amp; Training
-              </p>
+        ) : (
+          <div style={{ padding: '40px 32px', textAlign: 'center' }}>
+            <div style={{ color: '#aaa', fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+            <div style={{ color: '#666', fontSize: '14px', lineHeight: 1.6 }}>
+              The verification link appears to be incomplete.<br />
+              Please scan the QR code directly from the certificate.
             </div>
-          )}
-
-          {!isValid && (
-            <div className="px-8 py-8 text-center text-gray-400 text-sm">
-              If you believe this is an error, please contact us at{' '}
-              <a href="mailto:info@twofingerfoundation.org" className="text-[#2C5F2D] underline">
+            <div style={{ marginTop: '20px', color: '#aaa', fontSize: '12px' }}>
+              For assistance, contact{' '}
+              <a href="mailto:info@twofingerfoundation.org"
+                style={{ color: '#2C5F2D', textDecoration: 'underline' }}>
                 info@twofingerfoundation.org
               </a>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-gray-400 mt-6">
-          twofingerfoundation.org &mdash; Certificate Verification Portal
-        </p>
+      {/* Footer */}
+      <div style={{ marginTop: '24px', color: '#aaa', fontSize: '11px', textAlign: 'center', letterSpacing: '1px' }}>
+        twofingerfoundation.org — Certificate Verification Portal
       </div>
     </div>
   );
 };
 
-const Row: React.FC<{ label: string; value: string; large?: boolean; mono?: boolean }> = ({ label, value, large, mono }) => (
-  <div>
-    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">{label}</div>
-    <div className={`text-gray-800 font-semibold ${large ? 'text-xl' : 'text-base'} ${mono ? 'font-mono tracking-wider' : ''}`}>
+const DetailBox: React.FC<{ label: string; value: string; mono?: boolean }> = ({ label, value, mono }) => (
+  <div style={{
+    padding: '12px 16px',
+    background: '#f9f9f9',
+    borderRadius: '8px',
+    border: '1px solid #eee',
+  }}>
+    <div style={{ color: '#aaa', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+      {label}
+    </div>
+    <div style={{
+      color: '#222', fontSize: '13px', fontWeight: '600',
+      fontFamily: mono ? 'monospace' : 'inherit',
+      letterSpacing: mono ? '0.5px' : 'normal',
+    }}>
       {value}
     </div>
   </div>
