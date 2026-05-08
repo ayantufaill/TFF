@@ -331,6 +331,20 @@ const CertificateView: React.FC<CertificateViewProps> = ({
         {/* ── End Certificate ──────────────────────────────────── */}
 
       </div>
+
+      {/* Verify link — visible on screen only, not in downloaded image */}
+      <div className="mt-6 flex flex-col items-center gap-2">
+        <p className="text-sm text-gray-500">Scan the QR code or tap below to verify this certificate:</p>
+        <a
+          href={verifyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 px-6 py-2 bg-[#2C5F2D]/10 border border-[#2C5F2D] text-[#2C5F2D] rounded-full text-sm font-semibold hover:bg-[#2C5F2D] hover:text-white transition-all"
+        >
+          🔗 Verify Certificate — {certId}
+        </a>
+        <p className="text-xs text-gray-400 break-all max-w-xl text-center">{verifyUrl}</p>
+      </div>
     </div>
   );
 };
