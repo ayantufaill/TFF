@@ -14,6 +14,14 @@ const VerifyPage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const certData = useMemo<CertData | null>(() => {
+    // New short format: ?n=name&c=course&dt=date
+    const n = searchParams.get('n');
+    const c = searchParams.get('c');
+    const dt = searchParams.get('dt');
+    if (n && c && dt) {
+      return { certId: certId ?? '', userName: n, courseName: c, date: dt };
+    }
+    // Legacy base64 format: ?d=<payload>
     const raw = searchParams.get('d');
     if (!raw) return null;
     try {
@@ -21,9 +29,9 @@ const VerifyPage: React.FC = () => {
     } catch {
       return null;
     }
-  }, [searchParams]);
+  }, [searchParams, certId]);
 
-  const isValid = certData !== null && certData.certId === certId;
+  const isValid = certData !== null;
 
   return (
     <div className="min-h-screen bg-[#f9f6f0] flex items-center justify-center px-4 py-16">
@@ -42,7 +50,7 @@ const VerifyPage: React.FC = () => {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
 
           {/* Status banner */}
-          <div className={`px-8 py-5 flex items-center gap-4 ${isValid ? 'bg-[#2C5F2D]' : 'bg-red-600'}`}>
+          <div className={`px-8 py-5 flex items-center gap-4 ${isValid ? 'bg-[#2C5F2D]' : 'bg-[#dc2626]'}`}>
             {isValid
               ? <CheckCircle className="w-8 h-8 text-white flex-shrink-0" />
               : <XCircle className="w-8 h-8 text-white flex-shrink-0" />
