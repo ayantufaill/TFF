@@ -32,9 +32,9 @@ const generateCertId = (userName: string, date: string): string => {
 
 // ─── Encode certificate data into URL ────────────────────────────
 const buildVerifyUrl = (certId: string, userName: string, courseName: string, date: string): string => {
-  const payload = btoa(JSON.stringify({ certId, userName, courseName, date }));
-  const base = typeof window !== 'undefined' ? window.location.origin : 'https://twofingerfoundation.org';
-  return `${base}/verify/${certId}?d=${payload}`;
+  const base = window.location.origin;
+  const params = new URLSearchParams({ n: userName, c: courseName, dt: date });
+  return `${base}/verify/${certId}?${params.toString()}`;
 };
 
 // ─── Types ───────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
           const i = new Image();
           i.onload = () => {
             const c = document.createElement('canvas');
-            c.width = 90; c.height = 90;
+            c.width = 110; c.height = 110;
             c.getContext('2d')!.drawImage(i, 0, 0, 90, 90);
             URL.revokeObjectURL(qrBlobUrl);
             res(c.toDataURL('image/png'));
@@ -245,13 +245,22 @@ const CertificateView: React.FC<CertificateViewProps> = ({
                 <div style={{ color: '#444', fontSize: '11px', textAlign: 'center', marginBottom: '6px' }}>
                   by completing the following modules:
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 32px', padding: '0 48px' }}>
-                  {completedModules.map((mod, i) => (
-                    <div key={i} style={{ color: '#333', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ color: '#C9A961', fontSize: '10px' }}>◆</span>
-                      {mod}
-                    </div>
-                  ))}
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '48px', rowGap: '4px', width: 'fit-content' }}>
+                    {completedModules.map((mod, i) => {
+                      const isLastOdd = completedModules.length % 2 !== 0 && i === completedModules.length - 1;
+                      return (
+                        <div key={i} style={{
+                          color: '#333', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '6px',
+                          gridColumn: isLastOdd ? '1 / -1' : 'auto',
+                          justifyContent: isLastOdd ? 'center' : 'flex-start',
+                        }}>
+                          <span style={{ color: '#C9A961', fontSize: '10px' }}>◆</span>
+                          {mod}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
@@ -297,10 +306,10 @@ const CertificateView: React.FC<CertificateViewProps> = ({
                 <div className="cert-qr" style={{ marginBottom: '6px' }}>
                   <QRCodeSVG
                     value={verifyUrl}
-                    size={90}
+                    size={110}
                     bgColor="#ffffff"
                     fgColor="#1a1a1a"
-                    level="M"
+                    level="L"
                   />
                 </div>
                 <div style={{ color: '#444', fontSize: '9px', textAlign: 'right' }}>
