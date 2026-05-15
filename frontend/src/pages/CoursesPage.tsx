@@ -43,11 +43,11 @@ const CourseCard = ({ course, onClick }: { course: any; onClick: () => void }) =
 
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-4 h-4 text-[#2C5F2D] flex-shrink-0" />
+          <BookOpen className="w-4 h-4 text-[#1B2A4A] flex-shrink-0" />
           <span className="text-[12px] text-gray-500 font-bold uppercase tracking-widest">{course.provider}</span>
         </div>
 
-        <h4 className="text-[16px] font-bold text-gray-900 leading-tight mb-auto line-clamp-2 group-hover:text-[#2C5F2D] transition-colors">
+        <h4 className="text-[16px] font-bold text-gray-900 leading-tight mb-auto line-clamp-2 group-hover:text-[#1B2A4A] transition-colors">
           {course.title}
         </h4>
 
@@ -77,7 +77,7 @@ export function CoursesPage() {
   return (
     <div className="min-h-screen bg-white pb-32">
       {/* Search & Hero Section — Premium Green Theme */}
-      <section className="bg-[#2C5F2D] py-20 border-b border-[#234F24] text-white relative overflow-hidden">
+      <section className="bg-[#1B2A4A] py-20 border-b border-[#122038] text-white relative overflow-hidden">
         {/* Subtle Checkered Pattern */}
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M30 0l30 30-30 30L0 30z\' fill=\'%23ffffff\' fill-opacity=\'0.8\' fill-rule=\'evenodd\'/%3E%3C/svg%3E")', backgroundSize: '40px 40px' }} />
 
@@ -87,7 +87,7 @@ export function CoursesPage() {
 
           <div className="max-w-4xl w-full mx-auto relative group">
             <div className="flex items-center bg-white rounded-2xl shadow-2xl border-2 border-gray-100/50 p-2 transition-all duration-300 focus-within:border-[#C9A961] focus-within:shadow-[#C9A961]/20">
-              <div className="pl-6 text-[#2C5F2D]">
+              <div className="pl-6 text-[#1B2A4A]">
                 <Search className="w-7 h-7" />
               </div>
               <input
@@ -110,7 +110,7 @@ export function CoursesPage() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
           {/* Filter Row — Solid Spacing */}
           <div className="flex flex-wrap items-center gap-5 mb-12">
-            <div className="flex items-center gap-3 mr-4 border-r border-gray-200 pr-6 uppercase tracking-widest text-[#2C5F2D] font-black text-xs">
+            <div className="flex items-center gap-3 mr-4 border-r border-gray-200 pr-6 uppercase tracking-widest text-[#1B2A4A] font-black text-xs">
               <Filter className="w-4 h-4" />
               <span>Filter By</span>
             </div>
@@ -120,8 +120,8 @@ export function CoursesPage() {
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-6 py-2.5 rounded-full text-[14px] font-bold transition-all duration-300 border ${selectedCategory === cat
-                      ? 'bg-[#2C5F2D] text-white border-[#2C5F2D] shadow-md'
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-[#2C5F2D] hover:bg-gray-50'
+                      ? 'bg-[#1B2A4A] text-white border-[#1B2A4A] shadow-md'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-[#1B2A4A] hover:bg-gray-50'
                     }`}
                 >
                   {cat}
@@ -132,7 +132,7 @@ export function CoursesPage() {
 
           {/* Results Header */}
           <div className="mb-10 flex items-center justify-between">
-            <p className="text-sm text-gray-500 font-medium">Showing <span className="text-[#2C5F2D] font-bold">{filteredCourses.length}</span> professional modules</p>
+            <p className="text-sm text-gray-500 font-medium">Showing <span className="text-[#1B2A4A] font-bold">{filteredCourses.length}</span> professional modules</p>
             <div className="h-px bg-gray-100 flex-1 mx-8 hidden sm:block"></div>
           </div>
 
@@ -162,7 +162,7 @@ export function CoursesPage() {
       </section>
 
       {/* Enrollment CTA */}
-      <section className="py-24 bg-[#2C5F2D] text-white">
+      <section className="py-24 bg-[#1B2A4A] text-white">
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 text-center">
           <h2 className="text-4xl font-bold mb-6 tracking-tight">Can't decide where to start?</h2>
           <p className="text-white/80 mb-12 max-w-2xl mx-auto text-xl font-medium leading-relaxed">Take our faith-assessment quiz to find the perfect learning path for your current level of spiritual knowledge.</p>

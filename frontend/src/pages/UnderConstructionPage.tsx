@@ -28,7 +28,7 @@ export function UnderConstructionPage() {
   return (
     <div className="min-h-[60vh] px-4 py-16">
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
-        <h1 className="text-2xl font-semibold text-[#2C5F2D] mb-2">{title}</h1>
+        <h1 className="text-2xl font-semibold text-[#1B2A4A] mb-2">{title}</h1>
         <p className="text-xl text-gray-600 mb-8">Under construction</p>
         <Link
           to="/"

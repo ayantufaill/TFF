@@ -24,12 +24,12 @@ export default function ErrorPage() {
         <div className="flex gap-4 justify-center pt-4">
           <Button 
             onClick={() => window.location.reload()} 
-            className="bg-[#2C5F2D] hover:bg-[#234F24] text-white"
+            className="bg-[#1B2A4A] hover:bg-[#122038] text-white"
           >
             Refresh Page
           </Button>
           <Link to="/">
-            <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+            <Button variant="outline" className="border-[#1B2A4A] text-[#1B2A4A]">
               Go Home
             </Button>
           </Link>

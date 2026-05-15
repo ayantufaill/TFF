@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 // Relative path so logo loads when app is opened as file (e.g. dist/index.html) or from any base URL
-const LOGO_SVG = `${import.meta.env.BASE_URL}logo.svg`;
+const LOGO_SVG = `${import.meta.env.BASE_URL}logo.png`;
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -69,7 +69,7 @@ export function Layout() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="inline-flex items-center gap-1.5 sm:gap-2 text-[#2C5F2D] hover:text-[#C9A961] font-medium transition-colors"
+              className="inline-flex items-center gap-1.5 sm:gap-2 text-[#1B2A4A] hover:text-[#C9A961] font-medium transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 shrink-0" />
@@ -85,7 +85,7 @@ export function Layout() {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="lg:hidden flex-shrink-0 inline-flex items-center gap-1.5 text-[#2C5F2D] hover:text-[#C9A961] font-medium transition-colors py-2 pr-1"
+                className="lg:hidden flex-shrink-0 inline-flex items-center gap-1.5 text-[#1B2A4A] hover:text-[#C9A961] font-medium transition-colors py-2 pr-1"
                 aria-label="Go back"
               >
                 <ArrowLeft className="w-5 h-5 shrink-0" />
@@ -98,18 +98,18 @@ export function Layout() {
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#C9A961] shadow-md shrink-0 bg-white">
                 <img
                   src={LOGO_SVG}
-                  alt="Two Finger Foundation"
+                  alt="The Two Fingers Foundation"
                   width={48}
                   height={48}
                   fetchPriority="high"
-                  className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-semibold text-[#2C5F2D] truncate">Two Finger Foundation</h1>
+                <h1 className="text-base sm:text-xl font-semibold text-[#1B2A4A] truncate">The Two Fingers Foundation</h1>
                 <p className="text-xs text-gray-600 hidden sm:block">Empowering Lives, Nurturing Faith</p>
               </div>
             </Link>
@@ -127,7 +127,7 @@ export function Layout() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className={`transition-colors whitespace-nowrap ${isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#2C5F2D]'
+                    className={`transition-colors whitespace-nowrap ${isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#1B2A4A]'
                       }`}
                   >
                     {link.label}
@@ -138,7 +138,7 @@ export function Layout() {
                 <div className="relative ml-2" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 border-2 border-white/50"
+                    className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#1B2A4A] to-[#2D4A8A] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 border-2 border-white/50"
                     title={user.name}
                   >
                     {user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)}
@@ -155,9 +155,9 @@ export function Layout() {
                       <Link
                         to="/profile"
                         onClick={() => setDropdownOpen(false)}
-                        className="flex items-center gap-4 px-8 py-4 text-sm font-semibold text-gray-700 hover:bg-[#2C5F2D]/5 hover:text-[#2C5F2D] transition-colors ml-1"
+                        className="flex items-center gap-4 px-8 py-4 text-sm font-semibold text-gray-700 hover:bg-[#1B2A4A]/5 hover:text-[#1B2A4A] transition-colors ml-1"
                       >
-                        <User className="w-5 h-5 text-[#2C5F2D]/70" /> My Profile
+                        <User className="w-5 h-5 text-[#1B2A4A]/70" /> My Profile
                       </Link>
                       <button
                         onClick={() => { setDropdownOpen(false); handleLogout(); }}
@@ -202,7 +202,7 @@ export function Layout() {
                   key={link.label}
                   to={link.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-4 px-4 rounded-lg text-lg font-medium transition-colors ${isActive ? 'bg-[#C9A961]/15 text-[#2C5F2D]' : 'text-[#2C5F2D] hover:bg-[#2C5F2D]/5'
+                  className={`block py-4 px-4 rounded-lg text-lg font-medium transition-colors ${isActive ? 'bg-[#C9A961]/15 text-[#1B2A4A]' : 'text-[#1B2A4A] hover:bg-[#1B2A4A]/5'
                     }`}
                 >
                   {link.label}
@@ -214,7 +214,7 @@ export function Layout() {
                 <Link
                   to="/profile"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-[#2C5F2D] hover:bg-[#2C5F2D]/5 transition-colors mt-4 border-t border-gray-100"
+                  className="flex items-center gap-4 py-4 px-4 rounded-lg text-lg font-medium text-[#1B2A4A] hover:bg-[#1B2A4A]/5 transition-colors mt-4 border-t border-gray-100"
                 >
                   <User className="w-6 h-6" />
                   <span>Profile ({user.name})</span>
@@ -238,14 +238,14 @@ export function Layout() {
       </main>
 
       {/* Footer – About TFF ke upar zyada green; © 2026 neeche se upar */}
-      <footer className={`bg-[#2C5F2D] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
+      <footer className={`bg-[#1B2A4A] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 'clamp(28px, 3.5vw, 48px)', paddingBottom: 'clamp(20px, 2.5vw, 36px)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* About */}
             <div>
               <h3 className="text-lg font-semibold mb-4 text-[#C9A961]">About TFF</h3>
               <p className="text-sm text-gray-200 leading-relaxed">
-                Two Finger Foundation is dedicated to empowering widows, supporting orphans, and guiding new Muslims to a stronger future through compassion and community.
+                The Two Fingers Foundation is dedicated to empowering widows, supporting orphans, and guiding new Muslims to a stronger future through compassion and community.
               </p>
             </div>
 
@@ -294,7 +294,7 @@ export function Layout() {
           {/* Bottom Bar – neeche padding taake © 2026 full end par na lage */}
           <div className="border-t border-white/20 pt-8 sm:pt-10" style={{ paddingBottom: 'clamp(16px, 2vw, 28px)' }}>
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs sm:text-sm text-gray-200 text-center md:text-left">
-              <p>© 2026 Two Finger Foundation. All rights reserved.</p>
+              <p>© 2026 The Two Fingers Foundation. All rights reserved.</p>
               <div className="flex flex-wrap justify-center md:justify-end gap-3 sm:gap-4 md:gap-6 text-gray-200">
                 <Link to="/privacy-policy" className="hover:text-[#C9A961] transition-colors">Privacy Policy</Link>
                 <Link to="/terms-and-conditions" className="hover:text-[#C9A961] transition-colors">Terms and Conditions</Link>

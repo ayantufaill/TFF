@@ -49,7 +49,7 @@ export function GetInvolvedPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white py-20">
+      <section className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Get Involved</h1>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto">
@@ -63,7 +63,7 @@ export function GetInvolvedPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-4">Volunteer Opportunities</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-4">Volunteer Opportunities</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Make a hands-on difference in the lives of those we serve
             </p>
@@ -77,7 +77,7 @@ export function GetInvolvedPage() {
                       <opportunity.icon className="w-7 h-7 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-2">{opportunity.title}</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-2">{opportunity.title}</h3>
                       <p className="text-gray-600 mb-4 leading-relaxed">{opportunity.description}</p>
                       <div className="space-y-2 text-sm">
                         <div className="flex items-center gap-2 text-gray-600">
@@ -99,7 +99,7 @@ export function GetInvolvedPage() {
           {/* Volunteer Sign-up Form */}
           <Card className="border-2 border-[#C9A961]/30">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-[#2C5F2D] mb-6 text-center">
+              <h3 className="text-2xl font-bold text-[#1B2A4A] mb-6 text-center">
                 Volunteer Application
               </h3>
               <form className="space-y-6">
@@ -173,7 +173,7 @@ export function GetInvolvedPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-6">Become a Mentor</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-6">Become a Mentor</h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
                 Mentorship is one of the most impactful ways to support new Muslims on their faith journey. 
                 As a mentor, you'll provide guidance, answer questions, and offer emotional support during 
@@ -183,40 +183,40 @@ export function GetInvolvedPage() {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-[#C9A961] flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-[#2C5F2D] mb-1">Personal Connection</h4>
+                    <h4 className="font-semibold text-[#1B2A4A] mb-1">Personal Connection</h4>
                     <p className="text-gray-600">Build meaningful one-on-one relationships with new Muslims</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-[#C9A961] flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-[#2C5F2D] mb-1">Flexible Engagement</h4>
+                    <h4 className="font-semibold text-[#1B2A4A] mb-1">Flexible Engagement</h4>
                     <p className="text-gray-600">Connect remotely via phone, video call, or in-person meetings</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-[#C9A961] flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-[#2C5F2D] mb-1">Training Provided</h4>
+                    <h4 className="font-semibold text-[#1B2A4A] mb-1">Training Provided</h4>
                     <p className="text-gray-600">Comprehensive mentor training and ongoing support from our team</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-6 h-6 text-[#C9A961] flex-shrink-0 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-[#2C5F2D] mb-1">Spiritual Reward</h4>
+                    <h4 className="font-semibold text-[#1B2A4A] mb-1">Spiritual Reward</h4>
                     <p className="text-gray-600">The immense reward of helping someone strengthen their faith</p>
                   </div>
                 </div>
               </div>
-              <Button size="lg" className="bg-[#2C5F2D] hover:bg-[#234F24] text-white">
+              <Button size="lg" className="bg-[#1B2A4A] hover:bg-[#122038] text-white">
                 <GraduationCap className="w-5 h-5 mr-2" />
                 Apply to Become a Mentor
               </Button>
             </div>
             <Card className="border-2 border-[#C9A961]/30">
               <CardContent className="p-8">
-                <h3 className="text-xl font-bold text-[#2C5F2D] mb-4">Mentor Requirements</h3>
+                <h3 className="text-xl font-bold text-[#1B2A4A] mb-4">Mentor Requirements</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="w-6 h-6 bg-[#C9A961] rounded-full flex items-center justify-center flex-shrink-0">
@@ -259,7 +259,7 @@ export function GetInvolvedPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-4">Partner with Us</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-4">Partner with Us</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Organizations and businesses can partner with TFF to amplify their social impact
             </p>
@@ -268,7 +268,7 @@ export function GetInvolvedPage() {
             <Card className="border-2 border-[#C9A961]/30">
               <CardContent className="p-8">
                 <Building className="w-12 h-12 text-[#C9A961] mb-4" />
-                <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Partnership Benefits</h3>
+                <h3 className="text-2xl font-bold text-[#1B2A4A] mb-4">Partnership Benefits</h3>
                 <ul className="space-y-3">
                   {partnerBenefits.map((benefit, index) => (
                     <li key={index} className="flex items-start gap-3">
@@ -281,7 +281,7 @@ export function GetInvolvedPage() {
             </Card>
             <Card className="border-2 border-[#C9A961]/30">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold text-[#2C5F2D] mb-6">Partnership Inquiry</h3>
+                <h3 className="text-2xl font-bold text-[#1B2A4A] mb-6">Partnership Inquiry</h3>
                 <form className="space-y-4">
                   <div>
                     <Label htmlFor="org-name">Organization Name *</Label>
@@ -336,7 +336,7 @@ export function GetInvolvedPage() {
       <section className="py-20 bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-4">Get in Touch</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-4">Get in Touch</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Have questions? Want to learn more? We'd love to hear from you.
             </p>
@@ -347,9 +347,9 @@ export function GetInvolvedPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Mail className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#2C5F2D] mb-2">Email Us</h3>
+                <h3 className="text-lg font-semibold text-[#1B2A4A] mb-2">Email Us</h3>
                 <p className="text-gray-600 mb-3">volunteer@twofingerfoundation.org</p>
-                <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                <Button variant="outline" className="border-[#1B2A4A] text-[#1B2A4A]">
                   Send Email
                 </Button>
               </CardContent>
@@ -359,9 +359,9 @@ export function GetInvolvedPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Phone className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#2C5F2D] mb-2">Call Us</h3>
+                <h3 className="text-lg font-semibold text-[#1B2A4A] mb-2">Call Us</h3>
                 <p className="text-gray-600 mb-3">+1 (555) 123-4567</p>
-                <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                <Button variant="outline" className="border-[#1B2A4A] text-[#1B2A4A]">
                   Call Now
                 </Button>
               </CardContent>
@@ -371,9 +371,9 @@ export function GetInvolvedPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-4">
                   <MessageCircle className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#2C5F2D] mb-2">Live Chat</h3>
+                <h3 className="text-lg font-semibold text-[#1B2A4A] mb-2">Live Chat</h3>
                 <p className="text-gray-600 mb-3">Mon-Fri, 9am-5pm EST</p>
-                <Button variant="outline" className="border-[#2C5F2D] text-[#2C5F2D]">
+                <Button variant="outline" className="border-[#1B2A4A] text-[#1B2A4A]">
                   Start Chat
                 </Button>
               </CardContent>

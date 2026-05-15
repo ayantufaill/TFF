@@ -8,7 +8,7 @@ export function ProgramsPage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white py-20">
+      <section className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Programs & Initiatives</h1>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto">
@@ -60,7 +60,7 @@ export function ProgramsPage() {
                   <div className="w-20 h-20 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-6">
                     <Heart className="w-10 h-10 text-white" />
                   </div>
-                  <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Widow Empowerment Programs</h2>
+                  <h2 className="text-3xl font-bold text-[#1B2A4A] mb-4">Widow Empowerment Programs</h2>
                   <p className="text-lg text-gray-600 leading-relaxed">
                     Supporting widows to rebuild their lives with dignity through financial assistance, skills development,
                     and comprehensive support systems that foster independence and resilience.
@@ -71,7 +71,7 @@ export function ProgramsPage() {
             <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors rounded-[24px]">
                     <CardContent className="p-6">
                       <Package className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Monthly Financial Support</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Monthly Financial Support</h3>
                       <p className="text-gray-600 leading-relaxed">
                         Regular financial assistance to cover basic needs including food, shelter, healthcare, and children's education.
                         Support is provided with dignity and respect.
@@ -81,7 +81,7 @@ export function ProgramsPage() {
             <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors rounded-[24px]">
                     <CardContent className="p-6">
                       <Briefcase className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Skills Development</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Skills Development</h3>
                       <p className="text-gray-600 leading-relaxed">
                         Vocational training programs in tailoring, cooking, handicrafts, computer skills, and small business
                         management to enable financial independence.
@@ -91,7 +91,7 @@ export function ProgramsPage() {
             <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors rounded-[24px]">
                     <CardContent className="p-6">
                       <Scale className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Legal Aid</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Legal Aid</h3>
                       <p className="text-gray-600 leading-relaxed">
                         Legal assistance for inheritance rights, property disputes, and custody matters—ensuring widows
                         receive their rightful entitlements under Islamic law.
@@ -102,7 +102,7 @@ export function ProgramsPage() {
 
                 <Card className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] border-2 border-[#C9A961]/30">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Success Story</h3>
+                    <h3 className="text-2xl font-bold text-[#1B2A4A] mb-4">Success Story</h3>
                     <p className="text-gray-700 italic leading-relaxed mb-4">
                       "When my husband passed away, I had three young children and no income. TFF not only provided monthly
                       support but also enrolled me in their tailoring program. Today, I run my own small tailoring business
@@ -134,7 +134,7 @@ export function ProgramsPage() {
                   <div className="w-20 h-20 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-6">
                     <Users className="w-10 h-10 text-white" />
                   </div>
-                  <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Orphan Care & Education</h2>
+                  <h2 className="text-3xl font-bold text-[#1B2A4A] mb-4">Orphan Care & Education</h2>
                   <p className="text-lg text-gray-600 leading-relaxed">
                     Providing comprehensive care, education, and mentorship to orphaned children, ensuring they have the
                     foundation for a bright and successful future.
@@ -145,7 +145,7 @@ export function ProgramsPage() {
                   <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
                     <CardContent className="p-6">
                       <GraduationCap className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Education Sponsorship</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Education Sponsorship</h3>
                       <p className="text-gray-600 leading-relaxed">
                         Full sponsorship covering tuition fees, school supplies, uniforms, and educational materials from
                         primary through higher education.
@@ -155,7 +155,7 @@ export function ProgramsPage() {
                   <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
                     <CardContent className="p-6">
                       <School className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">School Kits & Uniforms</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">School Kits & Uniforms</h3>
                       <p className="text-gray-600 leading-relaxed">
                         Annual provision of complete school kits with books, stationery, bags, and uniforms ensuring children
                         can attend school with dignity.
@@ -165,7 +165,7 @@ export function ProgramsPage() {
                   <Card className="border-2 border-[#C9A961]/30 hover:border-[#C9A961] transition-colors">
                     <CardContent className="p-6">
                       <UserCheck className="w-10 h-10 text-[#C9A961] mb-4" />
-                      <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Mentorship Programs</h3>
+                      <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Mentorship Programs</h3>
                       <p className="text-gray-600 leading-relaxed">
                         Pairing orphans with caring mentors who provide guidance, emotional support, and positive role
                         models throughout their development.
@@ -176,7 +176,7 @@ export function ProgramsPage() {
 
                 <Card className="bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8] border-2 border-[#C9A961]/30">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-[#2C5F2D] mb-4">Impact Story</h3>
+                    <h3 className="text-2xl font-bold text-[#1B2A4A] mb-4">Impact Story</h3>
                     <p className="text-gray-700 italic leading-relaxed mb-4">
                       "I lost both my parents in a car accident when I was 8 years old. TFF sponsored my education from
                       grade 3 through university. I just graduated with a degree in engineering and have secured a job at
@@ -203,7 +203,7 @@ export function ProgramsPage() {
 
             <TabsContent value="reverts">
               <div className="rounded-xl border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-8 text-center">
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-3">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2A4A] mb-3">
                   Revert Support
                 </h2>
                 <p className="text-gray-600 text-base sm:text-lg">
@@ -214,7 +214,7 @@ export function ProgramsPage() {
 
             <TabsContent value="emergency">
               <div className="rounded-xl border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-8 text-center">
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-3">
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2A4A] mb-3">
                   Emergency Relief
                 </h2>
                 <p className="text-gray-600 text-base sm:text-lg">
@@ -231,7 +231,7 @@ export function ProgramsPage() {
       <section className="py-20 bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-4">Long-Term Development Projects</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-4">Long-Term Development Projects</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Creating sustainable solutions for poverty alleviation and community empowerment
             </p>
@@ -240,7 +240,7 @@ export function ProgramsPage() {
             <Card className="border-2 border-[#C9A961]/30">
               <CardContent className="p-8">
                 <Briefcase className="w-12 h-12 text-[#C9A961] mb-4" />
-                <h3 className="text-2xl font-semibold text-[#2C5F2D] mb-4">Sustainable Livelihoods</h3>
+                <h3 className="text-2xl font-semibold text-[#1B2A4A] mb-4">Sustainable Livelihoods</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">
                   We invest in programs that create long-term economic opportunities including:
                 </p>
@@ -267,7 +267,7 @@ export function ProgramsPage() {
             <Card className="border-2 border-[#C9A961]/30">
               <CardContent className="p-8">
                 <School className="w-12 h-12 text-[#C9A961] mb-4" />
-                <h3 className="text-2xl font-semibold text-[#2C5F2D] mb-4">Community Development</h3>
+                <h3 className="text-2xl font-semibold text-[#1B2A4A] mb-4">Community Development</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">
                   Building strong, self-sufficient communities through:
                 </p>

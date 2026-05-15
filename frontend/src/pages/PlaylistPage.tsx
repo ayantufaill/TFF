@@ -731,7 +731,7 @@ function RecitationCard({
   return (
     <div className="bg-white rounded-[24px] border border-gray-200/90 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       {/* Title row: subtle number + Surah name */}
-      <h3 className="text-lg font-bold text-[#2C5F2D] px-4 pt-4 pb-1 flex items-center justify-center gap-2">
+      <h3 className="text-lg font-bold text-[#1B2A4A] px-4 pt-4 pb-1 flex items-center justify-center gap-2">
         <span className="text-[#C9A961] font-semibold tabular-nums">
           {number}.
         </span>
@@ -750,10 +750,12 @@ function RecitationCard({
               src={qariImage}
               alt={qariName}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#2C5F2D]/10 to-[#C9A961]/10 text-[#2C5F2D] text-2xl font-bold">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1B2A4A]/10 to-[#C9A961]/10 text-[#1B2A4A] text-2xl font-bold">
               {surahName.slice(0, 1)}
             </div>
           )}
@@ -769,12 +771,12 @@ function RecitationCard({
           type="button"
           onClick={handleDownload}
           disabled={downloading}
-          className={`flex-shrink-0 w-9 h-9 rounded-full bg-[#C9A961]/20 text-[#2C5F2D] flex items-center justify-center hover:bg-[#C9A961]/30 transition-colors ${downloading ? "opacity-50 cursor-wait" : ""}`}
+          className={`flex-shrink-0 w-9 h-9 rounded-full bg-[#C9A961]/20 text-[#1B2A4A] flex items-center justify-center hover:bg-[#C9A961]/30 transition-colors ${downloading ? "opacity-50 cursor-wait" : ""}`}
           title={downloading ? "Downloading..." : "Download"}
           aria-label={downloading ? "Downloading audio" : "Download audio"}
         >
           {downloading ? (
-            <div className="w-4 h-4 border-2 border-[#2C5F2D] border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-[#1B2A4A] border-t-transparent rounded-full animate-spin" />
           ) : (
             <Download className="w-4 h-4" />
           )}
@@ -783,7 +785,7 @@ function RecitationCard({
           <button
             type="button"
             onClick={togglePlay}
-            className="flex-shrink-0 w-8 h-8 rounded-full bg-[#2C5F2D] text-white flex items-center justify-center hover:bg-[#1e4620] transition-colors"
+            className="flex-shrink-0 w-8 h-8 rounded-full bg-[#1B2A4A] text-white flex items-center justify-center hover:bg-[#1e4620] transition-colors"
             aria-label={playing ? "Pause" : "Play"}
           >
             {playing ? (
@@ -849,7 +851,7 @@ export function PlaylistPage() {
 
   return (
     <div className="min-h-[60vh] pb-40 sm:pb-48 lg:pb-56">
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white min-h-[14rem] sm:min-h-[16rem] flex flex-col justify-center">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white min-h-[14rem] sm:min-h-[16rem] flex flex-col justify-center">
         <div
           className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10"
           aria-hidden
@@ -873,7 +875,7 @@ export function PlaylistPage() {
       <div className="h-10 sm:h-14 bg-[#FAF8F4]" aria-hidden />
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '1rem' }}>
           {RECITATIONS.map((rec, index) =>
             (() => {
               const surahNumber =

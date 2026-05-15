@@ -31,9 +31,9 @@ export function DashboardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF8F3]">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-[#2C5F2D] mb-4">Please log in to view your dashboard</h2>
+          <h2 className="text-2xl font-bold text-[#1B2A4A] mb-4">Please log in to view your dashboard</h2>
           <Link to="/training">
-            <Button className="bg-[#2C5F2D] hover:bg-[#234F24] text-white">Go to Login</Button>
+            <Button className="bg-[#1B2A4A] hover:bg-[#122038] text-white">Go to Login</Button>
           </Link>
         </div>
       </div>
@@ -42,7 +42,7 @@ export function DashboardPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#FAF8F3]">
-        <div className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] py-12">
+        <div className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="h-10 w-64 bg-white/20 rounded-lg animate-pulse mb-2" />
             <div className="h-4 w-48 bg-white/10 rounded-lg animate-pulse" />
@@ -76,12 +76,12 @@ export function DashboardPage() {
   ).length;
   const totalModulesCount = allModules.length;
 
-  if (isLoading) return <div className="p-20 text-center text-[#2C5F2D] font-bold">Loading your dashboard...</div>;
+  if (isLoading) return <div className="p-20 text-center text-[#1B2A4A] font-bold">Loading your dashboard...</div>;
 
   return (
     <div className="min-h-screen bg-[#FAF8F3]" style={{ paddingBottom: '320px' }}>
       {/* Welcome Hero */}
-      <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] py-12 text-white">
+      <section className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] py-12 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
@@ -98,7 +98,7 @@ export function DashboardPage() {
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 text-center min-w-[120px]">
                 <div className="text-2xl font-bold">{totalCompletedCount}</div>
-                <div className="text-xs text-white/70 uppercase tracking-wider font-semibold">Total Modules</div>
+                <div className="text-xs text-white/70 uppercase tracking-wider font-semibold">Total Lectures</div>
               </div>
             </div>
           </div>
@@ -136,7 +136,7 @@ export function DashboardPage() {
                         className="relative border border-[#C9A961]/30 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_20px_50px_rgba(44,95,45,0.15)] transition-all duration-500 h-full"
                         style={{ borderRadius: '24px', overflow: 'hidden' }}
                       >
-                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C9A961] to-[#2C5F2D] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#C9A961] to-[#1B2A4A] opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20" />
 
                         <div className="relative h-48 overflow-hidden rounded-[16px] m-2">
                           <img
@@ -147,7 +147,7 @@ export function DashboardPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
 
                           <div className="absolute top-4 left-4">
-                            <Badge className="bg-white/90 backdrop-blur-md text-[#2C5F2D] border-none font-bold px-3 py-1 text-[10px] uppercase tracking-wider shadow-sm">
+                            <Badge className="bg-white/90 backdrop-blur-md text-[#1B2A4A] border-none font-bold px-3 py-1 text-[10px] uppercase tracking-wider shadow-sm">
                               {course.category}
                             </Badge>
                           </div>
@@ -161,7 +161,7 @@ export function DashboardPage() {
 
                         <CardContent className="p-6 relative">
                           <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-[#2C5F2D] transition-colors line-clamp-2">
+                            <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-[#1B2A4A] transition-colors line-clamp-2">
                               {course.title}
                             </h3>
                           </div>
@@ -169,19 +169,19 @@ export function DashboardPage() {
                           <div className="flex items-center gap-4 text-xs font-semibold text-gray-400 mb-6">
                             <div className="flex items-center gap-1.5">
                               <BookOpen className="w-3.5 h-3.5 text-[#C9A961]" />
-                              {course.levels.length} Levels
+                              {course.levels.length} Courses
                             </div>
                             <div className="w-1 h-1 rounded-full bg-gray-200" />
                             <div className="flex items-center gap-1.5">
                               <Clock className="w-3.5 h-3.5 text-[#C9A961]" />
-                              {completedInCourse}/{totalInCourse} Modules
+                              {completedInCourse}/{totalInCourse} Lectures
                             </div>
                           </div>
 
                           <div className="space-y-3">
                             <div className="flex justify-between items-end">
                               <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Course Progress</span>
-                              <span className="text-sm font-black text-[#2C5F2D]">{calculatedProgress}%</span>
+                              <span className="text-sm font-black text-[#1B2A4A]">{calculatedProgress}%</span>
                             </div>
                             <div className="relative pt-2">
                               <Progress
@@ -204,7 +204,7 @@ export function DashboardPage() {
             <Card className="border-gray-200 shadow-sm overflow-hidden" style={{ borderRadius: '24px' }}>
               <CardHeader className="pb-4 bg-gray-50/50">
                 <CardTitle className="text-lg font-bold flex items-center gap-2">
-                  <LayoutDashboard className="w-5 h-5 text-[#2C5F2D]" />
+                  <LayoutDashboard className="w-5 h-5 text-[#1B2A4A]" />
                   Learning Metrics
                 </CardTitle>
               </CardHeader>
@@ -223,11 +223,11 @@ export function DashboardPage() {
                     <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600">
                       <CheckCircle className="w-4 h-4" />
                     </div>
-                    <span className="text-sm font-medium text-gray-600">Modules Mastered</span>
+                    <span className="text-sm font-medium text-gray-600">Lectures Completed</span>
                   </div>
                   <span className="font-bold text-gray-900">{totalCompletedCount} / {totalModulesCount}</span>
                 </div>
-                <Button variant="outline" className="w-full border-[#2C5F2D] text-[#2C5F2D] hover:bg-[#2C5F2D]/5 font-bold py-6">
+                <Button variant="outline" className="w-full border-[#1B2A4A] text-[#1B2A4A] hover:bg-[#1B2A4A]/5 font-bold py-6">
                   Detailed Report
                 </Button>
               </CardContent>
@@ -235,7 +235,7 @@ export function DashboardPage() {
 
             {/* Spiritual Tip */}
             <div
-              className="bg-[#2C5F2D] text-white p-6 shadow-lg relative overflow-hidden"
+              className="bg-[#1B2A4A] text-white p-6 shadow-lg relative overflow-hidden"
               style={{ borderRadius: '24px' }}
             >
               <div className="absolute top-0 right-0 p-4 opacity-10">

@@ -147,8 +147,8 @@ export default function AdminPanel() {
       setEditingAssessment({
         courseId: levelId,
         level: levelNumber,
-        title: `Level ${levelNumber} Final Assessment`,
-        description: `Verify mastery of Level ${levelNumber} topics`,
+        title: `Course ${levelNumber} Final Assessment`,
+        description: `Verify mastery of Course ${levelNumber} topics`,
         passingScore: 70,
         questions: []
       });
@@ -158,8 +158,8 @@ export default function AdminPanel() {
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAF8F3]">
       <div className="text-center space-y-4">
-        <div className="w-16 h-16 border-4 border-[#2C5F2D]/10 border-t-[#2C5F2D] rounded-full animate-spin mx-auto" />
-        <p className="text-[#2C5F2D] font-black tracking-widest text-sm uppercase">Initializing Studio</p>
+        <div className="w-16 h-16 border-4 border-[#1B2A4A]/10 border-t-[#1B2A4A] rounded-full animate-spin mx-auto" />
+        <p className="text-[#1B2A4A] font-black tracking-widest text-sm uppercase">Initializing Studio</p>
       </div>
     </div>
   );
@@ -183,7 +183,7 @@ export default function AdminPanel() {
         {/* Sidebar Header */}
         <div className="p-6 border-b border-gray-50 bg-white">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#2C5F2D] flex items-center justify-center shadow-sm">
+            <div className="w-12 h-12 rounded-xl bg-[#1B2A4A] flex items-center justify-center shadow-sm">
               <Settings className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -204,7 +204,7 @@ export default function AdminPanel() {
             <Search className="w-4 h-4 text-gray-400" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
             <Input
               placeholder="Search curriculum..."
-              className="pl-10 bg-gray-50 border-none rounded-xl text-sm h-11 focus-visible:ring-1 focus-visible:ring-[#2C5F2D]/10"
+              className="pl-10 bg-gray-50 border-none rounded-xl text-sm h-11 focus-visible:ring-1 focus-visible:ring-[#1B2A4A]/10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -229,19 +229,19 @@ export default function AdminPanel() {
                 key={course._id}
                 onClick={() => { setActiveTab(course._id); setSidebarOpen(false); }}
                 className={`w-full text-left p-4 rounded-2xl transition-all border-2 ${activeTab === course._id
-                  ? 'bg-white border-[#2C5F2D] shadow-sm'
+                  ? 'bg-white border-[#1B2A4A] shadow-sm'
                   : 'bg-white border-transparent hover:bg-gray-50 text-gray-600'
                   }`}
               >
                 <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs ${activeTab === course._id ? 'bg-[#2C5F2D] text-white shadow-inner' : 'bg-gray-100 text-[#2C5F2D]'
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs ${activeTab === course._id ? 'bg-[#1B2A4A] text-white shadow-inner' : 'bg-gray-100 text-[#1B2A4A]'
                     }`}>
                     {course.title.charAt(0)}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className={`font-bold text-sm truncate leading-tight ${activeTab === course._id ? 'text-[#2C5F2D]' : 'text-gray-700'}`}>{course.title}</p>
-                    <p className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${activeTab === course._id ? 'text-[#2C5F2D]/60' : 'text-gray-400'}`}>
-                      {course.levels.length} Levels
+                    <p className={`font-bold text-sm truncate leading-tight ${activeTab === course._id ? 'text-[#1B2A4A]' : 'text-gray-700'}`}>{course.title}</p>
+                    <p className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${activeTab === course._id ? 'text-[#1B2A4A]/60' : 'text-gray-400'}`}>
+                      {course.levels.length} Courses
                     </p>
                   </div>
                 </div>
@@ -256,7 +256,7 @@ export default function AdminPanel() {
             <div style={{ position: 'relative', zIndex: 10 }}>
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <p className="text-[10px] font-bold text-[#2C5F2D] uppercase tracking-widest">Status: Online</p>
+                <p className="text-[10px] font-bold text-[#1B2A4A] uppercase tracking-widest">Status: Online</p>
               </div>
               <p className="text-[10px] text-gray-400 font-medium tracking-tight">Syncing Master Database</p>
             </div>
@@ -272,7 +272,7 @@ export default function AdminPanel() {
               {/* Mobile sidebar toggle */}
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="admin-mobile-toggle items-center gap-2 mb-8 px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100 text-[#2C5F2D] font-bold text-sm"
+                className="admin-mobile-toggle items-center gap-2 mb-8 px-4 py-2 bg-white rounded-xl shadow-sm border border-gray-100 text-[#1B2A4A] font-bold text-sm"
                 style={{ display: 'none' }}
               >
                 <Menu className="w-5 h-5" /> Open Sidebar
@@ -281,8 +281,8 @@ export default function AdminPanel() {
                 <LayoutGrid className="w-10 h-10 text-gray-200" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2 tracking-tight">Select a Learning Path</h2>
-              <p className="text-gray-500 max-w-sm mb-8 font-medium">Choose a course from the sidebar to manage its curriculum levels and modules.</p>
-              <Button onClick={() => setEditingCourse({ title: '', description: '', order: courses.length + 1, category: 'General' })} className="bg-[#2C5F2D] text-white rounded-xl h-12 px-6 font-bold shadow-sm">
+              <p className="text-gray-500 max-w-sm mb-8 font-medium">Choose a course from the sidebar to manage its courses and lectures.</p>
+              <Button onClick={() => setEditingCourse({ title: '', description: '', order: courses.length + 1, category: 'General' })} className="bg-[#1B2A4A] text-white rounded-xl h-12 px-6 font-bold shadow-sm">
                 Create New Course
               </Button>
             </div>
@@ -294,12 +294,12 @@ export default function AdminPanel() {
                   {/* Mobile sidebar toggle */}
                   <button
                     onClick={() => setSidebarOpen(true)}
-                    className="admin-mobile-toggle items-center justify-center w-10 h-10 bg-white rounded-xl shadow-sm border border-gray-100 text-[#2C5F2D]"
+                    className="admin-mobile-toggle items-center justify-center w-10 h-10 bg-white rounded-xl shadow-sm border border-gray-100 text-[#1B2A4A]"
                     style={{ display: 'none', flexShrink: 0 }}
                   >
                     <Menu className="w-5 h-5" />
                   </button>
-                  <Badge className="bg-[#2C5F2D]/5 text-[#2C5F2D] border-none font-bold text-[10px] uppercase tracking-widest px-3 py-1 rounded-full">
+                  <Badge className="bg-[#1B2A4A]/5 text-[#1B2A4A] border-none font-bold text-[10px] uppercase tracking-widest px-3 py-1 rounded-full">
                     {activeCourse.category}
                   </Badge>
                 </div>
@@ -313,8 +313,8 @@ export default function AdminPanel() {
                       <Button variant="outline" className="bg-white rounded-xl h-9 px-4 font-bold text-red-500 hover:bg-red-50 hover:text-red-600 border-red-100" onClick={() => setDeleteTarget({ type: 'course', id: activeCourse._id })}>
                         <Trash2 className="w-4 h-4 mr-2" /> Delete
                       </Button>
-                      <Button className="bg-[#2C5F2D] text-white rounded-xl h-9 px-5 font-bold shadow-sm" onClick={() => setEditingLevel({ mainCourseId: activeTab, level: activeCourse.levels.length + 1, title: '', subtitle: '', color: 'from-[#2C5F2D] to-[#4A8B4D]' })}>
-                        <Plus className="w-4 h-4 mr-2" /> New Level
+                      <Button className="bg-[#1B2A4A] text-white rounded-xl h-9 px-5 font-bold shadow-sm" onClick={() => setEditingLevel({ mainCourseId: activeTab, level: activeCourse.levels.length + 1, title: '', subtitle: '', color: 'from-[#1B2A4A] to-[#2D4A8A]' })}>
+                        <Plus className="w-4 h-4 mr-2" /> New Course
                       </Button>
                     </div>
                   </div>
@@ -340,7 +340,7 @@ export default function AdminPanel() {
                         </div>
                         <div className="flex gap-2">
                           <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-[#C9A961]" onClick={() => setEditingLevel(level)}>
-                            <Edit className="w-4 h-4 mr-2" /> Level
+                            <Edit className="w-4 h-4 mr-2" /> Course
                           </Button>
                           <Button variant="ghost" size="sm" className="text-gray-400 font-bold hover:text-red-500" onClick={() => setDeleteTarget({ type: 'level', id: level._id })}>
                             <Trash2 className="w-4 h-4 mr-2" /> Delete
@@ -363,7 +363,7 @@ export default function AdminPanel() {
                                   <h4 className="font-bold text-gray-800 line-clamp-1 text-[15px]">{module.title}</h4>
                                 </div>
                                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                  <button onClick={() => setEditingModule(module)} className="p-1.5 text-gray-400 hover:text-[#2C5F2D]">
+                                  <button onClick={() => setEditingModule(module)} className="p-1.5 text-gray-400 hover:text-[#1B2A4A]">
                                     <Edit className="w-3.5 h-3.5" />
                                   </button>
                                   <button onClick={() => setDeleteTarget({ type: 'module', id: module._id })} className="p-1.5 text-gray-400 hover:text-red-500">
@@ -394,7 +394,7 @@ export default function AdminPanel() {
                           className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-100 rounded-[1.5rem] hover:border-[#C9A961]/30 hover:bg-white transition-all group"
                         >
                           <Plus className="w-5 h-5 text-gray-300 group-hover:text-[#C9A961] mb-2" />
-                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">New Module</span>
+                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">New Lecture</span>
                         </button>
                       </div>
                     </div>
@@ -409,7 +409,7 @@ export default function AdminPanel() {
       {/* Course Editor Dialog */}
       <Dialog open={!!editingCourse} onOpenChange={(open) => !open && setEditingCourse(null)}>
         <DialogContent className="admin-dialog">
-          <div className="dialog-accent-bar" style={{ background: '#2C5F2D' }} />
+          <div className="dialog-accent-bar" style={{ background: '#1B2A4A' }} />
           <div className="dialog-header">
             <DialogTitle><h2>{editingCourse?._id ? 'Edit Course' : 'Create New Course'}</h2></DialogTitle>
             <DialogDescription><p>Define the foundation for this learning path.</p></DialogDescription>
@@ -460,13 +460,13 @@ export default function AdminPanel() {
         <DialogContent className="admin-dialog">
           <div className="dialog-accent-bar" style={{ background: '#C9A961' }} />
           <div className="dialog-header">
-            <DialogTitle><h2>{editingLevel?._id ? 'Edit Level' : 'Create New Level'}</h2></DialogTitle>
-            <DialogDescription><p>Configure a curriculum milestone.</p></DialogDescription>
+            <DialogTitle><h2>{editingLevel?._id ? 'Edit Course' : 'Create New Course'}</h2></DialogTitle>
+            <DialogDescription><p>Configure a curriculum course.</p></DialogDescription>
           </div>
           <div className="dialog-body">
             <div className="dialog-field">
-              <label>Level Title</label>
-              <input value={editingLevel?.title || ''} onChange={e => setEditingLevel(prev => ({ ...prev!, title: e.target.value }))} placeholder="e.g., Level 1: Foundations" />
+              <label>Course Title</label>
+              <input value={editingLevel?.title || ''} onChange={e => setEditingLevel(prev => ({ ...prev!, title: e.target.value }))} placeholder="e.g., Course 1: First Steps to Islam" />
             </div>
             <div className="dialog-field">
               <label>Subtitle</label>
@@ -474,18 +474,18 @@ export default function AdminPanel() {
             </div>
             <div className="dialog-grid">
               <div className="dialog-field">
-                <label>Level Number</label>
+                <label>Course Number</label>
                 <input type="number" value={editingLevel?.level || 0} onChange={e => setEditingLevel(prev => ({ ...prev!, level: parseInt(e.target.value) }))} />
               </div>
               <div className="dialog-field">
                 <label>Theme Color</label>
-                <input value={editingLevel?.color || ''} onChange={e => setEditingLevel(prev => ({ ...prev!, color: e.target.value }))} placeholder="from-[#2C5F2D] to-[#4A8B4D]" />
+                <input value={editingLevel?.color || ''} onChange={e => setEditingLevel(prev => ({ ...prev!, color: e.target.value }))} placeholder="from-[#1B2A4A] to-[#2D4A8A]" />
               </div>
             </div>
           </div>
           <div className="dialog-footer">
             <button className="btn-cancel" onClick={() => setEditingLevel(null)}>Cancel</button>
-            <button className="btn-save" onClick={handleSaveLevel}>Save Level</button>
+            <button className="btn-save" onClick={handleSaveLevel}>Save Course</button>
           </div>
         </DialogContent>
       </Dialog>
@@ -493,14 +493,14 @@ export default function AdminPanel() {
       {/* Module Editor Dialog */}
       <Dialog open={!!editingModule} onOpenChange={(open) => !open && setEditingModule(null)}>
         <DialogContent className="admin-dialog">
-          <div className="dialog-accent-bar" style={{ background: '#2C5F2D' }} />
+          <div className="dialog-accent-bar" style={{ background: '#1B2A4A' }} />
           <div className="dialog-header">
-            <DialogTitle><h2>{editingModule?._id ? 'Edit Module' : 'Add New Module'}</h2></DialogTitle>
-            <DialogDescription><p>Configure individual learning components.</p></DialogDescription>
+            <DialogTitle><h2>{editingModule?._id ? 'Edit Lecture' : 'Add New Lecture'}</h2></DialogTitle>
+            <DialogDescription><p>Configure individual learning lectures.</p></DialogDescription>
           </div>
           <div className="dialog-body" style={{ maxHeight: '55vh', overflowY: 'auto' }}>
             <div className="dialog-field">
-              <label>Module Title</label>
+              <label>Lecture Title</label>
               <input value={editingModule?.title || ''} onChange={e => setEditingModule(prev => ({ ...prev!, title: e.target.value }))} placeholder="e.g., Welcome to Islam" />
             </div>
             <div className="dialog-field">
@@ -509,7 +509,7 @@ export default function AdminPanel() {
             </div>
             <div className="dialog-grid">
               <div className="dialog-field">
-                <label>Module #</label>
+                <label>Lecture #</label>
                 <input type="number" value={editingModule?.number || 0} onChange={e => setEditingModule(prev => ({ ...prev!, number: parseInt(e.target.value) }))} />
               </div>
               <div className="dialog-field">
@@ -535,7 +535,7 @@ export default function AdminPanel() {
           </div>
           <div className="dialog-footer">
             <button className="btn-cancel" onClick={() => setEditingModule(null)}>Cancel</button>
-            <button className="btn-save" onClick={handleSaveModule}>Save Module</button>
+            <button className="btn-save" onClick={handleSaveModule}>Save Lecture</button>
           </div>
         </DialogContent>
       </Dialog>
@@ -546,7 +546,7 @@ export default function AdminPanel() {
           <div className="dialog-accent-bar" style={{ background: '#C9A961' }} />
           <div className="dialog-header">
             <DialogTitle><h2>Assessment Bank</h2></DialogTitle>
-            <DialogDescription><p>Manage questions for Level {editingAssessment?.level} assessment.</p></DialogDescription>
+            <DialogDescription><p>Manage questions for Course {editingAssessment?.level} assessment.</p></DialogDescription>
           </div>
           <div className="dialog-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
             <div className="dialog-grid">
@@ -611,7 +611,7 @@ export default function AdminPanel() {
                               newQuestions[qIdx].correctAnswerIndex = optIdx;
                               setEditingAssessment(prev => ({ ...prev!, questions: newQuestions }));
                             }}
-                            className={`w-6 h-6 rounded-lg flex items-center justify-center cursor-pointer border-2 transition-all ${q.correctAnswerIndex === optIdx ? 'bg-[#2C5F2D] border-[#2C5F2D] text-white shadow-sm' : 'bg-white border-gray-200 text-gray-300'}`}
+                            className={`w-6 h-6 rounded-lg flex items-center justify-center cursor-pointer border-2 transition-all ${q.correctAnswerIndex === optIdx ? 'bg-[#1B2A4A] border-[#1B2A4A] text-white shadow-sm' : 'bg-white border-gray-200 text-gray-300'}`}
                           >
                             {q.correctAnswerIndex === optIdx ? <Check className="w-3 h-3" /> : optIdx + 1}
                           </div>

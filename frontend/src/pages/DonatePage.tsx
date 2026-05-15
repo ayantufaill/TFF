@@ -48,7 +48,7 @@ export function DonatePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white py-20">
+      <section className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Make a Difference Today</h1>
           <p className="text-xl text-gray-100 max-w-3xl mx-auto mb-8">
@@ -89,42 +89,42 @@ export function DonatePage() {
                   <div className="space-y-6">
                     {/* Select Program */}
                     <div>
-                      <Label className="text-lg font-semibold text-[#2C5F2D] mb-4 block">
+                      <Label className="text-lg font-semibold text-[#1B2A4A] mb-4 block">
                         Choose a Program to Support
                       </Label>
                       <RadioGroup defaultValue="general" className="space-y-3">
                         <div className="flex items-center space-x-3 border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A961] cursor-pointer">
                           <RadioGroupItem value="general" id="general" />
                           <Label htmlFor="general" className="flex-1 cursor-pointer">
-                            <div className="font-semibold text-[#2C5F2D]">Where Needed Most</div>
+                            <div className="font-semibold text-[#1B2A4A]">Where Needed Most</div>
                             <div className="text-sm text-gray-600">Allow us to direct funds to areas of greatest need</div>
                           </Label>
                         </div>
                         <div className="flex items-center space-x-3 border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A961] cursor-pointer">
                           <RadioGroupItem value="widows" id="widows" />
                           <Label htmlFor="widows" className="flex-1 cursor-pointer">
-                            <div className="font-semibold text-[#2C5F2D]">Widow Empowerment</div>
+                            <div className="font-semibold text-[#1B2A4A]">Widow Empowerment</div>
                             <div className="text-sm text-gray-600">Support widows with financial aid and skills training</div>
                           </Label>
                         </div>
                         <div className="flex items-center space-x-3 border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A961] cursor-pointer">
                           <RadioGroupItem value="orphans" id="orphans" />
                           <Label htmlFor="orphans" className="flex-1 cursor-pointer">
-                            <div className="font-semibold text-[#2C5F2D]">Orphan Care & Education</div>
+                            <div className="font-semibold text-[#1B2A4A]">Orphan Care & Education</div>
                             <div className="text-sm text-gray-600">Sponsor orphans' education and comprehensive care</div>
                           </Label>
                         </div>
                         <div className="flex items-center space-x-3 border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A961] cursor-pointer">
                           <RadioGroupItem value="reverts" id="reverts" />
                           <Label htmlFor="reverts" className="flex-1 cursor-pointer">
-                            <div className="font-semibold text-[#2C5F2D]">New Muslim Support</div>
+                            <div className="font-semibold text-[#1B2A4A]">New Muslim Support</div>
                             <div className="text-sm text-gray-600">Help new Muslims with training and integration</div>
                           </Label>
                         </div>
                         <div className="flex items-center space-x-3 border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A961] cursor-pointer">
                           <RadioGroupItem value="emergency" id="emergency" />
                           <Label htmlFor="emergency" className="flex-1 cursor-pointer">
-                            <div className="font-semibold text-[#2C5F2D]">Emergency Relief</div>
+                            <div className="font-semibold text-[#1B2A4A]">Emergency Relief</div>
                             <div className="text-sm text-gray-600">Provide immediate aid to crisis situations</div>
                           </Label>
                         </div>
@@ -133,7 +133,7 @@ export function DonatePage() {
 
                     {/* Select Amount */}
                     <div>
-                      <Label className="text-lg font-semibold text-[#2C5F2D] mb-4 block">
+                      <Label className="text-lg font-semibold text-[#1B2A4A] mb-4 block">
                         Select Amount
                       </Label>
                       <div className="grid grid-cols-3 gap-3 mb-4">
@@ -177,7 +177,7 @@ export function DonatePage() {
 
                     {/* Payment Method */}
                     <div>
-                      <Label className="text-lg font-semibold text-[#2C5F2D] mb-4 block">
+                      <Label className="text-lg font-semibold text-[#1B2A4A] mb-4 block">
                         Payment Method
                       </Label>
                       <div className="space-y-3">
@@ -249,14 +249,14 @@ export function DonatePage() {
               {/* Quick Donation Options */}
               <Card className="border-2 border-[#C9A961]/30">
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-[#2C5F2D] mb-4">Quick Donation Options</h3>
+                  <h3 className="text-xl font-bold text-[#1B2A4A] mb-4">Quick Donation Options</h3>
                   <div className="space-y-3">
                     {donationOptions.map((option, index) => (
                       <div key={index} className="border-l-4 border-[#C9A961] bg-[#FAF8F3] p-4 rounded-r-lg">
                         <div className="flex items-start gap-3">
                           <option.icon className="w-6 h-6 text-[#C9A961] flex-shrink-0 mt-1" />
                           <div className="flex-1">
-                            <div className="font-semibold text-[#2C5F2D] mb-1">{option.title}</div>
+                            <div className="font-semibold text-[#1B2A4A] mb-1">{option.title}</div>
                             <div className="text-sm text-gray-600 mb-2">{option.impact}</div>
                             <div className="text-lg font-bold text-[#C9A961]">{option.amount}</div>
                           </div>
@@ -268,7 +268,7 @@ export function DonatePage() {
               </Card>
 
               {/* Impact Calculator */}
-              <Card className="bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] text-white border-0">
+              <Card className="bg-gradient-to-br from-[#1B2A4A] to-[#2D4A8A] text-white border-0">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-4">Your Impact</h3>
                   <div className="space-y-3 text-sm">
@@ -300,7 +300,7 @@ export function DonatePage() {
       <section className="py-20 bg-gradient-to-br from-[#FAF8F3] to-[#F5F1E8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Our Transparency Commitment</h2>
+            <h2 className="text-3xl font-bold text-[#1B2A4A] mb-4">Our Transparency Commitment</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               We believe in complete transparency about how your donations are used
             </p>
@@ -344,13 +344,13 @@ export function DonatePage() {
           {/* Breakdown Chart */}
           <Card className="mt-12 border-2 border-[#C9A961]/30">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-[#2C5F2D] mb-6 text-center">
+              <h3 className="text-2xl font-bold text-[#1B2A4A] mb-6 text-center">
                 How Your Donation is Used
               </h3>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="font-semibold text-[#2C5F2D]">Direct Program Services</span>
+                    <span className="font-semibold text-[#1B2A4A]">Direct Program Services</span>
                     <span className="text-[#C9A961] font-bold">85%</span>
                   </div>
                   <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
@@ -359,7 +359,7 @@ export function DonatePage() {
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="font-semibold text-[#2C5F2D]">Program Development & Training</span>
+                    <span className="font-semibold text-[#1B2A4A]">Program Development & Training</span>
                     <span className="text-[#C9A961] font-bold">10%</span>
                   </div>
                   <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
@@ -368,11 +368,11 @@ export function DonatePage() {
                 </div>
                 <div>
                   <div className="flex justify-between mb-2">
-                    <span className="font-semibold text-[#2C5F2D]">Administrative & Operations</span>
+                    <span className="font-semibold text-[#1B2A4A]">Administrative & Operations</span>
                     <span className="text-[#C9A961] font-bold">5%</span>
                   </div>
                   <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full bg-[#2C5F2D] rounded-full" style={{ width: '5%' }}></div>
+                    <div className="h-full bg-[#1B2A4A] rounded-full" style={{ width: '5%' }}></div>
                   </div>
                 </div>
               </div>

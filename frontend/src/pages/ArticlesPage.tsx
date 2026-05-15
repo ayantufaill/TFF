@@ -45,7 +45,7 @@ export function ArticlesPage() {
   return (
     <div className="min-h-[60vh] pb-40 sm:pb-48 lg:pb-56">
       {/* Hero-style header */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white shadow-[0_4px_0_0_rgba(0,0,0,0.06)] min-h-[17rem] sm:min-h-[20rem] lg:min-h-[24rem] flex flex-col justify-center">
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white shadow-[0_4px_0_0_rgba(0,0,0,0.06)] min-h-[17rem] sm:min-h-[20rem] lg:min-h-[24rem] flex flex-col justify-center">
         <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
@@ -106,7 +106,7 @@ export function ArticlesPage() {
                       <span className="inline-block text-[11px] sm:text-xs font-semibold text-[#7b5b1f] bg-[#C9A961]/15 rounded-full px-2 py-0.5 mb-1.5">
                         {article.tag}
                       </span>
-                      <h2 className="text-base sm:text-lg font-bold text-[#2C5F2D] leading-snug">
+                      <h2 className="text-base sm:text-lg font-bold text-[#1B2A4A] leading-snug">
                         {article.title}
                       </h2>
                     </div>
@@ -144,7 +144,7 @@ export function ArticlesPage() {
                       <div className="mt-3 flex flex-wrap items-center gap-3">
                         <a
                           href={displayUrl}
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-[#2C5F2D] hover:text-[#C9A961] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-[#1B2A4A] hover:text-[#C9A961] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
                         >
                           <FileText className="w-4 h-4" />
                           {hasHtml ? 'Open full article (page)' : 'Open full article'}
@@ -154,7 +154,7 @@ export function ArticlesPage() {
                           <a
                             href={pdfUrl}
                             download
-                            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#2C5F2D] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
+                            className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#1B2A4A] transition-colors focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg px-3 py-1.5"
                           >
                             Download PDF
                           </a>

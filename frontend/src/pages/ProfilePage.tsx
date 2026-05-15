@@ -30,8 +30,8 @@ export function ProfilePage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF8F3]">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-[#2C5F2D] mb-4">Please log in to view your profile</h2>
-          <Button onClick={() => navigate('/training')} className="bg-[#2C5F2D] hover:bg-[#234F24] text-white">
+          <h2 className="text-2xl font-bold text-[#1B2A4A] mb-4">Please log in to view your profile</h2>
+          <Button onClick={() => navigate('/training')} className="bg-[#1B2A4A] hover:bg-[#122038] text-white">
             Go to Login
           </Button>
         </div>
@@ -98,7 +98,7 @@ export function ProfilePage() {
   return (
     <div className="min-h-screen bg-[#FAF8F3]" style={{ paddingBottom: '320px' }}>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[#2C5F2D] via-[#3A7A3C] to-[#4A8B4D] py-16 text-white relative overflow-hidden">
+      <section className="bg-gradient-to-br from-[#1B2A4A] via-[#3A7A3C] to-[#2D4A8A] py-16 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque-thin.png')]" />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 text-center">
           {/* Avatar */}
@@ -124,18 +124,18 @@ export function ProfilePage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 -mt-8 relative z-10 space-y-6">
         {/* Personal Info Card */}
         <Card className="border-gray-100 shadow-lg overflow-hidden" style={{ borderRadius: '24px' }}>
-          <div className="h-1.5 bg-gradient-to-r from-[#2C5F2D] to-[#C9A961]" />
+          <div className="h-1.5 bg-gradient-to-r from-[#1B2A4A] to-[#C9A961]" />
           <CardContent className="p-8">
             <h2 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center gap-3">
-              <User className="w-5 h-5 text-[#2C5F2D]" /> Personal Information
+              <User className="w-5 h-5 text-[#1B2A4A]" /> Personal Information
             </h2>
 
             {/* Name */}
             <div className="space-y-6">
               <div className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
                 <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-[#2C5F2D]/10 flex items-center justify-center flex-shrink-0">
-                    <User className="w-5 h-5 text-[#2C5F2D]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#1B2A4A]/10 flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-[#1B2A4A]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Full Name</p>
@@ -143,7 +143,7 @@ export function ProfilePage() {
                       <input
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
+                        className="w-full bg-white border border-gray-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-900 outline-none focus:border-[#1B2A4A] focus:ring-2 focus:ring-[#1B2A4A]/10 transition-all"
                         autoFocus
                       />
                     ) : (
@@ -162,7 +162,7 @@ export function ProfilePage() {
                     <button
                       onClick={handleSaveName}
                       disabled={saving}
-                      className="px-4 py-2 text-xs font-bold text-white bg-[#2C5F2D] rounded-xl hover:bg-[#234F24] transition-colors flex items-center gap-1.5 disabled:opacity-50"
+                      className="px-4 py-2 text-xs font-bold text-white bg-[#1B2A4A] rounded-xl hover:bg-[#122038] transition-colors flex items-center gap-1.5 disabled:opacity-50"
                     >
                       <Save className="w-3.5 h-3.5" /> Save
                     </button>
@@ -198,7 +198,7 @@ export function ProfilePage() {
 
         {/* Security Card */}
         <Card className="border-gray-100 shadow-lg overflow-hidden" style={{ borderRadius: '24px' }}>
-          <div className="h-1.5 bg-gradient-to-r from-[#C9A961] to-[#2C5F2D]" />
+          <div className="h-1.5 bg-gradient-to-r from-[#C9A961] to-[#1B2A4A]" />
           <CardContent className="p-8">
             <h2 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center gap-3">
               <Lock className="w-5 h-5 text-[#C9A961]" /> Security
@@ -207,8 +207,8 @@ export function ProfilePage() {
             {!changingPassword ? (
               <div className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#2C5F2D]/10 flex items-center justify-center">
-                    <Lock className="w-5 h-5 text-[#2C5F2D]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#1B2A4A]/10 flex items-center justify-center">
+                    <Lock className="w-5 h-5 text-[#1B2A4A]" />
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Password</p>
@@ -217,7 +217,7 @@ export function ProfilePage() {
                 </div>
                 <button
                   onClick={() => setChangingPassword(true)}
-                  className="px-5 py-2.5 text-xs font-bold text-[#2C5F2D] bg-white border-2 border-[#2C5F2D]/20 rounded-xl hover:border-[#2C5F2D] hover:bg-[#2C5F2D]/5 transition-all flex items-center gap-2"
+                  className="px-5 py-2.5 text-xs font-bold text-[#1B2A4A] bg-white border-2 border-[#1B2A4A]/20 rounded-xl hover:border-[#1B2A4A] hover:bg-[#1B2A4A]/5 transition-all flex items-center gap-2"
                 >
                   Change Password <ChevronRight className="w-3.5 h-3.5" />
                 </button>
@@ -232,7 +232,7 @@ export function ProfilePage() {
                       type={showCurrentPw ? 'text' : 'password'}
                       value={currentPassword}
                       onChange={e => setCurrentPassword(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#1B2A4A] focus:ring-2 focus:ring-[#1B2A4A]/10 transition-all"
                       placeholder="Enter current password"
                     />
                     <button
@@ -254,7 +254,7 @@ export function ProfilePage() {
                       type={showNewPw ? 'text' : 'password'}
                       value={newPassword}
                       onChange={e => setNewPassword(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#1B2A4A] focus:ring-2 focus:ring-[#1B2A4A]/10 transition-all"
                       placeholder="Enter new password (min 5 chars)"
                     />
                     <button
@@ -276,7 +276,7 @@ export function ProfilePage() {
                       type={showConfirmPw ? 'text' : 'password'}
                       value={confirmPassword}
                       onChange={e => setConfirmPassword(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#2C5F2D] focus:ring-2 focus:ring-[#2C5F2D]/10 transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 pr-12 text-sm font-semibold text-gray-900 outline-none focus:border-[#1B2A4A] focus:ring-2 focus:ring-[#1B2A4A]/10 transition-all"
                       placeholder="Confirm new password"
                     />
                     <button
@@ -308,7 +308,7 @@ export function ProfilePage() {
                   <button
                     onClick={handleChangePassword}
                     disabled={saving || !currentPassword || !newPassword || newPassword !== confirmPassword}
-                    className="flex-1 px-4 py-3 text-sm font-bold text-white bg-[#2C5F2D] rounded-xl hover:bg-[#234F24] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-3 text-sm font-bold text-white bg-[#1B2A4A] rounded-xl hover:bg-[#122038] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     <Lock className="w-4 h-4" /> Update Password
                   </button>
@@ -320,21 +320,21 @@ export function ProfilePage() {
 
         {/* Stats Card */}
         <Card className="border-gray-100 shadow-lg overflow-hidden" style={{ borderRadius: '24px' }}>
-          <div className="h-1.5 bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D]" />
+          <div className="h-1.5 bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A]" />
           <CardContent className="p-8">
             <h2 className="text-lg font-black text-gray-900 uppercase tracking-widest mb-8 flex items-center gap-3">
-              <Award className="w-5 h-5 text-[#2C5F2D]" /> Learning Stats
+              <Award className="w-5 h-5 text-[#1B2A4A]" /> Learning Stats
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div className="bg-gradient-to-br from-[#2C5F2D]/5 to-[#2C5F2D]/10 rounded-2xl p-5 text-center border border-[#2C5F2D]/10">
-                <p className="text-3xl font-black text-[#2C5F2D]">{user.completedModules?.filter(id => id.startsWith('module-')).length || 0}</p>
+              <div className="bg-gradient-to-br from-[#1B2A4A]/5 to-[#1B2A4A]/10 rounded-2xl p-5 text-center border border-[#1B2A4A]/10">
+                <p className="text-3xl font-black text-[#1B2A4A]">{user.completedModules?.filter(id => id.startsWith('module-')).length || 0}</p>
                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2">Modules Done</p>
               </div>
               <div className="bg-gradient-to-br from-[#C9A961]/5 to-[#C9A961]/10 rounded-2xl p-5 text-center border border-[#C9A961]/10">
                 <p className="text-3xl font-black text-[#C9A961]">{user.currentStreak || 0}</p>
                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2">Day Streak</p>
               </div>
-              <div className="bg-gradient-to-br from-[#2C5F2D]/5 to-[#C9A961]/10 rounded-2xl p-5 text-center border border-gray-100 col-span-2 sm:col-span-1">
+              <div className="bg-gradient-to-br from-[#1B2A4A]/5 to-[#C9A961]/10 rounded-2xl p-5 text-center border border-gray-100 col-span-2 sm:col-span-1">
                 <p className="text-3xl font-black text-gray-900">{user.longestStreak || 0}</p>
                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2">Best Streak</p>
               </div>

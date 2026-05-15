@@ -11,11 +11,11 @@ import { useNavigate } from 'react-router';
 const LoadingOverlay = ({ message }: { message: string }) => (
   <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-2xl animate-in fade-in duration-300">
     <div className="relative w-20 h-20 mb-4">
-      <div className="absolute inset-0 rounded-full border-[6px] border-[#2C5F2D]/5 border-t-[#C9A961] animate-spin" />
-      <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#2C5F2D] animate-[spin_1.5s_linear_infinite_reverse]" />
+      <div className="absolute inset-0 rounded-full border-[6px] border-[#1B2A4A]/5 border-t-[#C9A961] animate-spin" />
+      <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#1B2A4A] animate-[spin_1.5s_linear_infinite_reverse]" />
     </div>
     <div className="text-center px-6">
-      <h3 className="text-lg font-bold text-[#2C5F2D] tracking-tight">{message}</h3>
+      <h3 className="text-lg font-bold text-[#1B2A4A] tracking-tight">{message}</h3>
     </div>
   </div>
 );
@@ -95,7 +95,7 @@ export function AuthForm() {
       {isSubmitting && <LoadingOverlay message="Processing..." />}
       <Card className="bg-white border border-gray-100 shadow-xl rounded-2xl overflow-hidden">
         <CardHeader className="pb-4 pt-8 text-center">
-          <CardTitle className="text-2xl font-bold text-[#2C5F2D]">
+          <CardTitle className="text-2xl font-bold text-[#1B2A4A]">
             {authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Reset Password' : 'Join the Community'}
           </CardTitle>
         </CardHeader>
@@ -120,7 +120,7 @@ export function AuthForm() {
                     <button
                       type="button"
                       onClick={() => setShowNewPassword(!showNewPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2C5F2D]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1B2A4A]"
                     >
                       {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -137,7 +137,7 @@ export function AuthForm() {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2C5F2D]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1B2A4A]"
                     >
                       {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
@@ -145,7 +145,7 @@ export function AuthForm() {
                 </>
               )}
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
-              <Button type="submit" className="w-full bg-[#2C5F2D] text-white">
+              <Button type="submit" className="w-full bg-[#1B2A4A] text-white">
                 {forgotStep === 1 ? 'Send Code' : forgotStep === 2 ? 'Next' : 'Reset Password'}
               </Button>
             </form>
@@ -165,13 +165,13 @@ export function AuthForm() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#2C5F2D]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1B2A4A]"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
               {authError && <p className="text-red-500 text-sm">{authError}</p>}
-              <Button type="submit" className="w-full bg-[#2C5F2D] text-white">
+              <Button type="submit" className="w-full bg-[#1B2A4A] text-white">
                 {authMode === 'login' ? 'Login' : 'Sign Up'}
               </Button>
               <div className="text-center mt-4">

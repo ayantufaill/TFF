@@ -3,27 +3,6 @@ import { Download, ArrowLeft } from "lucide-react";
 import html2canvas from "html2canvas";
 import { QRCodeSVG } from "qrcode.react";
 
-// ─── SVG → PNG for html2canvas ───────────────────────────────────
-const svgToPngDataUrl = async (svgUrl: string, size = 220): Promise<string> => {
-  const res = await fetch(svgUrl);
-  const svgText = await res.text();
-  const blob = new Blob([svgText], { type: "image/svg+xml" });
-  const blobUrl = URL.createObjectURL(blob);
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = size;
-      canvas.height = size;
-      canvas.getContext("2d")!.drawImage(img, 0, 0, size, size);
-      URL.revokeObjectURL(blobUrl);
-      resolve(canvas.toDataURL("image/png"));
-    };
-    img.onerror = reject;
-    img.src = blobUrl;
-  });
-};
-
 // ─── Deterministic certificate ID from user name + date ──────────
 const generateCertId = (userName: string, date: string): string => {
   const seed = (userName + date)
@@ -93,7 +72,17 @@ const CertificateView: React.FC<CertificateViewProps> = ({
   const handleDownload = async () => {
     if (!certificateRef.current) return;
     try {
-      const logoPng = await svgToPngDataUrl("/logo.svg");
+      const logoPng = await new Promise<string>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement("canvas");
+          c.width = 220; c.height = 220;
+          c.getContext("2d")!.drawImage(img, 0, 0, 220, 220);
+          resolve(c.toDataURL("image/png"));
+        };
+        img.onerror = reject;
+        img.src = "/logo.png";
+      });
 
       // Convert the QR code SVG inside the certificate to a PNG for html2canvas
       const qrSvgEl =
@@ -127,7 +116,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
         scrollY: 0,
         onclone: (clonedDoc) => {
           clonedDoc
-            .querySelectorAll<HTMLImageElement>('img[src="/logo.svg"]')
+            .querySelectorAll<HTMLImageElement>('img[src="/logo.png"]')
             .forEach((img) => {
               img.src = logoPng;
             });
@@ -180,14 +169,14 @@ const CertificateView: React.FC<CertificateViewProps> = ({
       <div className="w-full flex justify-between items-center mb-8 px-2">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-[#2C5F2D] font-bold hover:text-[#1a3a1b] transition-all group"
+          className="flex items-center gap-2 text-[#1B2A4A] font-bold hover:text-[#1a3a1b] transition-all group"
         >
           <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
           <span className="text-lg">Back to Lesson</span>
         </button>
         <button
           onClick={handleDownload}
-          className="flex items-center gap-2 px-8 py-3 bg-[#2C5F2D] text-white rounded-full font-bold hover:bg-[#1a3a1b] transition-all shadow-lg active:scale-95"
+          className="flex items-center gap-2 px-8 py-3 bg-[#1B2A4A] text-white rounded-full font-bold hover:bg-[#1a3a1b] transition-all shadow-lg active:scale-95"
         >
           <Download className="w-5 h-5" />
           <span className="text-lg">Download Certificate</span>
@@ -232,7 +221,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
             {/* ── Top row: Logo | Title ─── */}
             <div className="flex items-center justify-between mb-4">
               <img
-                src="/logo.svg"
+                src="/logo.png"
                 alt="TFF Logo"
                 width="80"
                 height="80"
@@ -242,7 +231,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
               <div className="text-center flex-1 px-4">
                 <div
                   style={{
-                    color: "#2C5F2D",
+                    color: "#1B2A4A",
                     fontSize: "11px",
                     letterSpacing: "3px",
                     fontFamily: "Georgia, serif",
@@ -262,7 +251,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
                     lineHeight: 1.2,
                   }}
                 >
-                  Two Finger Foundation
+                  The Two Fingers Foundation
                 </div>
                 <div
                   style={{
@@ -335,7 +324,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
             <div className="text-center" style={{ marginBottom: "6px" }}>
               <span
                 style={{
-                  color: "#2C5F2D",
+                  color: "#1B2A4A",
                   fontSize: "16px",
                   fontWeight: "700",
                   letterSpacing: "1px",
@@ -350,7 +339,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
               className="text-center"
               style={{ marginBottom: "10px", color: "#555", fontSize: "12px" }}
             >
-              at Two Finger Foundation (TFF)
+              at The Two Fingers Foundation (TFF)
             </div>
 
             {/* ── Modules list ─── */}
@@ -430,12 +419,12 @@ const CertificateView: React.FC<CertificateViewProps> = ({
                     width: "80px",
                     height: "80px",
                     borderRadius: "50%",
-                    border: "2px solid #2C5F2D",
+                    border: "2px solid #1B2A4A",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: "#2C5F2D",
+                    color: "#1B2A4A",
                     fontSize: "7px",
                     letterSpacing: "1px",
                     textAlign: "center",

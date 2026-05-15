@@ -113,7 +113,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
           {/* Header */}
           <div className="p-6 bg-gray-50 border-b border-gray-100 flex-shrink-0 flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-bold text-[#2C5F2D]">Review Questions</h2>
+              <h2 className="text-xl font-bold text-[#1B2A4A]">Review Questions</h2>
               <p className="text-sm text-gray-500">Your Score: {score}%</p>
             </div>
             <button
@@ -164,9 +164,9 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
                       let indicatorBg = 'bg-white';
 
                       if (isCorrectOption) {
-                        borderClass = 'border-[#2C5F2D] bg-[#F1F9F4] border-[3px]';
-                        indicatorBorder = 'border-[#2C5F2D]';
-                        indicatorBg = 'bg-[#2C5F2D]';
+                        borderClass = 'border-[#1B2A4A] bg-[#F1F9F4] border-[3px]';
+                        indicatorBorder = 'border-[#1B2A4A]';
+                        indicatorBg = 'bg-[#1B2A4A]';
                       } else if (isUserSelected && !isCorrect) {
                         borderClass = 'border-red-500 bg-red-50/50';
                         indicatorBorder = 'border-red-500';
@@ -183,7 +183,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
                           </div>
 
                           <div className="flex-1 flex items-center justify-between">
-                            <span className={`text-lg ${isCorrectOption ? 'text-[#2C5F2D] font-bold' : 'text-gray-700'}`}>
+                            <span className={`text-lg ${isCorrectOption ? 'text-[#1B2A4A] font-bold' : 'text-gray-700'}`}>
                               {option}
                             </span>
 
@@ -211,7 +211,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
           <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-center flex-shrink-0">
             <button
               onClick={handleRetry}
-              className="px-6 py-2 bg-[#2C5F2D] text-white rounded-xl font-bold hover:bg-[#1a3a1b] transition-colors shadow-md flex items-center gap-2"
+              className="px-6 py-2 bg-[#1B2A4A] text-white rounded-xl font-bold hover:bg-[#1a3a1b] transition-colors shadow-md flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" /> Try Quiz Again
             </button>
@@ -235,7 +235,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={isFinalLevel && onViewCertificate ? onViewCertificate : handleContinue}
-                className="px-8 py-3 bg-[#2C5F2D] text-white rounded-xl font-bold text-lg hover:bg-[#1a3a1b] transition-colors shadow-lg"
+                className="px-8 py-3 bg-[#1B2A4A] text-white rounded-xl font-bold text-lg hover:bg-[#1a3a1b] transition-colors shadow-lg"
               >
                 {isFinalLevel ? 'View Certificate' : 'Continue to Next Level'}
               </button>
@@ -258,7 +258,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleRetry}
-                className="px-8 py-3 bg-white border-2 border-[#2C5F2D] text-[#2C5F2D] rounded-xl font-bold text-lg hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center gap-2"
+                className="px-8 py-3 bg-white border-2 border-[#1B2A4A] text-[#1B2A4A] rounded-xl font-bold text-lg hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center gap-2"
               >
                 <RefreshCw className="w-5 h-5" /> Try Again
               </button>
@@ -280,14 +280,14 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
       {/* Header */}
       <div className="p-6 bg-gray-50 border-b border-gray-100 flex-shrink-0">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-[#2C5F2D]">{quiz.title}</h2>
+          <h2 className="text-xl font-bold text-[#1B2A4A]">{quiz.title}</h2>
           <span className="text-sm font-semibold text-gray-500">
             Question {currentQuestionIndex + 1} of {quiz.questions.length}
           </span>
         </div>
         <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#2C5F2D] transition-all duration-300"
+            className="h-full bg-[#1B2A4A] transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -344,7 +344,7 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
           disabled={answers[currentQuestionIndex] === undefined}
           className={`flex items-center gap-2 px-10 py-3 text-lg rounded-xl font-bold transition-all shadow-md ${answers[currentQuestionIndex] === undefined
             ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            : 'bg-[#2C5F2D] text-white hover:bg-[#1a3a1b] hover:-translate-y-0.5 hover:shadow-lg'
+            : 'bg-[#1B2A4A] text-white hover:bg-[#1a3a1b] hover:-translate-y-0.5 hover:shadow-lg'
             }`}
         >
           <span className="py-2">

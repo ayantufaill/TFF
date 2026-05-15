@@ -151,8 +151,8 @@ export function ModulePlayerPage() {
   ).length;
   const progressValue = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
 
-  if (loading) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Synchronizing your path...</div>;
-  if (!currentLevel || !currentModule) return <div className="p-20 text-center font-bold text-[#2C5F2D]">Module not found.</div>;
+  if (loading) return <div className="p-20 text-center font-bold text-[#1B2A4A]">Synchronizing your path...</div>;
+  if (!currentLevel || !currentModule) return <div className="p-20 text-center font-bold text-[#1B2A4A]">Module not found.</div>;
 
   const renderPlayerContent = (isMobile: boolean) => {
     if (showFinalCertificate && isFinalLevelOfCourse && hasPassedLevelAssessment) {
@@ -202,12 +202,12 @@ export function ModulePlayerPage() {
 
     return (
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-4">
-        <div className="h-1 bg-[#2C5F2D]" />
+        <div className="h-1 bg-[#1B2A4A]" />
         <div className="p-6">
           <div className="flex flex-wrap gap-4 justify-between items-start">
             <div className="flex-1 min-w-[220px]">
               <div className="flex items-center gap-2 mb-3">
-                <Badge className="bg-[#2C5F2D] text-white px-3 py-1 font-bold text-[10px] tracking-widest uppercase">
+                <Badge className="bg-[#1B2A4A] text-white px-3 py-1 font-bold text-[10px] tracking-widest uppercase">
                   MODULE {currentModule.number}
                 </Badge>
                 {isCompleted && (
@@ -251,7 +251,7 @@ export function ModulePlayerPage() {
                 <Button
                   onClick={handleNext}
                   disabled={!canGoNext}
-                  className={`font-bold ${canGoNext ? 'bg-[#2C5F2D] hover:bg-[#234F24] text-white' : 'bg-gray-100 text-gray-400'}`}
+                  className={`font-bold ${canGoNext ? 'bg-[#1B2A4A] hover:bg-[#122038] text-white' : 'bg-gray-100 text-gray-400'}`}
                 >
                   Next <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
@@ -290,10 +290,10 @@ export function ModulePlayerPage() {
       `}</style>
 
       <div className="module-page-container">
-        <section className="bg-[#2C5F2D] text-white py-12 px-8 relative overflow-hidden text-center">
+        <section className="bg-[#1B2A4A] text-white py-12 px-8 relative overflow-hidden text-center">
           <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque-thin.png')]" />
           <div className="relative z-10 max-w-4xl mx-auto">
-            <h1 className="text-3xl font-black mb-2 tracking-tight">Level {currentLevel.level}: {currentLevel.title}</h1>
+            <h1 className="text-3xl font-black mb-2 tracking-tight">Course {currentLevel.level}: {currentLevel.title}</h1>
             <p className="text-white/70 font-medium mb-8">Part of the {currentCourse?.title} Course</p>
 
             <Card className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm border-white/20 text-left text-white">
@@ -313,7 +313,7 @@ export function ModulePlayerPage() {
         <div className="module-layout">
           <aside className="module-sidebar">
             <div className="p-6 border-b bg-gray-50/50">
-              <h3 className="text-xs font-black text-[#2C5F2D] uppercase tracking-widest mb-1">Current Syllabus</h3>
+              <h3 className="text-xs font-black text-[#1B2A4A] uppercase tracking-widest mb-1">Current Syllabus</h3>
               <p className="text-sm text-gray-500 font-medium line-clamp-1">{currentLevel.subtitle}</p>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -331,7 +331,7 @@ export function ModulePlayerPage() {
                         unlocked ? 'hover:bg-gray-50 border-2 border-transparent' : 'opacity-50 grayscale cursor-not-allowed border-2 border-transparent'
                       }`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold ${completed ? 'bg-[#2C5F2D] text-white shadow-lg shadow-[#2C5F2D]/20' :
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold ${completed ? 'bg-[#1B2A4A] text-white shadow-lg shadow-[#1B2A4A]/20' :
                         isActive ? 'bg-white border-2 border-[#C9A961] text-[#C9A961]' : 'bg-gray-100 text-gray-400'
                       }`}>
                       {completed ? <CheckCircle className="w-5 h-5" /> : m.number}
@@ -353,7 +353,7 @@ export function ModulePlayerPage() {
                   }`}>
                   📝
                 </div>
-                <div className="flex-1 font-bold text-sm text-gray-600">Level Assessment</div>
+                <div className="flex-1 font-bold text-sm text-gray-600">Course Assessment</div>
               </button>
             </div>
           </aside>

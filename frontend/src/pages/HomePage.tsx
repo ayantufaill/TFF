@@ -181,7 +181,7 @@ export function HomePage() {
     {
       icon: Heart,
       title: 'Widows Support',
-      description: 'Widows often face emotional loss, social isolation, and economic hardship after losing their life partners. At Two Finger Foundation, we work to restore dignity by providing emotional care, skills development, and sustainable support systems that help widows move from dependency to self-reliance and regain their rightful place in society.',
+      description: 'Widows often face emotional loss, social isolation, and economic hardship after losing their life partners. At The Two Fingers Foundation, we work to restore dignity by providing emotional care, skills development, and sustainable support systems that help widows move from dependency to self-reliance and regain their rightful place in society.',
       image: 'https://images.unsplash.com/photo-1601114174531-4d95d279713e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3aWRvdyUyMHdvbWFuJTIwc3VwcG9ydHxlbnwxfHx8fDE3Njk0NTA1MDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
     },
     {
@@ -229,26 +229,26 @@ export function HomePage() {
   ];
 
   const BOOK_DOWNLOADS = [
-    { title: 'Light of Faith', file: 'https://drive.google.com/file/d/1M9bi34Rc6_moPbppjDD2l98hcSmQjyYg/view?usp=drive_link', cover: 'covers/1.png' },
-    { title: 'The New Muslims Guide', file: 'https://drive.google.com/file/d/13gbIDTvL7DjZ_TOzkqXXo-Ps5DHSokGD/view?usp=drive_link', cover: 'covers/2.png' },
-    { title: 'Living Islam', file: 'https://drive.google.com/file/d/1YOZ5o4VWeWTBHuUKY7CStPtsC68zOoaK/view?usp=drive_link', cover: 'covers/3.png' },
-    { title: 'Bow Before Allah', file: 'https://drive.google.com/file/d/1jdHtlhrfRtAdNlgTe2LhmQsH2aesRjHl/view?usp=drive_link', cover: 'covers/4.png' },
-    { title: 'The Final Messenger ﷺ', file: 'https://drive.google.com/file/d/1JLkXjyulXNLGmdkct89-r-2V0AsZD7qW/view?usp=drive_link', cover: 'covers/5.png' },
-    { title: 'The Gateway to Quran', file: 'https://drive.google.com/file/d/1CDHlGdiUicK-pH4UJZZLOI8gRqtfPTai/view?usp=drive_link', cover: 'covers/6.png' },
-    { title: 'The Muslim Lifestyle', file: 'https://drive.google.com/file/d/1yudypcC8_yYXGetTgs1S07IgY8LagbTZ/view?usp=drive_link', cover: 'covers/7.png' },
-    { title: 'Purification of Heart', file: 'https://drive.google.com/file/d/13uHJEY1T2U0_lIVeU3DI21nvE1l99FzH/view?usp=drive_link', cover: 'covers/8.png' },
-    { title: 'Walking Together (Marriage and Community)', file: 'https://drive.google.com/file/d/1XXdirVBG_ulReYf56Bua-hL-Upw3J5zS/view?usp=drive_link', cover: 'covers/9.png' },
-    { title: 'The Struggle Ends', file: 'https://drive.google.com/file/d/1ipBZf0-1x1igyHloTV_rJDx_RoaUVM09/view?usp=drive_link', cover: 'covers/10.png' },
-    { title: 'Islamic Manners', file: 'https://drive.google.com/file/d/1RCPxd-3F94o99BMcrkYhRN3VAcBfvfoE/view?usp=drive_link', cover: 'covers/11.png' },
-    { title: 'Knowledge and Purpose', file: 'https://drive.google.com/file/d/1FUbodc2vVhyPMMOwO3isVJo44aib7TQL/view?usp=drive_link', cover: 'covers/12.png' },
-    { title: 'Ramadan Made Easy', file: 'https://drive.google.com/file/d/1FKR2L1Mt67-1lJNrzBgGMS8ScN1ba8qr/view?usp=drive_link', cover: 'covers/13.png' },
-    { title: 'Ramadan Booklet', file: 'https://drive.google.com/file/d/1rwafPkQxxbj_RB4VbzU_vXpPUFNQqlbj/view?usp=drive_link', cover: 'covers/14.png?t=1' },
+    { title: 'Light of Faith', file: 'https://drive.google.com/file/d/1M9bi34Rc6_moPbppjDD2l98hcSmQjyYg/view?usp=drive_link', cover: 'covers/1.jpg' },
+    { title: 'The New Muslims Guide', file: 'https://drive.google.com/file/d/13gbIDTvL7DjZ_TOzkqXXo-Ps5DHSokGD/view?usp=drive_link', cover: 'covers/2.jpg' },
+    { title: 'Living Islam', file: 'https://drive.google.com/file/d/1YOZ5o4VWeWTBHuUKY7CStPtsC68zOoaK/view?usp=drive_link', cover: 'covers/3.jpg' },
+    { title: 'Bow Before Allah', file: 'https://drive.google.com/file/d/1jdHtlhrfRtAdNlgTe2LhmQsH2aesRjHl/view?usp=drive_link', cover: 'covers/4.jpg' },
+    { title: 'The Final Messenger ﷺ', file: 'https://drive.google.com/file/d/1JLkXjyulXNLGmdkct89-r-2V0AsZD7qW/view?usp=drive_link', cover: 'covers/5.jpg' },
+    { title: 'The Gateway to Quran', file: 'https://drive.google.com/file/d/1CDHlGdiUicK-pH4UJZZLOI8gRqtfPTai/view?usp=drive_link', cover: 'covers/6.jpg' },
+    { title: 'The Muslim Lifestyle', file: 'https://drive.google.com/file/d/1yudypcC8_yYXGetTgs1S07IgY8LagbTZ/view?usp=drive_link', cover: 'covers/7.jpg' },
+    { title: 'Purification of Heart', file: 'https://drive.google.com/file/d/13uHJEY1T2U0_lIVeU3DI21nvE1l99FzH/view?usp=drive_link', cover: 'covers/8.jpg' },
+    { title: 'Walking Together (Marriage and Community)', file: 'https://drive.google.com/file/d/1XXdirVBG_ulReYf56Bua-hL-Upw3J5zS/view?usp=drive_link', cover: 'covers/9.jpg' },
+    { title: 'The Struggle Ends', file: 'https://drive.google.com/file/d/1ipBZf0-1x1igyHloTV_rJDx_RoaUVM09/view?usp=drive_link', cover: 'covers/10.jpg' },
+    { title: 'Islamic Manners', file: 'https://drive.google.com/file/d/1RCPxd-3F94o99BMcrkYhRN3VAcBfvfoE/view?usp=drive_link', cover: 'covers/11.jpg' },
+    { title: 'Knowledge and Purpose', file: 'https://drive.google.com/file/d/1FUbodc2vVhyPMMOwO3isVJo44aib7TQL/view?usp=drive_link', cover: 'covers/12.jpg' },
+    { title: 'Ramadan Made Easy', file: 'https://drive.google.com/file/d/1FKR2L1Mt67-1lJNrzBgGMS8ScN1ba8qr/view?usp=drive_link', cover: 'covers/13.jpg' },
+    { title: 'Ramadan Booklet', file: 'https://drive.google.com/file/d/1rwafPkQxxbj_RB4VbzU_vXpPUFNQqlbj/view?usp=drive_link', cover: 'covers/14.jpg?t=1' },
   ]; // 14 downloadable books – shared with Downloads page
 
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white overflow-hidden">
+      <section className="relative bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10" aria-hidden>
           <img
             src="https://images.unsplash.com/photo-1558114965-eeb97aa84c3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=75&w=1080"
@@ -257,7 +257,7 @@ export function HomePage() {
             alt=""
             width={1080}
             height={1080}
-            fetchpriority="low"
+            fetchPriority="low"
             decoding="async"
             className="w-full h-full object-cover"
           />
@@ -395,36 +395,35 @@ export function HomePage() {
           />
           <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center mb-10 sm:mb-14">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4 tracking-tight">
+            {/* Title + subtitle – full width above both columns */}
+            <div className="mb-8">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 tracking-tight">
                 Shahadah: The first step of Faith
               </h2>
-              <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium">
+              <div className="w-20 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
+              <p className="text-base sm:text-lg text-gray-500 font-medium">
                 Understanding the declaration at the heart of Islam
               </p>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 items-stretch">
-              <div className="order-1 flex">
-                <div className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8 shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full">
-                  <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-                    <span className="text-[#2C5F2D] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
-                  </p>
-                </div>
+
+            {/* Two columns – both start at same top edge */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2.5rem', alignItems: 'stretch' }}>
+              {/* Left – white text card */}
+              <div style={{ flex: '1 1 340px', minWidth: 0, backgroundColor: 'white', borderRadius: '16px', border: '1px solid rgba(229,231,235,0.8)', padding: '2rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center' }}>
+                <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+                  <span className="text-[#1B2A4A] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
+                </p>
               </div>
-              <div className="order-2 flex">
-                <div className="bg-white rounded-[24px] border border-gray-200/80 overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] w-full h-full min-h-0 flex flex-col">
-                  <div className="flex-1 min-h-0 w-full">
-                    <iframe
-                      title="Understanding the Shahadah"
-                      src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}?enablejsapi=1`}
-                      className="w-full h-full"
-                      loading="lazy"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
+              {/* Right – video */}
+              <div style={{ flex: '1 1 380px', minWidth: 0, position: 'relative', minHeight: '320px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(229,231,235,0.8)' }}>
+                <iframe
+                  title="Understanding the Shahadah"
+                  src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}?enablejsapi=1`}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
               </div>
             </div>
           </div>
@@ -448,7 +447,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 sm:mb-16">
 
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4 tracking-tight">Who We Serve</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4 tracking-tight">Who We Serve</h2>
             <div className="inline-block w-24 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium px-1">
               Providing comprehensive support to those in need with dignity and compassion
@@ -475,10 +474,10 @@ export function HomePage() {
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#C9A961]/20 to-[#2C5F2D]/10 flex items-center justify-center ring-2 ring-[#C9A961]/30 group-hover:ring-[#C9A961] group-hover:scale-110 transition-all duration-300 shrink-0">
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#C9A961]/20 to-[#1B2A4A]/10 flex items-center justify-center ring-2 ring-[#C9A961]/30 group-hover:ring-[#C9A961] group-hover:scale-110 transition-all duration-300 shrink-0">
                       <beneficiary.icon className="w-7 h-7 text-[#C9A961]" />
                     </div>
-                    <h3 className="text-2xl font-bold text-[#2C5F2D]">{beneficiary.title}</h3>
+                    <h3 className="text-2xl font-bold text-[#1B2A4A]">{beneficiary.title}</h3>
                   </div>
                   <p className="text-gray-600 leading-relaxed">{beneficiary.description}</p>
                 </CardContent>
@@ -501,7 +500,7 @@ export function HomePage() {
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 pb-20 sm:pb-28 lg:pb-36">
           <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Recommended Books</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4">Recommended Books</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Faith, history, and character — titles we recommend for learning and reflection
@@ -523,7 +522,7 @@ export function HomePage() {
                       className="w-full h-full object-cover object-center"
                     />
                   </div>
-                  <p className="mt-6 sm:mt-7 text-xs sm:text-[13px] md:text-sm font-semibold text-[#2C5F2D] leading-snug line-clamp-2 hover:text-[#1f3f21] text-center px-0.5">
+                  <p className="mt-6 sm:mt-7 text-xs sm:text-[13px] md:text-sm font-semibold text-[#1B2A4A] leading-snug line-clamp-2 hover:text-[#1f3f21] text-center px-0.5">
                     {book.title}
                   </p>
                 </a>
@@ -536,7 +535,7 @@ export function HomePage() {
         <div className="min-h-[100px] sm:min-h-[140px] lg:min-h-[180px]" aria-hidden />
       </section>
 
-      {/* The Cause of Two Finger Foundation – same gradient, same colour feel */}
+      {/* The Cause of The Two Fingers Foundation – same gradient, same colour feel */}
       <section id="cause-of-tff" className="pt-8 pb-24 sm:pt-10 sm:pb-28 lg:pt-12 lg:pb-32 relative overflow-hidden scroll-mt-20">
         <div
           className="absolute inset-0 opacity-[0.97]"
@@ -549,7 +548,7 @@ export function HomePage() {
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">The Cause of Two Finger Foundation</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4">The Cause of The Two Fingers Foundation</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Why we exist and what drives everything we do
@@ -561,12 +560,12 @@ export function HomePage() {
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <Target className="w-10 h-10 text-[#C9A961]" />
-                  <h3 className="text-2xl font-bold text-[#2C5F2D]">Our Cause</h3>
+                  <h3 className="text-2xl font-bold text-[#1B2A4A]">Our Cause</h3>
                 </div>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  Two Finger Foundation exists to restore dignity, strengthen faith, and rebuild lives. Across many communities, widows struggle in silence, orphans grow without guidance, and new Muslims begin their journey without structured support. Poverty is not only financial—it is educational, emotional, and spiritual. TFF was established to respond to this deeper need.
+                  The Two Fingers Foundation exists to restore dignity, strengthen faith, and rebuild lives. Across many communities, widows struggle in silence, orphans grow without guidance, and new Muslims begin their journey without structured support. Poverty is not only financial—it is educational, emotional, and spiritual. TFF was established to respond to this deeper need.
                 </p>
-                <p className="text-lg font-semibold text-[#2C5F2D] mb-3">Our cause is simple but powerful:</p>
+                <p className="text-lg font-semibold text-[#1B2A4A] mb-3">Our cause is simple but powerful:</p>
                 <ul className="space-y-2 list-none pl-0 text-gray-600 leading-relaxed">
                   <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> To stand with the vulnerable, not temporarily, but sustainably.</li>
                   <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> To replace dependency with empowerment.</li>
@@ -579,12 +578,12 @@ export function HomePage() {
               <CardContent className="p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <CheckCircle className="w-10 h-10 text-[#C9A961]" />
-                  <h3 className="text-2xl font-bold text-[#2C5F2D]">Our Commitment</h3>
+                  <h3 className="text-2xl font-bold text-[#1B2A4A]">Our Commitment</h3>
                 </div>
                 <p className="text-gray-600 leading-relaxed mb-4">
                   We believe real change happens when compassion is combined with structure. Through educational resources, targeted support programs, and faith-centered development initiatives, TFF works to create stability, confidence, and hope where it is most needed.
                 </p>
-                <p className="text-lg font-semibold text-[#2C5F2D] mb-3">This is our cause:</p>
+                <p className="text-lg font-semibold text-[#1B2A4A] mb-3">This is our cause:</p>
                 <ul className="space-y-2 list-none pl-0 text-gray-600 leading-relaxed">
                   <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> This is not just relief work.</li>
                   <li className="flex gap-2"><span className="text-[#C9A961] shrink-0">◆</span> This is restoration.</li>
@@ -610,7 +609,7 @@ export function HomePage() {
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Dua and Azkar</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4">Dua and Azkar</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Short adhkar and duas for remembrance and supplication
@@ -624,12 +623,12 @@ export function HomePage() {
             ].map(([leftIdx, rightIdx], rowIdx) => (
               <div key={rowIdx} className="grid md:grid-cols-2 gap-4 sm:gap-6">
                 <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
-                  <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[leftIdx].arabic}</p>
+                  <p className="text-xl sm:text-2xl text-[#1B2A4A] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[leftIdx].arabic}</p>
                   <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[leftIdx].transliteration}</p>
                   <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[leftIdx].meaning}</p>
                 </div>
                 <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
-                  <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[rightIdx].arabic}</p>
+                  <p className="text-xl sm:text-2xl text-[#1B2A4A] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[rightIdx].arabic}</p>
                   <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[rightIdx].transliteration}</p>
                   <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[rightIdx].meaning}</p>
                 </div>
@@ -638,12 +637,12 @@ export function HomePage() {
             {/* Last row – choti (19) left, bari (13) right; neeche bhi wahi spacing jo opar wali rows kay neeche */}
             <div className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-5">
               <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
-                <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[19].arabic}</p>
+                <p className="text-xl sm:text-2xl text-[#1B2A4A] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[19].arabic}</p>
                 <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[19].transliteration}</p>
                 <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[19].meaning}</p>
               </div>
               <div className="bg-white rounded-xl p-4 sm:p-5 border border-gray-100/90 shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_16px_rgba(44,95,45,0.08)] hover:border-[#C9A961]/25 transition-all duration-200">
-                <p className="text-xl sm:text-2xl text-[#2C5F2D] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[12].arabic}</p>
+                <p className="text-xl sm:text-2xl text-[#1B2A4A] font-medium mb-2 text-right leading-relaxed" dir="rtl">{DUAS_AZKAR[12].arabic}</p>
                 <p className="text-sm font-semibold text-[#C9A961] mb-1">{DUAS_AZKAR[12].transliteration}</p>
                 <p className="text-sm text-gray-600 leading-relaxed">{DUAS_AZKAR[12].meaning}</p>
               </div>
@@ -660,7 +659,7 @@ export function HomePage() {
             className={`text-center mb-10 sm:mb-16 transition-all duration-700 ease-out ${globalReachInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
               }`}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Our Global Reach</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4">Our Global Reach</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
             <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto px-1">
               Making a difference in communities across the world
@@ -697,7 +696,7 @@ export function HomePage() {
                     }
                   >
                     <stat.icon className="w-8 h-8 sm:w-10 sm:h-10 text-[#C9A961] mb-2 sm:mb-3 transition-transform duration-300 group-hover:scale-110 group-hover:text-[#B89751]" />
-                    <div className="text-2xl sm:text-3xl font-bold text-[#2C5F2D] mb-0.5 sm:mb-1">
+                    <div className="text-2xl sm:text-3xl font-bold text-[#1B2A4A] mb-0.5 sm:mb-1">
                       <CountUp target={stat.value} suffix={stat.suffix} inView={globalReachInView} />
                     </div>
                     <div className="text-xs sm:text-sm text-gray-500">{stat.label}</div>
@@ -720,7 +719,7 @@ export function HomePage() {
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-[#C9A961]/15 z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">Our Key Programs</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4">Our Key Programs</h2>
             <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-3 sm:mb-4" aria-hidden />
             <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto px-1">
               Comprehensive support systems designed to create lasting change
@@ -733,14 +732,14 @@ export function HomePage() {
                   <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-105 transition-transform duration-300">
                     <program.icon className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-[#2C5F2D] mb-2 sm:mb-3">{program.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-[#1B2A4A] mb-2 sm:mb-3">{program.title}</h3>
                   <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">{program.description}</p>
                 </CardContent>
               </Card>
             ))}
           </div>
           <div className="text-center mt-6 sm:mt-10">
-            <Button size="lg" className="bg-[#2C5F2D] hover:bg-[#234F24] text-white cursor-default" type="button">
+            <Button size="lg" className="bg-[#1B2A4A] hover:bg-[#122038] text-white cursor-default" type="button">
               View All Programs
             </Button>
           </div>
@@ -748,7 +747,7 @@ export function HomePage() {
       </section>
 
       {/* Impact Highlights - Design 2: soft left frame */}
-      <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] text-white overflow-hidden">
+      <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-[#1B2A4A] to-[#2D4A8A] text-white overflow-hidden">
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-[#C9A961]/30 z-10" aria-hidden />
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-16">
@@ -783,7 +782,7 @@ export function HomePage() {
                   <div className="min-w-0">
                     <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Testimonial</h3>
                     <p className="text-gray-100 italic leading-relaxed mb-3 sm:mb-4 text-sm sm:text-base">
-                      "After losing my husband, I felt lost and unable to provide for my children. Two Finger Foundation gave me hope, skills training, and the support I needed to stand on my own feet. Today, I run my own small business and can send my children to school with dignity."
+                      "After losing my husband, I felt lost and unable to provide for my children. The Two Fingers Foundation gave me hope, skills training, and the support I needed to stand on my own feet. Today, I run my own small business and can send my children to school with dignity."
                     </p>
                     <p className="text-[#C9A961] font-semibold">— Amina, Widow & Entrepreneur</p>
                   </div>
@@ -798,7 +797,7 @@ export function HomePage() {
       <section className="relative py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-[#FAF8F3] to-[#F8F6F0]">
         <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-1.5 bg-[#C9A961]/15 z-10" aria-hidden />
         <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2C5F2D] mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 sm:mb-4">
             Be Part of the Change
           </h2>
           <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961]/90 to-[#8B7355]/90 mb-4 sm:mb-6" aria-hidden />
@@ -814,13 +813,13 @@ export function HomePage() {
               </Button>
             </Link>
             <Link to="/volunteer">
-              <Button size="lg" variant="outline" className="border-[#2C5F2D] text-[#2C5F2D] hover:bg-[#2C5F2D] hover:text-white px-6 py-4 sm:px-10 sm:py-6 text-sm sm:text-lg w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="border-[#1B2A4A] text-[#1B2A4A] hover:bg-[#1B2A4A] hover:text-white px-6 py-4 sm:px-10 sm:py-6 text-sm sm:text-lg w-full sm:w-auto">
                 <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Volunteer
               </Button>
             </Link>
             <Link to="/get-help">
-              <Button size="lg" variant="outline" className="border-[#2C5F2D] text-[#2C5F2D] hover:bg-[#2C5F2D] hover:text-white px-6 py-4 sm:px-10 sm:py-6 text-sm sm:text-lg w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="border-[#1B2A4A] text-[#1B2A4A] hover:bg-[#1B2A4A] hover:text-white px-6 py-4 sm:px-10 sm:py-6 text-sm sm:text-lg w-full sm:w-auto">
                 <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Get Help
               </Button>

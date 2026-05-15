@@ -362,7 +362,7 @@ html {
 
 .admin-dialog .dialog-field input:focus,
 .admin-dialog .dialog-field textarea:focus {
-  border-color: #2C5F2D;
+  border-color: #1B2A4A;
   box-shadow: 0 0 0 3px rgba(44, 95, 45, 0.1);
   background: #fff;
 }
@@ -424,7 +424,7 @@ html {
   font-weight: 700;
   font-size: 0.875rem;
   color: #fff;
-  background: #2C5F2D;
+  background: #1B2A4A;
   border: none;
   cursor: pointer;
   transition: all 0.2s;

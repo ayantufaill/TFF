@@ -45,8 +45,8 @@ const VerifyPage: React.FC = () => {
       {/* Header */}
       <div style={{ textAlign: 'center', marginBottom: '32px' }}>
         <img src="/logo.svg" alt="TFF Logo" style={{ height: '72px', width: 'auto', marginBottom: '12px' }} />
-        <div style={{ color: '#2C5F2D', fontSize: '22px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
-          Two Finger Foundation
+        <div style={{ color: '#1B2A4A', fontSize: '22px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>
+          The Two Fingers Foundation
         </div>
         <div style={{ color: '#888', fontSize: '11px', letterSpacing: '4px', textTransform: 'uppercase', marginTop: '4px' }}>
           Certificate Verification Portal
@@ -66,7 +66,7 @@ const VerifyPage: React.FC = () => {
 
         {/* Status banner */}
         <div style={{
-          background: isValid ? '#2C5F2D' : '#b91c1c',
+          background: isValid ? '#1B2A4A' : '#b91c1c',
           padding: '20px 32px',
           display: 'flex',
           alignItems: 'center',
@@ -86,7 +86,7 @@ const VerifyPage: React.FC = () => {
             </div>
             <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', marginTop: '2px' }}>
               {isValid
-                ? 'This certificate is authentic and was issued by Two Finger Foundation.'
+                ? 'This certificate is authentic and was issued by The Two Fingers Foundation.'
                 : 'No certificate data found. The link may be incomplete or invalid.'}
             </div>
           </div>
@@ -134,14 +134,14 @@ const VerifyPage: React.FC = () => {
                 has successfully completed
               </div>
               <div style={{
-                textAlign: 'center', color: '#2C5F2D',
+                textAlign: 'center', color: '#1B2A4A',
                 fontSize: '15px', fontWeight: '700',
                 textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '16px',
               }}>
                 "{certData.courseName}"
               </div>
               <div style={{ textAlign: 'center', color: '#666', fontSize: '12px' }}>
-                at Two Finger Foundation (TFF)
+                at The Two Fingers Foundation (TFF)
               </div>
             </div>
 
@@ -157,8 +157,8 @@ const VerifyPage: React.FC = () => {
               background: '#f8f9f8', borderRadius: '8px',
               border: '1px solid #e0e8e0',
             }}>
-              <span style={{ color: '#2C5F2D', fontSize: '12px', fontWeight: '600' }}>
-                ✓ Officially issued by Two Finger Foundation
+              <span style={{ color: '#1B2A4A', fontSize: '12px', fontWeight: '600' }}>
+                ✓ Officially issued by The Two Fingers Foundation
               </span>
               <div style={{ color: '#888', fontSize: '11px', marginTop: '2px' }}>
                 Islamic Education &amp; Training
@@ -175,7 +175,7 @@ const VerifyPage: React.FC = () => {
             <div style={{ marginTop: '20px', color: '#aaa', fontSize: '12px' }}>
               For assistance, contact{' '}
               <a href="mailto:info@twofingerfoundation.org"
-                style={{ color: '#2C5F2D', textDecoration: 'underline' }}>
+                style={{ color: '#1B2A4A', textDecoration: 'underline' }}>
                 info@twofingerfoundation.org
               </a>
             </div>

@@ -3,7 +3,7 @@ export const trainingLevels = [
     level: 1,
     title: 'Foundations of Faith',
     subtitle: 'Beginner',
-    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    color: 'from-[#1B2A4A] to-[#2D4A8A]',
     modules: [
       {
         number: 1,
@@ -50,7 +50,7 @@ export const trainingLevels = [
     level: 2,
     title: 'Daily Practice',
     subtitle: 'Essential Worship',
-    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    color: 'from-[#1B2A4A] to-[#2D4A8A]',
     modules: [
       {
         number: 4,
@@ -97,7 +97,7 @@ export const trainingLevels = [
     level: 3,
     title: 'Lifestyle & Identity',
     subtitle: 'Building Your Muslim Life',
-    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    color: 'from-[#1B2A4A] to-[#2D4A8A]',
     modules: [
       {
         number: 7,
@@ -144,7 +144,7 @@ export const trainingLevels = [
     level: 4,
     title: 'Growth & Confidence',
     subtitle: 'Deepening Your Faith',
-    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    color: 'from-[#1B2A4A] to-[#2D4A8A]',
     modules: [
       {
         number: 10,
@@ -191,7 +191,7 @@ export const trainingLevels = [
     level: 5,
     title: 'Long-Term Practice & Stability',
     subtitle: 'Lifelong Journey',
-    color: 'from-[#2C5F2D] to-[#4A8B4D]',
+    color: 'from-[#1B2A4A] to-[#2D4A8A]',
     modules: [
       {
         number: 13,

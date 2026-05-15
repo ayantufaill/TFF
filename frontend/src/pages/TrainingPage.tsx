@@ -15,14 +15,14 @@ const LoadingOverlay = ({ message }: { message: string }) => (
   <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 backdrop-blur-md rounded-2xl animate-in fade-in duration-300">
     <div className="relative w-20 h-20 mb-4">
       {/* Dynamic rolling slider effect */}
-      <div className="absolute inset-0 rounded-full border-[6px] border-[#2C5F2D]/5 border-t-[#C9A961] animate-[spin_1s_cubic_bezier(0.55,0.055,0.675,0.19)_infinite]" />
-      <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#2C5F2D] animate-[spin_1.5s_cubic_bezier(0.215,0.61,0.355,1)_infinite_reverse]" />
+      <div className="absolute inset-0 rounded-full border-[6px] border-[#1B2A4A]/5 border-t-[#C9A961] animate-[spin_1s_cubic_bezier(0.55,0.055,0.675,0.19)_infinite]" />
+      <div className="absolute inset-[10%] rounded-full border-[6px] border-[#C9A961]/10 border-b-[#1B2A4A] animate-[spin_1.5s_cubic_bezier(0.215,0.61,0.355,1)_infinite_reverse]" />
       
       {/* Center glowing element */}
-      <div className="absolute inset-[30%] rounded-full bg-gradient-to-br from-[#2C5F2D] to-[#C9A961] opacity-20 animate-pulse" />
+      <div className="absolute inset-[30%] rounded-full bg-gradient-to-br from-[#1B2A4A] to-[#C9A961] opacity-20 animate-pulse" />
     </div>
     <div className="text-center px-6">
-      <h3 className="text-lg font-bold text-[#2C5F2D] tracking-tight">{message}</h3>
+      <h3 className="text-lg font-bold text-[#1B2A4A] tracking-tight">{message}</h3>
       <p className="mt-1 text-[#8B7355] font-semibold text-xs animate-pulse">Please wait while we process...</p>
     </div>
     
@@ -97,8 +97,8 @@ export function TrainingPage() {
       level: 1,
       title: 'Foundations of Faith',
       subtitle: 'Beginner',
-      darkFrom: '#2C5F2D', // TFF green
-      darkTo: '#4A8B4D',   // TFF green (lighter)
+      darkFrom: '#1B2A4A', // TFF green
+      darkTo: '#2D4A8A',   // TFF green (lighter)
       glow: '#C9A961',     // TFF gold
       modules: [
         {
@@ -149,8 +149,8 @@ export function TrainingPage() {
       level: 2,
       title: 'Daily Practice',
       subtitle: 'Essential Worship',
-      darkFrom: '#2C5F2D',
-      darkTo: '#4A8B4D',
+      darkFrom: '#1B2A4A',
+      darkTo: '#2D4A8A',
       glow: '#FAF8F3',     // warm ivory
       modules: [
         {
@@ -201,8 +201,8 @@ export function TrainingPage() {
       level: 3,
       title: 'Lifestyle & Identity',
       subtitle: 'Building Your Muslim Life',
-      darkFrom: '#2C5F2D',
-      darkTo: '#4A8B4D',
+      darkFrom: '#1B2A4A',
+      darkTo: '#2D4A8A',
       glow: '#E8D9B0',     // soft gold
       modules: [
         {
@@ -253,8 +253,8 @@ export function TrainingPage() {
       level: 4,
       title: 'Growth & Confidence',
       subtitle: 'Deepening Your Faith',
-      darkFrom: '#2C5F2D',
-      darkTo: '#4A8B4D',
+      darkFrom: '#1B2A4A',
+      darkTo: '#2D4A8A',
       glow: '#F5F1E8',     // warm cream
       modules: [
         {
@@ -305,8 +305,8 @@ export function TrainingPage() {
       level: 5,
       title: 'Long-Term Practice & Stability',
       subtitle: 'Lifelong Journey',
-      darkFrom: '#2C5F2D',
-      darkTo: '#4A8B4D',
+      darkFrom: '#1B2A4A',
+      darkTo: '#2D4A8A',
       glow: '#D7C08A',     // deep soft-gold
       modules: [
         {
@@ -473,7 +473,7 @@ export function TrainingPage() {
   if (loading) {
     return (
       <div className="min-h-[85vh] flex items-center justify-center bg-[#FAF8F3]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C5F2D]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1B2A4A]"></div>
       </div>
     );
   }
@@ -487,7 +487,7 @@ export function TrainingPage() {
         
         <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold text-[#2C5F2D] mb-3">Training Access</h1>
+            <h1 className="text-3xl font-bold text-[#1B2A4A] mb-3">Training Access</h1>
             <div className="w-20 h-1.5 bg-[#C9A961] mx-auto rounded-full mb-4" />
             <p className="text-[#8B7355] font-semibold text-lg max-w-[280px] mx-auto leading-relaxed">
               To see the Training page first login or sign up
@@ -499,7 +499,7 @@ export function TrainingPage() {
 
             <Card className="bg-white border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl overflow-hidden">
             <CardHeader className="pb-4 pt-8 text-center">
-              <CardTitle className="text-2xl font-bold text-[#2C5F2D]">
+              <CardTitle className="text-2xl font-bold text-[#1B2A4A]">
                 {authMode === 'login' ? 'Welcome Back' : authMode === 'forgot' ? 'Reset Password' : 'Join the Community'}
               </CardTitle>
               <CardDescription className="text-gray-500 font-medium">
@@ -528,11 +528,11 @@ export function TrainingPage() {
                         <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
                           <Mail className="w-8 h-8 text-[#C9A961]" />
                         </div>
-                        <h3 className="text-xl font-bold text-[#2C5F2D]">Verify your Email</h3>
+                        <h3 className="text-xl font-bold text-[#1B2A4A]">Verify your Email</h3>
                         <p className="text-sm text-gray-500">Enter the email associated with your account</p>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="forgot-email" className="text-sm font-semibold text-[#2C5F2D] ml-1">Email Address</Label>
+                        <Label htmlFor="forgot-email" className="text-sm font-semibold text-[#1B2A4A] ml-1">Email Address</Label>
                         <div className="relative group">
                           <Input 
                             id="forgot-email" 
@@ -552,11 +552,11 @@ export function TrainingPage() {
                         <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
                           <Shield className="w-8 h-8 text-[#C9A961]" />
                         </div>
-                        <h3 className="text-xl font-bold text-[#2C5F2D]">Check your Inbox</h3>
-                        <p className="text-sm text-gray-500">Enter the 6-digit code sent to <br/><span className="text-[#2C5F2D] font-bold">{email}</span></p>
+                        <h3 className="text-xl font-bold text-[#1B2A4A]">Check your Inbox</h3>
+                        <p className="text-sm text-gray-500">Enter the 6-digit code sent to <br/><span className="text-[#1B2A4A] font-bold">{email}</span></p>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="otp" className="text-sm font-semibold text-[#2C5F2D] ml-1 text-center block">Verification Code</Label>
+                        <Label htmlFor="otp" className="text-sm font-semibold text-[#1B2A4A] ml-1 text-center block">Verification Code</Label>
                         <Input 
                           id="otp" 
                           type="text" 
@@ -564,7 +564,7 @@ export function TrainingPage() {
                           onChange={(e) => setOtp(e.target.value)}
                           placeholder="••••••" 
                           maxLength={6}
-                          className="h-16 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 text-center tracking-[0.8em] font-extrabold text-3xl text-[#2C5F2D] rounded-xl bg-white/50 focus:bg-white transition-all" 
+                          className="h-16 border-2 border-gray-100 focus:border-[#C9A961] focus:ring-0 text-center tracking-[0.8em] font-extrabold text-3xl text-[#1B2A4A] rounded-xl bg-white/50 focus:bg-white transition-all" 
                           required 
                         />
                       </div>
@@ -575,11 +575,11 @@ export function TrainingPage() {
                         <div className="w-16 h-16 bg-[#C9A961]/10 rounded-full flex items-center justify-center mx-auto mb-2">
                           <Lock className="w-8 h-8 text-[#C9A961]" />
                         </div>
-                        <h3 className="text-xl font-bold text-[#2C5F2D]">New Password</h3>
+                        <h3 className="text-xl font-bold text-[#1B2A4A]">New Password</h3>
                         <p className="text-sm text-gray-500">Set a strong password for your account</p>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="new-password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">New Password</Label>
+                        <Label htmlFor="new-password" id="pass-label" className="text-sm font-semibold text-[#1B2A4A] ml-1">New Password</Label>
                         <div className="relative group w-full">
                           <Input 
                             id="new-password" 
@@ -593,7 +593,7 @@ export function TrainingPage() {
                           <button
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                            className="absolute z-10 text-gray-400 hover:text-[#1B2A4A] transition-colors"
                             style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
                           >
                             {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -601,7 +601,7 @@ export function TrainingPage() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="confirm-password" internal-role="confirm-pass-label" className="text-sm font-semibold text-[#2C5F2D] ml-1">Confirm Password</Label>
+                        <Label htmlFor="confirm-password" internal-role="confirm-pass-label" className="text-sm font-semibold text-[#1B2A4A] ml-1">Confirm Password</Label>
                         <div className="relative group w-full">
                           <Input 
                             id="confirm-password" 
@@ -615,7 +615,7 @@ export function TrainingPage() {
                           <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                            className="absolute z-10 text-gray-400 hover:text-[#1B2A4A] transition-colors"
                             style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
                           >
                             {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -635,7 +635,7 @@ export function TrainingPage() {
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full bg-[#2C5F2D] hover:bg-[#234F24] text-white h-14 text-lg font-bold rounded-xl shadow-lg shadow-green-900/10 transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
+                    className="w-full bg-[#1B2A4A] hover:bg-[#122038] text-white h-14 text-lg font-bold rounded-xl shadow-lg shadow-green-900/10 transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <div className="flex items-center">
@@ -661,7 +661,7 @@ export function TrainingPage() {
                 <CardContent className="space-y-4 px-8 pb-4">
                   {authMode === 'signup' && (
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm font-semibold text-[#2C5F2D]">Full Name</Label>
+                      <Label htmlFor="name" className="text-sm font-semibold text-[#1B2A4A]">Full Name</Label>
                       <div className="relative group">
                         <Input 
                           id="name" 
@@ -676,7 +676,7 @@ export function TrainingPage() {
                   )}
                   
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold text-[#2C5F2D]">Email Address</Label>
+                    <Label htmlFor="email" className="text-sm font-semibold text-[#1B2A4A]">Email Address</Label>
                     <div className="relative group">
                       <Input 
                         id="email" 
@@ -691,7 +691,7 @@ export function TrainingPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password" id="pass-label" className="text-sm font-semibold text-[#2C5F2D]">Password</Label>
+                    <Label htmlFor="password" id="pass-label" className="text-sm font-semibold text-[#1B2A4A]">Password</Label>
                     <div className="relative group w-full">
                       <Input 
                         id="password" 
@@ -705,7 +705,7 @@ export function TrainingPage() {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute z-10 text-gray-400 hover:text-[#2C5F2D] transition-colors"
+                        className="absolute z-10 text-gray-400 hover:text-[#1B2A4A] transition-colors"
                         style={{ right: '12px', top: '50%', transform: 'translateY(-50%)', left: 'auto' }}
                       >
                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -734,7 +734,7 @@ export function TrainingPage() {
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full bg-[#2C5F2D] hover:bg-[#234F24] text-white h-14 text-lg font-bold rounded-xl shadow-md transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
+                    className="w-full bg-[#1B2A4A] hover:bg-[#122038] text-white h-14 text-lg font-bold rounded-xl shadow-md transition-all active:scale-[0.98] mt-2 disabled:opacity-50"
                   >
                     {isSubmitting ? 'Processing...' : (authMode === 'login' ? 'Login Now' : 'Create My Account')}
                   </Button>
@@ -781,9 +781,9 @@ export function TrainingPage() {
 
           {/* Mini Trust Row */}
           <div className="mt-4 flex justify-center items-center gap-6 opacity-60">
-            <span className="text-[10px] font-bold text-[#2C5F2D] tracking-widest uppercase">Safe & Secure</span>
+            <span className="text-[10px] font-bold text-[#1B2A4A] tracking-widest uppercase">Safe & Secure</span>
             <div className="w-1 h-1 rounded-full bg-gray-300" />
-            <span className="text-[10px] font-bold text-[#2C5F2D] tracking-widest uppercase">Privacy Focused</span>
+            <span className="text-[10px] font-bold text-[#1B2A4A] tracking-widest uppercase">Privacy Focused</span>
           </div>
         </div>
       </div>
@@ -793,7 +793,7 @@ export function TrainingPage() {
   return (
     <div className="animate-in fade-in duration-700">
       {/* Hero */}
-      <section className="bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white py-20 relative">
+      <section className="bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -826,7 +826,7 @@ export function TrainingPage() {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Your Learning Path</h2>
+            <h2 className="text-3xl font-bold text-[#1B2A4A] mb-4">Your Learning Path</h2>
             <p className="text-gray-600 leading-relaxed mb-8">
               Our training program is organized into 5 progressive levels with 15 comprehensive modules. 
               Each module includes multiple formats (reading, video, audio) to suit your learning style. 
@@ -872,14 +872,14 @@ export function TrainingPage() {
                 <div className={`
                   flex flex-col items-center justify-center w-24 h-24 rounded-2xl border-2 transition-all shadow-sm
                   ${selectedLevelId === l.level 
-                    ? 'bg-gradient-to-br from-[#2C5F2D] to-[#4A8B4D] border-[#C9A961] shadow-xl shadow-green-900/20' 
+                    ? 'bg-gradient-to-br from-[#1B2A4A] to-[#2D4A8A] border-[#C9A961] shadow-xl shadow-green-900/20' 
                     : 'bg-white border-gray-100'
                   }
                 `}>
                   <p className={`text-[10px] font-black uppercase tracking-widest ${selectedLevelId === l.level ? 'text-[#C9A961]' : 'text-gray-400'}`}>
                     Level
                   </p>
-                  <p className={`text-3xl font-black ${selectedLevelId === l.level ? 'text-white' : 'text-[#2C5F2D]'}`}>
+                  <p className={`text-3xl font-black ${selectedLevelId === l.level ? 'text-white' : 'text-[#1B2A4A]'}`}>
                     {l.level}
                   </p>
                 </div>
@@ -924,13 +924,13 @@ export function TrainingPage() {
                 {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
                 <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-white">
                   <div className="pl-10 pr-8 pt-8 pb-7 border-b border-gray-100 bg-white sticky top-0 z-20">
-                    <h3 className="text-[11px] font-black text-[#2C5F2D] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
+                    <h3 className="text-[11px] font-black text-[#1B2A4A] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
                     <div className="flex flex-col gap-3">
                         <div className="flex items-baseline justify-between">
-                            <p className="text-sm font-black text-[#2C5F2D]">Level {level.level}</p>
+                            <p className="text-sm font-black text-[#1B2A4A]">Level {level.level}</p>
                             <span className="text-[10px] font-bold text-[#8B7355] bg-[#C9A961]/10 px-2 py-0.5 rounded-full">{userProgress}%</span>
                         </div>
-                        <Progress value={userProgress} className="h-1.5 bg-[#C9A961]/15 rounded-full [&>div]:bg-gradient-to-r [&>div]:from-[#C9A961] [&>div]:to-[#2C5F2D] [&>div]:rounded-full" />
+                        <Progress value={userProgress} className="h-1.5 bg-[#C9A961]/15 rounded-full [&>div]:bg-gradient-to-r [&>div]:from-[#C9A961] [&>div]:to-[#1B2A4A] [&>div]:rounded-full" />
                     </div>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column' }} className="pt-4 pb-6 px-4">
@@ -953,13 +953,13 @@ export function TrainingPage() {
                             moduleIdx < level.modules.length - 1 ? 'mb-4' : ''
                           } ${
                             isActive 
-                              ? 'bg-gray-50 shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#2C5F2D]/10' 
+                              ? 'bg-gray-50 shadow-[0_10px_30px_rgba(44,95,45,0.08)] ring-1 ring-[#1B2A4A]/10' 
                               : 'hover:bg-gray-50/80 opacity-75 hover:opacity-100 hover:translate-x-1'
                           }`}
                         >
                           {/* Active Backdrop Tint */}
                           {isActive && (
-                            <div className="absolute inset-0 bg-[#2C5F2D]/[0.02] rounded-2xl pointer-events-none" />
+                            <div className="absolute inset-0 bg-[#1B2A4A]/[0.02] rounded-2xl pointer-events-none" />
                           )}
                           {isActive && (
                             <div className="absolute left-1 top-4 bottom-4 w-1.5 bg-gradient-to-b from-[#C9A961] to-[#8B7355] rounded-full shadow-[0_0_10px_rgba(201,169,97,0.4)]" />
@@ -968,7 +968,7 @@ export function TrainingPage() {
                           <div className="flex flex-col gap-2 min-w-0 pl-2">
                             <div className="flex items-center justify-between">
                                 <span className={`text-[10px] font-black px-4 py-1.5 rounded-lg uppercase tracking-tight ${
-                                    isActive ? 'bg-[#2C5F2D] text-white shadow-sm' : 'bg-gray-100 text-gray-500'
+                                    isActive ? 'bg-[#1B2A4A] text-white shadow-sm' : 'bg-gray-100 text-gray-500'
                                 }`}>
                                     Module {module.number}
                                 </span>
@@ -981,7 +981,7 @@ export function TrainingPage() {
                                 )}
                             </div>
                             <h4 className={`font-black text-[13px] leading-snug transition-colors line-clamp-2 mt-0.5 ${
-                                isActive ? 'text-[#2C5F2D]' : 'text-gray-600'
+                                isActive ? 'text-[#1B2A4A]' : 'text-gray-600'
                             }`}>
                                 {module.title}
                             </h4>
@@ -1015,11 +1015,11 @@ export function TrainingPage() {
                             {/* Left Column: Lesson Details (Main Content) */}
                             <div className="min-w-0 space-y-12">
                                 <div className="max-w-3xl">
-                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A961]/10 text-[#2C5F2D] text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-[#C9A961]/20 shadow-sm shadow-[#C9A961]/5">
+                                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C9A961]/10 text-[#1B2A4A] text-[10px] font-black uppercase tracking-[0.2em] mb-8 border border-[#C9A961]/20 shadow-sm shadow-[#C9A961]/5">
                                         <Star className="w-3.5 h-3.5 text-[#C9A961] fill-[#C9A961]/20" />
                                         Module {module.number} • Level {level.level}
                                     </div>
-                                    <h1 className="text-4xl lg:text-5xl font-black text-[#2C5F2D] mb-8 tracking-tight leading-[1.05] animate-in slide-in-from-left duration-700">
+                                    <h1 className="text-4xl lg:text-5xl font-black text-[#1B2A4A] mb-8 tracking-tight leading-[1.05] animate-in slide-in-from-left duration-700">
                                         {module.title}
                                     </h1>
                                     <p className="text-lg text-gray-500 leading-relaxed font-medium mb-10 border-l-4 border-gray-100 pl-6 py-2 italic">
@@ -1028,7 +1028,7 @@ export function TrainingPage() {
                                 </div>
 
                                 <div className="space-y-6 bg-white p-8 rounded-[2rem] border border-[#C9A961]/10 shadow-[0_20px_40px_rgba(201,169,97,0.03)] group/goals">
-                                    <h4 className="text-xs font-black text-[#2C5F2D] flex items-center gap-3 uppercase tracking-[0.25em]">
+                                    <h4 className="text-xs font-black text-[#1B2A4A] flex items-center gap-3 uppercase tracking-[0.25em]">
                                         <div className="w-8 h-8 rounded-full bg-[#C9A961]/10 flex items-center justify-center">
                                             <BookOpen className="w-4 h-4 text-[#C9A961]" />
                                         </div>
@@ -1054,7 +1054,7 @@ export function TrainingPage() {
                                                 params.set('module', String(nextModule.number));
                                                 navigate(`?${params.toString()}`);
                                             }}
-                                            className="w-full max-w-xl bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] hover:from-[#234F24] hover:to-[#3e7540] text-white font-black h-16 rounded-2xl shadow-xl shadow-green-900/20 transition-all hover:scale-[1.03] active:scale-95 text-lg tracking-tight"
+                                            className="w-full max-w-xl bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] hover:from-[#122038] hover:to-[#3e7540] text-white font-black h-16 rounded-2xl shadow-xl shadow-green-900/20 transition-all hover:scale-[1.03] active:scale-95 text-lg tracking-tight"
                                         >
                                             Next Lesson
                                             <ArrowLeft className="w-5 h-5 ml-3 rotate-180" />
@@ -1079,13 +1079,13 @@ export function TrainingPage() {
                                             className={`h-12 border-gray-100 font-bold rounded-xl text-xs transition-all ${
                                                 user?.completedModules?.includes(module.id) 
                                                 ? 'bg-green-50 text-green-700 border-green-200' 
-                                                : 'text-[#2C5F2D] hover:bg-[#FAF8F3]'
+                                                : 'text-[#1B2A4A] hover:bg-[#FAF8F3]'
                                             }`}
                                         >
                                             <CheckCircle className="w-4 h-4 mr-2" />
                                             {user?.completedModules?.includes(module.id) ? 'Completed' : 'Mark Done'}
                                         </Button>
-                                        <Button variant="outline" className="h-12 border-gray-100 text-[#2C5F2D] hover:bg-[#FAF8F3] font-bold rounded-xl text-xs">
+                                        <Button variant="outline" className="h-12 border-gray-100 text-[#1B2A4A] hover:bg-[#FAF8F3] font-bold rounded-xl text-xs">
                                             <Download className="w-4 h-4 mr-2" />
                                             Resources
                                         </Button>
@@ -1140,7 +1140,7 @@ export function TrainingPage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[#2C5F2D] mb-4">Additional Support Features</h2>
+            <h2 className="text-3xl font-bold text-[#1B2A4A] mb-4">Additional Support Features</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
               Beyond the training modules, we offer comprehensive support to ensure your success
             </p>
@@ -1151,7 +1151,7 @@ export function TrainingPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-4">
                   <BookOpen className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Personal Mentor</h3>
+                <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Personal Mentor</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Get paired with an experienced Muslim mentor for one-on-one guidance, support, and answers to your questions.
                 </p>
@@ -1162,7 +1162,7 @@ export function TrainingPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Download className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Offline Access</h3>
+                <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Offline Access</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Download all training materials, guides, and audio files for offline access anytime, anywhere.
                 </p>
@@ -1173,7 +1173,7 @@ export function TrainingPage() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#C9A961] to-[#8B7355] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Headphones className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-[#2C5F2D] mb-3">Daily Reminders</h3>
+                <h3 className="text-xl font-semibold text-[#1B2A4A] mb-3">Daily Reminders</h3>
                 <p className="text-gray-600 leading-relaxed">
                   Receive daily prayers, duas, and motivational messages to keep you connected and inspired.
                 </p>
@@ -1199,7 +1199,7 @@ export function TrainingPage() {
 
       {/*
       CTA
-      <section className="py-20 bg-gradient-to-r from-[#2C5F2D] to-[#4A8B4D] text-white">
+      <section className="py-20 bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to Begin Your Journey?
