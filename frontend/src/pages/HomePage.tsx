@@ -396,11 +396,11 @@ export function HomePage() {
           <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             {/* Title + subtitle – full width above both columns */}
-            <div className="mb-8">
+            <div className="mb-8 text-center">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 tracking-tight">
                 Shahadah: The first step of Faith
               </h2>
-              <div className="w-20 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
+              <div className="inline-block w-20 h-1 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4" aria-hidden />
               <p className="text-base sm:text-lg text-gray-500 font-medium">
                 Understanding the declaration at the heart of Islam
               </p>
@@ -409,13 +409,13 @@ export function HomePage() {
             {/* Two columns – both start at same top edge */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2.5rem', alignItems: 'stretch' }}>
               {/* Left – white text card */}
-              <div style={{ flex: '1 1 340px', minWidth: 0, backgroundColor: 'white', borderRadius: '16px', border: '1px solid rgba(229,231,235,0.8)', padding: '2rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center' }}>
-                <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
+              <div style={{ flex: '1 1 420px', minWidth: 0, backgroundColor: 'white', borderRadius: '16px', border: '1px solid rgba(229,231,235,0.8)', padding: '2.5rem', boxShadow: '0 2px 12px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center' }}>
+                <p className="text-gray-700 text-lg leading-relaxed">
                   <span className="text-[#1B2A4A] font-semibold">The Shahadah</span> is the foundation of Islam and the gateway to a life of purpose, clarity, and peace. By sincerely declaring that there is no god worthy of worship except Allah, and that Muhammad ﷺ is the Messenger of Allah, a person enters Islam with a clean slate and a renewed direction. If you are new to Islam, we invite you to watch the video here to understand the meaning, beauty, and simplicity of the Shahadah. And if you are already a Muslim, take a moment to revisit and renew this powerful declaration, because faith grows stronger when its roots are remembered.
                 </p>
               </div>
               {/* Right – video */}
-              <div style={{ flex: '1 1 380px', minWidth: 0, position: 'relative', minHeight: '320px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(229,231,235,0.8)' }}>
+              <div style={{ flex: '1 1 480px', minWidth: 0, position: 'relative', minHeight: '400px', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.12)', border: '1px solid rgba(229,231,235,0.8)' }}>
                 <iframe
                   title="Understanding the Shahadah"
                   src={`https://www.youtube.com/embed/${HERO_VIDEO_YOUTUBE_ID}?enablejsapi=1`}
@@ -669,6 +669,7 @@ export function HomePage() {
             <div
               className={`rounded-2xl overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-700 ease-out delay-150 ${globalReachInView ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-8 scale-[0.98]'
                 }`}
+              style={{ maxHeight: '320px' }}
             >
               <ImageWithFallback
                 src="https://images.unsplash.com/photo-1619392553201-3d9ab3169271?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b3JsZCUyMGdsb2JlJTIwbWFwfGVufDF8fHx8MTc2OTQwNTcyOHww&ixlib=rb-4.1.0&q=80&w=1080"
