@@ -24,41 +24,48 @@ const SecurePlayer: React.FC<SecurePlayerProps> = ({ videoId, onEnded }) => {
 
   useEffect(() => {
     let bound = false;
-    let intervalId: NodeJS.Timeout;
+    let bindIntervalId: ReturnType<typeof setInterval>;
+    let pollIntervalId: ReturnType<typeof setInterval>;
+
+    const handleEnded = () => {
+      if (hasCompletedRef.current) return;
+      hasCompletedRef.current = true;
+      clearInterval(pollIntervalId);
+      if (onEndedRef.current) onEndedRef.current();
+    };
+
+    const checkProgress = () => {
+      if (hasCompletedRef.current) return;
+      const player = ref.current?.plyr;
+      if (player && player.duration > 0 && player.currentTime >= player.duration - 3) {
+        handleEnded();
+      }
+    };
 
     const tryBind = () => {
       const player = ref.current?.plyr;
       if (player && player.on && !bound) {
-        const handleEnded = () => {
-          if (hasCompletedRef.current) return;
-          hasCompletedRef.current = true;
-          if (onEndedRef.current) onEndedRef.current();
-        };
-
-        const handleTimeUpdate = () => {
-          if (hasCompletedRef.current) return;
-          if (player.duration > 0 && player.currentTime >= player.duration - 2) {
-            handleEnded();
-          }
-        };
-
         player.on('ended', handleEnded);
-        player.on('timeupdate', handleTimeUpdate);
-        player.on('seeked', handleTimeUpdate);
+        player.on('timeupdate', checkProgress);
+        player.on('seeked', checkProgress);
         bound = true;
 
-        if (intervalId) clearInterval(intervalId);
+        // Polling fallback every 1s in case YouTube events don't fire
+        pollIntervalId = setInterval(checkProgress, 1000);
+
+        if (bindIntervalId) clearInterval(bindIntervalId);
       }
     };
 
     tryBind();
 
     if (!bound) {
-      intervalId = setInterval(tryBind, 200);
+      bindIntervalId = setInterval(tryBind, 200);
     }
 
     return () => {
-      if (intervalId) clearInterval(intervalId);
+      clearInterval(bindIntervalId);
+      clearInterval(pollIntervalId);
     };
   }, []);
 

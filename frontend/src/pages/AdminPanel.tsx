@@ -46,6 +46,7 @@ export default function AdminPanel() {
   const [editingLevel, setEditingLevel] = useState<Partial<Level> | null>(null);
   const [editingModule, setEditingModule] = useState<Partial<Module> | null>(null);
   const [editingAssessment, setEditingAssessment] = useState<Partial<Assessment> | null>(null);
+  const [assessmentContext, setAssessmentContext] = useState<'level' | 'module'>('level');
   const [activeTab, setActiveTab] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -140,6 +141,7 @@ export default function AdminPanel() {
   };
 
   const loadAssessment = async (levelId: string, levelNumber: number) => {
+    setAssessmentContext('level');
     try {
       const data = await getAssessment(levelId);
       setEditingAssessment(data);
@@ -149,6 +151,23 @@ export default function AdminPanel() {
         level: levelNumber,
         title: `Course ${levelNumber} Final Assessment`,
         description: `Verify mastery of Course ${levelNumber} topics`,
+        passingScore: 70,
+        questions: []
+      });
+    }
+  };
+
+  const loadModuleAssessment = async (moduleId: string, moduleNumber: number, moduleTitle: string) => {
+    setAssessmentContext('module');
+    try {
+      const data = await getAssessment(moduleId);
+      setEditingAssessment(data);
+    } catch (err) {
+      setEditingAssessment({
+        courseId: moduleId,
+        level: moduleNumber,
+        title: `${moduleTitle} Quiz`,
+        description: `Quiz for lecture ${moduleNumber}`,
         passingScore: 70,
         questions: []
       });
@@ -366,6 +385,9 @@ export default function AdminPanel() {
                                   <button onClick={() => setEditingModule(module)} className="p-1.5 text-gray-400 hover:text-[#1B2A4A]">
                                     <Edit className="w-3.5 h-3.5" />
                                   </button>
+                                  <button onClick={() => loadModuleAssessment(module._id, module.number, module.title)} className="p-1.5 text-gray-400 hover:text-[#C9A961]">
+                                    <Sparkles className="w-3.5 h-3.5" />
+                                  </button>
                                   <button onClick={() => setDeleteTarget({ type: 'module', id: module._id })} className="p-1.5 text-gray-400 hover:text-red-500">
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </button>
@@ -545,8 +567,8 @@ export default function AdminPanel() {
         <DialogContent className="admin-dialog admin-dialog-wide">
           <div className="dialog-accent-bar" style={{ background: '#C9A961' }} />
           <div className="dialog-header">
-            <DialogTitle><h2>Assessment Bank</h2></DialogTitle>
-            <DialogDescription><p>Manage questions for Course {editingAssessment?.level} assessment.</p></DialogDescription>
+            <DialogTitle><h2>{assessmentContext === 'module' ? 'Lecture Quiz' : 'Assessment Bank'}</h2></DialogTitle>
+            <DialogDescription><p>{assessmentContext === 'module' ? `Quiz for: ${editingAssessment?.title}` : `Manage questions for Course ${editingAssessment?.level} assessment.`}</p></DialogDescription>
           </div>
           <div className="dialog-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
             <div className="dialog-grid">
@@ -568,7 +590,7 @@ export default function AdminPanel() {
                   style={{ flex: 'none', height: '32px', fontSize: '0.7rem', padding: '0 12px', display: 'flex', alignItems: 'center', gap: '4px' }}
                   onClick={() => {
                     const newQuestions = [...(editingAssessment?.questions || [])];
-                    newQuestions.push({ id: Date.now().toString(), question: '', options: ['', '', '', ''], correctAnswerIndex: 0 });
+                    newQuestions.push({ question: '', options: ['', '', '', ''], correctAnswerIndex: 0 });
                     setEditingAssessment(prev => ({ ...prev!, questions: newQuestions }));
                   }}
                 >
@@ -577,11 +599,11 @@ export default function AdminPanel() {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {editingAssessment?.questions.map((q, qIdx) => (
-                  <div key={q.id} className="p-6 bg-gray-50 rounded-2xl border border-gray-100 space-y-4 group" style={{ position: 'relative' }}>
+                {(editingAssessment?.questions ?? []).map((q, qIdx) => (
+                  <div key={q._id ?? qIdx} className="p-6 bg-gray-50 rounded-2xl border border-gray-100 space-y-4 group" style={{ position: 'relative' }}>
                     <button
                       onClick={() => {
-                        const newQuestions = editingAssessment.questions.filter((_, i) => i !== qIdx);
+                        const newQuestions = (editingAssessment?.questions ?? []).filter((_, i) => i !== qIdx);
                         setEditingAssessment(prev => ({ ...prev!, questions: newQuestions }));
                       }}
                       className="text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
@@ -594,7 +616,7 @@ export default function AdminPanel() {
                       <input
                         value={q.question}
                         onChange={e => {
-                          const newQuestions = [...editingAssessment.questions];
+                          const newQuestions = [...(editingAssessment?.questions ?? [])];
                           newQuestions[qIdx].question = e.target.value;
                           setEditingAssessment(prev => ({ ...prev!, questions: newQuestions }));
                         }}
@@ -607,7 +629,7 @@ export default function AdminPanel() {
                         <div key={optIdx} className="flex items-center gap-2">
                           <div
                             onClick={() => {
-                              const newQuestions = [...editingAssessment.questions];
+                              const newQuestions = [...(editingAssessment?.questions ?? [])];
                               newQuestions[qIdx].correctAnswerIndex = optIdx;
                               setEditingAssessment(prev => ({ ...prev!, questions: newQuestions }));
                             }}
@@ -618,7 +640,7 @@ export default function AdminPanel() {
                           <input
                             value={opt}
                             onChange={e => {
-                              const newQuestions = [...editingAssessment.questions];
+                              const newQuestions = [...(editingAssessment?.questions ?? [])];
                               newQuestions[qIdx].options[optIdx] = e.target.value;
                               setEditingAssessment(prev => ({ ...prev!, questions: newQuestions }));
                             }}

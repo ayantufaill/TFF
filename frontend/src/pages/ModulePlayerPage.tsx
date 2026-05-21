@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate, useLocation } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router';
 import {
   ChevronLeft,
   Play,
   CheckCircle,
   ChevronRight,
-  Sparkles,
   Award
 } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
 import SecurePlayer from '../components/SecurePlayer';
 import { Card, CardContent } from '../components/ui/card';
-import { Progress } from '../components/ui/progress';
 import { Button } from '../components/ui/button';
 
-import { getCourses, getAssessment, MainCourse, Level, Module, Assessment } from '../services/courseService';
+import { getCourses, getAssessment, MainCourse, Assessment } from '../services/courseService';
 import Quiz from '../components/Quiz';
 import CertificateView from '../components/CertificateView';
 
@@ -25,28 +23,27 @@ export function ModulePlayerPage() {
   const { user, updateProgress } = useAuth();
 
   const [courses, setCourses] = useState<MainCourse[]>([]);
-  const [currentAssessment, setCurrentAssessment] = useState<Assessment | null>(null);
+  const [moduleQuiz, setModuleQuiz] = useState<Assessment | null>(null);
+  const [showModuleQuiz, setShowModuleQuiz] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Derived state from courses data
   const allLevels = courses.flatMap(c => c.levels);
   const currentLevel = allLevels.find(l => l._id === levelId);
   const currentModule = currentLevel?.modules.find(m => String(m.number) === String(moduleId));
-
   const currentCourse = courses.find(c => c.levels.some(l => l._id === levelId));
 
-  const isCompleted = user?.completedModules?.some(id => id === `module-${String(currentModule?._id)}` || id === `module-${String(currentModule?.number)}`);
-  const isLastModuleOfLevel = currentLevel && currentModule && currentLevel.modules[currentLevel.modules.length - 1]._id === currentModule._id;
-  const hasPassedLevelAssessment = user?.completedModules?.includes(`quiz-${levelId}`);
-
-  const isFinalLevelOfCourse = currentCourse && currentCourse.levels[currentCourse.levels.length - 1]._id === levelId;
-
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const shouldShowQuiz = searchParams.get('quiz') === 'true';
+  const isCompleted = user?.completedModules?.some(id =>
+    id === `module-${String(currentModule?._id)}` || id === `module-${String(currentModule?.number)}`
+  );
+  const isLastModuleOfLevel = currentLevel && currentModule &&
+    currentLevel.modules[currentLevel.modules.length - 1]._id === currentModule._id;
+  const hasPassedModuleQuiz = user?.completedModules?.includes(`quiz-module-${currentModule?._id}`);
+  const allLectureQuizzesPassed = !!(currentLevel?.modules.every(m =>
+    user?.completedModules?.includes(`quiz-module-${m._id}`)
+  ));
 
   const [isVideoCompleted, setIsVideoCompleted] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(shouldShowQuiz && isLastModuleOfLevel);
   const [showFinalCertificate, setShowFinalCertificate] = useState(false);
 
   useEffect(() => {
@@ -54,10 +51,6 @@ export function ModulePlayerPage() {
       try {
         const data = await getCourses();
         setCourses(data);
-        if (levelId) {
-          const quiz = await getAssessment(levelId);
-          setCurrentAssessment(quiz);
-        }
       } catch (err) {
         console.error('Failed to fetch data', err);
       } finally {
@@ -69,9 +62,19 @@ export function ModulePlayerPage() {
 
   useEffect(() => {
     setIsVideoCompleted(false);
-    setShowQuiz(shouldShowQuiz && isLastModuleOfLevel);
     setShowFinalCertificate(false);
-  }, [moduleId, levelId, shouldShowQuiz, isLastModuleOfLevel]);
+    setShowModuleQuiz(false);
+  }, [moduleId, levelId]);
+
+  const currentModuleId = currentModule?._id ? String(currentModule._id) : null;
+
+  useEffect(() => {
+    if (!currentModuleId) return;
+    setModuleQuiz(null);
+    getAssessment(currentModuleId)
+      .then(q => setModuleQuiz(q))
+      .catch(() => setModuleQuiz(null));
+  }, [currentModuleId]);
 
   const handleVideoEnded = () => {
     if (currentModule) {
@@ -80,13 +83,13 @@ export function ModulePlayerPage() {
     }
   };
 
-  const handleQuizComplete = async (passed: boolean) => {
-    if (passed && levelId) {
-      await updateProgress(`quiz-${levelId}`);
-      setShowQuiz(false);
-      setIsVideoCompleted(false);
-
-      if (!isFinalLevelOfCourse) {
+  const handleModuleQuizComplete = async (passed: boolean) => {
+    if (passed && currentModule?._id) {
+      await updateProgress(`quiz-module-${currentModule._id}`);
+      setShowModuleQuiz(false);
+      if (isLastModuleOfLevel) {
+        setShowFinalCertificate(true);
+      } else {
         handleNext();
       }
     }
@@ -94,18 +97,16 @@ export function ModulePlayerPage() {
 
   const handleNext = () => {
     const isAdmin = user?.role === 'admin';
-    const canGoNext = isCompleted || isVideoCompleted || isAdmin;
+    const canGoNext = isCompleted || isVideoCompleted || isAdmin || hasPassedModuleQuiz;
 
     if (!canGoNext || !currentLevel || !currentModule) return;
 
     const currentIndex = currentLevel.modules.findIndex(m => String(m._id) === String(currentModule._id));
 
     if (currentIndex !== -1 && currentIndex < currentLevel.modules.length - 1) {
-      // Next module in same level
       const nextModule = currentLevel.modules[currentIndex + 1];
       navigate(`/training/module/${levelId}/${nextModule.number}`);
     } else {
-      // Last module of level -> check for next level
       const currentLevelIndex = currentCourse?.levels.findIndex(l => l._id === levelId) ?? -1;
       if (currentCourse && currentLevelIndex !== -1 && currentLevelIndex < currentCourse.levels.length - 1) {
         const nextLevel = currentCourse.levels[currentLevelIndex + 1];
@@ -113,7 +114,6 @@ export function ModulePlayerPage() {
           navigate(`/training/module/${nextLevel._id}/${nextLevel.modules[0].number}`);
         }
       } else {
-        // Last level of course -> check for next course
         const currentCourseIndex = courses.findIndex(c => c._id === currentCourse?._id);
         if (currentCourseIndex !== -1 && currentCourseIndex < courses.length - 1) {
           const nextCourse = courses[currentCourseIndex + 1];
@@ -146,7 +146,7 @@ export function ModulePlayerPage() {
 
   const totalModules = currentCourse?.levels.reduce((acc, l) => acc + l.modules.length, 0) || 0;
   const courseModules = currentCourse?.levels.flatMap(l => l.modules) || [];
-  const completedCount = courseModules.filter(m => 
+  const completedCount = courseModules.filter(m =>
     user?.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
   ).length;
   const progressValue = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
@@ -155,31 +155,27 @@ export function ModulePlayerPage() {
   if (!currentLevel || !currentModule) return <div className="p-20 text-center font-bold text-[#1B2A4A]">Module not found.</div>;
 
   const renderPlayerContent = (isMobile: boolean) => {
-    if (showFinalCertificate && isFinalLevelOfCourse && hasPassedLevelAssessment) {
+    if (showFinalCertificate) {
       return (
         <div className={isMobile ? "mt-4" : ""}>
           <CertificateView
             userName={user?.name || 'Student'}
-            courseName={currentCourse?.title}
-            completedModules={currentCourse?.levels.map(l => l.title)}
+            courseName={currentLevel?.title}
+            completedModules={currentLevel?.modules.map(m => m.title)}
             onBack={() => setShowFinalCertificate(false)}
           />
         </div>
       );
     }
 
-    if (showQuiz && currentAssessment) {
+    if (showModuleQuiz && moduleQuiz) {
       return (
         <div className={isMobile ? "mt-4" : ""}>
           <Quiz
-            quiz={currentAssessment}
-            onComplete={handleQuizComplete}
-            isFinalLevel={isFinalLevelOfCourse}
-            onViewCertificate={async () => {
-              await handleQuizComplete(true);
-              setShowFinalCertificate(true);
-            }}
-            alreadyPassed={hasPassedLevelAssessment}
+            quiz={moduleQuiz}
+            onComplete={handleModuleQuizComplete}
+            isFinalLevel={false}
+            alreadyPassed={hasPassedModuleQuiz}
           />
         </div>
       );
@@ -198,7 +194,10 @@ export function ModulePlayerPage() {
 
   const renderModuleInfoCard = () => {
     const isAdmin = user?.role === 'admin';
-    const canGoNext = isCompleted || isVideoCompleted || isAdmin;
+    const videoWatched = isVideoCompleted || isCompleted || isAdmin;
+    const moduleQuizDone = !moduleQuiz || hasPassedModuleQuiz || isAdmin;
+    const canGoNext = (isCompleted || isVideoCompleted || isAdmin) && moduleQuizDone;
+    const showCertButton = isLastModuleOfLevel && (allLectureQuizzesPassed || isAdmin) && !showFinalCertificate && !showModuleQuiz;
 
     return (
       <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-4">
@@ -208,7 +207,7 @@ export function ModulePlayerPage() {
             <div className="flex-1 min-w-[220px]">
               <div className="flex items-center gap-2 mb-3">
                 <Badge className="bg-[#1B2A4A] text-white px-3 py-1 font-bold text-[10px] tracking-widest uppercase">
-                  MODULE {currentModule.number}
+                  LECTURE {currentModule.number}
                 </Badge>
                 {isCompleted && (
                   <Badge variant="outline" className="text-[#15803d] border-[#bbf7d0] bg-[#f0fdf4] font-bold text-[10px] uppercase">
@@ -238,16 +237,27 @@ export function ModulePlayerPage() {
                 <ChevronLeft className="w-4 h-4 mr-1" /> Back
               </Button>
 
-              {isLastModuleOfLevel && (isVideoCompleted || isCompleted || isAdmin) && !showQuiz && (
+              {/* Per-lecture quiz button */}
+              {moduleQuiz && videoWatched && !hasPassedModuleQuiz && !showModuleQuiz && (
                 <Button
-                  onClick={() => setShowQuiz(true)}
+                  onClick={() => setShowModuleQuiz(true)}
                   className="bg-[#C9A961] hover:bg-[#B89751] text-white font-bold"
                 >
-                  {hasPassedLevelAssessment ? 'Review Quiz' : 'Take Quiz'}
+                  Take Lecture Quiz
                 </Button>
               )}
 
-              {(!isLastModuleOfLevel || (isLastModuleOfLevel && hasPassedLevelAssessment)) && !showQuiz && (
+              {/* View Certificate — appears after all lecture quizzes passed */}
+              {showCertButton && (
+                <Button
+                  onClick={() => setShowFinalCertificate(true)}
+                  className="bg-[#1B2A4A] hover:bg-[#122038] text-white font-bold"
+                >
+                  <Award className="w-4 h-4 mr-2" /> View Certificate
+                </Button>
+              )}
+
+              {!isLastModuleOfLevel && !showModuleQuiz && (
                 <Button
                   onClick={handleNext}
                   disabled={!canGoNext}
@@ -313,7 +323,7 @@ export function ModulePlayerPage() {
         <div className="module-layout">
           <aside className="module-sidebar">
             <div className="p-6 border-b bg-gray-50/50">
-              <h3 className="text-xs font-black text-[#1B2A4A] uppercase tracking-widest mb-1">Current Syllabus</h3>
+              <h3 className="text-xs font-black text-[#1B2A4A] uppercase tracking-widest mb-1">Course Lectures</h3>
               <p className="text-sm text-gray-500 font-medium line-clamp-1">{currentLevel.subtitle}</p>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
@@ -321,19 +331,30 @@ export function ModulePlayerPage() {
                 const isActive = String(m.number) === String(moduleId);
                 const completed = user?.completedModules?.includes(`module-${m._id}`) || user?.completedModules?.includes(`module-${m.number}`);
                 const isAdmin = user?.role === 'admin';
-                const unlocked = idx === 0 || user?.completedModules?.includes(`module-${currentLevel.modules[idx - 1]._id}`) || user?.completedModules?.includes(`module-${currentLevel.modules[idx - 1].number}`) || completed || isActive || isAdmin;
+                const unlocked = idx === 0
+                  || user?.completedModules?.includes(`module-${currentLevel.modules[idx - 1]._id}`)
+                  || user?.completedModules?.includes(`module-${currentLevel.modules[idx - 1].number}`)
+                  || completed || isActive || isAdmin;
 
                 return (
                   <button
                     key={m._id}
                     onClick={() => unlocked && navigate(`/training/module/${levelId}/${m.number}`)}
-                    className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 ${isActive ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm' :
-                        unlocked ? 'hover:bg-gray-50 border-2 border-transparent' : 'opacity-50 grayscale cursor-not-allowed border-2 border-transparent'
-                      }`}
+                    className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 ${
+                      isActive
+                        ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm'
+                        : unlocked
+                          ? 'hover:bg-gray-50 border-2 border-transparent'
+                          : 'opacity-50 grayscale cursor-not-allowed border-2 border-transparent'
+                    }`}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold ${completed ? 'bg-[#1B2A4A] text-white shadow-lg shadow-[#1B2A4A]/20' :
-                        isActive ? 'bg-white border-2 border-[#C9A961] text-[#C9A961]' : 'bg-gray-100 text-gray-400'
-                      }`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-bold ${
+                      completed
+                        ? 'bg-[#1B2A4A] text-white shadow-lg shadow-[#1B2A4A]/20'
+                        : isActive
+                          ? 'bg-white border-2 border-[#C9A961] text-[#C9A961]'
+                          : 'bg-gray-100 text-gray-400'
+                    }`}>
                       {completed ? <CheckCircle className="w-5 h-5" /> : m.number}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -344,17 +365,24 @@ export function ModulePlayerPage() {
                 );
               })}
 
-              <button
-                onClick={() => (isLastModuleOfLevel || user?.role === 'admin') && setShowQuiz(true)}
-                className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 mt-4 ${showQuiz ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm' : 'border-2 border-transparent hover:bg-gray-50'
+              {/* Certificate entry — visible after all lecture quizzes passed */}
+              {allLectureQuizzesPassed && (
+                <button
+                  onClick={() => setShowFinalCertificate(true)}
+                  className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 mt-4 ${
+                    showFinalCertificate
+                      ? 'bg-[#FAF8F3] border-2 border-[#C9A961]/20 shadow-sm'
+                      : 'border-2 border-transparent hover:bg-gray-50'
                   }`}
-              >
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg ${showQuiz ? 'bg-white border-2 border-[#C9A961]' : 'bg-gray-100'
+                >
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    showFinalCertificate ? 'bg-white border-2 border-[#C9A961]' : 'bg-[#1B2A4A]'
                   }`}>
-                  📝
-                </div>
-                <div className="flex-1 font-bold text-sm text-gray-600">Course Assessment</div>
-              </button>
+                    <Award className={`w-5 h-5 ${showFinalCertificate ? 'text-[#C9A961]' : 'text-white'}`} />
+                  </div>
+                  <div className="flex-1 font-bold text-sm text-gray-600">Your Certificate</div>
+                </button>
+              )}
             </div>
           </aside>
 
