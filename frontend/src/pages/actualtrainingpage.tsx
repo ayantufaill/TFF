@@ -229,7 +229,7 @@ export function ActualTrainingPage() {
     }
   }, [searchParams]);
 
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   if (isLoading) {
     return (
@@ -406,13 +406,21 @@ export function ActualTrainingPage() {
                                   ))}
                                 </ul>
                               </div>
-                              <div className="flex gap-3 pt-4 border-t">
+                              <div className="flex flex-wrap gap-3 pt-4 border-t items-center">
                                 <Button
                                   onClick={() => navigate(`/training/module/${level._id}/${module.number}`)}
                                   className="bg-[#C9A961] hover:bg-[#B89751] text-white px-8"
                                 >
                                   <Play className="w-4 h-4 mr-2" /> Start Now
                                 </Button>
+                                <a
+                                  href={encodeURI(`/courses/Course 1 Lecture ${module.number} slides (1).pdf`)}
+                                  download
+                                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#C9A961]/40 text-[#1B2A4A] font-semibold text-sm hover:bg-[#FAF8F3] hover:border-[#C9A961] transition-all"
+                                  onClick={e => e.stopPropagation()}
+                                >
+                                  <Download className="w-4 h-4 text-[#C9A961]" /> Download Notes
+                                </a>
                               </div>
                             </div>
                           </AccordionContent>
