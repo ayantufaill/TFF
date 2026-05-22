@@ -227,6 +227,21 @@ export function ModulePlayerPage() {
               <p className="text-gray-500 text-sm leading-relaxed max-w-2xl">
                 {currentModule.description}
               </p>
+
+              {/* Lecture Notes download */}
+              <a
+                href={encodeURI(`/courses/Course 1 Lecture ${currentModule.number} slides (1).pdf`)}
+                download
+                className="mt-4 inline-flex items-center gap-3 px-4 py-3 rounded-xl bg-[#FAF8F3] border border-[#C9A961]/30 hover:border-[#C9A961] hover:bg-[#C9A961]/10 transition-all group w-fit"
+              >
+                <div className="w-9 h-9 rounded-lg bg-[#C9A961]/20 flex items-center justify-center flex-shrink-0">
+                  <Download className="w-4 h-4 text-[#C9A961] group-hover:scale-110 transition-transform" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-[#1B2A4A] uppercase tracking-wider">Lecture Notes</p>
+                  <p className="text-xs text-gray-500">Download PDF slides</p>
+                </div>
+              </a>
             </div>
 
             <div className="flex gap-3 pt-2">
@@ -237,15 +252,6 @@ export function ModulePlayerPage() {
               >
                 <ChevronLeft className="w-4 h-4 mr-1" /> Back
               </Button>
-
-              {/* PDF download button */}
-              <a
-                href={encodeURI(`/courses/Course 1 Lecture ${currentModule.number} slides (1).pdf`)}
-                download
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors"
-              >
-                <Download className="w-4 h-4" /> Notes
-              </a>
 
               {/* Per-lecture quiz button */}
               {moduleQuiz && videoWatched && !hasPassedModuleQuiz && !showModuleQuiz && (
