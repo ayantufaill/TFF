@@ -5,7 +5,8 @@ import {
   Play,
   CheckCircle,
   ChevronRight,
-  Award
+  Award,
+  Download
 } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
 import { useAuth } from '../context/AuthContext';
@@ -236,6 +237,15 @@ export function ModulePlayerPage() {
               >
                 <ChevronLeft className="w-4 h-4 mr-1" /> Back
               </Button>
+
+              {/* PDF download button */}
+              <a
+                href={encodeURI(`/courses/Course 1 Lecture ${currentModule.number} slides (1).pdf`)}
+                download
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 transition-colors"
+              >
+                <Download className="w-4 h-4" /> Notes
+              </a>
 
               {/* Per-lecture quiz button */}
               {moduleQuiz && videoWatched && !hasPassedModuleQuiz && !showModuleQuiz && (
