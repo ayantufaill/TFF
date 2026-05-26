@@ -1,4 +1,4 @@
-import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Lock, Play, Mail, ArrowLeft, Shield, Eye, EyeOff } from 'lucide-react';
+import { BookOpen, Video, FileText, Headphones, Download, CheckCircle, Lock, Play, Mail, ArrowLeft, Shield, Eye, EyeOff, Award, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Progress } from '../components/ui/progress';
@@ -428,6 +428,33 @@ export function ActualTrainingPage() {
                       )
                     })}
                   </Accordion>
+
+                  {/* Certificate card — shown when all lectures in this level are completed */}
+                  {(() => {
+                    const total = level.modules.length;
+                    const done = level.modules.filter(m =>
+                      user?.completedModules?.some(id =>
+                        id === `module-${String(m._id)}` || id === `module-${String(m.number)}`
+                      )
+                    ).length;
+                    if (!user || done < total) return null;
+                    const lastModule = level.modules[level.modules.length - 1];
+                    return (
+                      <button
+                        onClick={() => navigate(`/training/module/${level._id}/${lastModule.number}?cert=true`)}
+                        className="w-full mt-4 p-6 rounded-2xl border-2 border-[#C9A961]/40 bg-gradient-to-r from-[#FAF8F3] to-[#FDF6E3] hover:border-[#C9A961] hover:shadow-md transition-all flex items-center gap-5 text-left group"
+                      >
+                        <div className="w-14 h-14 rounded-full bg-[#1B2A4A] flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-105 transition-transform">
+                          <Award className="w-7 h-7 text-[#C9A961]" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-black text-[#1B2A4A] text-base">Your Certificate is Ready!</p>
+                          <p className="text-sm text-gray-500 mt-0.5">You've completed all lectures — tap to view & download</p>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-[#C9A961] group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    );
+                  })()}
                 </div>
               )
             })
