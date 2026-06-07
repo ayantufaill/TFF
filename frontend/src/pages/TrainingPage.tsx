@@ -38,7 +38,7 @@ const LoadingOverlay = ({ message }: { message: string }) => (
 
 
 export function TrainingPage() {
-  const { user, login, register, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
+  const { user, login, register, loginWithGoogle, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
   const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   
@@ -449,6 +449,27 @@ export function TrainingPage() {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setAuthError('');
+    setIsSubmitting(true);
+    try {
+      await loginWithGoogle();
+      toast.success('Successfully logged in with Google!', {
+        description: 'Welcome to your training dashboard.',
+      });
+      navigate('/Training/dashboard');
+    } catch (err: any) {
+      console.error('Google login error:', err);
+      const errorMessage = err.response?.data?.message || err.message || 'Google Sign-In failed.';
+      setAuthError(errorMessage);
+      toast.error('Google Sign-In Failed', {
+        description: errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const GoogleIcon = () => (
     <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
       <path
@@ -752,7 +773,7 @@ export function TrainingPage() {
                   <Button 
                     type="button"
                     variant="outline" 
-                    onClick={() => login('demo@example.com', 'password123')} // Placeholder for demo
+                    onClick={handleGoogleLogin}
                     className="w-full h-12 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 text-gray-600 font-bold transition-all rounded-xl"
                   >
                     <GoogleIcon />

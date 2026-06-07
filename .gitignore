@@ -21,6 +21,7 @@ build/
 .env.production
 frontend/.env
 server/.env
+server/config/firebase-service-account.json
 
 # Other
 scripts/ffmpeg-darwin

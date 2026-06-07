@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../config/firebase';
 
 interface User {
   id: string;
@@ -21,6 +23,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => void;
   updateProgress: (moduleId?: string, quizAnswers?: Record<string, number[]>, lastViewedModuleId?: string) => Promise<void>;
   updateProfile: (data: { name?: string; currentPassword?: string; newPassword?: string }) => Promise<void>;
@@ -68,6 +71,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(userData);
   };
 
+  const loginWithGoogle = async () => {
+    // 1. Authenticate with Google on the client using Firebase
+    const result = await signInWithPopup(auth, googleProvider);
+    const idToken = await result.user.getIdToken(true);
+
+    // 2. Exchange Firebase Token for Backend JWT
+    const res = await api.post('/auth/google-login', { idToken });
+    const { token: newToken, user: userData } = res.data;
+
+    // 3. Set standard authentication states
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+    setUser(userData);
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
@@ -97,7 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateProgress, updateProfile, forgotPassword, resetPassword }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, loginWithGoogle, logout, updateProgress, updateProfile, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

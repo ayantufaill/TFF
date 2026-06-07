@@ -12,5 +12,9 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "firebase": "^12.14.0",
+    "resend": "^6.12.4"
   }
 }

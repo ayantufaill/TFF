@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Download, ArrowLeft } from "lucide-react";
 import html2canvas from "html2canvas";
 import { QRCodeSVG } from "qrcode.react";
@@ -41,6 +41,24 @@ const CertificateView: React.FC<CertificateViewProps> = ({
   onBack,
 }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        // Padding/gap consideration: 32px (16px each side)
+        const availableWidth = containerWidth - 32;
+        const newScale = Math.min(availableWidth / 900, 1);
+        setScale(newScale);
+      }
+    };
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
 
   // Persist cert ID + date in localStorage so the same cert is shown every time
   const { certId, certDate } = useMemo(() => {
@@ -166,52 +184,70 @@ const CertificateView: React.FC<CertificateViewProps> = ({
   return (
     <div className="w-full flex flex-col items-center animate-in fade-in duration-700">
       {/* Controls */}
-      <div className="w-full flex justify-between items-center mb-8 px-2">
+      <div className="w-full flex flex-row justify-between items-center mb-6 px-4 gap-4">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-[#1B2A4A] font-bold hover:text-[#1a3a1b] transition-all group"
+          className="flex items-center gap-2 text-[#1B2A4A] font-bold hover:text-[#1a3a1b] transition-all group whitespace-nowrap"
         >
           <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-          <span className="text-lg">Back to Lesson</span>
+          <span className="text-sm sm:text-lg">Back to Lesson</span>
         </button>
         <button
           onClick={handleDownload}
-          className="flex items-center gap-2 px-8 py-3 bg-[#1B2A4A] text-white rounded-full font-bold hover:bg-[#1a3a1b] transition-all shadow-lg active:scale-95"
+          className="flex items-center gap-2 px-4 sm:px-8 py-2 sm:py-3 bg-[#1B2A4A] text-white rounded-full font-bold hover:bg-[#1a3a1b] transition-all shadow-lg active:scale-95 whitespace-nowrap"
         >
-          <Download className="w-5 h-5" />
-          <span className="text-lg">Download Certificate</span>
+          <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+          <span className="text-sm sm:text-lg">Download Certificate</span>
         </button>
       </div>
 
-      {/* Scroll wrapper */}
-      <div className="w-full overflow-x-auto flex justify-center py-4">
-        {/* ── Certificate ─────────────────────────────────────────── */}
-        <div
-          ref={certificateRef}
-          className="relative bg-white flex-shrink-0"
-          style={{
-            width: "900px",
-            height: "636px",
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            border: "18px solid #C9A961",
-            boxShadow: "0 25px 60px -10px rgba(0,0,0,0.3)",
-            outline: "none",
-          }}
-        >
-          {/* Inner gold border line */}
+      {/* Certificate Frame */}
+      <div
+        ref={containerRef}
+        className="w-full flex justify-center bg-white/50 backdrop-blur-sm p-2 sm:p-8 border border-gray-100"
+        style={{
+          borderRadius: "1.5rem",
+          boxShadow: "inset 0 2px 4px 0 rgba(0,0,0,0.06)",
+          minHeight: scale < 1 ? `${636 * scale + 40}px` : "auto",
+        }}
+      >
+        <div className="w-full flex justify-center py-4 overflow-hidden">
           <div
-            className="absolute inset-[8px] pointer-events-none"
-            style={{ border: "2px solid #C9A961" }}
-          />
-
-          {/* Subtle background texture */}
-          <div
-            className="absolute inset-0 pointer-events-none"
+            className="flex-shrink-0 transition-transform duration-300 ease-out"
             style={{
-              background:
-                "radial-gradient(ellipse at 50% 0%, rgba(201,169,97,0.07) 0%, transparent 70%)",
+              width: "900px",
+              height: "636px",
+              transform: `scale(${scale})`,
+              transformOrigin: "top center",
+              marginBottom: scale < 1 ? `-${636 * (1 - scale)}px` : "0",
             }}
-          />
+          >
+            <div
+              ref={certificateRef}
+              className="relative bg-white"
+              style={{
+                width: "900px",
+                height: "636px",
+                fontFamily: "'Georgia', 'Times New Roman', serif",
+                border: "18px solid #C9A961",
+                boxShadow: "0 25px 60px -10px rgba(0,0,0,0.3)",
+                outline: "none",
+              }}
+            >
+              {/* Inner gold border line */}
+              <div
+                className="absolute inset-[8px] pointer-events-none"
+                style={{ border: "2px solid #C9A961" }}
+              />
+
+              {/* Subtle background texture */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 50% 0%, rgba(201,169,97,0.07) 0%, transparent 70%)",
+                }}
+              />
 
           {/* ── Content ─────────────────────────────────────────── */}
           <div
@@ -525,6 +561,8 @@ const CertificateView: React.FC<CertificateViewProps> = ({
           </div>
         </div>
         {/* ── End Certificate ──────────────────────────────────── */}
+      </div>
+      </div>
       </div>
     </div>
   );

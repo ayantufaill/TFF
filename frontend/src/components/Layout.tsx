@@ -150,7 +150,7 @@ export function Layout() {
                     >
                       <div className="px-8 py-5 border-b border-gray-50 ml-1">
                         <p className="font-bold text-gray-900 text-base truncate">{user.name}</p>
-                        <p className="text-xs text-gray-400 font-medium truncate">{user.email}</p>
+                        <p className="text-xs text-gray-400 font-medium truncate mb-2">{user.email}</p>
                       </div>
                       <Link
                         to="/profile"
