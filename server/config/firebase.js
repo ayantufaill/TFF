@@ -2,29 +2,39 @@ const admin = require('firebase-admin');
 
 let serviceAccount;
 
-if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-  let rawStr = process.env.FIREBASE_SERVICE_ACCOUNT.trim();
-  
-  // Strip outer quotes if they exist
-  if ((rawStr.startsWith("'") && rawStr.endsWith("'")) || (rawStr.startsWith('"') && rawStr.endsWith('"'))) {
-    rawStr = rawStr.slice(1, -1).trim();
-  }
+function parseConfigValue(val) {
+  if (!val) return null;
+  if (typeof val === 'object') return val;
 
+  const trimmed = val.trim();
+
+  // Try parsing as JSON first
   try {
-    serviceAccount = JSON.parse(rawStr);
+    const res = JSON.parse(trimmed);
+    if (res && typeof res === 'object') return res;
+    if (typeof res === 'string') return parseConfigValue(res);
   } catch (err) {
-    console.warn('Standard JSON.parse failed for FIREBASE_SERVICE_ACCOUNT, trying JS evaluation fallback...');
+    // If JSON parsing fails, try evaluating as JS object/expression
     try {
-      // Evaluate as JS Object literal (handles single quotes, unquoted keys, etc.)
-      const parsed = new Function(`return (${rawStr})`)();
-      if (parsed && typeof parsed === 'object') {
-        serviceAccount = parsed;
-      } else if (typeof parsed === 'string') {
-        serviceAccount = JSON.parse(parsed);
+      const res = new Function(`return (${trimmed})`)();
+      if (res && typeof res === 'object') return res;
+      if (typeof res === 'string') return parseConfigValue(res);
+    } catch (evalErr) {
+      // If evaluating fails, check if we can clean outer quotes
+      if ((trimmed.startsWith("'") && trimmed.endsWith("'")) || (trimmed.startsWith('"') && trimmed.endsWith('"'))) {
+        return parseConfigValue(trimmed.slice(1, -1));
       }
-    } catch (fallbackErr) {
-      console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT environment variable:', err);
+      throw err; // throw the original JSON parse error
     }
+  }
+  return null;
+}
+
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+  try {
+    serviceAccount = parseConfigValue(process.env.FIREBASE_SERVICE_ACCOUNT);
+  } catch (err) {
+    console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT environment variable:', err);
   }
 }
 
