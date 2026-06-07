@@ -74,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithGoogle = async () => {
     // 1. Authenticate with Google on the client using Firebase
     const result = await signInWithPopup(auth, googleProvider);
-    const idToken = await result.user.getIdToken();
+    const idToken = await result.user.getIdToken(true);
 
     // 2. Exchange Firebase Token for Backend JWT
     const res = await api.post('/auth/google-login', { idToken });
