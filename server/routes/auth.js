@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const admin = require('../config/firebase');
 const router = express.Namespace ? express.Router() : express.Router();
 
 if (!process.env.JWT_SECRET) {
@@ -175,6 +176,76 @@ router.post('/reset-password', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/auth/google-login
+// @desc    Login or Register user via Google Firebase ID Token
+// @access  Public
+router.post('/google-login', async (req, res) => {
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ message: 'Firebase ID Token is required' });
+  }
+
+  try {
+    // 1) Verify the Firebase ID Token
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { email, name } = decodedToken;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email not provided in Google account' });
+    }
+
+    // 2) Find or create user in MongoDB
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create a password-less user (or generate a random password)
+      const randomPassword = Math.random().toString(36).slice(-10) + '!A1';
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(randomPassword, salt);
+
+      user = new User({
+        name: name || email.split('@')[0],
+        email,
+        password: hashedPassword, // placeholder password
+        role: 'user'
+      });
+      await user.save();
+      console.log(`✅ New user registered via Google: ${email}`);
+    } else {
+      console.log(`✅ User logged in via Google: ${email}`);
+    }
+
+    // 3) Generate custom application JWT
+    const payload = { user: { id: user.id, role: user.role } };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' },
+      (err, token) => {
+        if (err) {
+          console.error('❌ JWT Sign Error:', err);
+          return res.status(500).json({ message: 'Error signing token' });
+        }
+        res.json({
+          token,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            completedModules: user.completedModules
+          }
+        });
+      }
+    );
+  } catch (err) {
+    console.error('❌ Firebase ID Token Verification Failed:', err);
+    res.status(401).json({ message: 'Invalid Google Token', error: err.message });
   }
 });
 
