@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
 import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../config/firebase';
+import { auth, googleProvider, isFirebaseConfigured } from '../config/firebase';
 
 interface User {
   id: string;
@@ -29,6 +29,7 @@ interface AuthContextType {
   updateProfile: (data: { name?: string; currentPassword?: string; newPassword?: string }) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (email: string, otp: string, newPassword: string) => Promise<void>;
+  isGoogleLoginConfigured: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,6 +73,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithGoogle = async () => {
+    if (!auth || !googleProvider) {
+      throw new Error('Google sign-in needs Firebase configuration before it can be used.');
+    }
+
     // 1. Authenticate with Google on the client using Firebase
     const result = await signInWithPopup(auth, googleProvider);
     const idToken = await result.user.getIdToken(true);
@@ -115,7 +120,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, loginWithGoogle, logout, updateProgress, updateProfile, forgotPassword, resetPassword }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, loginWithGoogle, logout, updateProgress, updateProfile, forgotPassword, resetPassword, isGoogleLoginConfigured: isFirebaseConfigured }}>
       {children}
     </AuthContext.Provider>
   );

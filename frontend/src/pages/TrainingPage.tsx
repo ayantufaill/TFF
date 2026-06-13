@@ -38,7 +38,7 @@ const LoadingOverlay = ({ message }: { message: string }) => (
 
 
 export function TrainingPage() {
-  const { user, login, register, loginWithGoogle, logout, updateProgress, loading, forgotPassword, resetPassword } = useAuth();
+  const { user, login, register, loginWithGoogle, logout, updateProgress, loading, forgotPassword, resetPassword, isGoogleLoginConfigured } = useAuth();
   const navigate = useNavigate();
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login');
   
@@ -760,25 +760,28 @@ export function TrainingPage() {
                     {isSubmitting ? 'Processing...' : (authMode === 'login' ? 'Login Now' : 'Create My Account')}
                   </Button>
 
-                  {/* Repositioned Google Login Button */}
-                  <div className="relative pt-6 pb-2">
-                    <div className="absolute inset-0 flex items-center pr-8 pl-8">
-                      <span className="w-full border-t border-gray-100" />
-                    </div>
-                    <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold text-gray-400">
-                      <span className="bg-white px-3">Or explore with</span>
-                    </div>
-                  </div>
+                  {isGoogleLoginConfigured && (
+                    <>
+                      <div className="relative pt-6 pb-2">
+                        <div className="absolute inset-0 flex items-center pr-8 pl-8">
+                          <span className="w-full border-t border-gray-100" />
+                        </div>
+                        <div className="relative flex justify-center text-[10px] uppercase tracking-widest font-bold text-gray-400">
+                          <span className="bg-white px-3">Or explore with</span>
+                        </div>
+                      </div>
 
-                  <Button 
-                    type="button"
-                    variant="outline" 
-                    onClick={handleGoogleLogin}
-                    className="w-full h-12 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 text-gray-600 font-bold transition-all rounded-xl"
-                  >
-                    <GoogleIcon />
-                    Continue with Google
-                  </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleGoogleLogin}
+                        className="w-full h-12 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 text-gray-600 font-bold transition-all rounded-xl"
+                      >
+                        <GoogleIcon />
+                        Continue with Google
+                      </Button>
+                    </>
+                  )}
                 </CardContent>
 
                 <CardFooter className="flex flex-col space-y-4 pb-4 pt-1">

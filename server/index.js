@@ -13,6 +13,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'TFF API',
+    routes: ['/api/auth', '/api/user', '/api/courses', '/api/comments']
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
