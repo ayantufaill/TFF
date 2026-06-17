@@ -398,32 +398,32 @@ export function ModulePlayerPage() {
   return (
     <>
       <style>{`
-        footer { margin-top: 0 !important; }
+        footer { display: none !important; }
         .module-page-container {
           display: flex;
           flex-direction: column;
-          height: calc(100vh - 64px);
+          min-height: calc(100vh - 64px);
           background-color: #FAF8F3;
-          overflow: hidden;
         }
         .module-layout { 
           display: flex; 
           flex: 1; 
-          overflow: hidden;
         }
         .module-sidebar {
-          width: 400px;
+          width: 360px;
           background: white;
           border-right: 4px solid rgba(44,95,45,0.1);
           display: flex;
           flex-direction: column;
           flex-shrink: 0;
           z-index: 10;
+          max-height: calc(100vh - 64px);
+          position: sticky;
+          top: 64px;
         }
         .module-content { 
           flex: 1; 
-          padding: 2.5rem; 
-          overflow-y: auto;
+          padding: 1.5rem 1.5rem 4rem; 
           background-color: #FAF8F3;
         }
         .custom-scrollbar::-webkit-scrollbar {
@@ -445,10 +445,12 @@ export function ModulePlayerPage() {
           .module-sidebar { 
             width: 100%; 
             height: auto; 
+            max-height: none;
+            position: static;
             border-right: none; 
             border-bottom: 1px solid #f3f4f6; 
           }
-          .module-content { overflow-y: visible; }
+          .module-content { overflow-y: visible; padding-bottom: 4rem; }
         }
       `}</style>
 

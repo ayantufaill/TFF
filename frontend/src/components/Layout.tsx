@@ -30,6 +30,7 @@ export function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAdmin = location.pathname.startsWith('/admin');
+  const isModulePlayer = location.pathname.startsWith('/training/module/');
   const showBack = location.pathname !== '/' && location.pathname !== '';
 
   // Close dropdown on click outside
@@ -238,7 +239,7 @@ export function Layout() {
       </main>
 
       {/* Footer – About TFF ke upar zyada green; © 2026 neeche se upar */}
-      <footer className={`bg-[#1B2A4A] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
+      {!isModulePlayer && <footer className={`bg-[#1B2A4A] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 'clamp(28px, 3.5vw, 48px)', paddingBottom: 'clamp(20px, 2.5vw, 36px)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* About */}
@@ -306,7 +307,7 @@ export function Layout() {
             </div>
           </div>
         </div>
-      </footer>
+      </footer>}
     </div>
   );
 }
