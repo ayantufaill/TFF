@@ -32,6 +32,7 @@ export function ModulePlayerPage() {
 
   const [courses, setCourses] = useState<MainCourse[]>([]);
   const [moduleQuiz, setModuleQuiz] = useState<Assessment | null>(null);
+  const [isModuleQuizLoading, setIsModuleQuizLoading] = useState(false);
   const [showModuleQuiz, setShowModuleQuiz] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -45,21 +46,30 @@ export function ModulePlayerPage() {
     c.levels.some((l) => l._id === levelId),
   );
 
-  const isCompleted = user?.completedModules?.some(
-    (id) =>
-      id === `module-${String(currentModule?._id)}` ||
-      id === `module-${String(currentModule?.number)}`,
-  );
+  const completedModules = user?.completedModules || [];
+  const isAdmin = user?.role === "admin";
+  const isModuleVideoCompleted = (module?: { _id: string; number: number }) =>
+    !!module &&
+    completedModules.some(
+      (id) =>
+        id === `module-${String(module._id)}` ||
+        id === `module-${String(module.number)}`,
+    );
+  const isModuleQuizPassed = (module?: { _id: string }) =>
+    !!module && completedModules.includes(`quiz-module-${module._id}`);
+  const isModuleFullyCompleted = (module?: { _id: string; number: number }) =>
+    isAdmin ||
+    (!!module && isModuleVideoCompleted(module) && isModuleQuizPassed(module));
+
+  const isCompleted = isModuleVideoCompleted(currentModule);
   const isLastModuleOfLevel =
     currentLevel &&
     currentModule &&
     currentLevel.modules[currentLevel.modules.length - 1]._id ===
       currentModule._id;
-  const hasPassedModuleQuiz = user?.completedModules?.includes(
-    `quiz-module-${currentModule?._id}`,
-  );
+  const hasPassedModuleQuiz = isModuleQuizPassed(currentModule);
   const allLectureQuizzesPassed = !!currentLevel?.modules.every((m) =>
-    user?.completedModules?.includes(`quiz-module-${m._id}`),
+    isModuleQuizPassed(m),
   );
 
   const location = useLocation();
@@ -92,11 +102,35 @@ export function ModulePlayerPage() {
 
   useEffect(() => {
     if (!currentModuleId) return;
+    setIsModuleQuizLoading(true);
     setModuleQuiz(null);
     getAssessment(currentModuleId)
       .then((q) => setModuleQuiz(q))
-      .catch(() => setModuleQuiz(null));
+      .catch(() => setModuleQuiz(null))
+      .finally(() => setIsModuleQuizLoading(false));
   }, [currentModuleId]);
+
+  useEffect(() => {
+    if (loading || !currentLevel || !currentModule || isAdmin) return;
+
+    const currentIndex = currentLevel.modules.findIndex(
+      (m) => String(m._id) === String(currentModule._id),
+    );
+    if (currentIndex <= 0) return;
+
+    let firstAccessibleIndex = 0;
+    for (let i = 0; i < currentLevel.modules.length - 1; i += 1) {
+      if (!isModuleFullyCompleted(currentLevel.modules[i])) break;
+      firstAccessibleIndex = i + 1;
+    }
+
+    if (currentIndex > firstAccessibleIndex) {
+      const targetModule = currentLevel.modules[firstAccessibleIndex];
+      navigate(`/training/module/${levelId}/${targetModule.number}`, {
+        replace: true,
+      });
+    }
+  }, [loading, currentLevel, currentModule, isAdmin, completedModules, levelId, navigate]);
 
   const handleVideoEnded = () => {
     if (currentModule) {
@@ -112,15 +146,17 @@ export function ModulePlayerPage() {
       if (isLastModuleOfLevel) {
         setShowFinalCertificate(true);
       } else {
-        handleNext();
+        handleNext(true);
       }
     }
   };
 
-  const handleNext = () => {
-    const isAdmin = user?.role === "admin";
+  const handleNext = (quizJustPassed = false) => {
+    const moduleQuizDone =
+      !isModuleQuizLoading &&
+      (!moduleQuiz || hasPassedModuleQuiz || quizJustPassed || isAdmin);
     const canGoNext =
-      isCompleted || isVideoCompleted || isAdmin || hasPassedModuleQuiz;
+      (isCompleted || isVideoCompleted || isAdmin) && moduleQuizDone;
 
     if (!canGoNext || !currentLevel || !currentModule) return;
 
@@ -193,10 +229,7 @@ export function ModulePlayerPage() {
     currentCourse?.levels.reduce((acc, l) => acc + l.modules.length, 0) || 0;
   const courseModules = currentCourse?.levels.flatMap((l) => l.modules) || [];
   const completedCount = courseModules.filter((m) =>
-    user?.completedModules?.some(
-      (id) =>
-        id === `module-${String(m._id)}` || id === `module-${String(m.number)}`,
-    ),
+    isModuleFullyCompleted(m),
   ).length;
   const progressValue =
     totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
@@ -236,6 +269,15 @@ export function ModulePlayerPage() {
             onComplete={handleModuleQuizComplete}
             isFinalLevel={false}
             alreadyPassed={hasPassedModuleQuiz}
+            passedTitle={isLastModuleOfLevel ? "Congratulations!" : undefined}
+            passedDescription={
+              isLastModuleOfLevel
+                ? "You passed the final assessment. Your certificate is ready."
+                : undefined
+            }
+            continueLabel={
+              isLastModuleOfLevel ? "See Your Certificate" : undefined
+            }
           />
         </div>
       );
@@ -256,15 +298,15 @@ export function ModulePlayerPage() {
   };
 
   const renderModuleInfoCard = () => {
-    const isAdmin = user?.role === "admin";
     const videoWatched = isVideoCompleted || isCompleted || isAdmin;
-    const moduleQuizDone = !moduleQuiz || hasPassedModuleQuiz || isAdmin;
+    const moduleQuizDone =
+      !isModuleQuizLoading && (!moduleQuiz || hasPassedModuleQuiz || isAdmin);
     const canGoNext =
       (isCompleted || isVideoCompleted || isAdmin) && moduleQuizDone;
-    const allVideosCompleted = completedCount === totalModules && totalModules > 0;
+    const allModulesCompleted = completedCount === totalModules && totalModules > 0;
     const showCertButton =
       isLastModuleOfLevel &&
-      (allLectureQuizzesPassed || allVideosCompleted || isAdmin) &&
+      (allLectureQuizzesPassed || allModulesCompleted || isAdmin) &&
       !showFinalCertificate &&
       !showModuleQuiz;
 
@@ -463,19 +505,11 @@ export function ModulePlayerPage() {
               {currentLevel.modules.map((m, idx) => {
                 const isActive = String(m.number) === String(moduleId);
                 const completed =
-                  user?.completedModules?.includes(`module-${m._id}`) ||
-                  user?.completedModules?.includes(`module-${m.number}`);
-                const isAdmin = user?.role === "admin";
+                  isModuleFullyCompleted(m);
                 const unlocked =
                   idx === 0 ||
-                  user?.completedModules?.includes(
-                    `module-${currentLevel.modules[idx - 1]._id}`,
-                  ) ||
-                  user?.completedModules?.includes(
-                    `module-${currentLevel.modules[idx - 1].number}`,
-                  ) ||
+                  isModuleFullyCompleted(currentLevel.modules[idx - 1]) ||
                   completed ||
-                  isActive ||
                   isAdmin;
 
                 return (
@@ -527,7 +561,7 @@ export function ModulePlayerPage() {
                 );
               })}
 
-              {/* Certificate entry — visible after all videos or quizzes completed */}
+              {/* Certificate entry — visible after all lecture quizzes are completed */}
               {(allLectureQuizzesPassed ||
                 (completedCount === totalModules && totalModules > 0)) && (
                 <button

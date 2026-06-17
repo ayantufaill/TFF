@@ -341,6 +341,14 @@ export function ActualTrainingPage() {
 
   if (isLoading) return <div className="p-20 text-center text-[#1B2A4A] font-bold">Loading your learning path...</div>;
 
+  const completedModules = user?.completedModules || [];
+  const isLectureVideoCompleted = (module: { _id: string; number: number }) =>
+    completedModules.some(id => id === `module-${String(module._id)}` || id === `module-${String(module.number)}`);
+  const isLectureQuizPassed = (module: { _id: string }) =>
+    completedModules.includes(`quiz-module-${module._id}`);
+  const isLectureCompleted = (module: { _id: string; number: number }) =>
+    isLectureVideoCompleted(module) && isLectureQuizPassed(module);
+
   return (
     <div>
       {/* Hero */}
@@ -368,7 +376,7 @@ export function ActualTrainingPage() {
                   const courseModules = levels.flatMap(l => l.modules);
                   const totalModules = courseModules.length;
                   const completedCount = courseModules.filter(m => 
-                    user.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+                    isLectureCompleted(m)
                   ).length;
                   const progressPercentage = totalModules > 0 ? (completedCount / totalModules) * 100 : 0;
 
@@ -428,13 +436,16 @@ export function ActualTrainingPage() {
                     onValueChange={handleAccordionChange}
                     className="space-y-4"
                   >
-                    {level.modules.map((module) => {
-                      const isCompleted = user?.completedModules?.some(id => id === `module-${String(module._id)}` || id === `module-${String(module.number)}`);
+                    {level.modules.map((module, moduleIndex) => {
+                      const isCompleted = isLectureCompleted(module);
+                      const isUnlocked =
+                        moduleIndex === 0 ||
+                        isLectureCompleted(level.modules[moduleIndex - 1]);
                       return (
                         <AccordionItem
                           key={module._id}
                           value={`module-${module.number}`}
-                          className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#1B2A4A]/40 shadow-sm' : 'border-[#C9A961]/20'}`}
+                          className={`bg-white border-2 rounded-xl overflow-hidden transition-all duration-300 ${isCompleted ? 'border-[#1B2A4A]/40 shadow-sm' : 'border-[#C9A961]/20'} ${!isUnlocked ? 'opacity-60 grayscale-[25%]' : ''}`}
                         >
                           <AccordionTrigger className={`px-6 py-4 hover:no-underline transition-colors ${isCompleted ? 'hover:bg-[#f0fdf4]' : 'hover:bg-[#FAF8F3]'}`}>
                             <div className="flex items-center gap-4 w-full text-left">
@@ -448,7 +459,9 @@ export function ActualTrainingPage() {
                               </div>
                               <div className="flex-1">
                                 <h3 className="font-semibold text-[#1B2A4A]">{module.title}</h3>
-                                <p className="text-sm text-gray-500 line-clamp-1">{module.description}</p>
+                                <p className="text-sm text-gray-500 line-clamp-1">
+                                  {isUnlocked ? module.description : 'Complete the previous lecture video and quiz to unlock'}
+                                </p>
                               </div>
                             </div>
                           </AccordionTrigger>
@@ -467,10 +480,12 @@ export function ActualTrainingPage() {
                               </div>
                               <div className="flex flex-wrap gap-3 pt-4 border-t items-center">
                                 <Button
-                                  onClick={() => navigate(`/training/module/${level._id}/${module.number}`)}
-                                  className="bg-[#C9A961] hover:bg-[#B89751] text-white px-8"
+                                  onClick={() => isUnlocked && navigate(`/training/module/${level._id}/${module.number}`)}
+                                  disabled={!isUnlocked}
+                                  className={`${isUnlocked ? 'bg-[#C9A961] hover:bg-[#B89751] text-white' : 'bg-gray-100 text-gray-400'} px-8`}
                                 >
-                                  <Play className="w-4 h-4 mr-2" /> Start Now
+                                  {isUnlocked ? <Play className="w-4 h-4 mr-2" /> : <Lock className="w-4 h-4 mr-2" />}
+                                  {isUnlocked ? 'Start Now' : 'Locked'}
                                 </Button>
                                 <a
                                   href={encodeURI(`/courses/Course 1 Lecture ${module.number} slides (1).pdf`)}
@@ -492,9 +507,7 @@ export function ActualTrainingPage() {
                   {(() => {
                     const total = level.modules.length;
                     const done = level.modules.filter(m =>
-                      user?.completedModules?.some(id =>
-                        id === `module-${String(m._id)}` || id === `module-${String(m.number)}`
-                      )
+                      isLectureCompleted(m)
                     ).length;
                     if (!user || done < total) return null;
                     const lastModule = level.modules[level.modules.length - 1];

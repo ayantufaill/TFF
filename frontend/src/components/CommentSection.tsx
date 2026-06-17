@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, MessageSquare, Send, Reply, Edit2, Trash2, X } from 'lucide-react';
-import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Separator } from './ui/separator';
@@ -32,6 +31,23 @@ const timeAgo = (date: Date) => {
   if (interval > 1) return Math.floor(interval) + " minutes";
   return Math.floor(seconds) + " seconds";
 };
+
+const getInitials = (name?: string) => {
+  const parts = (name || 'User').trim().split(/\s+/).filter(Boolean);
+  return parts
+    .slice(0, 2)
+    .map(part => part.charAt(0).toUpperCase())
+    .join('') || 'U';
+};
+
+const UserAvatar = ({ name, size = 'md' }: { name?: string; size?: 'sm' | 'md' }) => (
+  <div
+    className={`${size === 'sm' ? 'w-9 h-9 text-xs' : 'w-10 h-10 text-sm'} rounded-full bg-[#1B2A4A] text-white border-2 border-[#C9A961]/70 shadow-sm flex items-center justify-center flex-shrink-0 font-black tracking-wide`}
+    aria-label={`${name || 'User'} avatar`}
+  >
+    {getInitials(name)}
+  </div>
+);
 
 interface CommentSectionProps {
   moduleId: string;
@@ -130,12 +146,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
     return (
       <div key={comment._id} className={`mt-6 ${depth > 0 ? 'ml-3 sm:ml-8 border-l-2 border-gray-100 pl-3 sm:pl-4' : ''}`}>
         <div className="flex gap-3 sm:gap-4">
-          <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
-            {comment.userId.avatar && <AvatarImage src={comment.userId.avatar} />}
-            <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
-              {comment.userId.name.trim().charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar name={comment.userId.name} />
           <div className="flex-1">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
@@ -168,7 +179,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                 <Textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
-                  className="min-h-[100px] rounded-xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none text-sm"
+                  className="min-h-[100px] rounded-xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none text-sm text-gray-900 placeholder:text-gray-500 bg-white"
                 />
                 <div className="flex justify-end gap-2">
                   <Button 
@@ -183,7 +194,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                     size="sm" 
                     onClick={() => handleUpdateComment(comment._id)}
                     disabled={loading || !editContent.trim()}
-                    className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold h-8 px-4"
+                    className="bg-[#1B2A4A] hover:bg-[#122038] text-white font-bold h-8 px-4 disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none"
                   >
                     Save Changes
                   </Button>
@@ -211,7 +222,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                   value={replyContent}
                   onChange={(e) => setReplyContent(e.target.value)}
                   placeholder="Write your reply..."
-                  className="min-h-[80px] rounded-xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none text-sm"
+                  className="min-h-[80px] rounded-xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none text-sm text-gray-900 placeholder:text-gray-500 bg-white"
                 />
                 <div className="flex justify-end gap-2">
                   <Button 
@@ -226,7 +237,7 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
                     size="sm" 
                     onClick={() => handleSubmitReply(comment._id)}
                     disabled={loading || !replyContent.trim()}
-                    className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold h-8 px-4"
+                    className="bg-[#1B2A4A] hover:bg-[#122038] text-white font-bold h-8 px-4 disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none"
                   >
                     Post Reply
                   </Button>
@@ -275,24 +286,19 @@ export default function CommentSection({ moduleId }: CommentSectionProps) {
           {user ? (
             <div className="mb-8 sm:mb-10">
               <div className="flex gap-3 sm:gap-4 mb-4">
-                <Avatar className="w-10 h-10 border-2 border-white shadow-sm flex-shrink-0">
-                  {user.avatar && <AvatarImage src={user.avatar} />}
-                  <AvatarFallback className="bg-[#2C5F2D] text-white font-bold w-full h-full flex items-center justify-center">
-                    {user.name.trim().charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar name={user.name} />
                 <div className="flex-1 space-y-3">
                   <Textarea
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Share your thoughts about this module..."
-                    className="min-h-[120px] rounded-2xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none p-4 text-sm"
+                    className="min-h-[120px] rounded-2xl border-gray-200 focus:border-[#2C5F2D] focus:ring-[#2C5F2D]/10 resize-none p-4 text-sm text-gray-900 placeholder:text-gray-500 bg-white"
                   />
                   <div className="flex justify-end">
                     <Button 
                       onClick={handleSubmitComment}
                       disabled={loading || !newComment.trim()}
-                      className="bg-[#2C5F2D] hover:bg-[#234F24] text-white font-bold px-5 py-5 sm:px-8 sm:py-6 rounded-xl sm:rounded-2xl shadow-lg shadow-[#2C5F2D]/10 transition-all hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
+                      className="bg-[#1B2A4A] hover:bg-[#122038] text-white font-bold px-5 py-5 sm:px-8 sm:py-6 rounded-xl sm:rounded-2xl shadow-lg shadow-[#1B2A4A]/15 transition-all hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base disabled:bg-gray-200 disabled:text-gray-500 disabled:shadow-none disabled:hover:scale-100"
                     >
                       <Send className="w-4 h-4 mr-2" /> Post Comment
                     </Button>

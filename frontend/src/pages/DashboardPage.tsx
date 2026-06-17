@@ -70,9 +70,14 @@ export function DashboardPage() {
     );
   }
 
+  const completedModules = user.completedModules || [];
+  const isLectureCompleted = (module: { _id: string; number: number }) =>
+    completedModules.some(
+      id => id === `module-${String(module._id)}` || id === `module-${String(module.number)}`
+    ) && completedModules.includes(`quiz-module-${module._id}`);
   const allModules = courses.flatMap(c => c.levels.flatMap(l => l.modules));
   const totalCompletedCount = allModules.filter(m => 
-    user.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+    isLectureCompleted(m)
   ).length;
   const totalModulesCount = allModules.length;
 
@@ -121,13 +126,13 @@ export function DashboardPage() {
                 {courses.map((course) => {
                   const courseModules = course.levels.flatMap(l => l.modules);
                   const completedInCourse = courseModules.filter(m => 
-                    user.completedModules?.some(id => id === `module-${String(m._id)}` || id === `module-${String(m.number)}`)
+                    isLectureCompleted(m)
                   ).length;
                   const totalInCourse = courseModules.length;
                   const calculatedProgress = totalInCourse > 0 ? Math.round((completedInCourse / totalInCourse) * 100) : 0;
 
-                  // Find first uncompleted module
-                  const nextModule = courseModules.find(m => !user.completedModules?.includes(`module-${m._id}`) && !user.completedModules?.includes(`module-${m.number}`)) || courseModules[0];
+                  // Find first lecture that still needs its video and quiz completed
+                  const nextModule = courseModules.find(m => !isLectureCompleted(m)) || courseModules[0];
                   const targetLevelId = course.levels.find(l => l.modules.some(m => m._id === nextModule?._id))?._id || course.levels[0]?._id;
 
                   return (

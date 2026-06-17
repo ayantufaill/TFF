@@ -9,9 +9,21 @@ interface QuizProps {
   isFinalLevel?: boolean;
   onViewCertificate?: () => void;
   alreadyPassed?: boolean;
+  passedTitle?: string;
+  passedDescription?: string;
+  continueLabel?: string;
 }
 
-export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onViewCertificate, alreadyPassed }) => {
+export const Quiz: React.FC<QuizProps> = ({
+  quiz,
+  onComplete,
+  isFinalLevel,
+  onViewCertificate,
+  alreadyPassed,
+  passedTitle,
+  passedDescription,
+  continueLabel,
+}) => {
   const { user, updateProgress } = useAuth();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -230,14 +242,16 @@ export const Quiz: React.FC<QuizProps> = ({ quiz, onComplete, isFinalLevel, onVi
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-600" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Level Passed!</h2>
-            <p className="text-lg text-gray-600 mb-6">You scored {score}% on the assessment.</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">{passedTitle || 'Level Passed!'}</h2>
+            <p className="text-lg text-gray-600 mb-6">
+              {passedDescription || `You scored ${score}% on the assessment.`}
+            </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={isFinalLevel && onViewCertificate ? onViewCertificate : handleContinue}
                 className="px-8 py-3 bg-[#1B2A4A] text-white rounded-xl font-bold text-lg hover:bg-[#1a3a1b] transition-colors shadow-lg"
               >
-                {isFinalLevel ? 'View Certificate' : 'Continue to Next Level'}
+                {continueLabel || (isFinalLevel ? 'View Certificate' : 'Continue to Next Level')}
               </button>
               <button
                 onClick={() => setReviewMode(true)}
