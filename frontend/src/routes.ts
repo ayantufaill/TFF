@@ -19,6 +19,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
 // import { CoursesPage } from "./pages/CoursesPage";
 import { DonatePage } from "./pages/DonatePage";
+import { TestimonialsPage } from "./pages/TestimonialsPage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
 // import { NotFoundPage } from "./pages/NotFoundPage";
 
@@ -64,6 +65,7 @@ export const router = createBrowserRouter([
       { path: "playlist", Component: PlaylistPage },
       { path: "downloads", Component: DownloadsPage },
       { path: "articles", Component: ArticlesPage },
+      { path: "testimonials", Component: TestimonialsPage },
       { path: "admin", Component: lazy(() => import("./pages/AdminPanel")) },
       { path: "verify/:certId", Component: lazy(() => import("./pages/VerifyPage")) },
       // { path: "about", Component: AboutPage },

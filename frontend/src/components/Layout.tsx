@@ -19,6 +19,7 @@ const navLinks = [
   { label: 'Playlist', to: '/playlist' },
   { label: 'Downloads', to: '/downloads' },
   { label: 'Articles', to: '/articles' },
+  { label: 'Testimonials', to: '/testimonials' },
   { label: 'Admin Panel', to: '/admin', adminOnly: true },
 ];
 

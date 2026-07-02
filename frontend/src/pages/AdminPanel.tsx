@@ -11,7 +11,8 @@ import {
   LayoutGrid, Settings, Monitor, Users, BarChart3,
   ChevronRight, MoreVertical, Search, Globe, Lock,
   PlusCircle, Sparkles, Image as ImageIcon, ExternalLink,
-  Layers, Package, ChevronDown, Check, Menu, X
+  Layers, Package, ChevronDown, Check, Menu, X,
+  MessageSquareQuote, Star, EyeOff, ShieldCheck
 } from 'lucide-react';
 import {
   getCourses, saveMainCourse, saveLevel, saveModule,
@@ -38,6 +39,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../components/ui/alert-dialog";
+import {
+  deleteTestimonial,
+  getAdminTestimonials,
+  resolveMediaUrl,
+  Testimonial,
+  TestimonialStatus,
+  updateTestimonialStatus,
+} from '../services/testimonialService';
 
 export default function AdminPanel() {
   const [courses, setCourses] = useState<MainCourse[]>([]);
@@ -50,6 +59,8 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [testimonialNotes, setTestimonialNotes] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchData();
@@ -57,8 +68,18 @@ export default function AdminPanel() {
 
   const fetchData = async () => {
     try {
-      const data = await getCourses();
+      const [data, testimonialData] = await Promise.all([
+        getCourses(),
+        getAdminTestimonials().catch(() => []),
+      ]);
       setCourses(data);
+      setTestimonials(testimonialData);
+      setTestimonialNotes(
+        testimonialData.reduce<Record<string, string>>((acc, item) => {
+          acc[item._id] = item.adminNotes || '';
+          return acc;
+        }, {}),
+      );
       if (data.length > 0 && !activeTab) {
         setActiveTab(data[0]._id);
       }
@@ -66,6 +87,37 @@ export default function AdminPanel() {
       toast.error('Failed to synchronize with server');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const refreshTestimonials = async () => {
+    const data = await getAdminTestimonials();
+    setTestimonials(data);
+    setTestimonialNotes(
+      data.reduce<Record<string, string>>((acc, item) => {
+        acc[item._id] = item.adminNotes || '';
+        return acc;
+      }, {}),
+    );
+  };
+
+  const handleTestimonialStatus = async (id: string, status: TestimonialStatus) => {
+    try {
+      const updated = await updateTestimonialStatus(id, status, testimonialNotes[id] || '');
+      setTestimonials((items) => items.map((item) => (item._id === id ? updated : item)));
+      toast.success(`Testimonial marked ${status.toLowerCase()}`);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Failed to update testimonial');
+    }
+  };
+
+  const handleDeleteTestimonial = async (id: string) => {
+    try {
+      await deleteTestimonial(id);
+      setTestimonials((items) => items.filter((item) => item._id !== id));
+      toast.success('Testimonial deleted');
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || 'Failed to delete testimonial');
     }
   };
 
@@ -184,6 +236,16 @@ export default function AdminPanel() {
   );
 
   const activeCourse = courses.find(c => c._id === activeTab);
+  const courseTestimonials = activeCourse
+    ? testimonials.filter((item) => item.course?._id === activeCourse._id || (item.mainCourseId as any)?._id === activeCourse._id)
+    : testimonials;
+  const pendingCount = testimonials.filter((item) => item.status === 'PENDING').length;
+  const statusClass = (status: string) => {
+    if (status === 'APPROVED') return 'bg-green-50 text-green-700 border-green-200';
+    if (status === 'REJECTED') return 'bg-red-50 text-red-700 border-red-200';
+    if (status === 'HIDDEN') return 'bg-gray-100 text-gray-600 border-gray-200';
+    return 'bg-amber-50 text-amber-700 border-amber-200';
+  };
 
   return (
     <div className="bg-[#FAF8F3] flex h-[calc(100vh-64px)] sm:h-[calc(100vh-80px)]" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -340,6 +402,98 @@ export default function AdminPanel() {
                   <p className="text-md text-gray-500 font-medium max-w-2xl leading-relaxed">{activeCourse.description}</p>
                 </div>
               </header>
+
+              {/* Testimonial Moderation */}
+              <section className="space-y-6">
+                <div className="flex items-center justify-between gap-4 flex-wrap">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-white border border-gray-100 flex items-center justify-center shadow-sm">
+                      <MessageSquareQuote className="w-6 h-6 text-[#1B2A4A]" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Testimonials</h2>
+                      <p className="text-sm text-gray-500 font-medium">
+                        {pendingCount} pending review across all courses
+                      </p>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="bg-white rounded-xl font-bold border-gray-200" onClick={refreshTestimonials}>
+                    Refresh
+                  </Button>
+                </div>
+
+                {courseTestimonials.length === 0 ? (
+                  <Card className="border-gray-100 rounded-2xl bg-white">
+                    <CardContent className="p-8 text-center">
+                      <MessageSquareQuote className="w-9 h-9 mx-auto text-gray-200 mb-3" />
+                      <p className="font-bold text-[#1B2A4A]">No testimonials for this course yet.</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    {courseTestimonials.map((item) => (
+                      <Card key={item._id} className="border-gray-100 rounded-2xl bg-white overflow-hidden">
+                        <CardContent className="p-5 space-y-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-center gap-3 min-w-0">
+                              {item.profileImageUrl ? (
+                                <img src={resolveMediaUrl(item.profileImageUrl)} alt="" className="w-12 h-12 rounded-xl object-cover border border-gray-100" />
+                              ) : (
+                                <div className="w-12 h-12 rounded-xl bg-[#1B2A4A] text-white flex items-center justify-center font-black">
+                                  {(item.user?.name || 'S').charAt(0)}
+                                </div>
+                              )}
+                              <div className="min-w-0">
+                                <p className="font-black text-gray-900 truncate">{item.user?.name || 'Student'}</p>
+                                <p className="text-xs text-gray-400 font-bold truncate">{item.user?.email}</p>
+                              </div>
+                            </div>
+                            <Badge variant="outline" className={`${statusClass(item.status)} font-bold`}>
+                              {item.status}
+                            </Badge>
+                          </div>
+
+                          {item.rating ? (
+                            <div className="flex gap-0.5 text-[#C9A961]">
+                              {Array.from({ length: item.rating }).map((_, idx) => (
+                                <Star key={idx} className="w-4 h-4 fill-current" />
+                              ))}
+                            </div>
+                          ) : null}
+
+                          <p className="text-sm text-gray-700 leading-relaxed">{item.text}</p>
+
+                          {item.videoUrl ? (
+                            <video src={resolveMediaUrl(item.videoUrl)} controls className="w-full rounded-xl border border-gray-100 bg-black" />
+                          ) : null}
+
+                          <Textarea
+                            value={testimonialNotes[item._id] || ''}
+                            onChange={(event) => setTestimonialNotes((notes) => ({ ...notes, [item._id]: event.target.value }))}
+                            placeholder="Admin notes..."
+                            className="min-h-20 rounded-xl bg-gray-50 border-gray-100"
+                          />
+
+                          <div className="flex flex-wrap gap-2">
+                            <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl" onClick={() => handleTestimonialStatus(item._id, 'APPROVED')}>
+                              <ShieldCheck className="w-4 h-4 mr-1" /> Approve
+                            </Button>
+                            <Button size="sm" variant="outline" className="bg-white text-red-600 border-red-100 hover:bg-red-50 font-bold rounded-xl" onClick={() => handleTestimonialStatus(item._id, 'REJECTED')}>
+                              Reject
+                            </Button>
+                            <Button size="sm" variant="outline" className="bg-white text-gray-600 border-gray-200 hover:bg-gray-50 font-bold rounded-xl" onClick={() => handleTestimonialStatus(item._id, 'HIDDEN')}>
+                              <EyeOff className="w-4 h-4 mr-1" /> Hide
+                            </Button>
+                            <Button size="sm" variant="outline" className="bg-white text-red-600 border-red-100 hover:bg-red-50 font-bold rounded-xl" onClick={() => handleDeleteTestimonial(item._id)}>
+                              <Trash2 className="w-4 h-4 mr-1" /> Delete
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </section>
 
               {/* Curriculum Tree */}
               <div className="flex flex-col">

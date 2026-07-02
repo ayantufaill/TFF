@@ -24,6 +24,7 @@ import {
 import Quiz from "../components/Quiz";
 import CertificateView from "../components/CertificateView";
 import CommentSection from "../components/CommentSection";
+import TestimonialReviewModal from "../components/TestimonialReviewModal";
 
 export function ModulePlayerPage() {
   const { levelId, moduleId } = useParams();
@@ -253,9 +254,17 @@ export function ModulePlayerPage() {
         <div className={isMobile ? "mt-4" : ""}>
           <CertificateView
             userName={user?.name || "Student"}
-            courseName={currentLevel?.title}
+            courseName={currentCourse?.title || currentLevel?.title}
             completedModules={currentLevel?.modules.map((m) => m.title)}
             onBack={() => setShowFinalCertificate(false)}
+            testimonialCta={
+              currentCourse && completedCount === totalModules && totalModules > 0 ? (
+                <TestimonialReviewModal
+                  mainCourseId={currentCourse._id}
+                  courseName={currentCourse.title}
+                />
+              ) : null
+            }
           />
         </div>
       );

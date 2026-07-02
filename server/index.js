@@ -6,18 +6,21 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const courseRoutes = require('./routes/courses');
 const commentRoutes = require('./routes/comments');
+const testimonialRoutes = require('./routes/testimonials');
+const { UPLOAD_ROOT } = require('./utils/testimonialStorage');
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static(UPLOAD_ROOT.replace(/\/testimonials$/, '')));
 
 app.get('/', (req, res) => {
   res.json({
     status: 'ok',
     service: 'TFF API',
-    routes: ['/api/auth', '/api/user', '/api/courses', '/api/comments']
+    routes: ['/api/auth', '/api/user', '/api/courses', '/api/comments', '/api/testimonials', '/api/admin/testimonials']
   });
 });
 
@@ -26,6 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api', testimonialRoutes);
 
 // Database Connection
 if (process.env.MONGODB_URI.includes('cluster0.mongodb.net')) {

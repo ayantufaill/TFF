@@ -3,6 +3,30 @@ import api from '../services/api';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../config/firebase';
 
+const getGoogleAuthErrorMessage = (error: unknown) => {
+  const code = typeof error === 'object' && error && 'code' in error
+    ? String((error as { code?: string }).code)
+    : '';
+
+  if (code === 'auth/unauthorized-domain') {
+    return `Google login is not enabled for ${window.location.hostname}. Add this domain to Firebase Authentication > Settings > Authorized domains.`;
+  }
+  if (code === 'auth/popup-blocked') {
+    return 'The Google sign-in popup was blocked. Allow popups for this website and try again.';
+  }
+  if (code === 'auth/popup-closed-by-user') {
+    return 'Google sign-in was cancelled before completion.';
+  }
+  if (code === 'auth/cancelled-popup-request') {
+    return 'Another Google sign-in popup is already open.';
+  }
+  if (code === 'auth/operation-not-allowed') {
+    return 'Google sign-in is not enabled in Firebase Authentication.';
+  }
+
+  return error instanceof Error ? error.message : 'Google sign-in failed.';
+};
+
 interface User {
   id: string;
   name: string;
@@ -77,18 +101,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       throw new Error('Google sign-in needs Firebase configuration before it can be used.');
     }
 
-    // 1. Authenticate with Google on the client using Firebase
-    const result = await signInWithPopup(auth, googleProvider);
-    const idToken = await result.user.getIdToken(true);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const idToken = await result.user.getIdToken(true);
 
-    // 2. Exchange Firebase Token for Backend JWT
-    const res = await api.post('/auth/google-login', { idToken });
-    const { token: newToken, user: userData } = res.data;
+      const res = await api.post('/auth/google-login', { idToken });
+      const { token: newToken, user: userData } = res.data;
 
-    // 3. Set standard authentication states
-    localStorage.setItem('token', newToken);
-    setToken(newToken);
-    setUser(userData);
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
+      setUser(userData);
+    } catch (error: any) {
+      if (error?.response?.data?.message) throw error;
+      throw new Error(getGoogleAuthErrorMessage(error));
+    }
   };
 
   const logout = () => {

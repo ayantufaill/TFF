@@ -31,6 +31,7 @@ interface CertificateViewProps {
   courseName?: string;
   completedModules?: string[];
   onBack: () => void;
+  testimonialCta?: React.ReactNode;
 }
 
 // ─── Component ───────────────────────────────────────────────────
@@ -39,6 +40,7 @@ const CertificateView: React.FC<CertificateViewProps> = ({
   courseName = "Foundations of Faith & Islamic Practice",
   completedModules = [],
   onBack,
+  testimonialCta,
 }) => {
   const certificateRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -561,9 +563,10 @@ const CertificateView: React.FC<CertificateViewProps> = ({
           </div>
         </div>
         {/* ── End Certificate ──────────────────────────────────── */}
+          </div>
+        </div>
       </div>
-      </div>
-      </div>
+      {testimonialCta ? <div className="w-full mt-6 px-2 sm:px-0">{testimonialCta}</div> : null}
     </div>
   );
 };

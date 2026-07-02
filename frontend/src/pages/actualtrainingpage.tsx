@@ -514,7 +514,7 @@ export function ActualTrainingPage() {
                     return (
                       <button
                         onClick={() => navigate(`/training/module/${level._id}/${lastModule.number}?cert=true`)}
-                        className="w-full mt-4 p-6 rounded-2xl border-2 border-[#C9A961]/40 bg-gradient-to-r from-[#FAF8F3] to-[#FDF6E3] hover:border-[#C9A961] hover:shadow-md transition-all flex items-center gap-5 text-left group"
+                        className="w-full mt-6 p-6 rounded-2xl border-2 border-[#C9A961]/40 bg-gradient-to-r from-[#FAF8F3] to-[#FDF6E3] hover:border-[#C9A961] hover:shadow-md transition-all flex items-center gap-5 text-left group"
                       >
                         <div className="w-14 h-14 rounded-full bg-[#1B2A4A] flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-105 transition-transform">
                           <Award className="w-7 h-7 text-[#C9A961]" />
