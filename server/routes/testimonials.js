@@ -9,8 +9,7 @@ const Module = require('../models/Module');
 const Testimonial = require('../models/Testimonial');
 const {
   uploadTestimonialMedia,
-  fileToPublicUrl,
-  cleanupUploadedFiles,
+  uploadFilesToFirebase,
   deleteStoredMediaByUrl,
   validateUploadedFileSizes
 } = require('../utils/testimonialStorage');
@@ -93,52 +92,45 @@ router.post('/testimonials', auth, uploadMedia, async (req, res) => {
   const rating = req.body.rating === '' || req.body.rating === undefined ? null : Number(req.body.rating);
 
   try {
+    // Validate file sizes before uploading to Firebase
     const sizeError = validateUploadedFileSizes(req.files);
-    if (sizeError) {
-      cleanupUploadedFiles(req.files);
-      return res.status(400).json({ message: sizeError });
-    }
+    if (sizeError) return res.status(400).json({ message: sizeError });
 
     if (!isObjectId(mainCourseId)) {
-      cleanupUploadedFiles(req.files);
       return res.status(400).json({ message: 'Valid course id is required' });
     }
 
     if (!text || String(text).trim().length < 20 || String(text).trim().length > 3000) {
-      cleanupUploadedFiles(req.files);
       return res.status(400).json({ message: 'Testimonial must be between 20 and 3000 characters' });
     }
 
     if (rating !== null && (!Number.isInteger(rating) || rating < 1 || rating > 5)) {
-      cleanupUploadedFiles(req.files);
       return res.status(400).json({ message: 'Rating must be between 1 and 5' });
     }
 
     const user = await User.findById(req.user.id);
-    if (!user) {
-      cleanupUploadedFiles(req.files);
-      return res.status(404).json({ message: 'User not found' });
-    }
+    if (!user) return res.status(404).json({ message: 'User not found' });
 
     const completion = await getCourseCompletion(user, mainCourseId);
     if (!completion.completed) {
-      cleanupUploadedFiles(req.files);
       return res.status(403).json({ message: completion.reason });
     }
 
     const existing = await Testimonial.findOne({ userId: req.user.id, mainCourseId });
     if (existing) {
-      cleanupUploadedFiles(req.files);
       return res.status(409).json({ message: 'You have already submitted a testimonial for this course' });
     }
+
+    // Upload buffers to Firebase Storage and get permanent public URLs
+    const { profileImageUrl, videoUrl } = await uploadFilesToFirebase(req.files);
 
     const testimonial = await Testimonial.create({
       userId: req.user.id,
       mainCourseId,
       text: String(text).trim(),
       rating,
-      profileImageUrl: fileToPublicUrl(req.files?.profileImage?.[0]),
-      videoUrl: fileToPublicUrl(req.files?.video?.[0]),
+      profileImageUrl,
+      videoUrl,
       status: 'APPROVED',
       reviewedAt: new Date()
     });
@@ -149,8 +141,6 @@ router.post('/testimonials', auth, uploadMedia, async (req, res) => {
 
     return res.status(201).json(serializeTestimonial(populated));
   } catch (err) {
-    cleanupUploadedFiles(req.files);
-
     if (err.code === 11000) {
       return res.status(409).json({ message: 'You have already submitted a testimonial for this course' });
     }
@@ -267,8 +257,10 @@ router.delete('/admin/testimonials/:id', [auth, admin], async (req, res) => {
       return res.status(404).json({ message: 'Testimonial not found' });
     }
 
-    deleteStoredMediaByUrl(testimonial.profileImageUrl);
-    deleteStoredMediaByUrl(testimonial.videoUrl);
+    await Promise.allSettled([
+      deleteStoredMediaByUrl(testimonial.profileImageUrl),
+      deleteStoredMediaByUrl(testimonial.videoUrl)
+    ]);
 
     res.json({ message: 'Testimonial deleted' });
   } catch (err) {

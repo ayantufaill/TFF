@@ -48,7 +48,8 @@ if (!serviceAccount) {
 
 if (serviceAccount) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET || `${serviceAccount.project_id}.appspot.com`
   });
 } else {
   console.error('Firebase Admin SDK failed to initialize: No service account credentials available.');
