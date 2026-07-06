@@ -7,14 +7,12 @@ const userRoutes = require('./routes/user');
 const courseRoutes = require('./routes/courses');
 const commentRoutes = require('./routes/comments');
 const testimonialRoutes = require('./routes/testimonials');
-const { UPLOAD_ROOT } = require('./utils/testimonialStorage');
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use('/uploads', express.static(UPLOAD_ROOT.replace(/\/testimonials$/, '')));
 
 app.get('/', (req, res) => {
   res.json({
