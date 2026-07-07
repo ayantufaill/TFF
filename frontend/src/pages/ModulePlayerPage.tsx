@@ -49,18 +49,28 @@ export function ModulePlayerPage() {
 
   const completedModules = user?.completedModules || [];
   const isAdmin = user?.role === "admin";
-  const isModuleVideoCompleted = (module?: { _id: string; number: number }) =>
+  const isModuleVideoCompleted = (
+    module?: { _id: string; number: number },
+    list: string[] = completedModules,
+  ) =>
     !!module &&
-    completedModules.some(
+    list.some(
       (id) =>
         id === `module-${String(module._id)}` ||
         id === `module-${String(module.number)}`,
     );
-  const isModuleQuizPassed = (module?: { _id: string }) =>
-    !!module && completedModules.includes(`quiz-module-${module._id}`);
-  const isModuleFullyCompleted = (module?: { _id: string; number: number }) =>
+  const isModuleQuizPassed = (
+    module?: { _id: string },
+    list: string[] = completedModules,
+  ) => !!module && list.includes(`quiz-module-${module._id}`);
+  const isModuleFullyCompleted = (
+    module?: { _id: string; number: number },
+    list: string[] = completedModules,
+  ) =>
     isAdmin ||
-    (!!module && isModuleVideoCompleted(module) && isModuleQuizPassed(module));
+    (!!module &&
+      isModuleVideoCompleted(module, list) &&
+      isModuleQuizPassed(module, list));
 
   const isCompleted = isModuleVideoCompleted(currentModule);
   const isLastModuleOfLevel =
@@ -69,9 +79,13 @@ export function ModulePlayerPage() {
     currentLevel.modules[currentLevel.modules.length - 1]._id ===
       currentModule._id;
   const hasPassedModuleQuiz = isModuleQuizPassed(currentModule);
-  const allLectureQuizzesPassed = !!currentLevel?.modules.every((m) =>
-    isModuleQuizPassed(m),
-  );
+
+  const totalModules =
+    currentCourse?.levels.reduce((acc, l) => acc + l.modules.length, 0) || 0;
+  const courseModules = currentCourse?.levels.flatMap((l) => l.modules) || [];
+  const isCourseFullyCompleted = (list: string[] = completedModules) =>
+    totalModules > 0 &&
+    courseModules.every((m) => isModuleFullyCompleted(m, list));
 
   const location = useLocation();
   const certParam = new URLSearchParams(location.search).get("cert") === "true";
@@ -142,9 +156,9 @@ export function ModulePlayerPage() {
 
   const handleModuleQuizComplete = async (passed: boolean) => {
     if (passed && currentModule?._id) {
-      await updateProgress(`quiz-module-${currentModule._id}`);
+      const updatedUser = await updateProgress(`quiz-module-${currentModule._id}`);
       setShowModuleQuiz(false);
-      if (isLastModuleOfLevel) {
+      if (isLastModuleOfLevel && isCourseFullyCompleted(updatedUser?.completedModules)) {
         setShowFinalCertificate(true);
       } else {
         handleNext(true);
@@ -226,9 +240,6 @@ export function ModulePlayerPage() {
     }
   };
 
-  const totalModules =
-    currentCourse?.levels.reduce((acc, l) => acc + l.modules.length, 0) || 0;
-  const courseModules = currentCourse?.levels.flatMap((l) => l.modules) || [];
   const completedCount = courseModules.filter((m) =>
     isModuleFullyCompleted(m),
   ).length;
@@ -258,7 +269,7 @@ export function ModulePlayerPage() {
             completedModules={currentLevel?.modules.map((m) => m.title)}
             onBack={() => setShowFinalCertificate(false)}
             testimonialCta={
-              currentCourse && completedCount === totalModules && totalModules > 0 ? (
+              currentCourse && isCourseFullyCompleted() ? (
                 <TestimonialReviewModal
                   mainCourseId={currentCourse._id}
                   courseName={currentCourse.title}
@@ -312,10 +323,9 @@ export function ModulePlayerPage() {
       !isModuleQuizLoading && (!moduleQuiz || hasPassedModuleQuiz || isAdmin);
     const canGoNext =
       (isCompleted || isVideoCompleted || isAdmin) && moduleQuizDone;
-    const allModulesCompleted = completedCount === totalModules && totalModules > 0;
     const showCertButton =
       isLastModuleOfLevel &&
-      (allLectureQuizzesPassed || allModulesCompleted || isAdmin) &&
+      isCourseFullyCompleted() &&
       !showFinalCertificate &&
       !showModuleQuiz;
 
@@ -572,9 +582,8 @@ export function ModulePlayerPage() {
                 );
               })}
 
-              {/* Certificate entry — visible after all lecture quizzes are completed */}
-              {(allLectureQuizzesPassed ||
-                (completedCount === totalModules && totalModules > 0)) && (
+              {/* Certificate entry — visible after the course is fully completed */}
+              {isCourseFullyCompleted() && (
                 <button
                   onClick={() => setShowFinalCertificate(true)}
                   className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-4 mt-4 ${

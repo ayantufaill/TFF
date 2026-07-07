@@ -27,7 +27,7 @@ const getGoogleAuthErrorMessage = (error: unknown) => {
   return error instanceof Error ? error.message : 'Google sign-in failed.';
 };
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -49,7 +49,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
-  updateProgress: (moduleId?: string, quizAnswers?: Record<string, number[]>, lastViewedModuleId?: string) => Promise<void>;
+  updateProgress: (moduleId?: string, quizAnswers?: Record<string, number[]>, lastViewedModuleId?: string) => Promise<User | undefined>;
   updateProfile: (data: { name?: string; currentPassword?: string; newPassword?: string }) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (email: string, otp: string, newPassword: string) => Promise<void>;
@@ -128,6 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await api.post('/user/progress', { moduleId, quizAnswers, lastViewedModuleId });
       setUser(res.data); // The response is now the full user object
+      return res.data;
     } catch (err) {
       console.error('Error updating progress:', err);
     }

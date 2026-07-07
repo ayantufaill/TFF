@@ -49,7 +49,10 @@ const getCourseCompletion = async (user, mainCourseId) => {
   const completedSet = normalizeCompletedModules(user.completedModules);
   const missingModule = modules.find((module) => {
     const moduleId = String(module._id);
-    return !completedSet.has(`module-${moduleId}`) || !completedSet.has(`quiz-module-${moduleId}`);
+    const videoDone =
+      completedSet.has(`module-${moduleId}`) || completedSet.has(`module-${module.number}`);
+    const quizDone = completedSet.has(`quiz-module-${moduleId}`);
+    return !videoDone || !quizDone;
   });
 
   return {

@@ -56,6 +56,7 @@ export default function TestimonialSubmission({ mainCourseId, courseName }: Test
   const [formMessage, setFormMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [incompleteReason, setIncompleteReason] = useState<string | null>(null);
   const liveVideoRef = useRef<HTMLVideoElement | null>(null);
   const cameraStreamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -239,7 +240,11 @@ export default function TestimonialSubmission({ mainCourseId, courseName }: Test
       toast.success("Your testimonial was published");
     } catch (err: any) {
       const message = err?.response?.data?.message || "Could not submit testimonial. Please check your connection and try again.";
-      setFormMessage({ type: "error", text: message });
+      if (err?.response?.status === 403) {
+        setIncompleteReason(message);
+      } else {
+        setFormMessage({ type: "error", text: message });
+      }
       toast.error(message);
     } finally {
       setSubmitting(false);
@@ -333,6 +338,25 @@ export default function TestimonialSubmission({ mainCourseId, courseName }: Test
 
             <p className="mt-6 text-center text-xs font-medium text-gray-400">
               Your testimonial is visible on the public testimonials page.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (incompleteReason) {
+    return (
+      <Card className="w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-black/5">
+        <CardContent className="p-0">
+          <div className="px-8 py-9 text-center sm:px-12">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-600">
+              <AlertCircle className="h-6 w-6" />
+            </div>
+            <h3 className="mt-3 text-2xl font-black leading-tight text-[#1B2A4A]">Course not finished yet</h3>
+            <p className="mx-auto mt-2 max-w-md text-sm font-medium leading-6 text-gray-500">{incompleteReason}</p>
+            <p className="mx-auto mt-4 max-w-md text-xs font-medium leading-6 text-gray-400">
+              Complete every remaining lesson and quiz for {courseName}, then come back to share your review.
             </p>
           </div>
         </CardContent>
