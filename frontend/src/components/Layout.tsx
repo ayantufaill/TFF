@@ -43,41 +43,65 @@ export function Layout() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Scroll-reveal: fade/slide sections in as they enter the viewport
+  // Scroll to top on route change (skip hash links and the initial load,
+  // so the browser's own scroll restoration on refresh keeps working)
+  const prevPathRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (prevPathRef.current !== null && prevPathRef.current !== location.pathname && !location.hash) {
+      window.scrollTo(0, 0);
+    }
+    prevPathRef.current = location.pathname;
+  }, [location.pathname, location.hash]);
+
+  // Scroll-reveal: fade/slide sections in as they enter the viewport.
+  // Deterministic: anything already in view is revealed synchronously,
+  // so content can never be left hidden waiting for an observer callback.
   useEffect(() => {
     if (isAdmin || isModulePlayer) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const main = document.getElementById('main-content');
     if (!main) return;
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('rv-visible');
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0, rootMargin: '0px 0px -8% 0px' },
-    );
+    const check = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      main.querySelectorAll<HTMLElement>('.rv:not(.rv-visible)').forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.92 && r.bottom > 0) el.classList.add('rv-visible');
+      });
+    };
 
     const attach = () => {
       main
         .querySelectorAll<HTMLElement>('section:not([data-no-reveal]), [data-reveal]')
         .forEach((el) => {
-          if (el.classList.contains('rv')) return;
-          el.classList.add('rv');
-          io.observe(el);
+          if (!el.classList.contains('rv')) el.classList.add('rv');
         });
+      check();
+    };
+
+    let ticking = false;
+    const onScrollOrResize = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        check();
+      });
     };
 
     attach();
     const mo = new MutationObserver(attach);
     mo.observe(main, { childList: true, subtree: true });
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize, { passive: true });
     return () => {
-      io.disconnect();
       mo.disconnect();
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
+      // Never leave content hidden when this route's reveal engine detaches
+      main.querySelectorAll<HTMLElement>('.rv:not(.rv-visible)').forEach((el) => {
+        el.classList.remove('rv');
+      });
     };
   }, [location.pathname, isAdmin, isModulePlayer]);
 
