@@ -26,6 +26,7 @@ const navLinks = [
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -33,6 +34,52 @@ export function Layout() {
   const isAdmin = location.pathname.startsWith('/admin');
   const isModulePlayer = location.pathname.startsWith('/training/module/');
   const showBack = location.pathname !== '/' && location.pathname !== '';
+
+  // Elevate header once the page is scrolled
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Scroll-reveal: fade/slide sections in as they enter the viewport
+  useEffect(() => {
+    if (isAdmin || isModulePlayer) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const main = document.getElementById('main-content');
+    if (!main) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('rv-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0, rootMargin: '0px 0px -8% 0px' },
+    );
+
+    const attach = () => {
+      main
+        .querySelectorAll<HTMLElement>('section:not([data-no-reveal]), [data-reveal]')
+        .forEach((el) => {
+          if (el.classList.contains('rv')) return;
+          el.classList.add('rv');
+          io.observe(el);
+        });
+    };
+
+    attach();
+    const mo = new MutationObserver(attach);
+    mo.observe(main, { childList: true, subtree: true });
+    return () => {
+      io.disconnect();
+      mo.disconnect();
+    };
+  }, [location.pathname, isAdmin, isModulePlayer]);
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -64,7 +111,7 @@ export function Layout() {
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
-      <header className="bg-white shadow-sm sticky top-0 z-50 relative h-16 sm:h-20 min-h-[4rem]">
+      <header className={`site-header ${scrolled ? 'is-scrolled' : ''} sticky top-0 z-50 relative h-16 sm:h-20 min-h-[4rem]`}>
         {/* Back – desktop only: top-left (web unchanged) */}
         {showBack ? (
           <div className="absolute left-0 top-0 bottom-0 h-full hidden lg:flex items-center justify-center pl-10 sm:pl-14 z-10">
@@ -129,7 +176,7 @@ export function Layout() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className={`transition-colors whitespace-nowrap ${isActive ? 'text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#1B2A4A]'
+                    className={`nav-link transition-colors whitespace-nowrap ${isActive ? 'is-active text-[#C9A961] font-medium' : 'text-gray-700 hover:text-[#1B2A4A]'
                       }`}
                   >
                     {link.label}
@@ -240,7 +287,7 @@ export function Layout() {
       </main>
 
       {/* Footer – About TFF ke upar zyada green; © 2026 neeche se upar */}
-      {!isModulePlayer && <footer className={`bg-[#1B2A4A] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
+      {!isModulePlayer && <footer className={`site-footer bg-[#1B2A4A] text-white ${isAdmin ? 'mt-0' : 'mt-36 sm:mt-44 lg:mt-56'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 'clamp(28px, 3.5vw, 48px)', paddingBottom: 'clamp(20px, 2.5vw, 36px)' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             {/* About */}
@@ -284,7 +331,7 @@ export function Layout() {
                   placeholder="Your email"
                   autoComplete="email"
                   aria-label="Email for newsletter"
-                  className="px-3 py-2 rounded text-sm flex-1 min-w-0 text-gray-900 w-full sm:w-auto"
+                  className="footer-input px-3 py-2 text-sm flex-1 min-w-0 text-gray-900 w-full sm:w-auto"
                 />
                 <Button type="button" className="bg-[#C9A961] hover:bg-[#B89751] text-white w-full sm:w-auto shrink-0" aria-label="Subscribe to newsletter">
                   Subscribe
