@@ -183,19 +183,56 @@
 @media (min-width: 1024px) { .tp-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .tp-card {
+  position: relative;
+  overflow: hidden;
   border-radius: 1rem;
   border: 1px solid #F0EEE9;
   background: #fff;
   padding: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 400ms ease;
   display: flex;
   flex-direction: column;
+  will-change: transform;
+}
+.tp-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, #C9A961, #8B7355);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 .tp-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 32px rgba(27, 42, 74, 0.1);
-  border-color: rgba(201, 169, 97, 0.3);
+  transform: translateY(-8px) scale(1.015);
+  box-shadow:
+    0 24px 48px rgba(27, 42, 74, 0.16),
+    0 0 0 1px rgba(201, 169, 97, 0.4);
+  border-color: rgba(201, 169, 97, 0.4);
+}
+.tp-card:hover::before { transform: scaleX(1); }
+
+.tp-card-quote {
+  transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease;
+}
+.tp-card:hover .tp-card-quote {
+  transform: scale(1.15) rotate(-6deg);
+  opacity: 0.55;
+}
+
+.tp-card:hover .tp-avatar-img,
+.tp-card:hover .tp-avatar-fallback {
+  transform: scale(1.08);
+}
+.tp-avatar-img,
+.tp-avatar-fallback {
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tp-video-wrap { margin-top: 1rem; border-radius: 0.75rem; overflow: hidden; background: #000; }

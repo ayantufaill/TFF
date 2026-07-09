@@ -133,8 +133,9 @@ p {
 }
 
 :where([data-slot="card"]:hover) {
-  box-shadow: var(--shadow-md);
-  border-color: rgba(27, 42, 74, 0.12);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(201, 169, 97, 0.35);
+  border-color: rgba(201, 169, 97, 0.35);
 }
 
 /* Opt-in stronger lift for interactive/marketing cards */
@@ -325,6 +326,7 @@ p {
     transform: none !important;
   }
 
+  [data-slot="card"]:hover,
   .premium-card:hover,
   .img-premium:hover,
   [data-slot="button"]:not(:disabled):active,

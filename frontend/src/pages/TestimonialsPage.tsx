@@ -199,7 +199,7 @@ export function TestimonialsPage() {
               <div className="tp-grid">
                 {filteredTestimonials.map((item) => (
                   <article key={item._id} className="tp-card">
-                    <Quote className="h-7 w-7 text-[#C9A961]" style={{ opacity: 0.35 }} />
+                    <Quote className="tp-card-quote h-7 w-7 text-[#C9A961]" style={{ opacity: 0.35 }} />
 
                     {item.rating ? (
                       <div className="mt-6">
