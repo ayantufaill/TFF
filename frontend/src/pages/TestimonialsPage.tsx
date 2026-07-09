@@ -104,7 +104,38 @@ export function TestimonialsPage() {
 
       <main className="tp-container px-4 py-16">
         {loading ? (
-          <div className="py-16 text-center font-bold text-[#1B2A4A]">Loading student feedback...</div>
+          <>
+            <div className="tp-skel-summary">
+              <div className="tp-skel" style={{ width: 96, height: 56 }} />
+              <div className="tp-skel" style={{ width: 140, height: 22, marginTop: "1rem" }} />
+              <div className="tp-skel" style={{ width: 110, height: 14, marginTop: "0.75rem" }} />
+            </div>
+
+            <div className="tp-skel-filters">
+              <div className="tp-skel" style={{ width: 220, height: 44, borderRadius: 9999 }} />
+              <div className="tp-skel" style={{ width: 64, height: 44, borderRadius: 9999 }} />
+              <div className="tp-skel" style={{ width: 64, height: 44, borderRadius: 9999 }} />
+              <div className="tp-skel" style={{ width: 64, height: 44, borderRadius: 9999 }} />
+            </div>
+
+            <div className="tp-grid">
+              {[1, 2, 3, 4, 5, 6].map((key) => (
+                <div key={key} className="tp-skel-card">
+                  <div className="tp-skel" style={{ width: 28, height: 28, borderRadius: 6 }} />
+                  <div className="tp-skel" style={{ width: 100, height: 14 }} />
+                  <div className="tp-skel" style={{ width: "100%", height: 14 }} />
+                  <div className="tp-skel" style={{ width: "70%", height: 14 }} />
+                  <div className="tp-skel-footer">
+                    <div className="tp-skel" style={{ width: 44, height: 44, borderRadius: 9999, flexShrink: 0 }} />
+                    <div className="tp-skel-footer-text">
+                      <div className="tp-skel" style={{ width: "60%", height: 12 }} />
+                      <div className="tp-skel" style={{ width: "40%", height: 10 }} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         ) : testimonials.length === 0 ? (
           <div className="tp-empty" style={{ maxWidth: "28rem", marginLeft: "auto", marginRight: "auto" }}>
             <Quote className="mx-auto h-10 w-10 text-[#C9A961]" />
