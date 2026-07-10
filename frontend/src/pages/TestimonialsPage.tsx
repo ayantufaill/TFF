@@ -80,13 +80,13 @@ export function TestimonialsPage() {
           </span>
           <h1 className="tp-title">Real Stories, Real Growth</h1>
           <p className="tp-subtitle">
-            Verified feedback from learners who completed our training courses — in their own words.
+            Verified feedback from learners who completed our training courses, in their own words.
           </p>
 
           {!loading && testimonials.length > 0 && (
             <div className="tp-stats mt-10 mx-auto" style={{ maxWidth: "28rem" }}>
               <div>
-                <p className="tp-stat-num">{averageRating ? averageRating.toFixed(1) : "—"}</p>
+                <p className="tp-stat-num">{averageRating ? averageRating.toFixed(1) : "N/A"}</p>
                 <p className="tp-stat-label">Avg. rating</p>
               </div>
               <div>
@@ -94,7 +94,7 @@ export function TestimonialsPage() {
                 <p className="tp-stat-label">{testimonials.length === 1 ? "Review" : "Reviews"}</p>
               </div>
               <div>
-                <p className="tp-stat-num">{recommendPercent !== null ? `${recommendPercent}%` : "—"}</p>
+                <p className="tp-stat-num">{recommendPercent !== null ? `${recommendPercent}%` : "N/A"}</p>
                 <p className="tp-stat-label">Recommend</p>
               </div>
             </div>
@@ -292,7 +292,7 @@ export function TestimonialsPage() {
           <Video className="mx-auto text-[#C9A961]" style={{ width: 36, height: 36 }} />
           <h2 className="tp-cta-title">Have a story of your own?</h2>
           <p className="mt-6 mx-auto text-gray-400" style={{ maxWidth: "34rem" }}>
-            Complete one of our training courses and share your experience — it helps future learners choose with confidence.
+            Complete one of our training courses and share your experience. It helps future learners choose with confidence.
           </p>
           <Link to="/training" className="mt-10 inline-block">
             <button type="button" className="tp-btn-primary">

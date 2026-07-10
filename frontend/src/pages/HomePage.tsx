@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield, ChevronLeft, ChevronRight, Target, CheckCircle } from 'lucide-react';
+import { Heart, Users, BookOpen, HandHeart, Globe, TrendingUp, Award, Shield, ChevronLeft, ChevronRight, Target, CheckCircle, Quote } from 'lucide-react';
+import './HomePage.css';
 
 // Cover URL for public/books/covers (works with base: './')
 function getCoverUrl(relativePath: string): string {
@@ -90,6 +91,14 @@ const DUAS_AZKAR: { arabic: string; transliteration: string; meaning: string }[]
   { arabic: 'رَبِّ اشْرَحْ لِي صَدْرِي', transliteration: 'Rabbi ishrah li sadri', meaning: 'My Lord, expand my chest.' },
   { arabic: 'اللَّهُمَّ ثَبِّتْ قَلْبِي عَلَى دِينِكَ', transliteration: 'Allahumma thabbit qalbi \'ala deenik', meaning: 'O Allah, keep my heart firm upon Your religion.' },
   { arabic: 'اللَّهُمَّ إِنِّي تَوَكَّلْتُ عَلَيْكَ', transliteration: 'Allahumma inni tawakkaltu \'alayk', meaning: 'O Allah, I place my trust in You.' },
+];
+
+const HADITHS: { text: string; source: string }[] = [
+  { text: 'None of you truly believes until he loves for his brother what he loves for himself.', source: 'Sahih al-Bukhari & Muslim' },
+  { text: 'The strong is not the one who overcomes people by his strength, but the one who controls his anger.', source: 'Sahih al-Bukhari & Muslim' },
+  { text: 'Whoever believes in Allah and the Last Day should speak good or remain silent.', source: 'Sahih al-Bukhari & Muslim' },
+  { text: 'Make things easy and do not make them difficult. Cheer people up and do not repel them.', source: 'Sahih al-Bukhari' },
+  { text: 'The most beloved of deeds to Allah are those done consistently, even if small.', source: 'Sahih al-Bukhari & Muslim' },
 ];
 
 export function HomePage() {
@@ -263,10 +272,49 @@ export function HomePage() {
           />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 sm:py-32 lg:py-40 text-center z-10">
-          <div className="mb-16 sm:mb-20 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: '-120px',
+            right: '-100px',
+            width: 380,
+            height: 380,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(201,169,97,0.30), transparent 70%)',
+            filter: 'blur(50px)',
+            pointerEvents: 'none',
+          }}
+        />
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            bottom: '-140px',
+            left: '-100px',
+            width: 380,
+            height: 380,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(201,169,97,0.22), transparent 70%)',
+            filter: 'blur(50px)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div
+          className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 text-center z-10"
+          style={{ paddingTop: '7rem', paddingBottom: '7rem' }}
+        >
+          <div className="mb-8 text-[#C9A961] text-xl sm:text-2xl md:text-3xl leading-relaxed px-6 sm:px-8" dir="rtl" style={{ minHeight: '2.5rem' }}>
             بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
           </div>
+
+          <div className="mb-16 sm:mb-20" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }} aria-hidden>
+            <span style={{ width: 44, height: 1, background: 'linear-gradient(to right, transparent, #C9A961)' }} />
+            <span style={{ width: 7, height: 7, background: '#C9A961', transform: 'rotate(45deg)', boxShadow: '0 0 8px rgba(201,169,97,0.6)' }} />
+            <span style={{ width: 44, height: 1, background: 'linear-gradient(to left, transparent, #C9A961)' }} />
+          </div>
+
           {/* Headline: fixed height, centered – pointer-events-none so arrow tap works on mobile */}
           <div className="relative min-h-[5rem] h-24 sm:h-28 md:h-32 lg:h-36 flex items-center justify-center mb-12 sm:mb-16 px-4 sm:px-6 lg:px-8 mt-0 pointer-events-none">
             {heroLeavingIndex !== null && (
@@ -310,13 +358,13 @@ export function HomePage() {
               type="button"
               size="lg"
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0"
+              className="hero-glass-btn bg-white/10 text-white border-white rounded-full backdrop-blur-sm px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0"
               onClick={() => document.getElementById('cause-of-tff')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
             >
               Cause of TFF
             </Button>
             <Link to="/daily-ayat-hadith">
-              <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
+              <Button size="lg" variant="outline" className="hero-glass-btn bg-white/10 text-white border-white rounded-full backdrop-blur-sm px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
                 Daily Ayat and Hadith
               </Button>
             </Link>
@@ -324,13 +372,13 @@ export function HomePage() {
               type="button"
               size="lg"
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 text-white border-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0"
+              className="hero-glass-btn bg-white/10 text-white border-white rounded-full backdrop-blur-sm px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0"
               onClick={() => document.getElementById('dua-azkar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
             >
               Azkaar / Dua
             </Button>
             <Link to="/donate">
-              <Button size="lg" className="bg-[#C9A961] hover:bg-[#B89751] text-white px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
+              <Button size="lg" className="hero-donate-btn bg-[#C9A961] text-white rounded-full px-4 py-4 sm:px-6 sm:py-6 text-sm sm:text-lg shrink-0">
                 Donate Now
               </Button>
             </Link>
@@ -378,6 +426,23 @@ export function HomePage() {
             </button>
           </div>
         )}
+      </section>
+
+      {/* Hadith ticker */}
+      <section className="hadith-ticker" aria-label="Hadith of the Prophet, scrolling">
+        <div className="hadith-ticker-shine" aria-hidden />
+        <div className="hadith-ticker-track">
+          {[...HADITHS, ...HADITHS].map((hadith, index) => (
+            <div className="hadith-ticker-item" key={index}>
+              <span className="hadith-ticker-badge">
+                <Quote className="w-3.5 h-3.5" />
+              </span>
+              <span className="hadith-ticker-text">&ldquo;{hadith.text}&rdquo;</span>
+              <span className="hadith-ticker-source">({hadith.source})</span>
+              <span className="hadith-ticker-dot" aria-hidden />
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Shahadah Section – clean two-column: text left, video right */}
