@@ -135,7 +135,7 @@ export function Layout() {
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
-      <header className={`site-header ${scrolled ? 'is-scrolled' : ''} sticky top-0 z-50 relative h-16 sm:h-20 min-h-[4rem]`}>
+      <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? 'py-3' : 'py-5'}`}>
         {/* Back – desktop only: top-left (web unchanged) */}
         {showBack ? (
           <div className="absolute left-0 top-0 bottom-0 h-full hidden lg:flex items-center justify-center pl-10 sm:pl-14 z-10">
@@ -151,8 +151,8 @@ export function Layout() {
           </div>
         ) : null}
 
-        <div className={`max-w-7xl mx-auto pl-8 sm:pl-10 lg:pl-12 pr-3 sm:pr-6 lg:pr-8 h-full ${showBack ? 'lg:pl-24 lg:pl-32' : ''}`}>
-          <div className="flex items-center justify-between h-16 sm:h-20 min-h-[4rem] gap-3">
+        <div className={`container-page ${showBack ? 'lg:pl-24' : ''}`}>
+          <div className="flex items-center justify-between rounded-full glass-card shadow-tff-soft px-4 py-2 sm:px-6 gap-3 transition-all duration-500">
             {/* Back – mobile only: logo se pehle */}
             {showBack ? (
               <button
@@ -169,9 +169,9 @@ export function Layout() {
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg"
+              className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg py-1.5"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#C9A961] shadow-md shrink-0 bg-white">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#C9A961] shadow-tff-soft shrink-0 bg-white">
                 <img
                   src={LOGO_SVG}
                   alt="The Two Fingers Foundation"
@@ -182,7 +182,7 @@ export function Layout() {
                 />
               </div>
               <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-semibold text-[#1B2A4A] truncate">The Two Fingers Foundation</h1>
+                <h1 className="text-base sm:text-xl font-display font-semibold text-[#1B2A4A] truncate">The Two Fingers Foundation</h1>
                 <p className="text-xs text-gray-600 hidden sm:block">Empowering Lives, Nurturing Faith</p>
               </div>
             </Link>
@@ -207,6 +207,13 @@ export function Layout() {
                   </Link>
                 );
               })}
+              {/* <Link
+                to="/donate"
+                className="inline-flex items-center gap-2 rounded-full bg-[#1B2A4A] px-5 py-2.5 text-sm font-semibold text-white shadow-tff-elegant transition-all hover:bg-[#101a30] hover:shadow-tff-gold"
+              >
+                Donate
+                <span aria-hidden>→</span>
+              </Link> */}
               {user && (
                 <div className="relative ml-2" ref={dropdownRef}>
                   <button
@@ -305,8 +312,9 @@ export function Layout() {
         </div>
       )}
 
-      {/* Main Content */}
-      <main id="main-content" className="flex-1" tabIndex={-1}>
+      {/* Main Content — home page's own Hero has top padding to clear the floating nav
+          and wants its background to run to the true top, so it skips this offset. */}
+      <main id="main-content" className={`flex-1 ${showBack ? 'pt-24 sm:pt-28' : ''}`} tabIndex={-1}>
         <Outlet />
       </main>
 

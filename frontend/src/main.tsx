@@ -3,6 +3,7 @@
   import "./index.css";
   import "./styles/globals.css";
   import "./styles/premium.css";
+  import "./styles/premium-home.css";
   import { AuthProvider } from "./context/AuthContext.tsx";
 
   createRoot(document.getElementById("root")!).render(

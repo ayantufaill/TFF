@@ -3200,23 +3200,6 @@ input:focus-visible,
   backdrop-filter: blur(12px);
 }
 
-/* --- Grid --- */
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
 /* --- Shadow Inner --- */
 .shadow-inner {
   box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
@@ -3299,10 +3282,6 @@ input:focus-visible,
 
   .sm\:gap-8 {
     gap: 2rem;
-  }
-
-  .sm\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .sm\:mt-44 {
@@ -3429,14 +3408,6 @@ input:focus-visible,
     padding-bottom: 5rem;
   }
 
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .md\:gap-6 {
     gap: 1.5rem;
   }
@@ -3489,10 +3460,6 @@ input:focus-visible,
 
   .lg\:pr-8 {
     padding-right: 2rem;
-  }
-
-  .lg\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lg\:mt-56 {
