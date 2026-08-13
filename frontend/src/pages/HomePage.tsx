@@ -297,25 +297,32 @@ const DUAS_AZKAR: {
   },
 ];
 
-const HADITHS: { text: string; source: string }[] = [
+const HADITHS: { text: string; arabic: string; source: string }[] = [
   {
     text: "None of you truly believes until he loves for his brother what he loves for himself.",
+    arabic: "لَا يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لِأَخِيهِ مَا يُحِبُّ لِنَفْسِهِ",
     source: "Sahih al-Bukhari & Muslim",
   },
   {
     text: "The strong is not the one who overcomes people by his strength, but the one who controls his anger.",
+    arabic:
+      "لَيْسَ الشَّدِيدُ بِالصُّرَعَةِ، إِنَّمَا الشَّدِيدُ الَّذِي يَمْلِكُ نَفْسَهُ عِنْدَ الْغَضَبِ",
     source: "Sahih al-Bukhari & Muslim",
   },
   {
     text: "Whoever believes in Allah and the Last Day should speak good or remain silent.",
+    arabic:
+      "مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الْآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ",
     source: "Sahih al-Bukhari & Muslim",
   },
   {
     text: "Make things easy and do not make them difficult. Cheer people up and do not repel them.",
+    arabic: "يَسِّرُوا وَلَا تُعَسِّرُوا، وَبَشِّرُوا وَلَا تُنَفِّرُوا",
     source: "Sahih al-Bukhari",
   },
   {
     text: "The most beloved of deeds to Allah are those done consistently, even if small.",
+    arabic: "أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ",
     source: "Sahih al-Bukhari & Muslim",
   },
 ];
@@ -805,8 +812,8 @@ export function HomePage() {
           }}
         />
 
-        <div className="container-page grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
-          <div>
+        <div className="container-page">
+          <div className="mx-auto max-w-3xl text-center">
             <Reveal>
               <p className="font-arabic text-2xl text-tff-gold-soft md:text-3xl">
                 بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
@@ -843,21 +850,21 @@ export function HomePage() {
               {heroLeavingIndex !== null && (
                 <p
                   key={`sub-leave-${heroLeavingIndex}`}
-                  className={`absolute inset-0 max-w-xl text-lg leading-relaxed text-white/75 transition-opacity duration-700 ease-in-out ${heroLeavingVisible ? "opacity-100" : "opacity-0"}`}
+                  className={`absolute inset-0 mx-auto max-w-xl text-lg leading-relaxed text-white/75 transition-opacity duration-700 ease-in-out ${heroLeavingVisible ? "opacity-100" : "opacity-0"}`}
                 >
                   {HERO_TAGLINES[heroLeavingIndex].subtitle}
                 </p>
               )}
               <p
                 key={`sub-${heroTaglineIndex}`}
-                className={`max-w-xl text-lg leading-relaxed text-white/75 transition-opacity duration-700 ease-in-out ${heroEntering ? "opacity-0" : "opacity-100"}`}
+                className={`mx-auto max-w-xl text-lg leading-relaxed text-white/75 transition-opacity duration-700 ease-in-out ${heroEntering ? "opacity-0" : "opacity-100"}`}
               >
                 {HERO_TAGLINES[heroTaglineIndex].subtitle}
               </p>
             </div>
 
             <Reveal delay={200} className="mt-10">
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
                   className="hero-donate-btn group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-tff-gold px-6 py-3.5 font-semibold text-tff-navy-deep transition-transform hover:scale-[1.03]"
@@ -891,7 +898,7 @@ export function HomePage() {
             </Reveal>
 
             <Reveal delay={300}>
-              <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-white/70">
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-white/70">
                 <div className="flex items-center gap-2">
                   <span className="text-tff-gold">✦</span> 100% Transparent
                 </div>
@@ -905,7 +912,7 @@ export function HomePage() {
             </Reveal>
 
             {/* Dots + arrows */}
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-10 flex items-center justify-center gap-4">
               <button
                 type="button"
                 onClick={() => goToSlide(heroTaglineIndex - 1)}
@@ -942,10 +949,90 @@ export function HomePage() {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ================= Hadith ticker ================= */}
+      <section
+        className="hadith-ticker"
+        aria-label="Hadith of the Prophet, scrolling"
+      >
+        <div className="hadith-ticker-shine" aria-hidden />
+        <div className="hadith-ticker-track">
+          {[...HADITHS, ...HADITHS].map((hadith, index) => (
+            <div className="hadith-ticker-item" key={index}>
+              <span className="hadith-ticker-badge">
+                <Quote className="h-3.5 w-3.5" />
+              </span>
+              <div className="hadith-ticker-content">
+                <span className="hadith-ticker-arabic font-arabic" dir="rtl">
+                  {hadith.arabic}
+                </span>
+                <span className="hadith-ticker-text">
+                  &ldquo;{hadith.text}&rdquo;
+                  <span className="hadith-ticker-source">
+                    — {hadith.source}
+                  </span>
+                </span>
+              </div>
+              <span className="hadith-ticker-dot" aria-hidden />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ================= Impact snapshot ================= */}
+      <section className="relative isolate overflow-hidden bg-gradient-to-br from-tff-gold-soft/15 via-tff-cream to-tff-navy/5 py-20 md:py-32">
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 opacity-[0.06]"
+          style={{
+            backgroundImage: `url(${patternBg})`,
+            backgroundSize: "420px",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute -top-24 -right-24 -z-10 h-[420px] w-[420px] rounded-full bg-tff-gold/25 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-32 -left-24 -z-10 h-[380px] w-[380px] rounded-full bg-tff-navy/15 blur-3xl"
+        />
+        <div className="container-page grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr]">
+          <Reveal>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">
+              Our Impact
+            </p>
+            <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+              Every number <br />
+              <span className="italic text-tff-navy/60">
+                is a life restored.
+              </span>
+            </h2>
+            <p className="mt-6 max-w-lg text-lg leading-relaxed text-gray-500">
+              Behind every statistic is a widow supported, a child educated,
+              a family given back its dignity — the human face of your
+              generosity, reaching communities across Asia, Africa &amp; the
+              Middle East.
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById("our-impact")
+                  ?.scrollIntoView({ behavior: "smooth", block: "start" })
+              }
+              className="group mt-8 inline-flex items-center gap-2 font-semibold text-tff-navy"
+            >
+              See the full impact
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </button>
+          </Reveal>
 
           <Reveal
             delay={200}
-            className="relative hidden lg:block lg:mr-6 xl:mr-10"
+            className="relative mx-auto w-full max-w-md lg:ml-auto"
           >
             <div className="relative">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[32px] border border-tff-gold/20 shadow-tff-elegant">
@@ -971,7 +1058,7 @@ export function HomePage() {
                 <p className="text-xs text-gray-500">lives touched</p>
               </div>
             </div>
-            <div className="mt-5 rounded-2xl glass-dark p-5">
+            <div className="mt-5 rounded-2xl bg-tff-navy-gradient p-5 shadow-tff-soft">
               <p className="text-xs uppercase tracking-[0.14em] text-tff-gold-soft">
                 This month
               </p>
@@ -983,28 +1070,6 @@ export function HomePage() {
               </p>
             </div>
           </Reveal>
-        </div>
-      </section>
-
-      {/* ================= Hadith ticker (unchanged, already premium) ================= */}
-      <section
-        className="hadith-ticker"
-        aria-label="Hadith of the Prophet, scrolling"
-      >
-        <div className="hadith-ticker-shine" aria-hidden />
-        <div className="hadith-ticker-track">
-          {[...HADITHS, ...HADITHS].map((hadith, index) => (
-            <div className="hadith-ticker-item" key={index}>
-              <span className="hadith-ticker-badge">
-                <Quote className="h-3.5 w-3.5" />
-              </span>
-              <span className="hadith-ticker-text">
-                &ldquo;{hadith.text}&rdquo;
-              </span>
-              <span className="hadith-ticker-source">({hadith.source})</span>
-              <span className="hadith-ticker-dot" aria-hidden />
-            </div>
-          ))}
         </div>
       </section>
 
@@ -1127,6 +1192,7 @@ export function HomePage() {
 
       {/* ================= Impact ================= */}
       <section
+        id="our-impact"
         ref={impactRef}
         className="relative overflow-hidden bg-tff-navy-gradient py-20 text-white md:py-32"
       >
