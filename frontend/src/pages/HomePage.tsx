@@ -618,7 +618,6 @@ export function HomePage() {
   const heroTaglineRef = useRef(0);
   heroTaglineRef.current = heroTaglineIndex;
   const [carouselResetKey, setCarouselResetKey] = useState(0);
-  const [visibleDonate, setVisibleDonate] = useState(false);
   const [scrollP, setScrollP] = useState(0);
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
   const [playingDuaIndex, setPlayingDuaIndex] = useState<number | null>(null);
@@ -757,10 +756,9 @@ export function HomePage() {
     };
   }, [carouselResetKey]);
 
-  /* Floating donate button + scroll progress bar */
+  /* Scroll progress bar */
   useEffect(() => {
     const onScroll = () => {
-      setVisibleDonate(window.scrollY > 700);
       const h = document.documentElement;
       const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
       setScrollP(Math.max(0, Math.min(1, scrolled)));
@@ -865,13 +863,6 @@ export function HomePage() {
 
             <Reveal delay={200} className="mt-10">
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <button
-                  type="button"
-                  className="hero-donate-btn group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-tff-gold px-6 py-3.5 font-semibold text-tff-navy-deep transition-transform hover:scale-[1.03]"
-                >
-                  Donate Now
-                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
                 <button
                   type="button"
                   onClick={() =>
@@ -1795,28 +1786,24 @@ export function HomePage() {
           </Reveal>
           <Reveal delay={250}>
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/75">
-              Your support can transform lives. Whether through donation,
-              volunteering, or seeking help — every action creates ripples of
+              Your support can transform lives. Whether through
+              volunteering or seeking help — every action creates ripples of
               positive change.
+            </p>
+          </Reveal>
+          <Reveal delay={350}>
+            <p className="mx-auto mt-8 max-w-xl rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-sm leading-relaxed text-white/70">
+              We do not accept or collect monetary donations. TFF runs entirely
+              on volunteers. Please{" "}
+              <Link to="/volunteer" className="font-medium text-tff-gold-soft underline underline-offset-2 hover:text-tff-gold">
+                volunteer with us
+              </Link>{" "}
+              to support our mission.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* Floating donate button */}
-      {/* <Link
-        to="/donate"
-        className={`fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-tff-gold-gradient px-5 py-3.5 font-semibold text-tff-navy-deep shadow-tff-gold transition-all duration-500 ${
-          visibleDonate
-            ? "translate-y-0 opacity-100"
-            : "pointer-events-none translate-y-6 opacity-0"
-        }`}
-      >
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-tff-navy text-tff-gold">
-          <Heart className="h-3.5 w-3.5" />
-        </span>
-        Donate
-      </Link> */}
     </div>
   );
 }

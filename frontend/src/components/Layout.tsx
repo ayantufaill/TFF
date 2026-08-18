@@ -207,13 +207,6 @@ export function Layout() {
                   </Link>
                 );
               })}
-              {/* <Link
-                to="/donate"
-                className="inline-flex items-center gap-2 rounded-full bg-[#1B2A4A] px-5 py-2.5 text-sm font-semibold text-white shadow-tff-elegant transition-all hover:bg-[#101a30] hover:shadow-tff-gold"
-              >
-                Donate
-                <span aria-hidden>→</span>
-              </Link> */}
               {user && (
                 <div className="relative ml-2" ref={dropdownRef}>
                   <button

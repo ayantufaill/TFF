@@ -9,6 +9,7 @@ import ErrorPage from "./pages/ErrorPage";
 const UnderConstructionPage = lazy(() => import("./pages/UnderConstructionPage").then(m => ({ default: m.UnderConstructionPage })));
 // Deploy only homepage – other routes commented out
 import { AboutPage } from "./pages/AboutPage";
+import { VolunteerPage } from "./pages/VolunteerPage";
 import { DiscoveringIslamPage } from "./pages/DiscoveringIslamPage";
 import { PlaylistPage } from "./pages/PlaylistPage";
 // import { ProgramsPage } from "./pages/ProgramsPage";
@@ -18,7 +19,6 @@ import { ModulePlayerPage } from "./pages/ModulePlayerPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { ProfilePage } from "./pages/ProfilePage";
 // import { CoursesPage } from "./pages/CoursesPage";
-import { DonatePage } from "./pages/DonatePage";
 import { TestimonialsPage } from "./pages/TestimonialsPage";
 // import { GetInvolvedPage } from "./pages/GetInvolvedPage";
 // import { NotFoundPage } from "./pages/NotFoundPage";
@@ -50,8 +50,7 @@ export const router = createBrowserRouter([
       { path: "cause-of-tff", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "daily-ayat-hadith", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "azkaar-dua", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
-      { path: "donate", Component: DonatePage },
-      { path: "volunteer", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
+      { path: "volunteer", Component: VolunteerPage },
       { path: "get-help", Component: () => React.createElement(LazyRoute, { Component: UnderConstructionPage }) },
       { path: "about-us", Component: AboutPage },
       { path: "discovering-islam", Component: DiscoveringIslamPage },
@@ -71,7 +70,6 @@ export const router = createBrowserRouter([
       // { path: "about", Component: AboutPage },
       // { path: "programs", Component: ProgramsPage },
       // { path: "training", Component: TrainingPage },
-      // { path: "donate", Component: DonatePage },
       // { path: "get-involved", Component: GetInvolvedPage },
       // { path: "*", Component: NotFoundPage },
       { path: "*", Component: HomePage }, // fallback to home for client demo

@@ -31,8 +31,7 @@ export function Footer() {
     "Help Center",
     "Contact Support",
     "Feedback",
-    "Report Issue",
-    "Donate"
+    "Report Issue"
   ];
 
   return (
