@@ -342,3 +342,59 @@ p {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   Responsive layout fixes
+   Replaces hardcoded pixel-column inline grids (which never
+   adapted below their design width) with fluid, breakpointed
+   layouts. No visual change at the original desktop widths.
+   ============================================================ */
+
+/* Playlist reciter grid (was: fixed 5 columns at every width) */
+.reciter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+@media (min-width: 480px) {
+  .reciter-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 768px) {
+  .reciter-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .reciter-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+
+/* Training dashboard: sidebar + lesson area (was: fixed 280px 1fr) */
+.training-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+  .training-layout-grid { grid-template-columns: 280px 1fr; }
+}
+
+.training-sidebar {
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .training-sidebar { width: 280px; height: 100%; }
+}
+
+/* Training lesson: text column + video (was: fixed 1fr 720px, only fit very wide desktops) */
+.training-lesson-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.training-video-col {
+  width: 100%;
+  order: -1;
+}
+
+@media (min-width: 1600px) {
+  .training-lesson-grid { grid-template-columns: minmax(0, 1fr) 720px; }
+  .training-video-col { width: 720px; order: initial; }
+}

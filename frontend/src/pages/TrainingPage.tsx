@@ -944,9 +944,9 @@ export function TrainingPage() {
                 </div>
                 <h2 className="text-3xl font-bold">{level.title}</h2>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr' }} className="min-h-[750px] bg-white w-full overflow-hidden">
+              <div className="training-layout-grid min-h-[750px] bg-white w-full overflow-hidden">
                 {/* Left Sidebar: Curriculum List (Warm Premium Sidebar) */}
-                <div style={{ width: '280px', height: '100%' }} className="flex-shrink-0 border-r border-gray-100/80 bg-white">
+                <div className="training-sidebar flex-shrink-0 border-r border-gray-100/80 bg-white">
                   <div className="pl-10 pr-8 pt-8 pb-7 border-b border-gray-100 bg-white sticky top-0 z-20">
                     <h3 className="text-[11px] font-black text-[#1B2A4A] uppercase tracking-[0.25em] mb-4">Curriculum Path</h3>
                     <div className="flex flex-col gap-3">
@@ -1034,7 +1034,7 @@ export function TrainingPage() {
 
                         return (
                         <div key={module.id} className="h-full w-full animate-in fade-in slide-in-from-right-4 duration-700 p-8 lg:p-10">
-                          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 720px', gap: '1.5rem', alignItems: 'stretch', width: '100%' }}>
+                          <div className="training-lesson-grid" style={{ alignItems: 'stretch', width: '100%' }}>
                             
                             {/* Left Column: Lesson Details (Main Content) */}
                             <div className="min-w-0 space-y-12">
@@ -1118,7 +1118,7 @@ export function TrainingPage() {
                             </div>
 
                             {/* Right Column: Cinematic Video Player (Sticky Focus) */}
-                            <div style={{ width: '720px' }} className="animate-in fade-in slide-in-from-right duration-1000 delay-300">
+                            <div className="training-video-col animate-in fade-in slide-in-from-right duration-1000 delay-300">
                                 <div className="sticky top-10 w-full h-full flex flex-col">
                                   <div className="bg-[#0A0A0A] rounded-[2.5rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.3)] border-[8px] border-white ring-1 ring-gray-200 relative group transition-transform duration-500 hover:scale-[1.02] flex-1" style={{ minHeight: '450px' }}>
                                     <iframe

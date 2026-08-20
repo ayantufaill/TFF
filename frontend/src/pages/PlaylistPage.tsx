@@ -875,7 +875,7 @@ export function PlaylistPage() {
       <div className="h-10 sm:h-14 bg-[#FAF8F4]" aria-hidden />
 
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '1rem' }}>
+        <div className="reciter-grid">
           {RECITATIONS.map((rec, index) =>
             (() => {
               const surahNumber =

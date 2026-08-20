@@ -8,6 +8,7 @@ import {
   Square,
 } from "lucide-react";
 import "./HomePage.css";
+import { Reveal } from "../components/Reveal";
 import heroImg from "../assets/home/hero-main.jpg";
 import widowsImg from "../assets/home/impact-widows.jpg";
 import orphansImg from "../assets/home/impact-orphans.jpg";
@@ -24,51 +25,6 @@ import bookRamadanGuide from "../assets/home/book-ramadan-guide.png";
 import bookStruggleEnds from "../assets/home/book-struggle-ends.png";
 
 /* ---------- Small building blocks ---------- */
-
-/** Fades + slides a section in the first time it scrolls into view. */
-function Reveal({
-  children,
-  delay = 0,
-  className = "",
-  style,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShown(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.12 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
-        ...style,
-        opacity: shown ? 1 : 0,
-        transform: shown ? "translateY(0)" : "translateY(28px)",
-        transition: `opacity .9s cubic-bezier(.2,.7,.2,1) ${delay}ms, transform .9s cubic-bezier(.2,.7,.2,1) ${delay}ms`,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
 
 /** Count-up animation when in view: 0 -> target over ~1.8s with ease-out */
 function CountUp({
@@ -1257,7 +1213,7 @@ export function HomePage() {
       </section>
 
       {/* ================= Programs ================= */}
-      <section className="py-20 md:py-32">
+      <section id="programs" className="scroll-mt-20 py-20 md:py-32">
         <div className="container-page">
           <div className="mx-auto max-w-3xl text-center">
             <Reveal>
