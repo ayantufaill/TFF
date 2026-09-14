@@ -313,14 +313,19 @@ export function DiscoveringIslamPage() {
           <div className="mt-14 flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0">
             {PILLARS.map((pillar, i) => (
               <Reveal key={pillar.term} delay={(i % 5) * 80} className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-auto">
-                <div className="hover-lift h-full rounded-2xl border border-tff-navy/10 bg-white p-7">
+                <div className="group hover-lift relative h-full overflow-hidden rounded-3xl border border-tff-navy/10 bg-white p-8">
                   <span className="glass-card grid h-14 w-14 place-items-center rounded-2xl text-tff-gold shadow-tff-soft">
                     <pillar.icon className="h-6 w-6" />
                   </span>
                   <p className="mt-5 font-arabic text-2xl text-tff-navy">{pillar.arabic}</p>
                   <h3 className="mt-1 font-display text-xl text-tff-navy">{pillar.term}</h3>
                   <p className="text-sm font-medium uppercase tracking-wide text-tff-gold">{pillar.translation}</p>
-                  <p className="mt-3 leading-relaxed text-gray-500">{pillar.description}</p>
+                  <div className="mt-4 divider-gold" />
+                  <p className="mt-4 leading-relaxed text-gray-500">{pillar.description}</p>
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-tff-gold/10 transition-all duration-500 group-hover:scale-125"
+                  />
                 </div>
               </Reveal>
             ))}
@@ -343,16 +348,21 @@ export function DiscoveringIslamPage() {
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ARTICLES.map((article, i) => (
               <Reveal key={article.term} delay={(i % 3) * 80}>
-                <div className="hover-lift flex h-full items-start gap-4 rounded-2xl border border-tff-navy/10 bg-white p-6">
+                <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-tff-navy/10 bg-white p-8 hover-lift">
                   <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-tff-gold/10 text-tff-gold">
                     <article.icon className="h-5 w-5" />
                   </span>
-                  <div>
-                    <p className="font-arabic text-lg text-tff-navy/80">{article.arabic}</p>
-                    <h3 className="mt-0.5 font-display text-base text-tff-navy">{article.term}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-gray-500">{article.description}</p>
-                  </div>
-                </div>
+                  <p dir="rtl" lang="ar" className="mt-5 font-arabic text-2xl leading-[1.9] text-tff-navy">
+                    {article.arabic}
+                  </p>
+                  <p className="mt-3 text-sm italic text-tff-navy/60">{article.term}</p>
+                  <div className="mt-4 divider-gold" />
+                  <p className="mt-4 text-sm leading-relaxed text-gray-500">{article.description}</p>
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-tff-gold/10 transition-all duration-500 group-hover:scale-125"
+                  />
+                </article>
               </Reveal>
             ))}
           </div>
