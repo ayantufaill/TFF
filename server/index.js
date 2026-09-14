@@ -8,6 +8,7 @@ const courseRoutes = require('./routes/courses');
 const commentRoutes = require('./routes/comments');
 const testimonialRoutes = require('./routes/testimonials');
 const volunteerRoutes = require('./routes/volunteer');
+const mentorRequestRoutes = require('./routes/mentorRequest');
 
 const app = express();
 
@@ -19,7 +20,7 @@ app.get('/', (req, res) => {
   res.json({
     status: 'ok',
     service: 'TFF API',
-    routes: ['/api/auth', '/api/user', '/api/courses', '/api/comments', '/api/testimonials', '/api/admin/testimonials', '/api/volunteer']
+    routes: ['/api/auth', '/api/user', '/api/courses', '/api/comments', '/api/testimonials', '/api/admin/testimonials', '/api/volunteer', '/api/mentor-request']
   });
 });
 
@@ -30,6 +31,7 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api', testimonialRoutes);
 app.use('/api/volunteer', volunteerRoutes);
+app.use('/api/mentor-request', mentorRequestRoutes);
 
 // Database Connection
 if (process.env.MONGODB_URI.includes('cluster0.mongodb.net')) {

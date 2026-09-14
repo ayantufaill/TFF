@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 // Relative path so logo loads when app is opened as file (e.g. dist/index.html) or from any base URL
-const LOGO_SVG = `${import.meta.env.BASE_URL}logo.png`;
+const LOGO_SVG = `${import.meta.env.BASE_URL}logo-header.png`;
 
 const navLinks = [
   { label: 'Home', to: '/' },
@@ -171,7 +171,7 @@ export function Layout() {
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink-0 justify-start no-underline focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-offset-2 rounded-lg py-1.5"
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#C9A961] shadow-tff-soft shrink-0 bg-white">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shadow-tff-soft shrink-0 bg-white">
                 <img
                   src={LOGO_SVG}
                   alt="The Two Fingers Foundation"

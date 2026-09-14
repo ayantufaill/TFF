@@ -1,163 +1,619 @@
+import { useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
-import { Heart, Sun, Scale, Calendar, MapPin, Sparkles, ArrowRight, BookMarked } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/card';
+import {
+  Sparkles,
+  Sun,
+  Scale,
+  CalendarDays,
+  MapPin,
+  BookOpen,
+  Users,
+  ScrollText,
+  Moon,
+  Compass,
+  MessageCircleQuestion,
+  Heart,
+  HandHeart,
+  PlayCircle,
+  Loader2,
+  CheckCircle2,
+} from 'lucide-react';
+import { Reveal } from '../components/Reveal';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
+import { Button } from '../components/ui/button';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../components/ui/accordion';
+import { submitMentorRequest } from '../services/mentorRequestService';
+import '../styles/premium-home.css';
+import heroImg from '../assets/home/impact-widows.jpg';
+import communityImg from '../assets/home/gallery-1.jpg';
+import learningImg from '../assets/home/gallery-2.jpg';
+import patternBg from '../assets/home/pattern-bg.jpg';
 
 const PILLARS = [
-  { icon: Heart, title: 'Shahadah', subtitle: 'Declaration of Faith', description: 'The sincere declaration that there is no god worthy of worship except Allah, and that Muhammad ﷺ is His Messenger. The gateway to Islam and the foundation of a life of purpose and peace.' },
-  { icon: Sun, title: 'Salah', subtitle: 'Prayer', description: 'Five daily prayers that connect the believer with Allah, bring discipline, and centre the heart on gratitude and remembrance throughout the day.' },
-  { icon: Scale, title: 'Zakat', subtitle: 'Charity', description: 'Giving a portion of one’s wealth to those in need. It purifies wealth, uplifts communities, and reminds us that everything we have is a trust from Allah.' },
-  { icon: Calendar, title: 'Sawm', subtitle: 'Fasting in Ramadan', description: 'Fasting from dawn to sunset during Ramadan. It builds self-control, empathy for the hungry, and draws the heart closer to Allah.' },
-  { icon: MapPin, title: 'Hajj', subtitle: 'Pilgrimage', description: 'The pilgrimage to Makkah, once in a lifetime for those who are able. A journey of unity, equality, and devotion shared by millions worldwide.' },
+  { arabic: 'الشهادة', term: 'Shahada', translation: 'Declaration of Faith', icon: Heart, description: 'Bearing witness that there is no god worthy of worship but Allah, and Muhammad ﷺ is His Messenger — the gateway into Islam.' },
+  { arabic: 'الصلاة', term: 'Salah', translation: 'Prayer', icon: Sun, description: 'Five daily prayers that pause the day for remembrance, gratitude, and a direct connection with Allah.' },
+  { arabic: 'الزكاة', term: 'Zakat', translation: 'Charity', icon: Scale, description: 'Giving a portion of one’s wealth to those in need — purifying wealth and strengthening community.' },
+  { arabic: 'الصوم', term: 'Sawm', translation: 'Fasting in Ramadan', icon: CalendarDays, description: 'Fasting from dawn to sunset during Ramadan, building self-discipline and empathy for those who go without.' },
+  { arabic: 'الحج', term: 'Hajj', translation: 'Pilgrimage', icon: MapPin, description: 'A once-in-a-lifetime pilgrimage to Makkah for those who are able — a journey of unity and devotion.' },
 ];
 
-const FIRST_STEPS = [
-  { title: 'Understand the Shahadah', body: 'Learn the meaning and beauty of the declaration of faith.', to: '/cause-of-tff', label: 'Learn more' },
-  { title: 'Daily Ayat & Hadith', body: 'A verse from the Qur’an or a saying of the Prophet ﷺ each day.', to: '/daily-ayat-hadith', label: 'Read today’s' },
-  { title: 'Free Books & Guides', body: 'Clear, gentle introductions from Light of Faith to The New Muslims Guide.', to: '/downloads', label: 'Browse downloads' },
-  { title: 'Azkaar & Dua', body: 'Short remembrances and supplications for morning, evening, and daily life.', to: '/azkaar-dua', label: 'Explore duas' },
+const ARTICLES = [
+  { arabic: 'الله', term: 'Allah', icon: Sparkles, description: 'Belief in One God — without partners, without equals.' },
+  { arabic: 'الملائكة', term: 'The Angels', icon: Moon, description: 'Belief in beings created by Allah to carry out His command.' },
+  { arabic: 'الكتب', term: 'The Books', icon: BookOpen, description: 'Belief in the scriptures revealed by Allah, including the Qur’an.' },
+  { arabic: 'الرسل', term: 'The Prophets', icon: Users, description: 'Belief in every messenger sent by Allah, from Adam to Muhammad ﷺ.' },
+  { arabic: 'اليوم الآخر', term: 'The Day of Judgment', icon: ScrollText, description: 'Belief that this life ends and every soul answers for it.' },
+  { arabic: 'القدر', term: 'Divine Decree', icon: Compass, description: 'Belief that all things unfold by Allah’s knowledge and wisdom.' },
 ];
+
+const JOURNEY = [
+  { title: 'Curiosity & Questions', body: 'You start with questions — about God, purpose, or Islam itself. We meet you with patience, not pressure, and answer honestly.' },
+  { title: 'Learning & Conversation', body: 'One-on-one conversations, free books, and daily reflections help you explore at your own pace, in your own time.' },
+  { title: 'Meeting the Community', body: 'You’re welcomed into gatherings, halaqas, and iftars — meeting real people who once stood exactly where you stand now.' },
+  { title: 'Taking Shahada', body: 'When you’re ready — and only when you’re ready — we support you in making the declaration of faith, witnessed with warmth, not spectacle.' },
+  { title: 'Ongoing Support & Mentorship', body: 'Your journey continues. A mentor, a community, and real resources stay with you long after your first day.' },
+];
+
+const SUPPORT_PROGRAMS = [
+  { title: 'One-on-One Mentorship', description: 'Paired with a caring, knowledgeable mentor for honest conversations, at your pace and never with judgment.', icon: HandHeart },
+  { title: 'Community Iftars & Gatherings', description: 'Regular gatherings and iftars where you’ll meet others walking the same path and feel embraced by community.', icon: Users },
+  { title: 'Starter Resource Kit', description: 'Free books and guides — including The New Muslim Guide — to help you learn clearly, at your own pace.', icon: BookOpen },
+  { title: 'Ongoing Halaqas', description: 'Regular study circles and recorded sessions, so your learning never has to stop between visits.', icon: PlayCircle },
+];
+
+const FAQS = [
+  { q: 'Do I have to change my name?', a: 'No. Changing your name is entirely optional and a personal choice, not a requirement. Some new Muslims choose a name with a meaning they connect with; many simply keep their given name. There is no right answer — only your own.' },
+  { q: 'What happens after I take Shahada?', a: 'Nothing outward changes in an instant except your intention before Allah. What does happen is that you’re no longer walking alone: we pair you with a mentor, welcome you into our community, and continue learning alongside you at whatever pace feels right.' },
+  { q: 'Will I lose my family or friends?', a: 'We won’t pretend this is never hard — some relationships take time to adjust, and that’s a real part of many people’s journeys. What we can promise is that you won’t navigate it alone. Our mentors have walked this path and are there to support those conversations with you.' },
+  { q: 'Do I need to know Arabic to practice Islam?', a: 'No. You can learn and pray in your own language from day one. Arabic phrases used in prayer are learned gradually, with patient support from a mentor — never all at once, and never as a barrier to starting.' },
+  { q: 'How soon do I have to start praying five times a day?', a: 'There is no deadline and no pressure. Faith is built one habit at a time. Your mentor will help you build toward the five daily prayers gradually, celebrating each step rather than expecting perfection from the first day.' },
+  { q: 'Is there a formal process to become Muslim?', a: 'It’s simpler than many expect: a sincere declaration of faith, the Shahada, is all that’s required. There’s no paperwork and no gatekeeping. When you’re ready, we’re glad to help you take that step in a way that feels warm and personal to you.' },
+  { q: 'What if I still have doubts or questions after taking Shahada?', a: 'That’s completely normal. Faith is a journey, not a single moment — questions are part of it, not a failure of it. Your mentor and our community remain available to you for as long as you need, with no question considered too small.' },
+];
+
+function useDiscoveringIslamSEO() {
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = 'Discovering Islam | The Two Fingers Foundation';
+
+    const origin = window.location.origin;
+    const url = `${origin}/discovering-islam`;
+    const description =
+      'Curious about Islam or newly Muslim? The Two Fingers Foundation walks alongside you with warmth and without pressure — mentorship, community, and real answers.';
+
+    const upsertMeta = (attr: 'name' | 'property', key: string, content: string) => {
+      let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
+      const created = !el;
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
+      }
+      const prevContent = el.getAttribute('content');
+      el.setAttribute('content', content);
+      return { el, created, prevContent };
+    };
+
+    const metaEntries = [
+      upsertMeta('name', 'description', description),
+      upsertMeta('property', 'og:title', 'Discovering Islam | The Two Fingers Foundation'),
+      upsertMeta('property', 'og:description', description),
+      upsertMeta('property', 'og:url', url),
+      upsertMeta('property', 'og:type', 'website'),
+      upsertMeta('property', 'og:image', `${origin}/logo.png`),
+    ];
+
+    let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    const canonicalCreated = !canonical;
+    const prevCanonicalHref = canonical?.getAttribute('href') ?? null;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', url);
+
+    const schema = document.createElement('script');
+    schema.type = 'application/ld+json';
+    schema.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQS.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    });
+    document.head.appendChild(schema);
+
+    return () => {
+      document.title = prevTitle;
+      metaEntries.forEach(({ el, created, prevContent }) => {
+        if (created) el.remove();
+        else if (prevContent !== null) el.setAttribute('content', prevContent);
+      });
+      if (canonical) {
+        if (canonicalCreated) canonical.remove();
+        else if (prevCanonicalHref !== null) canonical.setAttribute('href', prevCanonicalHref);
+      }
+      schema.remove();
+    };
+  }, []);
+}
+
+const initialMentorForm = { name: '', contact: '', message: '' };
 
 export function DiscoveringIslamPage() {
+  useDiscoveringIslamSEO();
+
+  const [form, setForm] = useState(initialMentorForm);
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const updateField = (field: keyof typeof initialMentorForm, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.contact) {
+      setStatus('error');
+      return;
+    }
+    setStatus('submitting');
+    try {
+      await submitMentorRequest(form);
+      setStatus('success');
+      setForm(initialMentorForm);
+    } catch {
+      setStatus('error');
+    }
+  };
+
   return (
-    <div className="min-h-[60vh]">
-      {/* Hero – bilkul same as Downloads / Articles (green banner, white text) */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white shadow-[0_4px_0_0_rgba(0,0,0,0.06)] min-h-[17rem] sm:min-h-[20rem] lg:min-h-[24rem] flex flex-col justify-center">
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10" aria-hidden />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            Discovering Islam
-          </h1>
-          <div className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-5" aria-hidden />
-          <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto">
-            A journey of faith, knowledge, and peace. Learn what Islam is, what Muslims believe, and take your first steps with clarity and confidence.
-          </p>
-        </div>
-      </section>
-
-      {/* Cream strip – same as Downloads / Articles */}
-      <div className="h-12 sm:h-16 lg:h-20 shrink-0 bg-[#FAF8F4]" aria-hidden />
-
-      {/* Content – same section style as Articles (gradient background + left gold bar) */}
-      <section className="relative overflow-hidden pt-16 sm:pt-20 lg:pt-24 pb-24 sm:pb-36 lg:pb-44">
+    <div>
+      {/* ================= Hero ================= */}
+      <section className="relative isolate overflow-hidden bg-tff-navy-gradient pt-32 pb-24 text-white md:pt-40 md:pb-28">
         <div
-          className="absolute inset-0 opacity-[0.98]"
-          style={{
-            backgroundImage: 'linear-gradient(165deg, #FAF8F4 0%, #F6F3ED 25%, #F9F7F2 50%, #F4F1EA 75%, #F2EFE7 100%)',
-          }}
           aria-hidden
+          className="absolute inset-0 -z-10 opacity-[0.12] mix-blend-screen"
+          style={{ backgroundImage: `url(${patternBg})`, backgroundSize: '480px' }}
         />
-        <div className="absolute left-0 top-0 bottom-0 w-1 sm:w-2 bg-gradient-to-b from-[#C9A961]/50 to-[#8B7355]/40 z-10" aria-hidden />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* What is Islam – card same style as project */}
-          <div className="rounded-[24px] border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-6 sm:p-8 mb-10 sm:mb-12">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-[#C9A961]/10 text-[#C9A961]">
-                <Sparkles className="w-5 h-5" />
+        <div
+          aria-hidden
+          className="absolute -top-32 left-1/4 -z-10 h-[420px] w-[420px] rounded-full bg-tff-gold/25 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-24 right-0 -z-10 h-[340px] w-[340px] rounded-full bg-tff-gold/15 blur-3xl"
+        />
+
+        <div className="container-page grid items-center gap-14 lg:grid-cols-2">
+          <Reveal>
+            <div className="inline-flex items-center gap-2 rounded-full border border-tff-gold/40 bg-white/5 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-tff-gold-soft">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-tff-gold" />
+              Discovering Islam
+            </div>
+            <h1 className="mt-6 font-display text-4xl leading-[1.1] md:text-6xl">
+              Every Journey to Faith Begins With{' '}
+              <span className="italic text-tff-gold-soft">a Single Question.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
+              Whatever brought you here — curiosity, a question, or a decision already in your
+              heart — The Two Fingers Foundation walks alongside you with warmth, patience, and
+              no pressure at all.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-tff-gold-gradient px-6 py-3.5 font-semibold text-tff-navy-deep shadow-tff-gold">
+                Discover Islam
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2A4A]">What is Islam?</h2>
             </div>
-            <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-4">
-              <strong className="text-[#1B2A4A]">Islam</strong> means submission to the One God—Allah—in peace. Muslims believe that Allah created the universe, sent guidance through prophets and books, and that life has a purpose: to worship Him, do good, and prepare for the life to come.
-            </p>
-            <p className="text-gray-700 text-base sm:text-lg leading-relaxed">
-              Islam is built on clarity, mercy, and balance. Discovering Islam is a journey of the mind and the heart—one that millions have taken and found peace, direction, and a connection with their Creator.
-            </p>
-          </div>
+          </Reveal>
 
-          {/* Section heading – same as HomePage / Articles */}
-          <div className="text-center mb-8 sm:mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 tracking-tight">
-              The Five Pillars of Islam
+          <Reveal delay={150}>
+            <div className="relative">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] shadow-tff-elegant">
+                <img
+                  src={heroImg}
+                  alt="A woman quietly focused on her work, a moment of calm reflection"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-tff-navy-deep/60 via-transparent to-transparent" />
+              </div>
+              <div className="glass-dark absolute -bottom-6 left-6 right-6 rounded-2xl px-6 py-4 md:left-8 md:right-8">
+                <p className="text-xs uppercase tracking-widest text-tff-gold-soft">Your Journey</p>
+                <p className="mt-1 font-display text-xl text-white">Curiosity. Guidance. Community.</p>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= What Is Islam ================= */}
+      <section id="what-is-islam" className="py-20 md:py-32">
+        <div className="container-page grid items-center gap-14 lg:grid-cols-2">
+          <Reveal>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">What Is Islam</p>
+            <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+              A faith of <span className="italic text-tff-navy/60">submission and peace.</span>
             </h2>
-            <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-3" aria-hidden />
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              The foundation of a Muslim’s faith and practice—five acts that shape life, character, and connection with Allah.
-            </p>
-          </div>
-
-          {/* Pillars – cards same as project (rounded-xl, border, hover) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 mb-12 sm:mb-14">
-            {PILLARS.map((pillar, i) => (
-              <Card
-                key={pillar.title}
-                className="border border-gray-200/80 bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:border-[#C9A961]/60 hover:shadow-[0_8px_24px_rgba(44,95,45,0.12)] transition-all duration-200"
-              >
-                <CardContent className="p-4 sm:p-5">
-                  <div className="flex items-start gap-3">
-                    <span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-lg bg-[#C9A961]/10 text-[#C9A961]">
-                      <pillar.icon className="w-5 h-5" />
-                    </span>
-                    <div className="min-w-0">
-                      <span className="inline-block text-[11px] sm:text-xs font-semibold text-[#7b5b1f] bg-[#C9A961]/15 rounded-full px-2 py-0.5 mb-1">
-                        {pillar.subtitle}
-                      </span>
-                      <h3 className="text-base sm:text-lg font-bold text-[#1B2A4A] mb-2">{pillar.title}</h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">{pillar.description}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* What Muslims Believe – same card style */}
-          <div className="rounded-xl border border-gray-200/80 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.06)] p-6 sm:p-8 mb-12 sm:mb-14">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#1B2A4A] mb-4 text-center">
-              What Muslims Believe
-            </h2>
-            <p className="text-gray-700 text-base sm:text-lg leading-relaxed text-center max-w-3xl mx-auto">
-              Muslims believe in <strong className="text-[#1B2A4A]">One God (Allah)</strong>, the <strong className="text-[#1B2A4A]">Angels</strong>, the <strong className="text-[#1B2A4A]">Books</strong> (including the Qur’an), the <strong className="text-[#1B2A4A]">Prophets</strong> (from Adam to Noah, Abraham, Moses, Jesus, and Muhammad ﷺ), the <strong className="text-[#1B2A4A]">Day of Judgment</strong>, and that good and bad are by Allah’s will (<strong className="text-[#1B2A4A]">Qadr</strong>). These six articles of faith give Islam its clarity and coherence.
-            </p>
-          </div>
-
-          {/* Your Next Steps – same heading + cards as project */}
-          <div className="text-center mb-8 sm:mb-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1B2A4A] mb-3 tracking-tight">
-              Your Next Steps
-            </h2>
-            <div className="inline-block w-20 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-3" aria-hidden />
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore our resources to deepen your understanding and strengthen your connection with Islam.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-            {FIRST_STEPS.map((step) => (
-              <Link key={step.to} to={step.to} className="group block">
-                <Card className="h-full border border-gray-200/80 bg-white rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] hover:border-[#C9A961]/60 hover:shadow-[0_8px_24px_rgba(44,95,45,0.12)] hover:-translate-y-0.5 transition-all duration-200">
-                  <CardContent className="p-4 sm:p-5 flex flex-col h-full">
-                    <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-[#C9A961]/10 text-[#C9A961] mb-3 group-hover:bg-[#C9A961]/20 transition-colors">
-                      <BookMarked className="w-5 h-5" />
-                    </span>
-                    <h3 className="text-base sm:text-lg font-bold text-[#1B2A4A] mb-2 group-hover:text-[#1f3f21]">
-                      {step.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed flex-1 mb-3">
-                      {step.body}
-                    </p>
-                    <span className="inline-flex items-center text-sm font-semibold text-[#1B2A4A] group-hover:text-[#C9A961]">
-                      {step.label}
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5" />
-                    </span>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-
-          {/* Quote – solid project green */}
-          <div className="mt-12 sm:mt-16 mb-16 sm:mb-24 relative rounded-[24px] overflow-hidden bg-[#1B2A4A] text-white shadow-[0_8px_32px_rgba(44,95,45,0.25)] border border-[#1B2A4A]/90">
-            <div className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#D4AF37] to-[#B8962E]" aria-hidden />
-            <div className="absolute inset-0 opacity-[0.06] bg-[length:48px_48px] bg-[url('data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'1.5\' fill=\'%23fff\'/%3E%3C/svg%3E')]" aria-hidden />
-            <div className="relative z-10 px-6 sm:px-10 py-11 sm:py-14 text-center">
-              <p className="text-xl sm:text-2xl md:text-3xl font-medium italic text-white leading-relaxed mb-4 max-w-2xl mx-auto drop-shadow-sm">
-                “And I did not create the jinn and mankind except to worship Me.”
+            <div className="mt-6 space-y-5 text-lg leading-relaxed text-gray-500">
+              <p>
+                Islam means submission to the One God — Allah — in peace. Muslims believe Allah
+                created the universe, sent guidance through prophets across history, and that
+                every life has a purpose: to worship Him, to do good, and to prepare for what
+                comes after.
               </p>
-              <p className="text-sm sm:text-base text-[#E8D5A3] font-semibold tracking-wide">— Qur’an 51:56</p>
+              <p>
+                It isn’t a faith of extremes. Islam asks for sincerity, not perfection — a
+                heart turned toward its Creator, lived out in honesty, mercy, and care for
+                others.
+              </p>
             </div>
+          </Reveal>
+          <Reveal delay={150}>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] shadow-tff-elegant">
+              <img
+                src={learningImg}
+                alt="Children learning together in a classroom, hands raised"
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-32">
+        <div className="container-page grid items-center gap-14 lg:grid-cols-2">
+          <Reveal className="lg:order-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">A Way of Life</p>
+            <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+              Community, <span className="italic text-tff-navy/60">not isolation.</span>
+            </h2>
+            <div className="mt-6 space-y-5 text-lg leading-relaxed text-gray-500">
+              <p>
+                Islam is built on clarity, mercy, and balance — and it is never meant to be
+                walked alone. Whether you are simply curious or already certain in your heart,
+                you are welcomed into a real community of people who will stand beside you.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={150} className="lg:order-1">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] shadow-tff-elegant">
+              <img
+                src={communityImg}
+                alt="Volunteers and community members supporting one another"
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= Five Pillars ================= */}
+      <section className="py-20 md:py-32">
+        <div className="container-page">
+          <div className="mx-auto max-w-3xl text-center">
+            <Reveal>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">The Foundation of Practice</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+                The Five Pillars <span className="italic text-tff-navy/60">of Islam.</span>
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="mt-14 flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0">
+            {PILLARS.map((pillar, i) => (
+              <Reveal key={pillar.term} delay={(i % 5) * 80} className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-auto">
+                <div className="hover-lift h-full rounded-2xl border border-tff-navy/10 bg-white p-7">
+                  <span className="glass-card grid h-14 w-14 place-items-center rounded-2xl text-tff-gold shadow-tff-soft">
+                    <pillar.icon className="h-6 w-6" />
+                  </span>
+                  <p className="mt-5 font-arabic text-2xl text-tff-navy">{pillar.arabic}</p>
+                  <h3 className="mt-1 font-display text-xl text-tff-navy">{pillar.term}</h3>
+                  <p className="text-sm font-medium uppercase tracking-wide text-tff-gold">{pillar.translation}</p>
+                  <p className="mt-3 leading-relaxed text-gray-500">{pillar.description}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* ================= Six Articles of Faith ================= */}
+      <section className="py-20 md:py-32">
+        <div className="container-page">
+          <div className="mx-auto max-w-3xl text-center">
+            <Reveal>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">The Foundation of Belief</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+                The Six Articles <span className="italic text-tff-navy/60">of Faith.</span>
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {ARTICLES.map((article, i) => (
+              <Reveal key={article.term} delay={(i % 3) * 80}>
+                <div className="hover-lift flex h-full items-start gap-4 rounded-2xl border border-tff-navy/10 bg-white p-6">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-tff-gold/10 text-tff-gold">
+                    <article.icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <p className="font-arabic text-lg text-tff-navy/80">{article.arabic}</p>
+                    <h3 className="mt-0.5 font-display text-base text-tff-navy">{article.term}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-gray-500">{article.description}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= Your Journey ================= */}
+      <section className="relative isolate overflow-hidden bg-tff-navy-gradient py-20 text-white md:py-32">
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 opacity-[0.12] mix-blend-screen"
+          style={{ backgroundImage: `url(${patternBg})`, backgroundSize: '480px' }}
+        />
+        <div
+          aria-hidden
+          className="absolute -top-24 -right-24 -z-10 h-[420px] w-[420px] rounded-full bg-tff-gold/25 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-32 -left-24 -z-10 h-[380px] w-[380px] rounded-full bg-tff-gold/15 blur-3xl"
+        />
+
+        <div className="container-page">
+          <div className="mx-auto max-w-3xl text-center">
+            <Reveal>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold-soft">Your Journey</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">
+                What walking this path <span className="italic text-white/70">actually looks like.</span>
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="mt-16 space-y-10 md:space-y-0">
+            <ol className="relative md:grid md:grid-cols-5 md:gap-6">
+              <div aria-hidden className="absolute left-5 top-0 hidden h-full w-px bg-gradient-to-b from-transparent via-tff-gold/40 to-transparent md:block md:left-0 md:right-0 md:top-5 md:h-px md:w-full md:bg-gradient-to-r" />
+              {JOURNEY.map((step, i) => (
+                <li key={step.title} className="relative">
+                  <Reveal delay={i * 100}>
+                    <div className="flex gap-5 md:block md:pt-14">
+                      <span className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full bg-tff-gold-gradient font-display text-lg font-semibold text-tff-navy-deep shadow-tff-gold md:absolute md:left-0 md:top-0">
+                        {i + 1}
+                      </span>
+                      <div className="glass-dark rounded-2xl p-5 md:p-6">
+                        <h3 className="font-display text-lg text-white">{step.title}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-white/70">{step.body}</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= Shahada Spotlight ================= */}
+      <section className="relative overflow-hidden bg-tff-cream py-24 md:py-36">
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-[0.06]"
+          style={{ backgroundImage: `url(${patternBg})`, backgroundSize: '520px' }}
+        />
+        <div className="container-page relative">
+          <Reveal>
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">The Declaration of Faith</p>
+              <h2 className="mt-4 font-display text-3xl leading-tight text-tff-navy md:text-4xl">
+                The Shahada
+              </h2>
+              <div className="mx-auto mt-8 flex items-center justify-center gap-3">
+                <span className="h-px w-10 bg-tff-gold/50" />
+                <span className="text-tff-gold">✦</span>
+                <span className="h-px w-10 bg-tff-gold/50" />
+              </div>
+
+              <p className="font-arabic mt-10 text-3xl leading-[2.2] text-tff-navy md:text-4xl" dir="rtl" lang="ar">
+                أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ
+              </p>
+              <p className="mt-6 italic text-gray-500">
+                Ash-hadu al-la ilaha illallah, wa ash-hadu anna Muhammadan rasulullah.
+              </p>
+              <p className="mx-auto mt-4 max-w-lg leading-relaxed text-gray-600">
+                "I bear witness that there is no god worthy of worship except Allah, and I bear
+                witness that Muhammad is the Messenger of Allah."
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= New Muslim Support Program ================= */}
+      <section className="py-20 md:py-32">
+        <div className="container-page">
+          <div className="mx-auto max-w-3xl text-center">
+            <Reveal>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">Support Program</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+                You won’t walk this <span className="italic text-tff-navy/60">alone.</span>
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {SUPPORT_PROGRAMS.map((program, i) => (
+              <Reveal key={program.title} delay={(i % 4) * 100}>
+                <div className="hover-lift flex h-full flex-col overflow-hidden rounded-2xl border border-tff-navy/10 bg-white">
+                  <div className="flex h-32 items-center justify-center bg-tff-gold/5">
+                    <program.icon className="h-8 w-8 text-tff-gold" />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="font-display text-lg text-tff-navy">{program.title}</h3>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">{program.description}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= FAQ ================= */}
+      <section className="py-20 md:py-32">
+        <div className="container-page">
+          <div className="mx-auto max-w-3xl text-center">
+            <Reveal>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">Common Questions</p>
+              <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
+                Real questions, <span className="italic text-tff-navy/60">honest answers.</span>
+              </h2>
+            </Reveal>
+          </div>
+
+          <Reveal delay={100}>
+            <div className="mx-auto mt-12 max-w-3xl rounded-[28px] border border-tff-navy/10 bg-white px-6 shadow-tff-soft md:px-10">
+              <Accordion type="single" collapsible className="w-full">
+                {FAQS.map((faq, i) => (
+                  <AccordionItem key={faq.q} value={`faq-${i}`}>
+                    <AccordionTrigger className="gap-4 py-6 text-left font-display text-lg text-tff-navy hover:no-underline">
+                      <span className="flex items-start gap-3">
+                        <MessageCircleQuestion className="mt-1 h-5 w-5 shrink-0 text-tff-gold" />
+                        {faq.q}
+                      </span>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-6 pl-8 leading-relaxed text-gray-500">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================= Cross-link band =================
+      <section className="border-y border-tff-navy/10 bg-white py-14">
+        <div className="container-page">
+          <Reveal>
+            <div className="flex flex-col items-center justify-center gap-8 text-center sm:flex-row sm:gap-14">
+              <Link to="/playlist" className="group flex items-center gap-2 text-tff-navy transition-colors hover:text-tff-gold">
+                <PlayCircle className="h-5 w-5 text-tff-gold" />
+                <span className="font-medium">Watch and listen</span>
+              </Link>
+              <span className="hidden h-6 w-px bg-tff-navy/10 sm:block" aria-hidden />
+              <Link to="/downloads" className="group flex items-center gap-2 text-tff-navy transition-colors hover:text-tff-gold">
+                <BookOpen className="h-5 w-5 text-tff-gold" />
+                <span className="font-medium">Read and learn</span>
+              </Link>
+              <span className="hidden h-6 w-px bg-tff-navy/10 sm:block" aria-hidden />
+              <Link to="/articles" className="group flex items-center gap-2 text-tff-navy transition-colors hover:text-tff-gold">
+                <ScrollText className="h-5 w-5 text-tff-gold" />
+                <span className="font-medium">Real stories</span>
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      ================= Final CTA =================
+      <section id="mentor-form" className="bg-tff-navy-gradient py-20 text-white md:py-32">
+        <div className="container-page grid items-start gap-14 lg:grid-cols-2">
+          <Reveal>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold-soft">Let’s Talk</p>
+            <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">
+              Ready when <span className="italic text-white/70">you are.</span>
+            </h2>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-white/75">
+              No question is too small, and there is no pressure to decide anything today. Leave
+              your details and a mentor will reach out to you personally.
+            </p>
+          </Reveal>
+
+          <Reveal delay={150}>
+            <div className="glass-dark rounded-[28px] p-8">
+              {status === 'success' ? (
+                <div className="py-6 text-center">
+                  <CheckCircle2 className="mx-auto mb-4 h-10 w-10 text-tff-gold-soft" />
+                  <h3 className="font-display text-xl text-white">JazakAllah Khair!</h3>
+                  <p className="mt-2 text-white/70">
+                    We’ve received your message. A mentor will reach out to you soon.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="mentor-name" className="text-white/90">Name *</Label>
+                    <Input
+                      id="mentor-name"
+                      value={form.name}
+                      onChange={(e) => updateField('name', e.target.value)}
+                      placeholder="Your name"
+                      className="border-white/20 bg-white/10 text-white placeholder:text-white/40"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="mentor-contact" className="text-white/90">Email or WhatsApp *</Label>
+                    <Input
+                      id="mentor-contact"
+                      value={form.contact}
+                      onChange={(e) => updateField('contact', e.target.value)}
+                      placeholder="you@example.com or +1 555 000 0000"
+                      className="border-white/20 bg-white/10 text-white placeholder:text-white/40"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="mentor-message" className="text-white/90">Message (optional)</Label>
+                    <Textarea
+                      id="mentor-message"
+                      value={form.message}
+                      onChange={(e) => updateField('message', e.target.value)}
+                      placeholder="Share as much or as little as you’d like"
+                      rows={3}
+                      className="border-white/20 bg-white/10 text-white placeholder:text-white/40"
+                    />
+                  </div>
+
+                  {status === 'error' && (
+                    <p className="text-sm text-red-300">Please fill in your name and a way to reach you.</p>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={status === 'submitting'}
+                    className="w-full rounded-full bg-tff-gold-gradient py-6 text-sm font-semibold text-tff-navy-deep hover:opacity-90"
+                  >
+                    {status === 'submitting' ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      'Speak With a Mentor'
+                    )}
+                  </Button>
+                </form>
+              )}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+      */}
     </div>
   );
 }
