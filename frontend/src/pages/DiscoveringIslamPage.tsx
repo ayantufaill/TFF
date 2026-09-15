@@ -23,12 +23,6 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Button } from '../components/ui/button';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '../components/ui/accordion';
 import { submitMentorRequest } from '../services/mentorRequestService';
 import '../styles/premium-home.css';
 import heroImg from '../assets/home/impact-widows.jpg';
@@ -120,19 +114,6 @@ function useDiscoveringIslamSEO() {
     }
     canonical.setAttribute('href', url);
 
-    const schema = document.createElement('script');
-    schema.type = 'application/ld+json';
-    schema.text = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: FAQS.map((f) => ({
-        '@type': 'Question',
-        name: f.q,
-        acceptedAnswer: { '@type': 'Answer', text: f.a },
-      })),
-    });
-    document.head.appendChild(schema);
-
     return () => {
       document.title = prevTitle;
       metaEntries.forEach(({ el, created, prevContent }) => {
@@ -143,9 +124,16 @@ function useDiscoveringIslamSEO() {
         if (canonicalCreated) canonical.remove();
         else if (prevCanonicalHref !== null) canonical.setAttribute('href', prevCanonicalHref);
       }
-      schema.remove();
     };
   }, []);
+}
+
+function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M12.04 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.5 1.34 5.02L2 22l5.13-1.35a9.96 9.96 0 0 0 4.91 1.29h.01c5.52 0 10-4.48 10-10s-4.48-9.94-10.01-9.94Zm0 18.2h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.05.8.81-2.97-.2-.3a8.19 8.19 0 0 1-1.26-4.4c0-4.53 3.69-8.22 8.23-8.22 2.2 0 4.26.86 5.82 2.42a8.16 8.16 0 0 1 2.41 5.81c0 4.53-3.69 8.19-8.27 8.19Zm4.52-6.14c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.13-.17.25-.64.81-.78.97-.14.17-.29.19-.53.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05s.88 2.38 1 2.55c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.41.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.23-.17-.48-.29Z" />
+    </svg>
+  );
 }
 
 const initialMentorForm = { name: '', contact: '', message: '' };
@@ -490,28 +478,33 @@ export function DiscoveringIslamPage() {
             <Reveal>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-tff-gold">Common Questions</p>
               <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
-                Real questions, <span className="italic text-tff-navy/60">honest answers.</span>
+                Real questions, <span className="italic text-tff-navy/60">answered personally.</span>
               </h2>
+              <p className="mt-6 text-lg leading-relaxed text-gray-500">
+                Tap any question to send it straight to us on WhatsApp — we'll answer you directly.
+              </p>
             </Reveal>
           </div>
 
           <Reveal delay={100}>
-            <div className="mx-auto mt-12 max-w-3xl rounded-[28px] border border-tff-navy/10 bg-white px-6 shadow-tff-soft md:px-10">
-              <Accordion type="single" collapsible className="w-full">
-                {FAQS.map((faq, i) => (
-                  <AccordionItem key={faq.q} value={`faq-${i}`}>
-                    <AccordionTrigger className="gap-4 py-6 text-left font-display text-lg text-tff-navy hover:no-underline">
-                      <span className="flex items-start gap-3">
-                        <MessageCircleQuestion className="mt-1 h-5 w-5 shrink-0 text-tff-gold" />
-                        {faq.q}
-                      </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="pb-6 pl-8 leading-relaxed text-gray-500">
-                      {faq.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
+            <div className="mx-auto mt-12 max-w-3xl divide-y divide-tff-navy/10 rounded-[28px] border border-tff-navy/10 bg-white px-6 shadow-tff-soft md:px-10">
+              {FAQS.map((faq) => (
+                <div key={faq.q} className="flex items-center justify-between gap-4 py-6">
+                  <span className="flex items-start gap-3 font-display text-lg text-tff-navy">
+                    <MessageCircleQuestion className="mt-1 h-5 w-5 shrink-0 text-tff-gold" />
+                    {faq.q}
+                  </span>
+                  <a
+                    href={`https://wa.me/923454491979?text=${encodeURIComponent(faq.q)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Ask us on WhatsApp: ${faq.q}`}
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#25D366] text-white transition-transform hover:scale-110"
+                  >
+                    <WhatsAppIcon className="h-5 w-5" />
+                  </a>
+                </div>
+              ))}
             </div>
           </Reveal>
         </div>
