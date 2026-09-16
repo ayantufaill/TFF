@@ -495,7 +495,7 @@ export function DiscoveringIslamPage() {
                     {faq.q}
                   </span>
                   <a
-                    href={`https://wa.me/923454491979?text=${encodeURIComponent(faq.q)}`}
+                    href={`https://wa.me/923454491979?text=${encodeURIComponent(`Hello, I'm reaching out via The Two Fingers Foundation website (Discovering Islam page) regarding the following question:\n\n"${faq.q}"\n\nI would appreciate your response. Thank you.`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Ask us on WhatsApp: ${faq.q}`}
