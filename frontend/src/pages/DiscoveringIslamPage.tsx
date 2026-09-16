@@ -12,6 +12,7 @@ import {
   Moon,
   Compass,
   MessageCircleQuestion,
+  ArrowUpRight,
   Heart,
   HandHeart,
   PlayCircle,
@@ -480,8 +481,13 @@ export function DiscoveringIslamPage() {
               <h2 className="mt-4 font-display text-4xl leading-tight text-tff-navy md:text-5xl">
                 Real questions, <span className="italic text-tff-navy/60">answered personally.</span>
               </h2>
-              <p className="mt-6 text-lg leading-relaxed text-gray-500">
-                Tap any question to send it straight to us on WhatsApp — we'll answer you directly.
+              <p className="mt-6 flex items-center justify-center gap-2 text-lg leading-relaxed text-gray-500">
+                Tap any question to send it straight to us on
+                <span className="inline-flex items-center gap-1.5 font-semibold text-[#25D366]">
+                  <WhatsAppIcon className="h-4 w-4" />
+                  WhatsApp
+                </span>
+                — we'll answer you directly.
               </p>
             </Reveal>
           </div>
@@ -489,21 +495,20 @@ export function DiscoveringIslamPage() {
           <Reveal delay={100}>
             <div className="mx-auto mt-12 max-w-3xl divide-y divide-tff-navy/10 rounded-[28px] border border-tff-navy/10 bg-white px-6 shadow-tff-soft md:px-10">
               {FAQS.map((faq) => (
-                <div key={faq.q} className="flex items-center justify-between gap-4 py-6">
+                <a
+                  key={faq.q}
+                  href={`https://wa.me/923454491979?text=${encodeURIComponent(`Hello, I'm reaching out via The Two Fingers Foundation website (Discovering Islam page) regarding the following question:\n\n"${faq.q}"\n\nI would appreciate your response. Thank you.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Ask us on WhatsApp: ${faq.q}`}
+                  className="group flex items-center justify-between gap-4 py-6 transition-colors hover:bg-tff-navy/[0.03]"
+                >
                   <span className="flex items-start gap-3 font-display text-lg text-tff-navy">
                     <MessageCircleQuestion className="mt-1 h-5 w-5 shrink-0 text-tff-gold" />
                     {faq.q}
                   </span>
-                  <a
-                    href={`https://wa.me/923454491979?text=${encodeURIComponent(`Hello, I'm reaching out via The Two Fingers Foundation website (Discovering Islam page) regarding the following question:\n\n"${faq.q}"\n\nI would appreciate your response. Thank you.`)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Ask us on WhatsApp: ${faq.q}`}
-                    className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#25D366] text-white transition-transform hover:scale-110"
-                  >
-                    <WhatsAppIcon className="h-5 w-5" />
-                  </a>
-                </div>
+                  <ArrowUpRight className="h-5 w-5 shrink-0 text-tff-navy/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#25D366]" />
+                </a>
               ))}
             </div>
           </Reveal>
