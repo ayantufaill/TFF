@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Play, Pause, Download } from "lucide-react";
+import patternBg from "../assets/home/pattern-bg.jpg";
 
 /* One audio per Surah, each from a different Qari.
  * Add your audio file in public/audio/surah-al-baqarah/ and set audioSrc.
@@ -729,87 +730,97 @@ function RecitationCard({
   }, [downloadUrl, audioSrc, qariName, surahName, downloading]);
 
   return (
-    <div className="bg-white rounded-[24px] border border-gray-200/90 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-      {/* Title row: subtle number + Surah name */}
-      <h3 className="text-lg font-bold text-[#1B2A4A] px-4 pt-4 pb-1 flex items-center justify-center gap-2">
-        <span className="text-[#C9A961] font-semibold tabular-nums">
-          {number}.
+    <article className="group relative overflow-hidden rounded-[24px] border border-tff-navy/10 bg-white p-3 shadow-tff-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-tff-elegant">
+      <div className="mb-3 flex items-center justify-center gap-2">
+        <span className="grid h-8 w-8 place-items-center rounded-full bg-tff-gold-gradient text-sm font-semibold text-tff-navy-deep">
+          {number}
         </span>
-        <span className="line-clamp-2 text-center">{surahName}</span>
-      </h3>
+        <h3 className="font-display text-xl leading-snug text-tff-navy md:text-2xl">
+          {surahName}
+        </h3>
+      </div>
 
-      {/* Qari image + name (click to play) */}
       <button
         type="button"
         onClick={togglePlay}
-        className="w-full block text-left focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-inset rounded-lg"
+        className="block w-full text-left focus:outline-none focus:ring-2 focus:ring-[#C9A961] focus:ring-inset rounded-[18px]"
       >
-        <div className="relative aspect-square max-h-32 sm:max-h-36 mx-auto bg-gray-100">
-          {showImage ? (
-            <img
-              src={qariImage}
-              alt={qariName}
-              className="w-full h-full object-cover"
-              loading="lazy"
-              decoding="async"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1B2A4A]/10 to-[#C9A961]/10 text-[#1B2A4A] text-2xl font-bold">
-              {surahName.slice(0, 1)}
-            </div>
-          )}
+        <div className="relative overflow-hidden rounded-[18px] border border-tff-navy/10 bg-gray-100">
+          <div className="aspect-[4/4.8] w-full">
+            {showImage ? (
+              <img
+                src={qariImage}
+                alt={qariName}
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                decoding="async"
+                onError={() => setImageError(true)}
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#1B2A4A]/10 to-[#C9A961]/10 text-3xl font-bold text-[#1B2A4A]">
+                {surahName.slice(0, 1)}
+              </div>
+            )}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1B2A4A]/55 via-transparent to-transparent" />
         </div>
-        <p className="text-center font-semibold text-gray-800 pt-2 pb-3 px-4">
+
+        <p className="px-2 pb-0 pt-3 text-center text-base font-semibold text-tff-navy sm:text-lg">
           {qariName}
         </p>
       </button>
 
-      {/* Play bar: left = Download, then progress + time */}
-      <div className="px-4 pb-4 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={handleDownload}
-          disabled={downloading}
-          className={`flex-shrink-0 w-9 h-9 rounded-full bg-[#C9A961]/20 text-[#1B2A4A] flex items-center justify-center hover:bg-[#C9A961]/30 transition-colors ${downloading ? "opacity-50 cursor-wait" : ""}`}
-          title={downloading ? "Downloading..." : "Download"}
-          aria-label={downloading ? "Downloading audio" : "Download audio"}
-        >
-          {downloading ? (
-            <div className="w-4 h-4 border-2 border-[#1B2A4A] border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <Download className="w-4 h-4" />
-          )}
-        </button>
-        <div className="flex-1 min-w-0 flex items-center gap-2">
+      <div className="mt-3 space-y-2 px-1 pb-1">
+        <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={togglePlay}
-            className="flex-shrink-0 w-8 h-8 rounded-full bg-[#1B2A4A] text-white flex items-center justify-center hover:bg-[#1e4620] transition-colors"
-            aria-label={playing ? "Pause" : "Play"}
+            onClick={handleDownload}
+            disabled={downloading}
+            className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#C9A961]/20 text-[#1B2A4A] transition-colors hover:bg-[#C9A961]/30 ${downloading ? "cursor-wait opacity-50" : ""}`}
+            title={downloading ? "Downloading..." : "Download"}
+            aria-label={downloading ? "Downloading audio" : "Download audio"}
           >
-            {playing ? (
-              <Pause className="w-4 h-4" />
+            {downloading ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#1B2A4A] border-t-transparent" />
             ) : (
-              <Play className="w-4 h-4 ml-0.5" />
+              <Download className="h-4 w-4" />
             )}
           </button>
-          <div
-            className="flex-1 min-w-0 h-2 bg-gray-200 rounded-full cursor-pointer overflow-hidden"
-            onClick={handleProgressClick}
-            role="progressbar"
-            aria-valuenow={duration ? (currentTime / duration) * 100 : 0}
-            aria-valuemin={0}
-            aria-valuemax={100}
-          >
+
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
+            <button
+              type="button"
+              onClick={togglePlay}
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#1B2A4A] text-white transition-colors hover:bg-[#20345d]"
+              aria-label={playing ? "Pause" : "Play"}
+            >
+              {playing ? (
+                <Pause className="h-4 w-4" />
+              ) : (
+                <Play className="ml-0.5 h-4 w-4" />
+              )}
+            </button>
+
             <div
-              className="h-full bg-[#C9A961] rounded-full transition-all duration-150"
-              style={{
-                width: duration ? `${(currentTime / duration) * 100}%` : "0%",
-              }}
-            />
+              className="h-2.5 min-w-0 flex-1 cursor-pointer overflow-hidden rounded-full bg-gray-200"
+              onClick={handleProgressClick}
+              role="progressbar"
+              aria-valuenow={duration ? (currentTime / duration) * 100 : 0}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              <div
+                className="h-full rounded-full bg-[#C9A961] transition-all duration-150"
+                style={{
+                  width: duration ? `${(currentTime / duration) * 100}%` : "0%",
+                }}
+              />
+            </div>
           </div>
-          <span className="flex-shrink-0 text-xs text-gray-500 tabular-nums min-w-[7rem] text-right whitespace-nowrap">
+        </div>
+
+        <div className="flex justify-end px-1">
+          <span className="whitespace-nowrap text-right text-[11px] sm:text-xs font-medium text-gray-500 tabular-nums tracking-tight">
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
         </div>
@@ -842,7 +853,7 @@ function RecitationCard({
           }
         }}
       />
-    </div>
+    </article>
   );
 }
 
@@ -851,30 +862,64 @@ export function PlaylistPage() {
 
   return (
     <div className="min-h-[60vh] pb-40 sm:pb-48 lg:pb-56">
-      <section className="relative overflow-hidden bg-gradient-to-r from-[#1B2A4A] to-[#2D4A8A] text-white min-h-[14rem] sm:min-h-[16rem] flex flex-col justify-center">
+      <section className="relative isolate overflow-hidden bg-tff-navy-gradient pt-32 pb-24 text-white md:pt-40 md:pb-28">
         <div
-          className="absolute left-0 top-0 bottom-0 w-1.5 sm:w-2 bg-gradient-to-b from-[#C9A961] to-[#8B7355] z-10"
           aria-hidden
+          className="absolute inset-0 -z-10 opacity-[0.12] mix-blend-screen"
+          style={{ backgroundImage: `url(${patternBg})`, backgroundSize: '480px' }}
         />
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-4">
-            Playlist
-          </h1>
-          <div
-            className="inline-block w-24 h-1.5 rounded-full bg-gradient-to-r from-[#C9A961] to-[#8B7355] mb-4"
-            aria-hidden
-          />
-          <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            One Surah, one audio — each in a different Qari&apos;s voice. Click
-            the image or Surah to play; use the bar to seek. Download from the
-            left.
-          </p>
+        <div
+          aria-hidden
+          className="absolute -top-32 left-1/4 -z-10 h-[420px] w-[420px] rounded-full bg-tff-gold/25 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute -bottom-24 right-0 -z-10 h-[340px] w-[340px] rounded-full bg-tff-gold/15 blur-3xl"
+        />
+
+        <div className="container-page grid items-center gap-14 lg:grid-cols-2">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-tff-gold/40 bg-white/5 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-tff-gold-soft">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-tff-gold" />
+              Playlist
+            </div>
+
+            <h1 className="mt-6 font-display text-4xl leading-[1.1] md:text-6xl">
+              Listen to the Qur&apos;an in{' '}
+              <span className="italic text-tff-gold-soft">Every Voice.</span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/75">
+              One Surah, one recitation, and a different Qari&apos;s voice each time —
+              a calm, immersive way to listen, reflect, and revisit the words of Allah.
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-tff-gold-gradient px-6 py-3.5 font-semibold text-tff-navy-deep shadow-tff-gold">
+                Explore Playlist
+              </span>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[28px] bg-[#091a2f] shadow-tff-elegant ring-1 ring-[#c9a961]/25">
+              <img
+                src="/playlist.jpg"
+                alt="A young boy reading the Qur'an on a wooden stand in a mosque"
+                className="h-full w-full object-cover object-[70%_center]"
+              />
+            </div>
+            <div className="glass-dark absolute -bottom-6 left-6 right-6 rounded-2xl px-6 py-4 md:left-8 md:right-8">
+              <p className="text-xs uppercase tracking-widest text-tff-gold-soft">Listen With Purpose</p>
+              <p className="mt-1 font-display text-xl text-white">Reflection. Recitation. Peace.</p>
+            </div>
+          </div>
         </div>
       </section>
 
       <div className="h-10 sm:h-14 bg-[#FAF8F4]" aria-hidden />
 
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-6">
+      <section className="mx-auto w-full max-w-[1500px] px-6 sm:px-10 lg:px-16 xl:px-20 pt-8 sm:pt-10 pb-6">
         <div className="reciter-grid">
           {RECITATIONS.map((rec, index) =>
             (() => {
