@@ -895,9 +895,12 @@ export function PlaylistPage() {
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-tff-gold-gradient px-6 py-3.5 font-semibold text-tff-navy-deep shadow-tff-gold">
+              <a
+                href="#recitations"
+                className="inline-flex items-center gap-2 rounded-full bg-tff-gold-gradient px-6 py-3.5 font-semibold text-tff-navy-deep shadow-tff-gold transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-tff-gold-soft focus-visible:ring-offset-2 focus-visible:ring-offset-tff-navy"
+              >
                 Explore Playlist
-              </span>
+              </a>
             </div>
           </div>
 
@@ -907,6 +910,9 @@ export function PlaylistPage() {
                 src="/playlist.jpg"
                 alt="A young boy reading the Qur'an on a wooden stand in a mosque"
                 className="h-full w-full object-cover object-[70%_center]"
+                width={1400}
+                height={788}
+                fetchPriority="high"
               />
             </div>
             <div className="glass-dark absolute -bottom-6 left-6 right-6 rounded-2xl px-6 py-4 md:left-8 md:right-8">
@@ -919,7 +925,7 @@ export function PlaylistPage() {
 
       <div className="h-10 sm:h-14 bg-[#FAF8F4]" aria-hidden />
 
-      <section className="mx-auto w-full max-w-[1500px] px-6 sm:px-10 lg:px-16 xl:px-20 pt-8 sm:pt-10 pb-6">
+      <section id="recitations" className="scroll-mt-24 mx-auto w-full max-w-[1500px] px-6 sm:px-10 lg:px-16 xl:px-20 pt-8 sm:pt-10 pb-6">
         <div className="reciter-grid">
           {RECITATIONS.map((rec, index) =>
             (() => {
