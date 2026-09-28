@@ -16,7 +16,7 @@ const RECITATIONS = [
     id: "al-fatihah-islam-sobhi",
     surahName: "Surah Al-Fatihah",
     qariName: "Islam Sobhi",
-    qariImage: "/audio/surah-al-fatihah/islam-sobhi.png",
+    qariImage: "/audio/surah-al-fatihah/islam-sobhi.jpg",
     audioSrc:
       "https://ia801604.us.archive.org/13/items/islam-sobhi_202603/Islam-Sobhi.mp3",
     downloadUrl:
@@ -26,7 +26,7 @@ const RECITATIONS = [
     id: "al-baqarah-abdul-basit",
     surahName: "Surah Al-Baqarah",
     qariName: "Abdul Basit Abdul Samad",
-    qariImage: "/audio/surah-al-baqarah/abdul-basit.png",
+    qariImage: "/audio/surah-al-baqarah/abdul-basit.jpg",
     audioSrc:
       "https://ia600702.us.archive.org/2/items/abdul-basit-abdul-samad_202603/Abdul-Basit-Abdul-Samad.mp3",
     downloadUrl:
@@ -36,7 +36,7 @@ const RECITATIONS = [
     id: "al-imran-m-siddiq-al-manshawi",
     surahName: "Surah Al-Imran",
     qariName: "M. Siddiq Al-Manshawi",
-    qariImage: "/audio/surah-al-imran/m-siddiq-al-manshawi.png",
+    qariImage: "/audio/surah-al-imran/m-siddiq-al-manshawi.jpg",
     audioSrc:
       "https://ia800502.us.archive.org/22/items/m.-siddiq-al-manshawi/M.-Siddiq-Al-Manshawi.mp3",
     downloadUrl:
@@ -46,7 +46,7 @@ const RECITATIONS = [
     id: "an-nisa-mahmood-ali-al-banna",
     surahName: "Surah An-Nisa",
     qariName: "Mahmood Ali Al Banna",
-    qariImage: "/audio/surah-an-nisa/mahmood-ali-al-banna.png",
+    qariImage: "/audio/surah-an-nisa/mahmood-ali-al-banna.jpg",
     audioSrc:
       "https://ia600106.us.archive.org/2/items/mahmood-ali-al-banna/Mahmood-Ali-Al-Banna.mp3",
     downloadUrl:
@@ -56,7 +56,7 @@ const RECITATIONS = [
     id: "al-maidah-mehmood-al-tablawi",
     surahName: "Surah Al-Ma'idah",
     qariName: "Mehmood Al Tablawi",
-    qariImage: "/audio/surah-al-maidah/mehmood-al-tablawi.png",
+    qariImage: "/audio/surah-al-maidah/mehmood-al-tablawi.jpg",
     audioSrc:
       "https://ia600702.us.archive.org/15/items/mehmood-al-tablawi_202603/Mehmood-Al-Tablawi.mp3",
     downloadUrl:
