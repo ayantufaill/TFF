@@ -66,7 +66,7 @@ const RECITATIONS = [
     id: "al-anam-mehmood-al-hasri",
     surahName: "Surah Al-An'am",
     qariName: "Mehmood Al Hasri",
-    qariImage: "/audio/surah-al-anam/mehmood-al-hasri.png",
+    qariImage: "/audio/surah-al-anam/mehmood-al-hasri.jpg",
     audioSrc:
       "https://ia601602.us.archive.org/10/items/mehmood-al-hasri/Mehmood-Al-Hasri.mp3",
     downloadUrl:
@@ -77,7 +77,7 @@ const RECITATIONS = [
     id: "al-araf-shahat-anwar",
     surahName: "Surah Al-A'raf",
     qariName: "Shahat Anwar",
-    qariImage: "/audio/surah-al-a'raf/shahat-anwar.png",
+    qariImage: "/audio/surah-al-a'raf/shahat-anwar.jpg",
     audioSrc:
       "https://ia600805.us.archive.org/13/items/shahat-anwar/Shahat-Anwar.mp3",
     downloadUrl:
@@ -87,7 +87,7 @@ const RECITATIONS = [
     id: "al-anfal-saud-al-shuraim",
     surahName: "Surah Al-Anfal",
     qariName: "Saud Al Shuraim",
-    qariImage: "/audio/surah-al-anfal/saud-al-shuraim.png",
+    qariImage: "/audio/surah-al-anfal/saud-al-shuraim.jpg",
     audioSrc:
       "https://ia601607.us.archive.org/24/items/saud-al-shuraim_202603/Saud-Al-Shuraim.mp3",
     downloadUrl:
@@ -97,7 +97,7 @@ const RECITATIONS = [
     id: "at-tawbah-abdullah-kahayyat",
     surahName: "Surah At-Tawbah",
     qariName: "Abdullah Kahayyat",
-    qariImage: "/audio/surah-al-tawbah/abdullah-kahayyat.png",
+    qariImage: "/audio/surah-al-tawbah/abdullah-kahayyat.jpg",
     audioSrc:
       "https://ia600701.us.archive.org/16/items/abdullah-kahayyat/Abdullah-Kahayyat.mp3",
     downloadUrl:
@@ -107,7 +107,7 @@ const RECITATIONS = [
     id: "yunus-abdul-rashid-soufi",
     surahName: "Surah Yunus",
     qariName: "Abdul Rashid Soufi",
-    qariImage: "/audio/surah-yunus/abdul-rashid-soufi.png",
+    qariImage: "/audio/surah-yunus/abdul-rashid-soufi.jpg",
     audioSrc:
       "https://ia600701.us.archive.org/12/items/abdul-rashid-soufi/Abdul-Rashid-Soufi.mp3",
     downloadUrl:
