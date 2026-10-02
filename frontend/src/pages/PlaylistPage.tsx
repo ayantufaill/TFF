@@ -317,7 +317,7 @@ const RECITATIONS = [
     id: "luqman-ahmad-al-ajmi",
     surahName: "Surah Luqman",
     qariName: "Ahmad Al Ajmi",
-    qariImage: "/audio/surah-luqman/ahmad-al-ajmi.png",
+    qariImage: "/audio/surah-luqman/ahmad-al-ajmi.jpg",
     audioSrc:
       "https://ia601904.us.archive.org/5/items/ahmad-al-ajmi_202603/Ahmad-Al-Ajmi.mp3",
     downloadUrl:
@@ -327,7 +327,7 @@ const RECITATIONS = [
     id: "as-sajdah-omer-hisham-al-arabi",
     surahName: "Surah As-Sajdah",
     qariName: "Omer Hisham Al Arabi",
-    qariImage: "/audio/surah-as-sajdah/omer-hisham-al-arabi.png",
+    qariImage: "/audio/surah-as-sajdah/omer-hisham-al-arabi.jpg",
     audioSrc:
       "https://ia601402.us.archive.org/13/items/omer-hisham-al-arabi_202603/Omer-Hisham-Al-Arabi.mp3",
     downloadUrl:
@@ -337,7 +337,7 @@ const RECITATIONS = [
     id: "al-ahzab-abdullah-basfar",
     surahName: "Surah Al-Ahzab",
     qariName: "Abdullah Basfar",
-    qariImage: "/audio/surah-al-ahzab/abdullah-basfar.png",
+    qariImage: "/audio/surah-al-ahzab/abdullah-basfar.jpg",
     audioSrc:
       "https://ia600103.us.archive.org/26/items/abdullah-basfar_20260313/Abdullah-Basfar.mp3",
     downloadUrl:
@@ -347,7 +347,7 @@ const RECITATIONS = [
     id: "saba-yasir-al-dosri",
     surahName: "Surah Saba",
     qariName: "Yasir Al Dosri",
-    qariImage: "/audio/surah-saba/yasir-al-dosri.png",
+    qariImage: "/audio/surah-saba/yasir-al-dosri.jpg",
     audioSrc:
       "https://ia903203.us.archive.org/6/items/yasir-al-dosri_202603/Yasir-Al-Dosri.mp3",
     downloadUrl:
@@ -357,7 +357,7 @@ const RECITATIONS = [
     id: "fatir-zain-muhammad",
     surahName: "Surah Fatir",
     qariName: "Zain Muhammad",
-    qariImage: "/audio/surah-fatir/zain-muhammad.png",
+    qariImage: "/audio/surah-fatir/zain-muhammad.jpg",
     audioSrc:
       "https://ia600407.us.archive.org/8/items/zain-muhammad_202603/Zain-Muhammad.mp3",
     downloadUrl:
@@ -367,7 +367,7 @@ const RECITATIONS = [
     id: "ya-sin-zain-muhammad",
     surahName: "Surah Ya-Sin",
     qariName: "Zain Muhammad",
-    qariImage: "/audio/surah-fatir/zain-muhammad.png",
+    qariImage: "/audio/surah-fatir/zain-muhammad-ya-sin.jpg",
     audioSrc:
       "https://ia601503.us.archive.org/25/items/zain-muhammad_20260313/Zain-Muhammad.mp3",
     downloadUrl:
@@ -377,7 +377,7 @@ const RECITATIONS = [
     id: "as-saaffat-mansour-al-salmi",
     surahName: "Surah As-Saaffat",
     qariName: "Mansour Al Salmi",
-    qariImage: "/audio/surah-as-saaffat/mansour-al-salmi.png",
+    qariImage: "/audio/surah-as-saaffat/mansour-al-salmi.jpg",
     audioSrc:
       "https://ia903207.us.archive.org/6/items/mansour-al-salmi_202603/Mansour-Al-Salmi.mp3",
     downloadUrl:
@@ -387,7 +387,7 @@ const RECITATIONS = [
     id: "saad-hazaa-al-baloushi",
     surahName: "Surah Saad",
     qariName: "Hazaa Al Baloushi",
-    qariImage: "/audio/surah-saad/hazaa-al-baloushi.png",
+    qariImage: "/audio/surah-saad/hazaa-al-baloushi.jpg",
     audioSrc:
       "https://ia601904.us.archive.org/24/items/hazaa-al-baloushi/Hazaa-Al-Baloushi.mp3",
     downloadUrl:
@@ -397,7 +397,7 @@ const RECITATIONS = [
     id: "az-zumar-hazaa-al-baloushi",
     surahName: "Surah Az-Zumar",
     qariName: "Hazaa Al Baloushi",
-    qariImage: "/audio/surah-az-zumar/hazaa-al-baloushi.png",
+    qariImage: "/audio/surah-az-zumar/hazaa-al-baloushi.jpg",
     audioSrc:
       "https://ia903204.us.archive.org/27/items/hazaa-al-baloushi-1/Hazaa-Al-Baloushi%20%281%29.mp3",
     downloadUrl:
@@ -407,7 +407,7 @@ const RECITATIONS = [
     id: "ghafir-noreen-siddiq",
     surahName: "Surah Ghafir",
     qariName: "Noreen Siddiq",
-    qariImage: "/audio/surah-ghafir/noreen-siddiq.png",
+    qariImage: "/audio/surah-ghafir/noreen-siddiq.jpg",
     audioSrc:
       "https://ia601503.us.archive.org/22/items/noreen-siddiq/Noreen-Siddiq.mp3",
     downloadUrl:
