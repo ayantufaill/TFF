@@ -417,7 +417,7 @@ const RECITATIONS = [
     id: "fussilat-muayyid-al-mazin",
     surahName: "Surah Fussilat",
     qariName: "Muayyid Al Mazin",
-    qariImage: "/audio/surah-fussilat/muayyid-al-mazin.png",
+    qariImage: "/audio/surah-fussilat/muayyid-al-mazin.jpg",
     audioSrc:
       "https://ia601404.us.archive.org/25/items/muayyid-al-mazin/Muayyid-Al-Mazin.mp3",
     downloadUrl:
@@ -427,7 +427,7 @@ const RECITATIONS = [
     id: "ash-shura-hasan-saleh",
     surahName: "Surah Ash-Shura",
     qariName: "Hasan Saleh",
-    qariImage: "/audio/surah-ash-shura/hasan-saleh.png",
+    qariImage: "/audio/surah-ash-shura/hasan-saleh.jpg",
     audioSrc:
       "https://ia903207.us.archive.org/26/items/hasan-saleh/Hasan-Saleh.mp3",
     downloadUrl:
